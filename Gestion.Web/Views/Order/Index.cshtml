@@ -41,34 +41,34 @@
     <tbody>
         @foreach (var item in Model)
         {
-            <tr>
-                @if (this.User.IsInRole("Admin"))
-                {
-                    <th>
-                        @Html.DisplayFor(modelItem => item.User.FullName)
-                    </th>
-                }
-                <td>
-                    @Html.DisplayFor(modelItem => item.FechaLocal)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.FechaEntrega)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Lines)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Cantidad)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Total)
-                </td>
-                <td>
-                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning">Edit</a>
-                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info">Details</a>
-                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger">Delete</a>
-                </td>
-            </tr>
+        <tr>
+            @if (this.User.IsInRole("Admin"))
+            {
+                <th>
+                    @Html.DisplayFor(modelItem => item.User.FullName)
+                </th>
+            }
+            <td>
+                @Html.DisplayFor(modelItem => item.FechaLocal)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FechaEntrega)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Lines)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Cantidad)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Total)
+            </td>
+            <td id="@item.Id">
+                <a asp-action="Deliver" asp-route-id="@item.Id" class="btn btn-primary" id="btnDeliver">Deliver</a>
+                <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger">Delete</a>
+            </td>
+            
+        </tr>
         }
     </tbody>
 </table>
