@@ -16,7 +16,7 @@ namespace Gestion.Web.Models
         public decimal Precio { get; set; }
 
         [DisplayFormat(DataFormatString = "{0:N2}")]
-        public double Cantidad { get; set; }
+        public int Cantidad { get; set; }
 
         [DisplayFormat(DataFormatString = "{0:C2}")]
         public decimal SubTotal { get { return this.Precio * (decimal)this.Cantidad; } }

@@ -12,7 +12,11 @@ namespace Gestion.Web.Data
 
         Task AddItemToOrderAsync(AddItemViewModel model, string userName);
 
-        Task ModifyOrderDetailTempQuantityAsync(int id, double quantity);
+        Task ModifyOrderDetailTempQuantityAsync(int id, int quantity);
+
+        Task DeleteDetailTempAsync(int id);
+
+        Task<bool> ConfirmOrderAsync(string userName);
 
 
     }

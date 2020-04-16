@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Gestion.Web.Helpers;
 using Gestion.Web.Models;
@@ -28,6 +29,7 @@ namespace Gestion.Web.Data
             if (await this.userHelper.IsUserInRoleAsync(user, "Admin"))
             {
                 return this.context.Orders
+                    .Include(o => o.User)
                     .Include(o => o.Items)
                     .ThenInclude(i => i.Producto)
                     .OrderByDescending(o => o.Fecha);
@@ -92,7 +94,7 @@ namespace Gestion.Web.Data
             await this.context.SaveChangesAsync();
         }
 
-        public async Task ModifyOrderDetailTempQuantityAsync(int id, double quantity)
+        public async Task ModifyOrderDetailTempQuantityAsync(int id, int quantity)
         {
             var orderDetailTemp = await this.context.OrderDetailTemps.FindAsync(id);
             if (orderDetailTemp == null)
@@ -107,6 +109,57 @@ namespace Gestion.Web.Data
                 await this.context.SaveChangesAsync();
             }
         }
+
+        public async Task DeleteDetailTempAsync(int id)
+        {
+            var orderDetailTemp = await this.context.OrderDetailTemps.FindAsync(id);
+            if (orderDetailTemp == null)
+            {
+                return;
+            }
+
+            this.context.OrderDetailTemps.Remove(orderDetailTemp);
+            await this.context.SaveChangesAsync();
+        }
+
+        public async Task<bool> ConfirmOrderAsync(string userName)
+        {
+            var user = await this.userHelper.GetUserByEmailAsync(userName);
+            if (user == null)
+            {
+                return false;
+            }
+
+            var orderTmps = await this.context.OrderDetailTemps
+                .Include(o => o.Producto)
+                .Where(o => o.User == user)
+                .ToListAsync();
+
+            if (orderTmps == null || orderTmps.Count == 0)
+            {
+                return false;
+            }
+
+            var details = orderTmps.Select(o => new OrderDetail
+            {
+                Precio = o.Precio,
+                Producto = o.Producto,
+                Cantidad = o.Cantidad
+            }).ToList();
+
+            var order = new Order
+            {
+                Fecha = DateTime.UtcNow,
+                User = user,
+                Items = details,
+            };
+
+            this.context.Orders.Add(order);
+            this.context.OrderDetailTemps.RemoveRange(orderTmps);
+            await this.context.SaveChangesAsync();
+            return true;
+        }
+
 
 
     }
