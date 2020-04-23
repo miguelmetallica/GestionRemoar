@@ -6,8 +6,8 @@ namespace Gestion.Web.Data
 {
     public class DataContext : IdentityDbContext<Usuarios>
     {
-        public virtual DbSet<ParamLocalidades> ParamLocalidades { get; set; }
-        public virtual DbSet<ParamProvincias> ParamProvincias { get; set; }
+        public virtual DbSet<Localidades> Localidades { get; set; }
+        public virtual DbSet<Provincia> Provincias { get; set; }
         public virtual DbSet<ParamTiposDocumentos> ParamTiposDocumentos { get; set; }
         public virtual DbSet<Categorias> Categorias { get; set; }
         public virtual DbSet<Etiquetas> Etiquetas { get; set; }

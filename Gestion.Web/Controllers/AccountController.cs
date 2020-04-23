@@ -1,4 +1,5 @@
-﻿using Gestion.Web.Helpers;
+﻿using Gestion.Web.Data;
+using Gestion.Web.Helpers;
 using Gestion.Web.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -17,11 +18,13 @@ namespace Gestion.Web.Controllers
     {
         private readonly IUserHelper userHelper;
         private readonly IConfiguration configuration;
+        private readonly IProvinciasRepository repository;
 
-        public AccountController(IUserHelper userHelper,IConfiguration configuration )
+        public AccountController(IUserHelper userHelper,IConfiguration configuration, IProvinciasRepository repository )
         {
             this.userHelper = userHelper;
             this.configuration = configuration;
+            this.repository = repository;
         }
 
         public IActionResult Login()
@@ -62,7 +65,13 @@ namespace Gestion.Web.Controllers
 
         public IActionResult Register()
         {
-            return this.View();
+            var model = new RegisterNewUserViewModel
+            {
+                Provincias = this.repository.GetComboProvincias(),
+                Localidades = this.repository.GetComboLocalidades(0)
+            };
+
+            return this.View(model);
         }
 
         [HttpPost]
@@ -73,12 +82,17 @@ namespace Gestion.Web.Controllers
                 var user = await this.userHelper.GetUserByEmailAsync(model.Username);
                 if (user == null)
                 {
+                    var localidad = await this.repository.GetLocalidadesAsync(model.LocalidadId);
                     user = new Usuarios
                     {
                         FirstName = model.FirstName,
                         LastName = model.LastName,
                         Email = model.Username,
-                        UserName = model.Username
+                        UserName = model.Username,
+                        Address = model.Address,
+                        PhoneNumber = model.PhoneNumber,
+                        LocalidadId = model.LocalidadId,
+                        Localidad = localidad
                     };
 
                     var result = await this.userHelper.AddUserAsync(user, model.Password);
@@ -117,13 +131,32 @@ namespace Gestion.Web.Controllers
         {
             var user = await this.userHelper.GetUserByEmailAsync(this.User.Identity.Name);
             var model = new ChangeUserViewModel();
+
             if (user != null)
             {
                 model.FirstName = user.FirstName;
                 model.LastName = user.LastName;
+                model.Address = user.Address;
+                model.PhoneNumber = user.PhoneNumber;
+
+                var localidades = await this.repository.GetLocalidadesAsync(user.LocalidadId);
+                if (localidades != null)
+                {
+                    var provincias = await this.repository.GetProvinciasAsync(localidades);
+                    if (provincias != null)
+                    {
+                        model.ProvinciaId = provincias.Id;
+                        model.Localidades = this.repository.GetComboLocalidades(provincias.Id);
+                        model.Provincias = this.repository.GetComboProvincias();
+                        model.LocalidadId = user.LocalidadId;
+                    }
+                }
             }
 
+            model.Localidades = this.repository.GetComboLocalidades(model.ProvinciaId);
+            model.Provincias = this.repository.GetComboProvincias();
             return this.View(model);
+
         }
 
         [HttpPost]
@@ -134,12 +167,19 @@ namespace Gestion.Web.Controllers
                 var user = await this.userHelper.GetUserByEmailAsync(this.User.Identity.Name);
                 if (user != null)
                 {
+                    var localidades = await this.repository.GetLocalidadesAsync(model.LocalidadId);
+
                     user.FirstName = model.FirstName;
                     user.LastName = model.LastName;
+                    user.Address = model.Address;
+                    user.PhoneNumber = model.PhoneNumber;
+                    user.LocalidadId = model.LocalidadId;
+                    user.Localidad = localidades ;
+
                     var respose = await this.userHelper.UpdateUserAsync(user);
                     if (respose.Succeeded)
                     {
-                        return this.RedirectToAction("Index", "Home");
+                        this.ViewBag.UserMessage = "User updated!";
                     }
                     else
                     {
@@ -152,7 +192,11 @@ namespace Gestion.Web.Controllers
                 }
             }
 
+            model.Localidades = this.repository.GetComboLocalidades(model.ProvinciaId);
+            model.Provincias = this.repository.GetComboProvincias();
+
             return this.View(model);
+
         }
 
         public IActionResult ChangePassword()
@@ -228,6 +272,13 @@ namespace Gestion.Web.Controllers
 
             return this.BadRequest();
         }
+
+        public async Task<JsonResult> GetLocalidadesAsync(int provinciaId)
+        {
+            var provincia = await this.repository.GetProvinciasWithLocalidadesAsync(provinciaId);
+            return this.Json(provincia.Localidades.OrderBy(c => c.Nombre));
+        }
+
 
         public IActionResult NotAuthorized()
         {

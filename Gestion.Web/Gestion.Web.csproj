@@ -5,6 +5,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Views\Localidades\**" />
+    <Content Remove="Views\Localidades\**" />
+    <EmbeddedResource Remove="Views\Localidades\**" />
+    <None Remove="Views\Localidades\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Include="wwwroot\node_modules\bootstrap-datepicker\build\build.less" />
     <Content Include="wwwroot\node_modules\bootstrap-datepicker\build\build3.less" />
     <Content Include="wwwroot\node_modules\bootstrap-datepicker\build\build_standalone.less" />

@@ -83,6 +83,8 @@ namespace Gestion.Web
             services.AddScoped<IProductosEtiquetasRepository, ProductosEtiquetasRepository>();
             services.AddScoped<IProductosImagenesRepository, ProductosImagenesRepository>();
             services.AddScoped<IOrderRepository, OrderRepository>();
+            services.AddScoped<IProvinciasRepository, ProvinciasRepository>();
+            services.AddScoped<ILocalidadesRepository, LocalidadesRepository>();
 
             services.AddScoped<IUserHelper, UserHelper>();
 
