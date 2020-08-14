@@ -6,7 +6,7 @@ namespace Gestion.Web.Models
 {
     public partial class Localidades : IEntidades
     {
-        public int Id { get; set; }
+        public string Id { get; set; }
         [Required]
         [Display(Name = "Codigo")]
         [MaxLength(10, ErrorMessage = "The field {0} only can contain {1} characters length.")]

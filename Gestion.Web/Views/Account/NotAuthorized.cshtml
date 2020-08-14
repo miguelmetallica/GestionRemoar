@@ -2,6 +2,36 @@
     ViewData["Title"] = "NO ESTÁ AUTORIZADO";
 }
 
-    <h2>
-        ¡NO ESTÁ AUTORIZADO PARA REALIZAR ESTA ACCIÓN!
-    </h2>
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <h1>
+            401 ¡NO ESTÁ AUTORIZADO PARA REALIZAR ESTA ACCIÓN!
+        </h1>
+        <ol class="breadcrumb">
+            <li><a asp-controller="Home"><i class="fa fa-dashboard"></i> Inicio</a></li>
+            <li class="active">401 Error</li>
+        </ol>
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+        <div class="error-page">
+            <h2 class="headline text-yellow"> 401</h2>
+
+            <div class="error-content">
+                <p><i class="fa fa-warning text-yellow"></i></p>
+
+                <p>
+                    ¡NO ESTÁ AUTORIZADO PARA REALIZAR ESTA ACCIÓN!
+                </p>
+
+            </div>
+            <!-- /.error-content -->
+        </div>
+        <!-- /.error-page -->
+    </section>
+    <!-- /.content -->
+</div>
+<!-- /.content-wrapper -->

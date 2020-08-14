@@ -5,7 +5,7 @@ namespace Gestion.Web.Models
     public partial class ParamTiposDocumentos : IEntidades
     {
         [Key]
-        public int Id { get; set; }
+        public string Id { get; set; }
         [Required(ErrorMessage = "El campo {0} es obligatorio.")]
         [MaxLength(6)]
         public string Codigo { get; set; }
@@ -13,6 +13,5 @@ namespace Gestion.Web.Models
         [MaxLength(150)]
         public string Descripcion { get; set; }
         public bool Estado { get; set; }
-        public Usuarios User { get; set; }
     }
 }

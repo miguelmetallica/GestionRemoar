@@ -1,5 +1,8 @@
 ﻿using Gestion.Web.Models;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Gestion.Web.Helpers
@@ -82,6 +85,50 @@ namespace Gestion.Web.Helpers
         public async Task<bool> IsUserInRoleAsync(Usuarios user, string roleName)
         {
             return await this.userManager.IsInRoleAsync(user, roleName);
+        }
+
+        public async Task<IdentityResult> ConfirmEmailAsync(Usuarios user, string token)
+        {
+            return await this.userManager.ConfirmEmailAsync(user, token);
+        }
+
+        public async Task<string> GenerateEmailConfirmationTokenAsync(Usuarios user)
+        {
+            return await this.userManager.GenerateEmailConfirmationTokenAsync(user);
+        }
+
+        public async Task<Usuarios> GetUserByIdAsync(string userId)
+        {
+            return await this.userManager.FindByIdAsync(userId);
+        }
+
+        public async Task<string> GeneratePasswordResetTokenAsync(Usuarios user)
+        {
+            return await this.userManager.GeneratePasswordResetTokenAsync(user);
+        }
+
+        public async Task<IdentityResult> ResetPasswordAsync(Usuarios user, string token, string password)
+        {
+            return await this.userManager.ResetPasswordAsync(user, token, password);
+        }
+
+        public async Task<List<Usuarios>> GetAllUsersAsync()
+        {
+            return await this.userManager.Users
+                .Include(u => u.Sucursal)
+                .OrderBy(u => u.FirstName)
+                .ThenBy(u => u.LastName)
+                .ToListAsync();
+        }
+
+        public async Task RemoveUserFromRoleAsync(Usuarios user, string roleName)
+        {
+            await this.userManager.RemoveFromRoleAsync(user, roleName);
+        }
+
+        public async Task DeleteUserAsync(Usuarios user)
+        {
+            await this.userManager.DeleteAsync(user);
         }
 
 

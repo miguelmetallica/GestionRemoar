@@ -7,6 +7,6 @@ namespace Gestion.Web.Models
 {
     public interface IEntidades
     {
-        int Id { get; set; }
+        string Id { get; set; }
     }
 }

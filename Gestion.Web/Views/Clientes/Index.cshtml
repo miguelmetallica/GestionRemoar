@@ -1,0 +1,154 @@
+﻿@model IEnumerable<Gestion.Web.Models.Clientes>
+
+@{
+    ViewData["Title"] = "Listado de Clientes";
+}
+
+<!--================================
+BREADCRUMB
+=================================-->
+<div class="content-wrapper">
+    <section class="content-header">
+        <h1>
+            Sistema de gestíon <small>Gestion de Clientes</small>
+        </h1>
+        <ol class="breadcrumb">
+            <li><a asp-controller="Home"><i class="fas fa-tachometer-alt"></i> Inicio</a></li>
+        <li class="active">@ViewData["Title"]</li>
+        </ol>
+    </section>
+    <!--================================
+        CONTENIDO
+    =================================-->
+    <section class="content">
+        <div class="box box-primary">
+            <div class="box-header with-border">
+                <h3 class="box-title">@ViewData["Title"]</h3>
+                <p><a asp-action="Create" class="btn btn-primary btn-sm pull-right" aria-hidden="true">Nuevo Cliente</a></p>                
+            </div>
+            <div class="box-body">
+                <p>
+                    
+                </p>
+                <table id="dTable" class="table dt-responsive table-condensed table-bordered table-striped" width="100%">
+                    <thead>
+                        <tr>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Codigo)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.RazonSocial)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.NroDocumento)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.CuilCuit)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Estado)
+                            </th>
+                            <th>Operaciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Codigo)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.RazonSocial)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.NroDocumento)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.CuilCuit)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Estado)
+                            </td>
+                            <td>
+                                <div class="btn-group">
+                                    <a class="btn btn-warning" asp-action="Edit" asp-route-id="@item.Id"><i class="fa fa-pen"></i></a>
+                                    <a class="btn btn-info" asp-action="Details" asp-route-id="@item.Id"><i class="fa fa-search-plus"></i></a>
+                                    @*<a class="btn btn-warning" asp-action="Details" asp-route-id="@item.Id"><i class="fa fa-trash"></i></a>*@
+                                    <button data-id="@item.Id" class="btn btn-danger deleteItem" data-toggle="modal" data-target="#deleteDialog"><i class="fa fa-trash"></i></button>
+                                </div>
+                            </td>
+                        </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+            @*<div class="box-footer">
+                FOOTER
+            </div>*@
+        </div>
+    </section>
+</div>
+
+
+
+
+
+<div id="deleteDialog" class="modal fade">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Delete</h4>
+                <button type="button" class="close" data-dismiss="modal"><i class="fa fa-window-close"></i></button>
+            </div>
+            <div class="modal-body">
+                <p>Do you want to delete the country?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" id="btnYesDelete">Delete</button>
+                <button type="button" class="btn btn-success" id="btnNoDelete">No</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            var item_to_delete;
+
+            $('.deleteItem').click((e) => {
+                item_to_delete = e.currentTarget.dataset.id;
+            });
+
+            $("#btnYesDelete").click(function () {
+                window.location.href = '/Clientes/Delete/' + item_to_delete;
+            });
+
+
+            $('#dTable').DataTable({
+                "processing": "true",
+                "retrieve": "true",
+                "language": {
+                    "processing": "Procesando... Espere por favor",
+                    "lengthMenu": "Mostrar _MENU_ registros por pagina",
+                    "zeroRecords": "Nada encontrado",
+                    "info": "Mostrando página _PAGE_ de _PAGES_",
+                    "infoEmpty": "No hay registros disponibles",
+                    "sInfoFiltered": "(filtrado de un total de _MAX_ registros)",
+                    "sSearch": "Buscar:",
+                    "oPaginate": {
+                        "sFirst": "Primero",
+                        "sLast": "Último",
+                        "sNext": "Siguiente",
+                        "sPrevious": "Anterior"
+                    }
+                }
+            });
+        });
+
+    </script>
+}

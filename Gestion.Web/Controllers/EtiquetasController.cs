@@ -25,14 +25,14 @@ namespace Gestion.Web.Controllers
             return View(repository.GetAll());
         }
 
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Details(string id)
         {
             if (id == null)
             {
                 return new NotFoundViewResult("NoExiste");
             }
 
-            var Etiquetas = await this.repository.GetByIdAsync(id.Value);
+            var Etiquetas = await this.repository.GetByIdAsync(id);
             if (Etiquetas == null)
             {
                 return new NotFoundViewResult("NoExiste");
@@ -58,14 +58,14 @@ namespace Gestion.Web.Controllers
             return View(Etiquetas);
         }
 
-        public async Task<IActionResult> Edit(int? id)
+        public async Task<IActionResult> Edit(string id)
         {
             if (id == null)
             {
                 return new NotFoundViewResult("NoExiste");
             }
 
-            var Etiquetas = await this.repository.GetByIdAsync(id.Value);
+            var Etiquetas = await this.repository.GetByIdAsync(id);
             if (Etiquetas == null)
             {
                 return new NotFoundViewResult("NoExiste");
@@ -76,7 +76,7 @@ namespace Gestion.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, Etiquetas Etiquetas)
+        public async Task<IActionResult> Edit(string id, Etiquetas Etiquetas)
         {
             if (id != Etiquetas.Id)
             {
@@ -105,14 +105,14 @@ namespace Gestion.Web.Controllers
             return View(Etiquetas);
         }
 
-        public async Task<IActionResult> Delete(int? id)
+        public async Task<IActionResult> Delete(string id)
         {
             if (id == null)
             {
                 return new NotFoundViewResult("NoExiste");
             }
 
-            var Etiquetas = await this.repository.GetByIdAsync(id.Value);
+            var Etiquetas = await this.repository.GetByIdAsync(id);
             if (Etiquetas == null)
             {
                 return new NotFoundViewResult("NoExiste");
@@ -123,7 +123,7 @@ namespace Gestion.Web.Controllers
 
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> DeleteConfirmed(string id)
         {
             var Etiquetas = await repository.GetByIdAsync(id);
             await repository.DeleteAsync(Etiquetas);

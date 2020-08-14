@@ -1,0 +1,70 @@
+﻿@model Gestion.Web.Models.CajasAperturasCierres
+
+@{
+    ViewData["Title"] = "Nueva";
+}
+
+<h1>Nueva</h1>
+
+<h4>Apertura</h4>
+<hr />
+<div class="row">
+    <div class="col-md-12">
+        <form asp-action="Create" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            
+            <input type="hidden" asp-for="UsuarioAperturaId" />
+            <div class="form-group">
+                <label asp-for="CajaId" class="control-label"></label>
+                <select asp-for="CajaId" asp-items="@ViewBag.Cajas" class="form-control"></select>
+                <span asp-validation-for="CajaId" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="FechaApertura" class="control-label"></label>
+                <input asp-for="FechaApertura" class="form-control" />
+                <span asp-validation-for="FechaApertura" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="EfectivoApertura" class="control-label"></label>
+                <input asp-for="EfectivoApertura" class="form-control"  />
+                <span asp-validation-for="EfectivoApertura" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DolaresApertura" class="control-label"></label>
+                <input asp-for="DolaresApertura" class="form-control" />
+                <span asp-validation-for="DolaresApertura" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CuponesApertura" class="control-label"></label>
+                <input asp-for="CuponesApertura" class="form-control" />
+                <span asp-validation-for="CuponesApertura" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ChequesApertura" class="control-label"></label>
+                <input asp-for="ChequesApertura" class="form-control" />
+                <span asp-validation-for="ChequesApertura" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="OtrosApertura" class="control-label"></label>
+                <input asp-for="OtrosApertura" class="form-control" />
+                <span asp-validation-for="OtrosApertura" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ObservacionesApertura" class="control-label"></label>
+                <input asp-for="ObservacionesApertura" class="form-control" />
+                <span asp-validation-for="ObservacionesApertura" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <input type="submit" value="Crear" class="btn btn-primary" />
+                <a asp-action="Index" class="btn btn-success">Volver a la lista</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

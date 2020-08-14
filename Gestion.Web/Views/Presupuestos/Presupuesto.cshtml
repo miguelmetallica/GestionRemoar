@@ -1,0 +1,205 @@
+﻿@model Gestion.Web.Models.Presupuestos
+
+@{
+    ViewData["Title"] = "Nuevo Presupuesto";
+}
+
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <h1>
+            Sistema de gestíon
+            <small>Gestion de Presupuestos</small>
+        </h1>
+        <ol class="breadcrumb">
+            <li><a asp-controller="Home"><i class="fas fa-tachometer-alt"></i> Inicio</a></li>
+            <li><a asp-controller="Presupuestos" asp-action="Index">Listado de Presupuestos</a></li>
+            <li class="active">@ViewData["Title"]</li>
+        </ol>
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+        <div class="row">
+            <!-- left column -->
+            <div class="col-md-6">
+                <!-- general form elements -->
+                <div class="box box-primary">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">Datos del Presupuesto</h3>
+                        <a asp-action="PresupuestoPendienteAprobar" asp-route-id="@Model.Id" class="btn btn-success btn-sm pull-right" aria-hidden="true">Aprobar el Presupuesto</a>
+                    </div>
+                    <!-- /.box-header -->
+                    <!-- form start -->
+                    <form>
+                        <div class="box-body">
+                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                            <input type="hidden" asp-for="Id" />
+                            <input type="hidden" asp-for="ClienteId" />
+
+                            <div class="form-group col-md-6">
+                                <label asp-for="Codigo" class="control-label"></label>
+                                <input asp-for="Codigo" readonly class="form-control input-sm" />
+                                <span asp-validation-for="Codigo" class="text-danger"></span>
+                            </div>
+
+                            <div class="form-group col-md-6">
+                                <label asp-for="Estado.Descripcion" class="control-label"></label>
+                                <input asp-for="Estado.Descripcion" readonly class="form-control input-sm" />
+                                <span asp-validation-for="Estado.Descripcion" class="text-danger"></span>
+                            </div>
+
+                            <div class="form-group col-md-6">
+                                <label asp-for="Fecha" class="control-label"></label>
+                                <input asp-for="Fecha" readonly class="form-control input-sm" />
+                                <span asp-validation-for="Fecha" class="text-danger"></span>
+                            </div>
+
+                            <div class="form-group col-md-6">
+                                <label asp-for="FechaVencimiento" class="control-label"></label>
+                                <input asp-for="FechaVencimiento" readonly class="form-control input-sm" />
+                                <span asp-validation-for="FechaVencimiento" class="text-danger"></span>
+                            </div>
+
+                            <div class="form-group col-md-6">
+                                <label asp-for="Cliente.Codigo" class="control-label"></label>
+                                <input asp-for="Cliente.Codigo" readonly class="form-control input-sm" />
+                                <span asp-validation-for="Cliente.Codigo" class="text-danger"></span>
+                            </div>
+
+                            <div class="form-group col-md-6">
+                                <label asp-for="Cliente.RazonSocial" class="control-label"></label>
+                                <input asp-for="Cliente.RazonSocial" readonly class="form-control input-sm" />
+                                <span asp-validation-for="Cliente.RazonSocial" class="text-danger"></span>
+                            </div>
+
+                            <div class="form-group col-md-6">
+                                <label asp-for="Cliente.NroDocumento" class="control-label"></label>
+                                <input asp-for="Cliente.NroDocumento" readonly class="form-control input-sm" />
+                                <span asp-validation-for="Cliente.NroDocumento" class="text-danger"></span>
+                            </div>
+
+                            <div class="form-group col-md-6">
+                                <label asp-for="Cliente.CuilCuit" class="control-label"></label>
+                                <input asp-for="Cliente.CuilCuit" readonly class="form-control input-sm" />
+                                <span asp-validation-for="Cliente.CuilCuit" class="text-danger"></span>
+                            </div>
+
+
+                        </div>
+                        <!-- /.box-body -->
+
+                        <div class="box-footer">
+                            <a asp-action="ClienteBuscar" asp-route-id="@Model.Id" class="btn btn-warning" aria-hidden="true">Cambiar Cliente</a>
+                            <a asp-action="Index" class="btn btn-default pull-right">Volver al Listado</a>
+                        </div>
+                    </form>
+                </div>                
+                <!-- /.box -->
+            </div>
+            <!--/.col-->
+            <!-- left column -->
+            <div class="col-md-6">
+                <!-- general form elements -->
+                <div class="box box-primary">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">Listado de Productos</h3>
+                        <a asp-action="ProductoCreate" asp-route-id="@Model.Id" class="btn btn-primary btn-sm pull-right" aria-hidden="true">Agregar Productos</a>
+                    </div>
+                    <div class="box-body">
+                        <table id="dTable" class="table dt-responsive table-condensed table-bordered table-striped" width="100%">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        Codigo
+                                    </th>
+                                    <th>
+                                        Producto
+                                    </th>
+                                    <th>
+                                        Precio
+                                    </th>
+                                    <th>
+                                        Cantidad
+                                    </th>
+                                    <th>
+                                        SubTotal
+                                    </th>
+                                    <th>Operaciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (Model.Item.Count() > 0)
+                                {
+                                    @foreach (var item in Model.Item)
+                                    {
+                                    <tr>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Producto.Codigo)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Producto.Producto)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Precio)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Cantidad)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.SubTotal)
+                                        </td>
+                                        <td>
+                                            <div class="btn-group">
+                                                @{
+                                                    var param = new Dictionary<string, string> { { "id", item.Id }, { "id2", item.PresupuestoId } };
+                                                }
+                                                <a class="btn btn-success" asp-action="Incrementar" asp-all-route-data="@param"><i class="fa fa-plus"></i></a>
+                                                <a class="btn btn-warning" asp-action="Decrementar" asp-all-route-data="@param"><i class="fa fa-minus"></i></a>
+
+                                                <a class="btn btn-danger" asp-action="ProductoDelete" asp-route-id="@item.Id"><i class="fa fa-trash"></i></a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    }
+                                }
+                                else
+                                { 
+                                    <tr>
+                                        <td colspan="6">
+                                            No hay productos cargados
+                                        </td>                                
+                                    </tr>
+                                }
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <th colspan="3">                                        
+                                    </th>
+                                    <th>
+                                        Cantidad : @Model.Item.Sum(x => x.Cantidad)
+                                    </th>
+                                    <th>
+                                        Total : @Model.Item.Sum(x => x.SubTotal)
+                                    </th>
+                                    <td>
+                                    </td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+                <!-- /.box -->
+            </div>
+            <!--/.col-->
+        </div>
+        <!-- /.row -->
+    </section>
+    <!-- /.content -->
+</div>
+<!-- /.content-wrapper -->
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

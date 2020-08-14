@@ -1,4 +1,4 @@
-﻿@model Gestion.Web.Models.Provincia
+﻿@model Gestion.Web.Models.ParamProvincias
 
 @{
     ViewData["Title"] = "Edit";
@@ -15,9 +15,9 @@
             <input type="hidden" asp-for="Id" />
             
             <div class="form-group">
-                <label asp-for="Nombre" class="control-label"></label>
-                <input asp-for="Nombre" class="form-control" />
-                <span asp-validation-for="Nombre" class="text-danger"></span>
+                <label asp-for="Descripcion" class="control-label"></label>
+                <input asp-for="Descripcion" class="form-control" />
+                <span asp-validation-for="Descripcion" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Codigo" class="control-label"></label>

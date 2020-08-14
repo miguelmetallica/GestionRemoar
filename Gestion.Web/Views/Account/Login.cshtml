@@ -1,41 +1,78 @@
 ﻿@model Gestion.Web.Models.LoginViewModel
 @{
-    ViewData["Title"] = "Login";
+    Layout = null;
 }
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Remoar | Ingreso</title>
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <!-- Bootstrap 3.3.7 -->
+    @*<link rel="stylesheet" href="~/admin/bower_components/bootstrap/dist/css/bootstrap.css">*@
+    <link href="~/admin/bower_components/bootstrap/dist/css/bootstrap.css" rel="stylesheet" />
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="~/admin/bower_components/fontawesome-free/css/all.css">
+    <!-- Ionicons -->
+    <link rel="stylesheet" href="~/admin/bower_components/Ionicons/css/ionicons.css">
+    <!-- Theme style -->
+    @*<link rel="stylesheet" href="~/admin/dist/css/AdminLTE.css">*@
+    <link href="~/admin/dist/css/AdminLTE.css" rel="stylesheet" />
+    <!-- Google Font -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+</head>
 
-<h2>Login</h2>
+<body class="hold-transition login-page">
+    <div class="login-box">
+        <div class="login-logo">
+            <b>REMOAR</b>
+        </div>
+        <div class="login-box-body">
+            <p class="login-box-msg">Ingresar al sistema</p>
 
-<div class="row">
-    <div class="col-md-4 offset-md-4">
-        <form method="post">
-            <div asp-validation-summary="ModelOnly"></div>
-            <div class="form-group">
-                <label asp-for="Username">Username</label>
-                <input asp-for="Username" class="form-control" />
-                <span asp-validation-for="Username" class="text-warning"></span>
-            </div>
-            
-            <div class="form-group">
-                <label asp-for="Password">Password</label>
-                <input asp-for="Password" type="password" class="form-control" />
-                <span asp-validation-for="Password" class="text-warning"></span>
-            </div>
-            
-            <div class="form-group">
-                <div class="form-check">
-                    <input asp-for="RememberMe" type="checkbox" class="form-check-input" />
-                    <label asp-for="RememberMe" class="form-check-label">Remember Me?</label>
+            <form method="post">
+                <div class="form-group has-feedback">
+                    <label asp-for="Username">Email</label>
+                    <input type="email" asp-for="Username" class="form-control" />
+                    <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
+                    <span asp-validation-for="Username" class="text-warning"></span>
+
                 </div>
-                <span asp-validation-for="RememberMe" class="text-warning"></span>
-            </div>
-            
-            <div class="form-group">
-                <input type="submit" value="Login" class="btn btn-success" />
-                <a asp-action="Register" class="btn btn-primary">Register New User</a>
-            </div>
-        </form>
+                <div class="form-group has-feedback">
+                    <label asp-for="Password">Password</label>
+                    <input asp-for="Password" type="password" class="form-control" />
+                    <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+                    <span asp-validation-for="Password" class="text-warning"></span>
+
+                </div>
+                <div class="form-group has-feedback">
+                    <div class="form-check">
+                        <input asp-for="RememberMe" type="checkbox" class="form-check-input" />
+                        <label asp-for="RememberMe" class="form-check-label"> Recuerdame?</label>
+                    </div>
+                    <span asp-validation-for="RememberMe" class="text-warning"></span>
+                </div>
+                <div class="row">
+                    <div class="col-xs-12">
+                        @*<button type="submit" class="btn btn-primary btn-block btn-flat">Ingresar</button>*@
+                        <input type="submit" value="Ingresar" class="btn btn-primary btn-block btn-flat">
+
+                    </div>
+                </div>
+            </form>
+
+            <a asp-action="Register">Olvidé mi contraseña</a><br>
+            <a asp-action="RecoverPassword" class="text-center">Crear Cuenta</a>
+        </div>
     </div>
-</div>
+
+    <script src="~/admin/bower_components/jquery/dist/jquery.js"></script>
+    <!-- Bootstrap 3.3.7 -->
+    <script src="~/admin/bower_components/bootstrap/dist/js/bootstrap.js"></script>
+</body>
+</html>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

@@ -27,14 +27,14 @@ namespace Gestion.Web.Controllers
             
         }
 
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Details(string id)
         {
             if (id == null)
             {
                 return new NotFoundViewResult("NoExiste");
             }
 
-            var Localidades = await this.repository.GetByIdAsync(id.Value);
+            var Localidades = await this.repository.GetByIdAsync(id);
             if (Localidades == null)
             {
                 return new NotFoundViewResult("NoExiste");
@@ -60,14 +60,14 @@ namespace Gestion.Web.Controllers
             return View(localidades);
         }
 
-        public async Task<IActionResult> Edit(int? id)
+        public async Task<IActionResult> Edit(string id)
         {
             if (id == null)
             {
                 return new NotFoundViewResult("NoExiste");
             }
 
-            var Localidades = await this.repository.GetByIdAsync(id.Value);
+            var Localidades = await this.repository.GetByIdAsync(id);
             if (Localidades == null)
             {
                 return new NotFoundViewResult("NoExiste");
@@ -79,7 +79,7 @@ namespace Gestion.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, Localidades localidades)
+        public async Task<IActionResult> Edit(string id, Localidades localidades)
         {
             if (id != localidades.Id)
             {
@@ -108,14 +108,14 @@ namespace Gestion.Web.Controllers
             return View(localidades);
         }
 
-        public async Task<IActionResult> Delete(int? id)
+        public async Task<IActionResult> Delete(string id)
         {
             if (id == null)
             {
                 return new NotFoundViewResult("NoExiste");
             }
 
-            var Localidades = await this.repository.GetByIdAsync(id.Value);
+            var Localidades = await this.repository.GetByIdAsync(id);
             if (Localidades == null)
             {
                 return new NotFoundViewResult("NoExiste");
@@ -126,7 +126,7 @@ namespace Gestion.Web.Controllers
 
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> DeleteConfirmed(string id)
         {
             var Localidades = await repository.GetByIdAsync(id);
             await repository.DeleteAsync(Localidades);

@@ -9,7 +9,7 @@ namespace Gestion.Web.Data
     {
         IQueryable<T> GetAll();
 
-        Task<T> GetByIdAsync(int id);
+        Task<T> GetByIdAsync(string id);
 
         Task CreateAsync(T entity);
 
@@ -17,7 +17,7 @@ namespace Gestion.Web.Data
 
         Task DeleteAsync(T entity);
 
-        Task<bool> ExistAsync(int id);
+        Task<bool> ExistAsync(string id);
     }
 
 }

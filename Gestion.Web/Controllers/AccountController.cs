@@ -1,6 +1,7 @@
 ﻿using Gestion.Web.Data;
 using Gestion.Web.Helpers;
 using Gestion.Web.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -17,12 +18,14 @@ namespace Gestion.Web.Controllers
     public class AccountController : Controller
     {
         private readonly IUserHelper userHelper;
+        private readonly IMailHelper mailHelper;
         private readonly IConfiguration configuration;
-        private readonly IProvinciasRepository repository;
+        private readonly ISucursalesRepository repository;
 
-        public AccountController(IUserHelper userHelper,IConfiguration configuration, IProvinciasRepository repository )
+        public AccountController(IUserHelper userHelper, IMailHelper mailHelper, IConfiguration configuration, ISucursalesRepository repository)
         {
             this.userHelper = userHelper;
+            this.mailHelper = mailHelper;
             this.configuration = configuration;
             this.repository = repository;
         }
@@ -48,7 +51,7 @@ namespace Gestion.Web.Controllers
                     if (this.Request.Query.Keys.Contains("ReturnUrl"))
                     {
                         return this.Redirect(this.Request.Query["ReturnUrl"].First());
-                    }                    
+                    }
                     return this.RedirectToAction("Index", "Home");
                 }
             }
@@ -67,8 +70,8 @@ namespace Gestion.Web.Controllers
         {
             var model = new RegisterNewUserViewModel
             {
-                Provincias = this.repository.GetComboProvincias(),
-                Localidades = this.repository.GetComboLocalidades(0)
+                Sucursales = this.repository.GetCombo(),
+                //Localidades = this.repository.GetComboLocalidades(0)
             };
 
             return this.View(model);
@@ -82,7 +85,6 @@ namespace Gestion.Web.Controllers
                 var user = await this.userHelper.GetUserByEmailAsync(model.Username);
                 if (user == null)
                 {
-                    var localidad = await this.repository.GetLocalidadesAsync(model.LocalidadId);
                     user = new Usuarios
                     {
                         FirstName = model.FirstName,
@@ -91,8 +93,7 @@ namespace Gestion.Web.Controllers
                         UserName = model.Username,
                         Address = model.Address,
                         PhoneNumber = model.PhoneNumber,
-                        LocalidadId = model.LocalidadId,
-                        Localidad = localidad
+                        SucursalId = model.SucursalId
                     };
 
                     var result = await this.userHelper.AddUserAsync(user, model.Password);
@@ -102,27 +103,24 @@ namespace Gestion.Web.Controllers
                         return this.View(model);
                     }
 
-
-                    var loginViewModel = new LoginViewModel
+                    var myToken = await this.userHelper.GenerateEmailConfirmationTokenAsync(user);
+                    var tokenLink = this.Url.Action("ConfirmEmail", "Account", new
                     {
-                        Password = model.Password,
-                        RememberMe = false,
-                        Username = model.Username
-                    };
+                        userid = user.Id,
+                        token = myToken
+                    }, protocol: HttpContext.Request.Scheme);
 
-                    var result2 = await this.userHelper.LoginAsync(loginViewModel);
-
-                    if (result2.Succeeded)
-                    {
-                        return this.RedirectToAction("Index", "Home");
-                    }
-
-                    this.ModelState.AddModelError(string.Empty, "The user couldn't be login.");
+                    this.mailHelper.SendMail(model.Username, "Email confirmation", $"<h1>Email Confirmacion</h1>" +
+                        $"Para permitir al usuario, " +
+                        $"haga clic en este enlace: </br></br><a href = \"{tokenLink}\">Confirmar correo electrónico</a>");
+                    this.ViewBag.Message = "The instructions to allow your user has been sent to email.";
                     return this.View(model);
                 }
 
                 this.ModelState.AddModelError(string.Empty, "The username is already registered.");
             }
+
+            model.Sucursales = this.repository.GetCombo();
 
             return this.View(model);
         }
@@ -138,23 +136,11 @@ namespace Gestion.Web.Controllers
                 model.LastName = user.LastName;
                 model.Address = user.Address;
                 model.PhoneNumber = user.PhoneNumber;
+                model.SucursalId = user.SucursalId;
 
-                var localidades = await this.repository.GetLocalidadesAsync(user.LocalidadId);
-                if (localidades != null)
-                {
-                    var provincias = await this.repository.GetProvinciasAsync(localidades);
-                    if (provincias != null)
-                    {
-                        model.ProvinciaId = provincias.Id;
-                        model.Localidades = this.repository.GetComboLocalidades(provincias.Id);
-                        model.Provincias = this.repository.GetComboProvincias();
-                        model.LocalidadId = user.LocalidadId;
-                    }
-                }
             }
 
-            model.Localidades = this.repository.GetComboLocalidades(model.ProvinciaId);
-            model.Provincias = this.repository.GetComboProvincias();
+            model.Sucursales = this.repository.GetCombo();
             return this.View(model);
 
         }
@@ -167,14 +153,11 @@ namespace Gestion.Web.Controllers
                 var user = await this.userHelper.GetUserByEmailAsync(this.User.Identity.Name);
                 if (user != null)
                 {
-                    var localidades = await this.repository.GetLocalidadesAsync(model.LocalidadId);
-
                     user.FirstName = model.FirstName;
                     user.LastName = model.LastName;
                     user.Address = model.Address;
                     user.PhoneNumber = model.PhoneNumber;
-                    user.LocalidadId = model.LocalidadId;
-                    user.Localidad = localidades ;
+                    user.SucursalId = model.SucursalId;
 
                     var respose = await this.userHelper.UpdateUserAsync(user);
                     if (respose.Succeeded)
@@ -192,8 +175,7 @@ namespace Gestion.Web.Controllers
                 }
             }
 
-            model.Localidades = this.repository.GetComboLocalidades(model.ProvinciaId);
-            model.Provincias = this.repository.GetComboProvincias();
+            model.Sucursales = this.repository.GetCombo();
 
             return this.View(model);
 
@@ -273,17 +255,165 @@ namespace Gestion.Web.Controllers
             return this.BadRequest();
         }
 
-        public async Task<JsonResult> GetLocalidadesAsync(int provinciaId)
+        //public async Task<JsonResult> GetLocalidadesAsync(int provinciaId)
+        //{
+        //    var provincia = await this.repository.GetProvinciasWithLocalidadesAsync(provinciaId);
+        //    return this.Json(provincia.Localidades.OrderBy(c => c.Nombre));
+        //}
+
+        public async Task<IActionResult> ConfirmEmail(string userId, string token)
         {
-            var provincia = await this.repository.GetProvinciasWithLocalidadesAsync(provinciaId);
-            return this.Json(provincia.Localidades.OrderBy(c => c.Nombre));
+            if (string.IsNullOrEmpty(userId) || string.IsNullOrEmpty(token))
+            {
+                return this.NotFound();
+            }
+
+            var user = await this.userHelper.GetUserByIdAsync(userId);
+            if (user == null)
+            {
+                return this.NotFound();
+            }
+
+            var result = await this.userHelper.ConfirmEmailAsync(user, token);
+            if (!result.Succeeded)
+            {
+                return this.NotFound();
+            }
+
+            return View();
         }
 
+        public IActionResult RecoverPassword()
+        {
+            return this.View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> RecoverPassword(RecoverPasswordViewModel model)
+        {
+            if (this.ModelState.IsValid)
+            {
+                var user = await this.userHelper.GetUserByEmailAsync(model.Email);
+                if (user == null)
+                {
+                    ModelState.AddModelError(string.Empty, "El correo electrónico no corresponde a un usuario registrado.");
+                    return this.View(model);
+                }
+
+                var myToken = await this.userHelper.GeneratePasswordResetTokenAsync(user);
+                var link = this.Url.Action(
+                    "ResetPassword",
+                    "Account",
+                    new { token = myToken }, protocol: HttpContext.Request.Scheme);
+                this.mailHelper.SendMail(model.Email, "Gestion Reset Password", $"<h1>Gestion Reset Password</h1>" +
+                    $"Para restablecer la contraseña, haga clic en este enlace: </br></br>" +
+                    $"<a href = \"{link}\">Reset Password</a>");
+                this.ViewBag.Message = "Las instrucciones para recuperar su contraseña han sido enviadas por correo electrónico.";
+                return this.View();
+
+            }
+
+            return this.View(model);
+        }
+
+        public IActionResult ResetPassword(string token)
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ResetPassword(ResetPasswordViewModel model)
+        {
+            var user = await this.userHelper.GetUserByEmailAsync(model.UserName);
+            if (user != null)
+            {
+                var result = await this.userHelper.ResetPasswordAsync(user, model.Token, model.Password);
+                if (result.Succeeded)
+                {
+                    this.ViewBag.Message = "Restablecimiento de contraseña exitosa.";
+                    return this.View();
+                }
+
+                this.ViewBag.Message = "Error al restablecer la contraseña.";
+                return View(model);
+            }
+
+            this.ViewBag.Message = "Usuario no encontrado.";
+            return View(model);
+        }
 
         public IActionResult NotAuthorized()
         {
             return this.View();
         }
+
+        [Authorize]
+        public async Task<IActionResult> Index()
+        {
+            var users = await this.userHelper.GetAllUsersAsync();
+            foreach (var user in users)
+            {
+                var myUser = await this.userHelper.GetUserByIdAsync(user.Id);
+                if (myUser != null)
+                {
+                    user.IsAdmin = await this.userHelper.IsUserInRoleAsync(myUser, "Admin");
+                }
+            }
+
+            return this.View(users);
+        }
+
+        public async Task<IActionResult> AdminOff(string id)
+        {
+            if (string.IsNullOrEmpty(id))
+            {
+                return NotFound();
+            }
+
+            var user = await this.userHelper.GetUserByIdAsync(id);
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            await this.userHelper.RemoveUserFromRoleAsync(user, "Admin");
+            return this.RedirectToAction(nameof(Index));
+        }
+
+        public async Task<IActionResult> AdminOn(string id)
+        {
+            if (string.IsNullOrEmpty(id))
+            {
+                return NotFound();
+            }
+
+            var user = await this.userHelper.GetUserByIdAsync(id);
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            await this.userHelper.AddUserToRoleAsync(user, "Admin");
+            return this.RedirectToAction(nameof(Index));
+        }
+
+        public async Task<IActionResult> DeleteUser(string id)
+        {
+            if (string.IsNullOrEmpty(id))
+            {
+                return NotFound();
+            }
+
+            var user = await this.userHelper.GetUserByIdAsync(id);
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            await this.userHelper.DeleteUserAsync(user);
+            return this.RedirectToAction(nameof(Index));
+        }
+
 
     }
 }

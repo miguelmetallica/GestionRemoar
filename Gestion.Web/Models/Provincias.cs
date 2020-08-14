@@ -5,7 +5,7 @@ namespace Gestion.Web.Models
 {
     public partial class Provincia : IEntidades
     {
-        public int Id { get; set; }
+        public string Id { get; set; }
 
         [Required]
         [Display(Name = "Codigo")]

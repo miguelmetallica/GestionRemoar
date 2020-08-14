@@ -1,0 +1,36 @@
+﻿@model Gestion.Web.Models.Cajas
+
+@{
+    ViewData["Title"] = "Nueva";
+}
+
+<h1>Nueva</h1>
+
+<h4>Caja</h4>
+<hr />
+<div class="row">
+    <div class="col-md-12">
+        <form asp-action="Create" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Codigo" class="control-label"></label>
+                <input asp-for="Codigo" class="form-control" />
+                <span asp-validation-for="Codigo" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="SucursalId" class="control-label"></label>
+                <select asp-for="SucursalId" asp-items="@ViewBag.Sucursales" class="form-control"></select>
+                <span asp-validation-for="SucursalId" class="text-danger"></span>
+            </div>
+            
+            <div class="form-group">
+                <input type="submit" value="Crear" class="btn btn-primary" />
+                <a asp-action="Index" class="btn btn-success">Volver a la lista</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

@@ -33,6 +33,8 @@ namespace Gestion.Web
         {
             services.AddIdentity<Usuarios, IdentityRole>(cfg =>
             {
+                cfg.Tokens.AuthenticatorTokenProvider = TokenOptions.DefaultAuthenticatorProvider;
+                cfg.SignIn.RequireConfirmedEmail = true;
                 cfg.User.RequireUniqueEmail = true;
                 cfg.Password.RequireDigit = false;
                 cfg.Password.RequiredUniqueChars = 0;
@@ -40,12 +42,18 @@ namespace Gestion.Web
                 cfg.Password.RequireNonAlphanumeric = false;
                 cfg.Password.RequireUppercase = false;
                 cfg.Password.RequiredLength = 6;
-            }).AddEntityFrameworkStores<DataContext>();
+            })
+                .AddDefaultTokenProviders()
+                .AddEntityFrameworkStores<DataContext>();
 
             services.AddDbContext<DataContext>(cfg =>
             {
                 cfg.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
             });
+
+            services.AddTransient<DataContext>();
+
+            services.Configure<ConexionConfiguracion>(Configuration.GetSection("ConnectionStrings"));
 
             services.Configure<CookiePolicyOptions>(options =>
             {
@@ -77,16 +85,35 @@ namespace Gestion.Web
 
             services.AddScoped<ITiposDocumentosRepository, TiposDocumentosRepository>();
             services.AddScoped<ICategoriasRepository, CategoriasRepository>();
+            services.AddScoped<IColoresRepository, ColoresRepository>();
             services.AddScoped<IEtiquetasRepository, EtiquetasRepository>();
             services.AddScoped<IProductosRepository, ProductosRepository>();
             services.AddScoped<IProductosCategoriasRepository, ProductosCategoriasRepository>();
             services.AddScoped<IProductosEtiquetasRepository, ProductosEtiquetasRepository>();
             services.AddScoped<IProductosImagenesRepository, ProductosImagenesRepository>();
-            services.AddScoped<IOrderRepository, OrderRepository>();
+            services.AddScoped<IPresupuestosRepository, PresupuestosRepository>();
             services.AddScoped<IProvinciasRepository, ProvinciasRepository>();
-            services.AddScoped<ILocalidadesRepository, LocalidadesRepository>();
+            services.AddScoped<ISucursalesRepository, SucursalesRepository>();
+            services.AddScoped<IClientesRepository, ClientesRepository>();
+            services.AddScoped<ITiposDocumentosRepository, TiposDocumentosRepository>();
+            services.AddScoped<IFactoryConnection, FactoryConnection>();
 
+            services.AddScoped<ITiposProductosRepository, TiposProductosRepository>();
+            services.AddScoped<ICuentasVentasRepository, CuentasVentasRepository>();
+            services.AddScoped<ICuentasComprasRepository, CuentasComprasRepository>();
+            services.AddScoped<IUnidadesMedidasRepository, UnidadesMedidasRepository>();
+            services.AddScoped<IMarcasRepository, MarcasRepository>();
+
+            services.AddScoped<ICajasRepository, CajasRepository>();
+            services.AddScoped<ICajasAperturasCierresRepository, CajasAperturasCierresRepository>();
+            services.AddScoped<ICajasMovimientosRepository, CajasMovimientosRepository>();            
+            services.AddScoped<ICajasTiposMovimientosRepository, CajasTiposMovimientosRepository>();
+
+            services.AddScoped<IPresupuestosEstadosRepository, PresupuestosEstadosRepository>();
+            services.AddScoped<IPresupuestosRepository, PresupuestosRepository>();
+            
             services.AddScoped<IUserHelper, UserHelper>();
+            services.AddScoped<IMailHelper, MailHelper>();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
@@ -94,6 +121,13 @@ namespace Gestion.Web
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
+            var supportedCultures = new[] { "es-MX", "mx" };
+            var localizationOptions = new RequestLocalizationOptions().SetDefaultCulture(supportedCultures[0])
+                .AddSupportedCultures(supportedCultures)
+                .AddSupportedUICultures(supportedCultures);
+
+            app.UseRequestLocalization(localizationOptions);
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();

@@ -2,7 +2,7 @@
 
 namespace Gestion.Web.Data
 {
-    public interface ICategoriasRepository : IGenericRepository<Categorias>
+    public interface ICategoriasRepository : IGenericRepository<ParamCategorias>
     {        
     }
 }

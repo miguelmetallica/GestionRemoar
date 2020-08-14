@@ -9,8 +9,6 @@ using System;
 using System.IO;
 using System.Net;
 using System.Threading.Tasks;
-using WooCommerceNET;
-using WooCommerceNET.WooCommerce.v3;
 
 namespace Gestion.Web.Controllers
 {
@@ -45,12 +43,7 @@ namespace Gestion.Web.Controllers
             {
                 return new NotFoundViewResult("NoExiste");
             }
-            MyRestAPI rest = new MyRestAPI("http://remoar.site/catalogo/wp-json/wc/v3/", "ck_48a4ce75e1343bfa3195aeb98a484e0bfd9d311d", "cs_d7170330f840cca7da468cff92ad22c07f940682");
-            WCObject wc = new WCObject(rest);
-
-            //Get all products
-            var products = await wc.Product.Get("2143");
-
+            
             return this.View(Categorias);
         }
 
@@ -112,7 +105,7 @@ namespace Gestion.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, CategoriasViewModel view)
+        public async Task<IActionResult> Edit(string id, CategoriasViewModel view)
         {
             if (id != view.Id)
             {
@@ -192,33 +185,33 @@ namespace Gestion.Web.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        private Categorias ToCategoria(CategoriasViewModel view, string path)
-        {
-            return new Categorias
-            {
-                Id = view.Id,
-                Nombre = view.Nombre,
-                Slug = view.Slug,
-                ParentId = view.ParentId,
-                Descripcion = view.Descripcion,
-                Imagen = path,
-                MenuOrden = view.MenuOrden,
-            };
-        }
+        //private Categorias ToCategoria(CategoriasViewModel view, string path)
+        //{
+        //    return new Categorias
+        //    {
+        //        Id = view.Id,
+        //        Nombre = view.Nombre,
+        //        Slug = view.Slug,
+        //        ParentId = view.ParentId,
+        //        Descripcion = view.Descripcion,
+        //        Imagen = path,
+        //        MenuOrden = view.MenuOrden,
+        //    };
+        //}
 
-        private CategoriasViewModel ToCategoria(Categorias categorias)
-        {
-            return new CategoriasViewModel
-            {
-                Id = categorias.Id,
-                Nombre = categorias.Nombre,
-                Slug = categorias.Slug,
-                ParentId = categorias.ParentId,
-                Descripcion = categorias.Descripcion,
-                Imagen = categorias.Imagen,
-                MenuOrden = categorias.MenuOrden,
-            };
-        }
+        //private CategoriasViewModel ToCategoria(Categorias categorias)
+        //{
+        //    return new CategoriasViewModel
+        //    {
+        //        Id = categorias.Id,
+        //        Nombre = categorias.Nombre,
+        //        Slug = categorias.Slug,
+        //        ParentId = categorias.ParentId,
+        //        Descripcion = categorias.Descripcion,
+        //        Imagen = categorias.Imagen,
+        //        MenuOrden = categorias.MenuOrden,
+        //    };
+        //}
 
         public IActionResult NoExiste()
         {
@@ -227,23 +220,23 @@ namespace Gestion.Web.Controllers
 
     }
 
-    public class MyRestAPI : RestAPI
-    {
-        public MyRestAPI(string url, string key, string secret, bool authorizedHeader = true,
-            Func<string, string> jsonSerializeFilter = null,
-            Func<string, string> jsonDeserializeFilter = null,
-            Action<HttpWebRequest> requestFilter = null) : base(url, key, secret, authorizedHeader, jsonSerializeFilter, jsonDeserializeFilter, requestFilter)
-        {
-        }
+    //public class MyRestAPI : RestAPI
+    //{
+    //    public MyRestAPI(string url, string key, string secret, bool authorizedHeader = true,
+    //        Func<string, string> jsonSerializeFilter = null,
+    //        Func<string, string> jsonDeserializeFilter = null,
+    //        Action<HttpWebRequest> requestFilter = null) : base(url, key, secret, authorizedHeader, jsonSerializeFilter, jsonDeserializeFilter, requestFilter)
+    //    {
+    //    }
 
-        public override T DeserializeJSon<T>(string jsonString)
-        {
-            return JsonConvert.DeserializeObject<T>(jsonString);
-        }
+    //    public override T DeserializeJSon<T>(string jsonString)
+    //    {
+    //        return JsonConvert.DeserializeObject<T>(jsonString);
+    //    }
 
-        public override string SerializeJSon<T>(T t)
-        {
-            return JsonConvert.SerializeObject(t);
-        }
-    }
+    //    public override string SerializeJSon<T>(T t)
+    //    {
+    //        return JsonConvert.SerializeObject(t);
+    //    }
+    //}
 }

@@ -1,5 +1,6 @@
 ﻿using Gestion.Web.Models;
 using Microsoft.AspNetCore.Identity;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Gestion.Web.Helpers
@@ -26,6 +27,21 @@ namespace Gestion.Web.Helpers
 
         Task<bool> IsUserInRoleAsync(Usuarios user, string roleName);
 
+        Task<string> GenerateEmailConfirmationTokenAsync(Usuarios user);
+
+        Task<IdentityResult> ConfirmEmailAsync(Usuarios user, string token);
+
+        Task<Usuarios> GetUserByIdAsync(string userId);
+
+        Task<string> GeneratePasswordResetTokenAsync(Usuarios user);
+
+        Task<IdentityResult> ResetPasswordAsync(Usuarios user, string token, string password);
+
+        Task<List<Usuarios>> GetAllUsersAsync();
+
+        Task RemoveUserFromRoleAsync(Usuarios user, string roleName);
+
+        Task DeleteUserAsync(Usuarios user);
 
     }
 }

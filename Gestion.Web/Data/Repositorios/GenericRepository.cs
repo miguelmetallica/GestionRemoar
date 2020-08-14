@@ -21,7 +21,7 @@ namespace Gestion.Web.Data
             return this.context.Set<T>().AsNoTracking();
         }
 
-        public async Task<T> GetByIdAsync(int id)
+        public async Task<T> GetByIdAsync(string id)
         {
             return await this.context.Set<T>().AsNoTracking().FirstOrDefaultAsync(e => e.Id == id);
         }
@@ -44,7 +44,7 @@ namespace Gestion.Web.Data
             await SaveAllAsync();
         }
 
-        public async Task<bool> ExistAsync(int id)
+        public async Task<bool> ExistAsync(string id)
         {
             return await this.context.Set<T>().AnyAsync(e => e.Id == id);
 

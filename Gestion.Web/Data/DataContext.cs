@@ -6,20 +6,37 @@ namespace Gestion.Web.Data
 {
     public class DataContext : IdentityDbContext<Usuarios>
     {
-        public virtual DbSet<Localidades> Localidades { get; set; }
-        public virtual DbSet<Provincia> Provincias { get; set; }
+        public virtual DbSet<Clientes> Clientes { get; set; }
+        public virtual DbSet<ParamCategorias> ParamCategorias { get; set; }
+        public virtual DbSet<ParamColores> ParamColores { get; set; }
+        public virtual DbSet<ParamComprobantesTipos> ParamComprobantesTipos { get; set; }
+        public virtual DbSet<ParamCondicionesIva> ParamCondicionesIva { get; set; }
+        public virtual DbSet<ParamCuentasCompras> ParamCuentasCompras { get; set; }
+        public virtual DbSet<ParamCuentasVentas> ParamCuentasVentas { get; set; }
+        public virtual DbSet<ParamEtiquetas> ParamEtiquetas { get; set; }
+        public virtual DbSet<ParamMarcas> ParamMarcas { get; set; }
+        public virtual DbSet<ParamProvincias> ParamProvincias { get; set; }
         public virtual DbSet<ParamTiposDocumentos> ParamTiposDocumentos { get; set; }
-        public virtual DbSet<Categorias> Categorias { get; set; }
-        public virtual DbSet<Etiquetas> Etiquetas { get; set; }
+        public virtual DbSet<ParamTiposProductos> ParamTiposProductos { get; set; }
+        public virtual DbSet<ParamUnidadesMedidas> ParamUnidadesMedidas { get; set; }
+
         public virtual DbSet<Productos> Productos { get; set; }
         public virtual DbSet<ProductosCategorias> ProductosCategorias { get; set; }
+        public virtual DbSet<ProductosColores> ProductosColores { get; set; }
         public virtual DbSet<ProductosEtiquetas> ProductosEtiquetas { get; set; }
         public virtual DbSet<ProductosImagenes> ProductosImagenes { get; set; }
 
-        public DbSet<Order> Orders { get; set; }
-        public DbSet<OrderDetail> OrderDetails { get; set; }
-        public DbSet<OrderDetailTemp> OrderDetailTemps { get; set; }
+        public virtual DbSet<Sucursales> Sucursales { get; set; }
 
+        public DbSet<Presupuestos> Presupuestos { get; set; }
+        public DbSet<PresupuestosDetalle> PresupuestosDetalle { get; set; }
+        public DbSet<PresupuestosDetalleTemp> PresupuestosDetalleTemp { get; set; }
+        public DbSet<ParamPresupuestosEstados> ParamPresupuestosEstados { get; set; }
+
+        public DbSet<Cajas> Cajas  { get; set; }
+        public DbSet<CajasAperturasCierres> CajasAperturasCierres { get; set; }
+        public DbSet<CajasMovimientos> CajasMovimientos { get; set; }
+        public DbSet<ParamCajasMovimientosTipos> ParamCajasMovimientosTipos { get; set; }
 
         public DataContext(DbContextOptions<DataContext> options) : base(options)
         {

@@ -5,8 +5,8 @@ namespace Gestion.Web.Models
 {
     public partial class ProductosImagenes : IEntidades
     {
-        public int Id { get; set; }
-        public int ProductoId { get; set; }
+        public string Id { get; set; }
+        public string ProductoId { get; set; }
         public string ImagenUrl { get; set; }
         public string NombreImagen { get; set; }
     }

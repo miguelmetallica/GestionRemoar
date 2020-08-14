@@ -1,80 +1,169 @@
 ﻿<!DOCTYPE html>
+
 <html lang="en">
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - Gestion.Web</title>
-
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link href="~/node_modules/font-awesome/css/font-awesome.min.css" rel="stylesheet" />
-    <link rel="stylesheet" href="~/css/site.css" />
-    <link href="~/node_modules/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css" rel="stylesheet" />
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Remoar | Gestión</title>
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <!--=====================================
+        ARCHIVOS CSS
+    ======================================-->
+    <!-- Bootstrap 3.3.7 -->
+    <link rel="stylesheet" href="~/admin/bower_components/bootstrap/dist/css/bootstrap.min.css">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="~/admin/bower_components/fontawesome-free/css/all.min.css">
+    <!-- Ionicons -->
+    <link rel="stylesheet" href="~/admin/bower_components/Ionicons/css/ionicons.min.css">
+    <!-- Theme style -->
+    <link rel="stylesheet" href="~/admin/dist/css/AdminLTE.css">
+    <!-- AdminLTE Skins.  -->
+    <link rel="stylesheet" href="~/admin/dist/css/skins/_all-skins.min.css">
+    <!-- Google Font -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+    <!-- DataTables -->
+    <link href="~/admin/bower_components/datatables.net-bs/css/dataTables.bootstrap.css" rel="stylesheet" />
+    <link href="~/admin/bower_components/datatables.net-bs/css/responsive.bootstrap.min.css" rel="stylesheet" />
+    <!--=====================================
+        ARCHIVOS JS
+    ======================================-->
+    <!-- jQuery 3 -->
+    <script src="~/admin/bower_components/jquery/dist/jquery.min.js"></script>
+    <!-- Bootstrap 3.3.7 -->
+    <script src="~/admin/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+    <!-- Admin JS -->
+    <script src="~/admin/dist/js/adminlte.min.js"></script>
+    <!-- SlimScroll -->
+    <script src="~/admin/bower_components/jquery-slimscroll/jquery.slimscroll.min.js"></script>
+    <!-- FastClick -->
+    <script src="~/admin/bower_components/fastclick/lib/fastclick.js"></script>
+    <!-- DataTables -->
+    <script src="~/admin/bower_components/datatables.net/js/jquery.dataTables.min.js"></script>
+    <script src="~/admin/bower_components/datatables.net-bs/js/dataTables.bootstrap.js"></script>
+    <script src="~/admin/bower_components/datatables.net-bs/js/dataTables.responsive.min.js"></script>
+    <script src="~/admin/bower_components/datatables.net-bs/js/responsive.bootstrap.min.js"></script>
 </head>
-<body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Gestion.Web</a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Productos" asp-action="Index">Productos</a>
-                        </li>
-                        @if (this.User.Identity.IsAuthenticated)
-                        {
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Order" asp-action="Index">Orders</a>
-                            </li>
+<body class="hold-transition skin-blue sidebar-mini sidebar-collapse">
 
-                            @if (this.User.IsInRole("Admin"))
-                            {
-                                <li><a asp-area="" asp-controller="Provincias" asp-action="Index">Provincias</a></li>
-                            }
+    <div class="wrapper">
+        <header class="main-header">
+            <a asp-controller="Home" class="logo">
+                <span class="logo-mini"><b>R</b></span>
+                <span class="logo-lg"><b>REMOAR</b></span>
+            </a>
+            <nav class="navbar navbar-static-top">
+                <a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button">
+                    <span class="sr-only">Toggle navigation</span>
+                    <i class="fas fa-bars"></i>
+                </a>
+                <div class="navbar-custom-menu">
+                    <ul class="nav navbar-nav">
+                        @if (!User.Identity.IsAuthenticated)
+                        {
+                            <li class="dropdown user user-menu">
+                                <a asp-controller="Account" asp-action="Login" class="btn btn-success btn-flat">Login</a>
+                            </li>
                         }
+                        else
+                        {
+                            <li class="dropdown user user-menu">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                    <img src="~/admin/dist/img/user2-160x160.jpg" class="user-image" alt="User Image">
+                                    <span class="hidden-xs">@(User.Identity.Name)</span>
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li class="user-header">
+                                        <img src="~/admin/dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
+                                        <p>
+                                            @(User.Identity.Name)
+                                            @*<small>Member since Nov. 2012</small>*@
+                                        </p>
+                                    </li>
+                                    <li class="user-footer">
+                                        <div class="pull-right">
+                                            <a asp-controller="Account" asp-action="Logout" class="btn btn-warning btn-flat">Salir</a>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </li>
+                        }
+
 
                     </ul>
                 </div>
-                @if (this.User.Identity.IsAuthenticated)
-                {
-                    <form class="form-inline my-2 my-lg-0">
-                        <a asp-controller="Account" asp-action="ChangeUser" class="btn btn-outline-success my-2 my-sm-0">@(this.User.Identity.Name)</a>
-                        <a asp-controller="Account" asp-action="Logout" class="btn btn-outline-warning my-2 my-sm-0">Logout</a>
-                    </form>
-                }
-                else
-                {
-                    <form class="form-inline my-2 my-lg-0">
-                        <a asp-controller="Account" asp-action="Login" class="btn btn-outline-success my-2 my-sm-0">Login</a>
-                    </form>
-                }
-            </div>
-        </nav>
-    </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
-    </div>
+            </nav>
+        </header>
+        @if (User.Identity.IsAuthenticated)
+        {
+            <aside class="main-sidebar">
+                <section class="sidebar">
+                    <div class="user-panel">
+                        <div class="pull-left image">
+                            <img src="~/admin/dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
+                        </div>
+                        <div class="pull-left info">
+                            <p>@User.Identity.Name</p>
+                            <a href="#">Administrador</a>
+                        </div>
+                    </div>
+                    <ul class="sidebar-menu" data-widget="tree">
+                        <li class="header">MENÚ</li>
+                        <li>
+                            <a href="">
+                                <i class="fas fa-tachometer-alt"></i> <span>Inicio</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a asp-controller="Clientes" asp-action="Index">
+                                <i class="fas fa-tachometer-alt"></i> <span>Clientes</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a asp-controller="Productos" asp-action="Index">
+                                <i class="fas fa-tachometer-alt"></i> <span>Productos</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a asp-controller="Presupuestos" asp-action="Index">
+                                <i class="fas fa-tachometer-alt"></i> <span>Presupuestos</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a asp-controller="PresupuestosEstados" asp-action="Index">
+                                <i class="fas fa-tachometer-alt"></i> <span>PresupuestosEstados</span>
+                            </a>
+                        </li>
+                        <li class="treeview">
+                            <a href="#">
+                                <i class="fas fa-chart-pie"></i>
+                                <span>Charts</span>
+                                <span class="pull-right-container">
+                                    <i class="fa fa-angle-left pull-right"></i>
+                                </span>
+                            </a>
+                            <ul class="treeview-menu">
+                                <li><a href="../charts/chartjs.html"><i class="fa fa-circle-o"></i> ChartJS</a></li>
+                                <li><a href="../charts/morris.html"><i class="fa fa-circle-o"></i> Morris</a></li>
+                                <li><a href="../charts/flot.html"><i class="fa fa-circle-o"></i> Flot</a></li>
+                                <li><a href="../charts/inline.html"><i class="fa fa-circle-o"></i> Inline charts</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </section>
+            </aside>
+        }
+        @RenderBody()
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2020 - Gestion.Web - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+        <footer class="main-footer">
+            <div class="pull-right hidden-xs">
+                <b>Version</b> 1.0.0
+            </div>
+            <strong>Copyright &copy; @DateTime.Now.Year <a href="https://adminlte.io">Sis-Gestion</a>.</strong> Todos los derechos reservados
+        </footer>
         </div>
-    </footer>
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/node_modules/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
+
+    <script src="~/js/plantilla.js"></script>
+
     @RenderSection("Scripts", required: false)
 </body>
 </html>

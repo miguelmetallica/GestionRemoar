@@ -6,10 +6,10 @@ namespace Gestion.Web.Models
     public partial class ParamCondicionesIva : IEntidades
     {
         [Key]
-        public int Id { get; set; }
+        public string Id { get; set; }
 
         [Required(ErrorMessage = "El campo {0} es obligatorio.")]
-        [MaxLength(6)]
+        [MaxLength(5)]
         public string Codigo { get; set; }
 
         [Required(ErrorMessage = "El campo {0} es obligatorio.")]
@@ -17,7 +17,5 @@ namespace Gestion.Web.Models
         public string Descripcion { get; set; }
 
         public bool Estado { get; set; }
-
-        public Usuarios User { get; set; }
     }
 }

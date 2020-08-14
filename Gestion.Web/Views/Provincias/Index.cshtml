@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Gestion.Web.Models.Provincia>
+﻿@model IEnumerable<Gestion.Web.Models.ParamProvincias>
 
 @{
     ViewData["Title"] = "Index";
@@ -16,14 +16,14 @@
                 @Html.DisplayNameFor(model => model.Id)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Nombre)
+                @Html.DisplayNameFor(model => model.Descripcion)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Codigo)
             </th>
-            <th>
+            @*<th>
                 @Html.DisplayNameFor(model => model.NumeroLocalidades)
-            </th>
+            </th>*@
             <th></th>
         </tr>
     </thead>
@@ -35,14 +35,14 @@
                     @Html.DisplayFor(modelItem => item.Id)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Nombre)
+                    @Html.DisplayFor(modelItem => item.Descripcion)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Codigo)
                 </td>
-                <td>
+                @*<td>
                     @Html.DisplayFor(modelItem => item.NumeroLocalidades)
-                </td>
+                </td>*@
                 <td>
                     <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
                     <a asp-action="Details" asp-route-id="@item.Id">Details</a> |

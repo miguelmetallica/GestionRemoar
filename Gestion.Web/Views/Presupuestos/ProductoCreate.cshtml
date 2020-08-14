@@ -1,0 +1,157 @@
+﻿@model Gestion.Web.Models.PresupuestosDetalle
+
+@{
+    ViewData["Title"] = "Seleccion de Productos";
+    var productos = (IEnumerable<Productos>)ViewData["productos"];
+}
+
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <h1>
+            Sistema de gestíon
+            <small>Gestion de Presupuestos</small>
+        </h1>
+        <ol class="breadcrumb">
+            <li><a asp-controller="Home"><i class="fas fa-tachometer-alt"></i> Inicio</a></li>
+            <li><a asp-controller="Presupuestos">Listado de Presupuestos</a></li>
+            <li class="active">@ViewData["Title"]</li>
+        </ol>
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+        <div class="row">
+            <!-- left column -->
+            <div class="col-md-6">
+                <!-- general form elements -->
+                <div class="box box-primary">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">Ficha del Producto</h3>
+                    </div>
+                    <!-- /.box-header -->
+                    <!-- form start -->
+                    <form asp-action="ProductoCreate" enctype="multipart/form-data">
+                        <div class="box-body">
+                            <input type="hidden" asp-for="PresupuestoId" />
+
+                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                            <div class="form-group">
+                                <label asp-for="Producto.Producto" class="control-label"></label>
+                                <input asp-for="NombreProducto" class="form-control input-sm" />
+                                <span asp-validation-for="NombreProducto" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="Precio" class="control-label"></label>
+                                <input asp-for="Precio" class="form-control input-sm" />
+                                <span asp-validation-for="Precio" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="Cantidad" class="control-label"></label>
+                                <input asp-for="Cantidad" class="form-control input-sm" />
+                                <span asp-validation-for="Cantidad" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <!-- /.box-body -->
+
+                        <div class="box-footer">
+                            <input type="submit" value="Guardar" class="btn btn-primary" />
+                            <a asp-action="Index" class="btn btn-default pull-right">Volver al Listado</a>
+                        </div>
+                    </form>
+                </div>
+                <!-- /.box -->
+            </div>
+            <!--/.col-->
+            <!-- left column -->
+            <div class="col-md-6">
+                <!-- general form elements -->
+                <div class="box box-primary">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">Listado de Productos</h3>                        
+                    </div>
+                    <div class="box-body">
+                        <table id="dTable" class="table dt-responsive table-condensed table-bordered table-striped" width="100%">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        Codigo
+                                    </th>
+                                    <th>
+                                        Producto
+                                    </th>
+                                    <th>
+                                        Precio
+                                    </th>
+                                    <th>Operaciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in productos)
+                                {
+                                    <tr>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Codigo)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Producto)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.PrecioNormal)
+                                        </td>
+                                        <td>
+                                            <div class="btn-group">
+                                                @{
+                                                    var param = new Dictionary<string, string> { { "productoId", item.Id }, { "presupuestoId", Model.PresupuestoId } };
+                                                }
+                                                <a class="btn btn-warning" asp-action="ProductoSeleccion" asp-all-route-data="@param">Seleccionar Producto</a>
+
+                                            </div>
+                                        </td>
+                                    </tr>
+                                }
+                                
+                            </tbody>                            
+                        </table>
+                    </div>
+                </div>
+                <!-- /.box -->
+            </div>
+            <!--/.col-->
+        </div>
+        <!-- /.row -->
+    </section>
+    <!-- /.content -->
+</div>
+<!-- /.content-wrapper -->
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            $('#dTable').DataTable({
+                "processing": "true",
+                "retrieve": "true",
+                "language": {
+                    "processing": "Procesando... Espere por favor",
+                    "lengthMenu": "Mostrar _MENU_ registros por pagina",
+                    "zeroRecords": "Nada encontrado",
+                    "info": "Mostrando página _PAGE_ de _PAGES_",
+                    "infoEmpty": "No hay registros disponibles",
+                    "sInfoFiltered": "(filtrado de un total de _MAX_ registros)",
+                    "sSearch": "Buscar:",
+                    "oPaginate": {
+                        "sFirst": "Primero",
+                        "sLast": "Último",
+                        "sNext": "Siguiente",
+                        "sPrevious": "Anterior"
+                    }
+                }
+            });
+        });
+
+    </script>
+}

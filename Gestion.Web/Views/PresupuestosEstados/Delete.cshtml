@@ -1,0 +1,79 @@
+﻿@model Gestion.Web.Models.ParamPresupuestosEstados
+
+@{
+    ViewData["Title"] = "Eliminar Estado";
+}
+
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <h1>
+            Sistema de gestíon
+            <small>Gestion de Presupuestos</small>
+        </h1>
+        <ol class="breadcrumb">
+            <li><a asp-controller="Home"><i class="fas fa-tachometer-alt"></i> Inicio</a></li>
+            <li><a asp-controller="Clientes">Listado de Presupuestos</a></li>
+            <li class="active">@ViewData["Title"]</li>
+        </ol>
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+        <div class="row">
+            <!-- left column -->
+            <div class="col-md-6">
+                <!-- general form elements -->
+                <div class="box box-primary">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">Datos del Estado</h3>
+                    </div>
+                    <!-- /.box-header -->
+                    <!-- form start -->                    
+                    <div class="box-body">
+                        <dl class="dl-horizontal">
+                            <dt>
+                                @Html.DisplayNameFor(model => model.Codigo)
+                            </dt>
+                            <dd>
+                                @Html.DisplayFor(model => model.Codigo)
+                            </dd>
+                            <dt>
+                                @Html.DisplayNameFor(model => model.Descripcion)
+                            </dt>
+                            <dd>
+                                @Html.DisplayFor(model => model.Descripcion)
+                            </dd>
+                            <dt>
+                                @Html.DisplayNameFor(model => model.Estado)
+                            </dt>
+                            <dd>
+                                @Html.DisplayFor(model => model.Estado)
+                            </dd>
+                        </dl>
+                    </div>
+                    <!-- /.box-body -->
+
+                    <div class="box-footer">
+                        <form asp-action="Delete">
+                            <input type="hidden" asp-for="Id" />
+                            <input type="submit" value="Eliminar" class="btn btn-danger" />
+                            <a asp-action="Index" class="btn btn-default pull-right">Volver al Listado</a>
+                        </form>                        
+                    </div>                
+                </div>
+                <!-- /.box -->
+            </div>
+            <!--/.col-->
+        </div>
+        <!-- /.row -->
+    </section>
+    <!-- /.content -->
+</div>
+<!-- /.content-wrapper -->
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+

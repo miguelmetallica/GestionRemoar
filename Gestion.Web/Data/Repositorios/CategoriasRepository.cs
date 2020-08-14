@@ -2,7 +2,7 @@
 
 namespace Gestion.Web.Data
 {
-    public class CategoriasRepository : GenericRepository<Categorias>, ICategoriasRepository
+    public class CategoriasRepository : GenericRepository<ParamCategorias>, ICategoriasRepository
     {
         public CategoriasRepository(DataContext context) : base(context)
         {

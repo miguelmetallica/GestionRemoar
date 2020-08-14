@@ -1,4 +1,4 @@
-﻿@model Gestion.Web.Models.Provincia
+﻿@model Gestion.Web.Models.ParamProvincias
 
 @{
     ViewData["Title"] = "Details";
@@ -11,10 +11,10 @@
     <hr />
     <dl class="dl-horizontal">
         <dt>
-            @Html.DisplayNameFor(model => model.Nombre)
+            @Html.DisplayNameFor(model => model.Descripcion)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.Nombre)
+            @Html.DisplayFor(model => model.Descripcion)
         </dd>
     </dl>
 </div>
@@ -27,7 +27,7 @@
 <br />
 
 <h4>Localidades</h4>
-@if (Model.Localidades == null || Model.Localidades.Count == 0)
+@*@if (Model.Localidades == null || Model.Localidades.Count == 0)
 {
     <h5>No hay Localidades asignadas</h5>
 }
@@ -57,7 +57,7 @@ else
             }
         </tbody>
     </table>
-}
+}*@
 
 <div id="deleteDialog" class="modal fade">
     <div class="modal-dialog modal-sm">

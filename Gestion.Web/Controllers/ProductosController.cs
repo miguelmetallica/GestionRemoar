@@ -5,9 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
-using WooCommerceNET.WooCommerce.v3;
 
 namespace Gestion.Web.Controllers
 {
@@ -16,67 +14,43 @@ namespace Gestion.Web.Controllers
     {
         private readonly IProductosRepository repository; 
         private readonly IUserHelper userHelper;
+        private readonly ITiposProductosRepository tiposProductos;
+        private readonly ICuentasComprasRepository cuentasCompras;
+        private readonly ICuentasVentasRepository cuentasVentas;
+        private readonly IUnidadesMedidasRepository unidadesMedidas;
+        private readonly IMarcasRepository marcas;
 
-        public ProductosController(IProductosRepository repository, IUserHelper userHelper)
+        public ProductosController(IProductosRepository repository, 
+                                IUserHelper userHelper, 
+                                ITiposProductosRepository tiposProductos,
+                                ICuentasComprasRepository cuentasCompras,
+                                ICuentasVentasRepository cuentasVentas,
+                                IUnidadesMedidasRepository unidadesMedidas,
+                                IMarcasRepository marcas
+                                )
         {
             this.repository = repository;
             this.userHelper = userHelper;
+            this.tiposProductos = tiposProductos;
+            this.cuentasCompras = cuentasCompras;
+            this.cuentasVentas = cuentasVentas;
+            this.unidadesMedidas = unidadesMedidas;
+            this.marcas = marcas;
         }
 
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            MyRestAPI rest = new MyRestAPI("http://remoar.site/catalogo/wp-json/wc/v3/", "ck_48a4ce75e1343bfa3195aeb98a484e0bfd9d311d", "cs_d7170330f840cca7da468cff92ad22c07f940682");
-            WCObject wc = new WCObject(rest);
-
-            //Get all products
-            var wproducts = await wc.Product.GetAll();
-
-            //return View(repository.GetAll());
-            var productos = ToProductos(wproducts);
-
-            return View(productos);
+            return View(repository.GetAll());            
         }
-
-        private List<Productos> ToProductos(List<Product> wproducts)
-        {
-            List<Productos> list = new List<Productos>();
-            try
-            {                
-                foreach (var item in wproducts)
-                {
-                    list.Add(new Productos()
-                    {
-                        Id = (int)item.id,
-                        Nombre = item.name,
-                        Codigo = item.sku,
-                        Tipo = item.type,
-                        Precio = item.price,
-                        Descripcion = item.description,
-                        DescripcionCorta = item.short_description
-                    });
-                };
-
-                return list;
-
-            }
-            catch (Exception)
-            {
-
-                return list;
-            }
-            
-
-            
-        }
-
-        public async Task<IActionResult> Details(int? id)
+        
+        public async Task<IActionResult> Details(string id)
         {
             if (id == null)
             {
                 return new NotFoundViewResult("NoExiste");
             }
 
-            var Productos = await this.repository.GetByIdAsync(id.Value);
+            var Productos = await this.repository.GetByIdAsync(id);
             if (Productos == null)
             {
                 return new NotFoundViewResult("NoExiste");
@@ -87,6 +61,11 @@ namespace Gestion.Web.Controllers
 
         public IActionResult Create()
         {
+            ViewBag.TiposProductos = this.tiposProductos.GetCombo();
+            ViewBag.CuentasCompras = this.cuentasCompras.GetCombo();
+            ViewBag.CuentasVentas = this.cuentasVentas.GetCombo();
+            ViewBag.UnidadesMedidas = this.unidadesMedidas.GetCombo();
+            ViewBag.Marcas = this.marcas.GetCombo();
             return View();
         }
 
@@ -96,31 +75,57 @@ namespace Gestion.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                await repository.CreateAsync(productos);
-                return RedirectToAction(nameof(Index));
+                var codigo = await repository.ExistCodigoAsync("", productos.Codigo);
+                if (codigo) 
+                {
+                    ModelState.AddModelError("Codigo", "El Codigo ya existe en la base de datos");                
+                }
+
+                if (ModelState.IsValid)
+                {
+                    productos.Id = Guid.NewGuid().ToString();
+                    productos.FechaAlta = DateTime.Now;
+                    productos.UsuarioAlta = User.Identity.Name;
+                    await repository.CreateAsync(productos);
+                    return RedirectToAction(nameof(Index));
+                }
             }
+
+            ViewBag.TiposProductos = this.tiposProductos.GetCombo();
+            ViewBag.CuentasCompras = this.cuentasCompras.GetCombo();
+            ViewBag.CuentasVentas = this.cuentasVentas.GetCombo();
+            ViewBag.UnidadesMedidas = this.unidadesMedidas.GetCombo();
+            ViewBag.Marcas = this.marcas.GetCombo();
+
             return View(productos);
         }
 
-        public async Task<IActionResult> Edit(int? id)
+        public async Task<IActionResult> Edit(string id)
         {
             if (id == null)
             {
                 return new NotFoundViewResult("NoExiste");
             }
 
-            var productos = await this.repository.GetByIdAsync(id.Value);
+            var productos = await this.repository.GetByIdAsync(id);
             if (productos == null)
             {
                 return new NotFoundViewResult("NoExiste");
             }
+
+            ViewBag.TiposProductos = this.tiposProductos.GetCombo();
+            ViewBag.CuentasCompras = this.cuentasCompras.GetCombo();
+            ViewBag.CuentasVentas = this.cuentasVentas.GetCombo();
+            ViewBag.UnidadesMedidas = this.unidadesMedidas.GetCombo();
+            ViewBag.Marcas = this.marcas.GetCombo();
+
             return this.View(productos);
         }
 
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, Productos productos)
+        public async Task<IActionResult> Edit(string id, Productos productos)
         {
             if (id != productos.Id)
             {
@@ -131,7 +136,16 @@ namespace Gestion.Web.Controllers
             {
                 try
                 {
-                    await repository.UpdateAsync(productos);
+                    var codigo = await repository.ExistCodigoAsync(id, productos.Codigo);
+                    if (codigo)
+                    {
+                        ModelState.AddModelError("Codigo", "El Codigo ya existe en la base de datos");
+                    }
+
+                    if (ModelState.IsValid)
+                    {
+                        await repository.UpdateAsync(productos);
+                    }
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -146,17 +160,24 @@ namespace Gestion.Web.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+
+            ViewBag.TiposProductos = this.tiposProductos.GetCombo();
+            ViewBag.CuentasCompras = this.cuentasCompras.GetCombo();
+            ViewBag.CuentasVentas = this.cuentasVentas.GetCombo();
+            ViewBag.UnidadesMedidas = this.unidadesMedidas.GetCombo();
+            ViewBag.Marcas = this.marcas.GetCombo();
+
             return View(productos);
         }
 
-        public async Task<IActionResult> Delete(int? id)
+        public async Task<IActionResult> Delete(string id)
         {
             if (id == null)
             {
                 return new NotFoundViewResult("NoExiste");
             }
 
-            var Productos = await this.repository.GetByIdAsync(id.Value);
+            var Productos = await this.repository.GetByIdAsync(id);
             if (Productos == null)
             {
                 return new NotFoundViewResult("NoExiste");
@@ -167,7 +188,7 @@ namespace Gestion.Web.Controllers
 
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> DeleteConfirmed(string id)
         {
             var Productos = await repository.GetByIdAsync(id);
             await repository.DeleteAsync(Productos);
