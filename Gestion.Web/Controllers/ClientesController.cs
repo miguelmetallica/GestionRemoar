@@ -77,7 +77,9 @@ namespace Gestion.Web.Controllers
 
                 if (ModelState.IsValid)
                 {
-                    await spNuevo(clientes);
+                    clientes.Id = Guid.NewGuid().ToString();
+                    clientes.UsuarioAlta =User.Identity.Name;
+                    await repository.spInsertar(clientes);
 
                     return RedirectToAction(nameof(Index));
                 }
@@ -125,7 +127,7 @@ namespace Gestion.Web.Controllers
 
             if (ModelState.IsValid)
             {
-                await spEditar(clientes);
+                await repository.spEditar(clientes);
 
                 return RedirectToAction(nameof(Index));
             }
@@ -148,7 +150,7 @@ namespace Gestion.Web.Controllers
             {
                 return NotFound();
             }
-
+            cliente.Estado = !cliente.Estado;
             await this.repository.DeleteAsync(cliente);
             return RedirectToAction(nameof(Index));
         }

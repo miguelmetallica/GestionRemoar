@@ -17,7 +17,10 @@ namespace Gestion.Web.Models
         [MaxLength(150, ErrorMessage = "The field {0} only can contain {1} characters length.")]
         public string Nombre { get; set; }
 
-        public ICollection<ParamProvincias> Provincia { get; set; }
+        [Display(Name = "Provincia")]
+        public string ProvinciaId { get; set; }
+        public ParamProvincias Provincia { get; set; }
+        //public ICollection<ParamProvincias> Provincia { get; set; }
 
         [Required]
         [Display(Name = "Localidad")]
@@ -48,6 +51,7 @@ namespace Gestion.Web.Models
         [Display(Name = "Otras Referencias")]
         [MaxLength(500, ErrorMessage = "The field {0} only can contain {1} characters length.")]
         public string OtrasReferencias { get; set; }
+        public bool Estado { get; set; }
 
     }
 }

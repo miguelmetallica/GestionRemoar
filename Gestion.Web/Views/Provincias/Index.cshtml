@@ -1,101 +1,128 @@
 ﻿@model IEnumerable<Gestion.Web.Models.ParamProvincias>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Listado de Provincias";
 }
 
-<h1>Index</h1>
-
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Id)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Descripcion)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Codigo)
-            </th>
-            @*<th>
-                @Html.DisplayNameFor(model => model.NumeroLocalidades)
-            </th>*@
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Id)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Descripcion)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Codigo)
-                </td>
-                @*<td>
-                    @Html.DisplayFor(modelItem => item.NumeroLocalidades)
-                </td>*@
-                <td>
-                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger" id="btnDelete">Delete</a>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
-
-
-<div id="deleteDialog" class="modal fade">
-    <div class="modal-dialog modal-sm">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal"><i class="fa fa-window-close"></i></button>
-                <h4 class="modal-title">Delete</h4>
+<!--================================
+BREADCRUMB
+=================================-->
+<div class="content-wrapper">
+    <section class="content-header">
+        <h1>
+            Sistema de gestíon <small>Gestion de Clientes</small>
+        </h1>
+        <ol class="breadcrumb">
+            <li><a asp-controller="Home" asp-action="Index"><i class="fas fa-tachometer-alt"></i> Inicio</a></li>
+            <li class="active">@ViewData["Title"]</li>
+        </ol>
+    </section>
+    <!--================================
+        CONTENIDO
+    =================================-->
+    <section class="content">
+        <div class="box box-primary">
+            <div class="box-header with-border">
+                <h3 class="box-title">@ViewData["Title"]</h3>
+                <p><a asp-action="Create" class="btn btn-primary btn-sm pull-right" aria-hidden="true">Nueva Provincia</a></p>
             </div>
-            <div class="modal-body">
-                <p>Do you want to delete the country?</p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-danger" id="btnYesDelete">Delete</button>
-                <button type="button" class="btn btn-success" id="btnNoDelete">No</button>
-            </div>
+            <div class="box-body">
+                <p>
+
+                </p>
+                <table id="dTable" class="table dt-responsive table-condensed table-bordered table-striped" width="100%">
+                    <thead>
+                        <tr>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Codigo)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Descripcion)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Estado)
+                            </th>
+                            <th>Operaciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Codigo)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Descripcion)
+                                </td>                                
+                                <td>
+                                    @{
+                                        if (item.Estado)
+                                        {
+                                            <span class="label label-success">Activo</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="label label-danger">Inactivo</span>
+                                        }
+
+                                    }
+                                    
+                                    
+                                </td>
+                                <td>
+                                    <div class="btn-group">
+                                        <a class="btn btn-warning" asp-action="Edit" asp-route-id="@item.Id"><i class="fa fa-pen"></i></a>
+                                        <a class="btn btn-info" asp-action="Details" asp-route-id="@item.Id"><i class="fa fa-search-plus"></i></a>
+                                            @{
+                                                if (item.Estado)
+                                                {
+                                                    <a class="btn btn-danger" asp-action="Delete" asp-route-id="@item.Id"><i class="glyphicon glyphicon-remove"></i></a>
+                                                }
+                                                else
+                                                {
+                                                    <a class="btn btn-success" asp-action="Delete" asp-route-id="@item.Id"><i class="glyphicon glyphicon-ok"></i></a>
+                                                }
+
+                                            }                                                                                    
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>            
         </div>
-    </div>
+    </section>
 </div>
 
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 
+@section Scripts {
+
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
     <script type="text/javascript">
         $(document).ready(function () {
 
-            var id = 0;
-
-            $('a[id*=btnDelete]').click(function () {
-                debugger;
-                id = $(this).parent()[0].id;
-                $("#deleteDialog").modal('show');
-                return false;
+            $('#dTable').DataTable({
+                "processing": "true",
+                "retrieve": "true",
+                "language": {
+                    "processing": "Procesando... Espere por favor",
+                    "lengthMenu": "Mostrar _MENU_ registros por pagina",
+                    "zeroRecords": "Nada encontrado",
+                    "info": "Mostrando página _PAGE_ de _PAGES_",
+                    "infoEmpty": "No hay registros disponibles",
+                    "sInfoFiltered": "(filtrado de un total de _MAX_ registros)",
+                    "sSearch": "Buscar:",
+                    "oPaginate": {
+                        "sFirst": "Primero",
+                        "sLast": "Último",
+                        "sNext": "Siguiente",
+                        "sPrevious": "Anterior"
+                    }
+                }
             });
-
-            $("#btnNoDelete").click(function () {
-                $("#deleteDialog").modal('hide');
-                return false;
-            });
-
-            $("#btnYesDelete").click(function () {
-                window.location.href = '/Provincias/Delete/' + id;
-            });
-
         });
+
     </script>
 }

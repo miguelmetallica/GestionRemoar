@@ -12,7 +12,7 @@ namespace Gestion.Web.Data
 
         Task<bool> ExistNroDocAsync(string id, string tipo, string nro);
 
-        Task<int> spNuevo(ClientesFisicoAdd item);
+        Task<int> spInsertar(ClientesFisicoAdd item);
 
         Task<int> spEditar(ClientesFisicoEdit item);
     }

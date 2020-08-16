@@ -29,7 +29,7 @@ namespace Gestion.Web.Models
         [Display(Name = "Nro de Documento")]
         public string NroDocumento { get; set; }
 
-        [Required(ErrorMessage = "Debes ingresar el {0}")]
+        //[Required(ErrorMessage = "Debes ingresar el {0}")]
         [StringLength(20, ErrorMessage =
             "El campo {0} debe contener como maximo {1} y un minimo de {2} caracteres",
             MinimumLength = 11)]
@@ -107,7 +107,7 @@ namespace Gestion.Web.Models
         [Display(Name = "Nro de Documento")]
         public string NroDocumento { get; set; }
 
-        [Required(ErrorMessage = "Debes ingresar el {0}")]
+        //[Required(ErrorMessage = "Debes ingresar el {0}")]
         [StringLength(20, ErrorMessage =
             "El campo {0} debe contener como maximo {1} y un minimo de {2} caracteres",
             MinimumLength = 11)]

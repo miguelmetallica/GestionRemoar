@@ -1,20 +1,35 @@
 ﻿@model IEnumerable<Gestion.Web.Models.Usuarios>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Listado de Usuarios";
 }
 
-<link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" />
-<br />
-
-<div class="row">
-    <div class="col-md-12">
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <h3 class="panel-title">Usuarios</h3>
+<!--================================
+BREADCRUMB
+=================================-->
+<div class="content-wrapper">
+    <section class="content-header">
+        <h1>
+            Sistema de gestíon <small>Gestion de Usuarios</small>
+        </h1>
+        <ol class="breadcrumb">
+            <li><a asp-controller="Home"><i class="fas fa-tachometer-alt"></i> Inicio</a></li>
+            <li class="active">@ViewData["Title"]</li>
+        </ol>
+    </section>
+    <!--================================
+        CONTENIDO
+    =================================-->
+    <section class="content">
+        <div class="box box-primary">
+            <div class="box-header with-border">
+                <h3 class="box-title">@ViewData["Title"]</h3>
             </div>
-            <div class="panel-body">
-                <table class="table table-hover table-responsive table-striped" id="UsersTable">
+            <div class="box-body">
+                <p>
+
+                </p>
+                <table id="dTable" class="table dt-responsive table-condensed table-bordered table-striped" width="100%">
                     <thead>
                         <tr>
                             <th>
@@ -89,46 +104,90 @@
                 </table>
             </div>
         </div>
-    </div>
+    </section>
 </div>
 
 <div class="modal fade" id="deleteDialog" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Delete Item</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <p>Do you want to delete the user?</p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-danger" id="btnYesDelete">Delete</button>
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Delete Item</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>Do you want to delete the user?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-danger" id="btnYesDelete">Delete</button>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
 @section Scripts {
+
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-    <script src="//cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
     <script type="text/javascript">
-    	$(document).ready(function () {
-        	$('#UsersTable').DataTable();
+        $(document).ready(function () {
 
-        	// Delete item
-        	var item_to_delete;
+            var item_to_delete;
 
-        	$('.deleteItem').click((e) => {
-            	item_to_delete = e.currentTarget.dataset.id;
-        	});
+            $('.deleteItem').click((e) => {
+                item_to_delete = e.currentTarget.dataset.id;
+            });
 
-        	$("#btnYesDelete").click(function () {
-            	window.location.href = '/Account/DeleteUser/' + item_to_delete;
-        	});
-    	});
+            $("#btnYesDelete").click(function () {
+                window.location.href = '/Account/DeleteUser/' + item_to_delete;
+            });
+
+
+            $('#dTable').DataTable({
+                "processing": "true",
+                "retrieve": "true",
+                "language": {
+                    "processing": "Procesando... Espere por favor",
+                    "lengthMenu": "Mostrar _MENU_ registros por pagina",
+                    "zeroRecords": "Nada encontrado",
+                    "info": "Mostrando página _PAGE_ de _PAGES_",
+                    "infoEmpty": "No hay registros disponibles",
+                    "sInfoFiltered": "(filtrado de un total de _MAX_ registros)",
+                    "sSearch": "Buscar:",
+                    "oPaginate": {
+                        "sFirst": "Primero",
+                        "sLast": "Último",
+                        "sNext": "Siguiente",
+                        "sPrevious": "Anterior"
+                    }
+                }
+            });
+        });
+
     </script>
 }
+
+
+
+
+@*@section Scripts {
+        @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+        <script src="//cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+        <script type="text/javascript">
+            $(document).ready(function () {
+                $('#UsersTable').DataTable();
+
+                // Delete item
+                var item_to_delete;
+
+                $('.deleteItem').click((e) => {
+                    item_to_delete = e.currentTarget.dataset.id;
+                });
+
+                $("#btnYesDelete").click(function () {
+                    window.location.href = '/Account/DeleteUser/' + item_to_delete;
+                });
+            });
+        </script>
+    }*@

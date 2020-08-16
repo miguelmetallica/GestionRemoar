@@ -40,7 +40,8 @@ namespace Gestion.Web.Data
 
         public async Task DeleteAsync(T entity)
         {
-            this.context.Set<T>().Remove(entity);
+            //this.context.Set<T>().Remove(entity);            
+            this.context.Set<T>().Update(entity);
             await SaveAllAsync();
         }
 

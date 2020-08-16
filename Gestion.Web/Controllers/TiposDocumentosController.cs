@@ -9,12 +9,12 @@ using System.Threading.Tasks;
 namespace Gestion.Web.Controllers
 {
     [Authorize]
-    public class PresupuestosEstadosController : Controller
+    public class TiposDocumentosController : Controller
     {
-        private readonly IPresupuestosEstadosRepository repository; 
+        private readonly ITiposDocumentosRepository repository; 
         private readonly IUserHelper userHelper;
 
-        public PresupuestosEstadosController(IPresupuestosEstadosRepository repository, IUserHelper userHelper)
+        public TiposDocumentosController(ITiposDocumentosRepository repository, IUserHelper userHelper)
         {
             this.repository = repository;
             this.userHelper = userHelper;
@@ -32,13 +32,13 @@ namespace Gestion.Web.Controllers
                 return new NotFoundViewResult("NoExiste");
             }
 
-            var PresupuestosEstados = await this.repository.GetByIdAsync(id);
-            if (PresupuestosEstados == null)
+            var TiposDocumentos = await this.repository.GetByIdAsync(id);
+            if (TiposDocumentos == null)
             {
                 return new NotFoundViewResult("NoExiste");
             }
 
-            return this.View(PresupuestosEstados);
+            return this.View(TiposDocumentos);
         }
 
         public IActionResult Create()
@@ -48,15 +48,15 @@ namespace Gestion.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(ParamPresupuestosEstados PresupuestosEstados)
+        public async Task<IActionResult> Create(ParamTiposDocumentos TiposDocumentos)
         {
             if (ModelState.IsValid)
             {
-                PresupuestosEstados.Estado = true;
-                await repository.CreateAsync(PresupuestosEstados);
+                TiposDocumentos.Estado = true;
+                await repository.CreateAsync(TiposDocumentos);
                 return RedirectToAction(nameof(Index));
             }
-            return View(PresupuestosEstados);
+            return View(TiposDocumentos);
         }
 
         public async Task<IActionResult> Edit(string id)
@@ -66,20 +66,20 @@ namespace Gestion.Web.Controllers
                 return new NotFoundViewResult("NoExiste");
             }
 
-            var PresupuestosEstados = await this.repository.GetByIdAsync(id);
-            if (PresupuestosEstados == null)
+            var TiposDocumentos = await this.repository.GetByIdAsync(id);
+            if (TiposDocumentos == null)
             {
                 return new NotFoundViewResult("NoExiste");
             }
 
-            return this.View(PresupuestosEstados);
+            return this.View(TiposDocumentos);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(string id, ParamPresupuestosEstados PresupuestosEstados)
+        public async Task<IActionResult> Edit(string id, ParamTiposDocumentos TiposDocumentos)
         {
-            if (id != PresupuestosEstados.Id)
+            if (id != TiposDocumentos.Id)
             {
                 return new NotFoundViewResult("NoExiste");
             }
@@ -88,11 +88,11 @@ namespace Gestion.Web.Controllers
             {
                 try
                 {
-                    await repository.UpdateAsync(PresupuestosEstados);
+                    await repository.UpdateAsync(TiposDocumentos);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!await repository.ExistAsync(PresupuestosEstados.Id))
+                    if (!await repository.ExistAsync(TiposDocumentos.Id))
                     {
                         return new NotFoundViewResult("NoExiste");
                     }
@@ -103,7 +103,7 @@ namespace Gestion.Web.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(PresupuestosEstados);
+            return View(TiposDocumentos);
         }
 
         public async Task<IActionResult> Delete(string id)
@@ -113,27 +113,16 @@ namespace Gestion.Web.Controllers
                 return new NotFoundViewResult("NoExiste");
             }
 
-            var PresupuestosEstados = await this.repository.GetByIdAsync(id);
-            if (PresupuestosEstados == null)
+            var TiposDocumentos = await this.repository.GetByIdAsync(id);
+            if (TiposDocumentos == null)
             {
                 return new NotFoundViewResult("NoExiste");
             }
 
-            //return this.View(PresupuestosEstados);
-            PresupuestosEstados.Estado = !PresupuestosEstados.Estado;
-            await repository.DeleteAsync(PresupuestosEstados);
+            TiposDocumentos.Estado = !TiposDocumentos.Estado;
+            await repository.DeleteAsync(TiposDocumentos);
             return RedirectToAction(nameof(Index));
-        }
-
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(string id)
-        {
-            var PresupuestosEstados = await repository.GetByIdAsync(id);
-            PresupuestosEstados.Estado = !PresupuestosEstados.Estado;
-            await repository.DeleteAsync(PresupuestosEstados);
-            return RedirectToAction(nameof(Index));
-        }
+        }        
 
     }
 }

@@ -34,7 +34,7 @@ namespace Gestion.Web.Data
             return clientes;
         }
 
-        public async Task<int> spNuevo(ClientesFisicoAdd item)
+        public async Task<int> spInsertar(ClientesFisicoAdd item)
         {
             try
             {
@@ -49,7 +49,7 @@ namespace Gestion.Web.Data
                         oCmd.CommandType = System.Data.CommandType.StoredProcedure;
 
                         //el indicamos cual stored procedure utilizar
-                        oCmd.CommandText = "ClientesInsertar";
+                        oCmd.CommandText = "ClientesPersonaFisicaInsertar";
 
                         //le asignamos los parámetros para el stored procedure
                         //los valores viene en el parámetro item del procedimiento
@@ -105,7 +105,7 @@ namespace Gestion.Web.Data
                         oCmd.CommandType = System.Data.CommandType.StoredProcedure;
 
                         //el indicamos cual stored procedure utilizar
-                        oCmd.CommandText = "ClientesEditar";
+                        oCmd.CommandText = "ClientesPersonaFisicaEditar";
 
                         //le asignamos los parámetros para el stored procedure
                         //los valores viene en el parámetro item del procedimiento
@@ -138,7 +138,7 @@ namespace Gestion.Web.Data
             }
             catch (Exception ex)
             {
-                throw new Exception("Error al insertar el registro: " + ex.Message);
+                throw new Exception("Error al editar el registro: " + ex.Message);
             }
             finally
             {

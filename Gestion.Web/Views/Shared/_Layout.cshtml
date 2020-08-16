@@ -47,7 +47,7 @@
 
     <div class="wrapper">
         <header class="main-header">
-            <a asp-controller="Home" class="logo">
+            <a asp-controller="Home" asp-action="Index" class="logo">
                 <span class="logo-mini"><b>R</b></span>
                 <span class="logo-lg"><b>REMOAR</b></span>
             </a>
@@ -80,6 +80,9 @@
                                         </p>
                                     </li>
                                     <li class="user-footer">
+                                        <div class="pull-left">
+                                            <a asp-controller="Account" asp-action="ChangeUser" class="btn btn-info btn-flat">Actualizar Datos</a>
+                                        </div>
                                         <div class="pull-right">
                                             <a asp-controller="Account" asp-action="Logout" class="btn btn-warning btn-flat">Salir</a>
                                         </div>
@@ -109,13 +112,13 @@
                     <ul class="sidebar-menu" data-widget="tree">
                         <li class="header">MENÚ</li>
                         <li>
-                            <a href="">
+                            <a asp-controller="Home" asp-action="Index">
                                 <i class="fas fa-tachometer-alt"></i> <span>Inicio</span>
                             </a>
                         </li>
                         <li>
                             <a asp-controller="Clientes" asp-action="Index">
-                                <i class="fas fa-tachometer-alt"></i> <span>Clientes</span>
+                                <i class="fas fa-users"></i> <span>Clientes</span>
                             </a>
                         </li>
                         <li>
@@ -135,17 +138,38 @@
                         </li>
                         <li class="treeview">
                             <a href="#">
-                                <i class="fas fa-chart-pie"></i>
-                                <span>Charts</span>
+                                <i class="fa fa-inbox"></i>
+                                <span>Presupuestos</span>
                                 <span class="pull-right-container">
                                     <i class="fa fa-angle-left pull-right"></i>
                                 </span>
                             </a>
                             <ul class="treeview-menu">
-                                <li><a href="../charts/chartjs.html"><i class="fa fa-circle-o"></i> ChartJS</a></li>
-                                <li><a href="../charts/morris.html"><i class="fa fa-circle-o"></i> Morris</a></li>
+                                <li><a asp-controller="PresupuestosEstados" asp-action="Index"><i class="fa fa-circle-o"></i> Estados</a></li>
+                                <li><a asp-controller="Presupuestos" asp-action="Index"><i class="fa fa-circle-o"></i> Presupuestos</a></li>
                                 <li><a href="../charts/flot.html"><i class="fa fa-circle-o"></i> Flot</a></li>
                                 <li><a href="../charts/inline.html"><i class="fa fa-circle-o"></i> Inline charts</a></li>
+                            </ul>
+                        </li>
+
+                        <li>
+                            <a asp-controller="Account" asp-action="Index">
+                                <i class="fas fa-user-alt"></i> <span>Usuarios</span>
+                            </a>
+                        </li>
+
+                        <li class="treeview">
+                            <a href="#">
+                                <i class="fa fa-cog"></i>
+                                <span>Configuraciones</span>
+                                <span class="pull-right-container">
+                                    <i class="fa fa-angle-left pull-right"></i>
+                                </span>
+                            </a>
+                            <ul class="treeview-menu">
+                                <li><a asp-controller="PresupuestosEstados" asp-action="Index"><i class="fa fa-circle-o"></i> Estados del Presup.</a></li>
+                                <li><a asp-controller="TiposDocumentos" asp-action="Index"><i class="fa fa-circle-o"></i> Tipos Documentos</a></li>
+                                <li><a asp-controller="Provincias" asp-action="Index"><i class="fa fa-circle-o"></i> Provincias</a></li>
                             </ul>
                         </li>
                     </ul>

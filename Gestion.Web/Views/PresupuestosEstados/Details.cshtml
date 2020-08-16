@@ -12,8 +12,8 @@
             <small>Gestion de Presupuestos</small>
         </h1>
         <ol class="breadcrumb">
-            <li><a asp-controller="Home"><i class="fas fa-tachometer-alt"></i> Inicio</a></li>
-            <li><a asp-controller="Clientes">Listado de Presupuestos</a></li>
+            <li><a asp-controller="Home" asp-action="Index"><i class="fas fa-tachometer-alt"></i> Inicio</a></li>
+            <li><a asp-controller="PresupuestosEstados" asp-action="Index">Listado de Estados</a></li>
             <li class="active">@ViewData["Title"]</li>
         </ol>
     </section>
@@ -49,7 +49,17 @@
                                     @Html.DisplayNameFor(model => model.Estado)
                                 </dt>
                                 <dd>
-                                    @Html.DisplayFor(model => model.Estado)
+                                    @{
+                                        if (Model.Estado)
+                                        {
+                                            <span class="label label-success">Activo</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="label label-danger">Inactivo</span>
+                                        }
+
+                                    }
                                 </dd>
                             </dl>
                         </div>

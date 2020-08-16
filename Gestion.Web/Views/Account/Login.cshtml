@@ -27,22 +27,22 @@
 <body class="hold-transition login-page">
     <div class="login-box">
         <div class="login-logo">
-            <b>REMOAR</b>
+            <a asp-controller="Home" asp-action="Index"><b>REMO</b>AR</a>
         </div>
         <div class="login-box-body">
             <p class="login-box-msg">Ingresar al sistema</p>
 
             <form method="post">
                 <div class="form-group has-feedback">
-                    <label asp-for="Username">Email</label>
-                    <input type="email" asp-for="Username" class="form-control" />
+                    @*<label asp-for="Username">Email</label>*@
+                    <input type="email" asp-for="Username" class="form-control"  placeholder="Email"/>
                     <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
                     <span asp-validation-for="Username" class="text-warning"></span>
 
                 </div>
                 <div class="form-group has-feedback">
-                    <label asp-for="Password">Password</label>
-                    <input asp-for="Password" type="password" class="form-control" />
+                    @*<label asp-for="Password">Password</label>*@
+                    <input asp-for="Password" type="password" class="form-control" placeholder="Password"/>
                     <span class="glyphicon glyphicon-lock form-control-feedback"></span>
                     <span asp-validation-for="Password" class="text-warning"></span>
 
@@ -63,8 +63,8 @@
                 </div>
             </form>
 
-            <a asp-action="Register">Olvidé mi contraseña</a><br>
-            <a asp-action="RecoverPassword" class="text-center">Crear Cuenta</a>
+            <a asp-action="RecoverPassword">Olvidé mi contraseña</a><br>
+            <a asp-action="Register" class="text-center">Crear Cuenta</a>
         </div>
     </div>
 

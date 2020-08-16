@@ -1,82 +1,110 @@
 ﻿@model Gestion.Web.Models.RegisterNewUserViewModel
 @{
     ViewData["Title"] = "Register";
+    Layout = null;
 }
 
-<h2>Register New User</h2>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Remoar | Ingreso</title>
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <!-- Bootstrap 3.3.7 -->
+    <link rel="stylesheet" href="~/admin/bower_components/bootstrap/dist/css/bootstrap.min.css">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="~/admin/bower_components/font-awesome/css/font-awesome.min.css">
+    <!-- Ionicons -->
+    <link rel="stylesheet" href="~/admin/bower_components/Ionicons/css/ionicons.min.css">
+    <!-- Theme style -->
+    <link rel="stylesheet" href="~/admin/dist/css/AdminLTE.min.css">
+    <!-- iCheck -->
+    <link rel="stylesheet" href="~/admin/plugins/iCheck/square/blue.css">
+    <!-- Google Font -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+</head>
 
-<div class="row">
-    <div class="col-md-4 offset-md-4">
-        <form method="post">
-            <div asp-validation-summary="ModelOnly"></div>
+<body class="hold-transition register-page">
+    <div class="register-box">
+        <div class="register-logo">
+            <a asp-controller="Home" asp-action="Index"><b>REMO</b>AR</a>
+        </div>
 
-            <div class="form-group">
-                <label asp-for="FirstName">First Name</label>
-                <input asp-for="FirstName" class="form-control" />
-                <span asp-validation-for="FirstName" class="text-warning"></span>
-            </div>
+        <div class="register-box-body">
+            <p class="login-box-msg">Crear Cuenta</p>
 
-            <div class="form-group">
-                <label asp-for="LastName">Last Name</label>
-                <input asp-for="LastName" class="form-control" />
-                <span asp-validation-for="LastName" class="text-warning"></span>
-            </div>
-
-            <div class="form-group">
-                <label asp-for="Address">Address</label>
-                <input asp-for="Address" class="form-control" />
-                <span asp-validation-for="Address" class="text-warning"></span>
-            </div>
-
-            <div class="form-group">
-                <label asp-for="PhoneNumber">Phone Number</label>
-                <input asp-for="PhoneNumber" class="form-control" />
-                <span asp-validation-for="PhoneNumber" class="text-warning"></span>
-            </div>
+            <form method="post">
+                <div asp-validation-summary="ModelOnly"></div>
 
 
-            <div class="form-group">
-                <label asp-for="Username">Username</label>
-                <input asp-for="Username" class="form-control" />
-                <span asp-validation-for="Username" class="text-warning"></span>
-            </div>
+                <div class="form-group has-feedback">
+                    <input asp-for="LastName" type="text" class="form-control" placeholder="Apellido" />
+                    <span class="glyphicon glyphicon-user form-control-feedback"></span>
+                    <span asp-validation-for="LastName" class="text-warning"></span>
+                </div>
+                <div class="form-group has-feedback">
+                    <input asp-for="FirstName" type="text" class="form-control" placeholder="Nombre" />
+                    <span class="glyphicon glyphicon-user form-control-feedback"></span>
+                    <span asp-validation-for="FirstName" class="text-warning"></span>
+                </div>
+                <div class="form-group has-feedback">
+                    <input asp-for="Address" type="text" class="form-control" placeholder="Direccion" />
+                    <span class="glyphicon glyphicon-home form-control-feedback"></span>
+                    <span asp-validation-for="Address" class="text-warning"></span>
+                </div>
+                <div class="form-group has-feedback">
+                    <input asp-for="PhoneNumber" type="text" class="form-control" placeholder="Telefono" />
+                    <span class="glyphicon glyphicon-phone form-control-feedback"></span>
+                    <span asp-validation-for="PhoneNumber" class="text-warning"></span>
+                </div>
+                <div class="form-group has-feedback">
+                    <input asp-for="Username" type="email" class="form-control" placeholder="Email" />
+                    <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
+                    <span asp-validation-for="Username" class="text-warning"></span>
+                </div>
+                <div class="form-group has-feedback">
+                    <input asp-for="Password" type="password" class="form-control" placeholder="Password" />
+                    <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+                    <span asp-validation-for="Password" class="text-warning"></span>
+                </div>
+                <div class="form-group has-feedback">
+                    <input asp-for="Confirm" type="password" class="form-control" placeholder="Confirmar" />
+                    <span class="glyphicon glyphicon-log-in form-control-feedback"></span>
+                    <span asp-validation-for="Confirm" class="text-warning"></span>
+                </div>
+                <div class="form-group">
+                    <select asp-for="SucursalId" asp-items="Model.Sucursales" class="form-control"></select>
+                    <span asp-validation-for="SucursalId" class="text-warning"></span>
+                </div>
+                
+                <div class="row">
+                    <div class="col-xs-8">
+                    </div>
+                    <!-- /.col -->
+                    <div class="col-xs-4">
+                        <button type="submit" class="btn btn-primary btn-block btn-flat">Registrar</button>
+                    </div>
+                    <!-- /.col -->
+                </div>
+            </form>
 
-            <div class="form-group">
-                <label asp-for="Password">Password</label>
-                <input asp-for="Password" type="password" class="form-control" />
-                <span asp-validation-for="Password" class="text-warning"></span>
-            </div>
-
-            <div class="form-group">
-                <label asp-for="Confirm">Confirm</label>
-                <input asp-for="Confirm" type="password" class="form-control" />
-                <span asp-validation-for="Confirm" class="text-warning"></span>
-            </div>
-
-            <div class="form-group">
-                <label asp-for="SucursalId" class="control-label"></label>
-                <select asp-for="SucursalId" asp-items="Model.Sucursales" class="form-control"></select>
-                <span asp-validation-for="SucursalId" class="text-warning"></span>
-            </div>
-
-            <div class="form-group">
-                <input type="submit" value="Register New User" class="btn btn-primary" />
-            </div>
-        </form>
+            <a asp-action="Login" class="text-center">Ya tengo cuenta</a>
+        </div>
+        <!-- /.form-box -->
     </div>
-</div>
+    <!-- /.register-box -->
+    <!-- jQuery 3 -->
+    <script src="~/admin/bower_components/jquery/dist/jquery.min.js"></script>
+    <!-- Bootstrap 3.3.7 -->
+    <script src="~/admin/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+    <!-- iCheck -->
+    <script src="~/admin/plugins/iCheck/icheck.min.js"></script>
 
-<div class="text-success">
-    <p>
-        @ViewBag.Message
-    </p>
-</div>
-
+</body>
+</html>
 
 @section Scripts {
-    @{
-        await Html.RenderPartialAsync("_ValidationScriptsPartial");
-        }
-    
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
-

@@ -90,7 +90,7 @@ namespace Gestion.Web.Controllers
                 {
                     clientes.Id = Guid.NewGuid().ToString();
                     clientes.UsuarioAlta = User.Identity.Name;
-                    var result = await clientesRepository.spNuevo(clientes);
+                    var result = await clientesRepository.spInsertar(clientes);
                     Presupuestos presupuesto = this.repository.GetPresupuestoId(clientes.ExternalId);                    
 
                     if (presupuesto == null)

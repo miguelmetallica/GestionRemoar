@@ -12,15 +12,40 @@
                 <small>Gestion de Clientes</small>
             </h1>
             <ol class="breadcrumb">
-                <li><a asp-controller="Home"><i class="fas fa-tachometer-alt"></i> Inicio</a></li>
-                <li><a asp-controller="Clientes">Listado de Clientes</a></li>
+                <li><a asp-controller="Home" asp-action="Index"><i class="fas fa-tachometer-alt"></i> Inicio</a></li>
+                <li><a asp-controller="Clientes" asp-action="Index">Listado de Clientes</a></li>
                 <li class="active">@ViewData["Title"]</li>
             </ol>
         </section>
-
-        <partial name="_ClienteCreate" model="Model" />
-
-        
+        <!-- Main content -->
+        <section class="content">
+            <div class="row">
+                <!-- left column -->
+                <div class="col-md-6">
+                    <!-- general form elements -->
+                    <div class="box box-primary">
+                        <div class="box-header with-border">
+                            <h3 class="box-title">Ficha del Cliente</h3>
+                        </div>
+                        <!-- /.box-header -->
+                        <!-- form start -->
+                        <form asp-action="Create" enctype="multipart/form-data">
+                            <div class="box-body">
+                                <partial name="_ClienteCreate" model="Model" />
+                                <div class="box-footer">
+                                    <input type="submit" value="Guardar" class="btn btn-primary" />
+                                    <a asp-action="Index" class="btn btn-default pull-right">Volver al Listado</a>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <!-- /.box -->
+                </div>
+                <!--/.col-->
+            </div>
+            <!-- /.row -->
+        </section>
+        <!-- /.content -->
     </div>
 <!-- /.content-wrapper -->
 

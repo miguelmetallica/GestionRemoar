@@ -12,8 +12,8 @@
             <small>Gestion de Presupuestos</small>
         </h1>
         <ol class="breadcrumb">
-            <li><a asp-controller="Home"><i class="fas fa-tachometer-alt"></i> Inicio</a></li>
-            <li><a asp-controller="Clientes">Listado de Estados</a></li>
+            <li><a asp-controller="Home" asp-action="Index"><i class="fas fa-tachometer-alt"></i> Inicio</a></li>
+            <li><a asp-controller="PresupuestosEstados" asp-action="Index">Listado de Estados</a></li>
             <li class="active">@ViewData["Title"]</li>
         </ol>
     </section>
@@ -33,7 +33,8 @@
                     <form asp-action="Edit" enctype="multipart/form-data">
                         <div class="box-body">
                             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                            <input type="hidden" asp-for="Id" />                            
+                            <input type="hidden" asp-for="Id" />
+                            <input type="hidden" asp-for="Estado" />
 
                             <div class="form-group">
                                 <label asp-for="Codigo" class="control-label"></label>
@@ -45,7 +46,7 @@
                                 <label asp-for="Descripcion" class="control-label"></label>
                                 <input asp-for="Descripcion" class="form-control input-sm" />
                                 <span asp-validation-for="Descripcion" class="text-danger"></span>
-                            </div>                            
+                            </div>
                         </div>
                         <!-- /.box-body -->
 

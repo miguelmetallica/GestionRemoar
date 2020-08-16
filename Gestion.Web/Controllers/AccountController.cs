@@ -56,7 +56,7 @@ namespace Gestion.Web.Controllers
                 }
             }
 
-            this.ModelState.AddModelError(string.Empty, "Failed to login.");
+            this.ModelState.AddModelError(string.Empty, "No se pudo iniciar sesión.");
             return this.View(model);
         }
 
@@ -99,7 +99,7 @@ namespace Gestion.Web.Controllers
                     var result = await this.userHelper.AddUserAsync(user, model.Password);
                     if (result != IdentityResult.Success)
                     {
-                        this.ModelState.AddModelError(string.Empty, "The user couldn't be created.");
+                        this.ModelState.AddModelError(string.Empty, "No se pudo crear el usuario.");
                         return this.View(model);
                     }
 
@@ -110,14 +110,14 @@ namespace Gestion.Web.Controllers
                         token = myToken
                     }, protocol: HttpContext.Request.Scheme);
 
-                    this.mailHelper.SendMail(model.Username, "Email confirmation", $"<h1>Email Confirmacion</h1>" +
+                    this.mailHelper.SendMail(model.Username, "Confirmacion de Email", $"<h1>Confirmacion de Email</h1>" +
                         $"Para permitir al usuario, " +
                         $"haga clic en este enlace: </br></br><a href = \"{tokenLink}\">Confirmar correo electrónico</a>");
-                    this.ViewBag.Message = "The instructions to allow your user has been sent to email.";
+                    this.ViewBag.Message = "Las instrucciones para permitir que el usuario se haya enviado por correo electrónico.";
                     return this.View(model);
                 }
 
-                this.ModelState.AddModelError(string.Empty, "The username is already registered.");
+                this.ModelState.AddModelError(string.Empty, "El nombre de usuario ya está registrado.");
             }
 
             model.Sucursales = this.repository.GetCombo();
@@ -162,7 +162,7 @@ namespace Gestion.Web.Controllers
                     var respose = await this.userHelper.UpdateUserAsync(user);
                     if (respose.Succeeded)
                     {
-                        this.ViewBag.UserMessage = "User updated!";
+                        this.ViewBag.UserMessage = "Los datos fueron actualizados";
                     }
                     else
                     {
@@ -171,7 +171,7 @@ namespace Gestion.Web.Controllers
                 }
                 else
                 {
-                    this.ModelState.AddModelError(string.Empty, "User no found.");
+                    this.ModelState.AddModelError(string.Empty, "Usuario no encontrado");
                 }
             }
 
@@ -206,7 +206,7 @@ namespace Gestion.Web.Controllers
                 }
                 else
                 {
-                    this.ModelState.AddModelError(string.Empty, "User no found.");
+                    this.ModelState.AddModelError(string.Empty, "Usuario no encontrado");
                 }
             }
 
@@ -254,12 +254,6 @@ namespace Gestion.Web.Controllers
 
             return this.BadRequest();
         }
-
-        //public async Task<JsonResult> GetLocalidadesAsync(int provinciaId)
-        //{
-        //    var provincia = await this.repository.GetProvinciasWithLocalidadesAsync(provinciaId);
-        //    return this.Json(provincia.Localidades.OrderBy(c => c.Nombre));
-        //}
 
         public async Task<IActionResult> ConfirmEmail(string userId, string token)
         {
@@ -344,7 +338,15 @@ namespace Gestion.Web.Controllers
 
         public IActionResult NotAuthorized()
         {
-            return this.View();
+            if (!User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+            else 
+            {
+                return this.View();
+            }
+                
         }
 
         [Authorize]

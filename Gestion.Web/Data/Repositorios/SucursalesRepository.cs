@@ -16,7 +16,7 @@ namespace Gestion.Web.Data
 
         public IEnumerable<SelectListItem> GetCombo()
         {
-            var list = this.context.Sucursales.Select(c => new SelectListItem
+            var list = this.context.Sucursales.Where(x => x.Estado == true).Select(c => new SelectListItem
             {
                 Text = c.Nombre,
                 Value = c.Id.ToString()

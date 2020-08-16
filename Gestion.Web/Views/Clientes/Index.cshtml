@@ -13,7 +13,7 @@ BREADCRUMB
             Sistema de gestíon <small>Gestion de Clientes</small>
         </h1>
         <ol class="breadcrumb">
-            <li><a asp-controller="Home"><i class="fas fa-tachometer-alt"></i> Inicio</a></li>
+            <li><a asp-controller="Home" asp-action="Index"><i class="fas fa-tachometer-alt"></i> Inicio</a></li>
         <li class="active">@ViewData["Title"]</li>
         </ol>
     </section>
@@ -68,14 +68,33 @@ BREADCRUMB
                                 @Html.DisplayFor(modelItem => item.CuilCuit)
                             </td>
                             <td>
-                                @Html.DisplayFor(modelItem => item.Estado)
+                                @{
+                                    if (item.Estado)
+                                    {
+                                        <span class="label label-success">Activo</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="label label-danger">Inactivo</span>
+                                    }
+
+                                }
                             </td>
                             <td>
                                 <div class="btn-group">
                                     <a class="btn btn-warning" asp-action="Edit" asp-route-id="@item.Id"><i class="fa fa-pen"></i></a>
                                     <a class="btn btn-info" asp-action="Details" asp-route-id="@item.Id"><i class="fa fa-search-plus"></i></a>
-                                    @*<a class="btn btn-warning" asp-action="Details" asp-route-id="@item.Id"><i class="fa fa-trash"></i></a>*@
-                                    <button data-id="@item.Id" class="btn btn-danger deleteItem" data-toggle="modal" data-target="#deleteDialog"><i class="fa fa-trash"></i></button>
+                                    @{
+                                        if (item.Estado)
+                                        {
+                                            <a class="btn btn-danger" asp-action="Delete" asp-route-id="@item.Id"><i class="glyphicon glyphicon-remove"></i></a>
+                                        }
+                                        else
+                                        {
+                                            <a class="btn btn-success" asp-action="Delete" asp-route-id="@item.Id"><i class="glyphicon glyphicon-ok"></i></a>
+                                        }
+
+                                    }
                                 </div>
                             </td>
                         </tr>
@@ -91,43 +110,11 @@ BREADCRUMB
 </div>
 
 
-
-
-
-<div id="deleteDialog" class="modal fade">
-    <div class="modal-dialog modal-sm">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title">Delete</h4>
-                <button type="button" class="close" data-dismiss="modal"><i class="fa fa-window-close"></i></button>
-            </div>
-            <div class="modal-body">
-                <p>Do you want to delete the country?</p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-danger" id="btnYesDelete">Delete</button>
-                <button type="button" class="btn btn-success" id="btnNoDelete">No</button>
-            </div>
-        </div>
-    </div>
-</div>
-
 @section Scripts {
 
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
     <script type="text/javascript">
         $(document).ready(function () {
-
-            var item_to_delete;
-
-            $('.deleteItem').click((e) => {
-                item_to_delete = e.currentTarget.dataset.id;
-            });
-
-            $("#btnYesDelete").click(function () {
-                window.location.href = '/Clientes/Delete/' + item_to_delete;
-            });
-
 
             $('#dTable').DataTable({
                 "processing": "true",

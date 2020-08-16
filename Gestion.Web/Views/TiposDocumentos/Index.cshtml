@@ -1,7 +1,7 @@
-﻿@model IEnumerable<Gestion.Web.Models.ParamPresupuestosEstados>
+﻿@model IEnumerable<Gestion.Web.Models.ParamTiposDocumentos>
 
 @{
-    ViewData["Title"] = "Listado de Estados";
+    ViewData["Title"] = "Listado de Tipos de Documentos";
 }
 
 <!--================================
@@ -10,7 +10,7 @@ BREADCRUMB
 <div class="content-wrapper">
     <section class="content-header">
         <h1>
-            Sistema de gestíon <small>Gestion de Presupuestos</small>
+            Sistema de gestíon <small>Gestion de Clientes</small>
         </h1>
         <ol class="breadcrumb">
             <li><a asp-controller="Home" asp-action="Index"><i class="fas fa-tachometer-alt"></i> Inicio</a></li>
@@ -24,7 +24,7 @@ BREADCRUMB
         <div class="box box-primary">
             <div class="box-header with-border">
                 <h3 class="box-title">@ViewData["Title"]</h3>
-                <p><a asp-action="Create" class="btn btn-primary btn-sm pull-right" aria-hidden="true">Nuevo Estado</a></p>
+                <p><a asp-action="Create" class="btn btn-primary btn-sm pull-right" aria-hidden="true">Nuevo Tipo de Documento</a></p>
             </div>
             <div class="box-body">
                 <p>
@@ -97,40 +97,11 @@ BREADCRUMB
 </div>
 
 
-<div id="deleteDialog" class="modal fade">
-    <div class="modal-dialog modal-sm">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title">Delete</h4>
-                <button type="button" class="close" data-dismiss="modal"><i class="fa fa-window-close"></i></button>
-            </div>
-            <div class="modal-body">
-                <p>¿Quieres borrar el Estado?</p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-danger" id="btnYesDelete">Delete</button>
-                <button type="button" class="btn btn-success" id="btnNoDelete">No</button>
-            </div>
-        </div>
-    </div>
-</div>
-
 @section Scripts {
 
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
     <script type="text/javascript">
         $(document).ready(function () {
-
-            var item_to_delete;
-
-            $('.deleteItem').click((e) => {
-                item_to_delete = e.currentTarget.dataset.id;
-            });
-
-            $("#btnYesDelete").click(function () {
-                window.location.href = '/PresupuestosEstados/Delete/' + item_to_delete;
-            });
-
 
             $('#dTable').DataTable({
                 "processing": "true",

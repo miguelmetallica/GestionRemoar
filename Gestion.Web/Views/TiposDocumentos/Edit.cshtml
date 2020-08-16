@@ -1,7 +1,7 @@
-﻿@model Gestion.Web.Models.ParamPresupuestosEstados
+﻿@model Gestion.Web.Models.ParamTiposDocumentos
 
 @{
-    ViewData["Title"] = "Nuevo Estado";
+    ViewData["Title"] = "Editar Tipo de Documento";
 }
 
 <div class="content-wrapper">
@@ -9,11 +9,11 @@
     <section class="content-header">
         <h1>
             Sistema de gestíon
-            <small>Gestion de Presupuestos</small>
+            <small>Gestion de Clientes</small>
         </h1>
         <ol class="breadcrumb">
             <li><a asp-controller="Home" asp-action="Index"><i class="fas fa-tachometer-alt"></i> Inicio</a></li>
-            <li><a asp-controller="PresupuestosEstados" asp-action="Index">Listado de Estados</a></li>
+            <li><a asp-controller="TiposDocumentos" asp-action="Index">Listado de Tipos de Documentos</a></li>
             <li class="active">@ViewData["Title"]</li>
         </ol>
     </section>
@@ -26,24 +26,27 @@
                 <!-- general form elements -->
                 <div class="box box-primary">
                     <div class="box-header with-border">
-                        <h3 class="box-title">Ficha del Estado</h3>
+                        <h3 class="box-title">Ficha del Tipo de Documento</h3>
                     </div>
                     <!-- /.box-header -->
                     <!-- form start -->
-                    <form asp-action="Create" enctype="multipart/form-data">
+                    <form asp-action="Edit" enctype="multipart/form-data">
                         <div class="box-body">
                             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                            <input type="hidden" asp-for="Id" /> 
+                            <input type="hidden" asp-for="Estado" />
+
                             <div class="form-group">
                                 <label asp-for="Codigo" class="control-label"></label>
-                                <input asp-for="Codigo" class="form-control input-sm" />
+                                <input asp-for="Codigo" class="form-control" />
                                 <span asp-validation-for="Codigo" class="text-danger"></span>
                             </div>
+
                             <div class="form-group">
                                 <label asp-for="Descripcion" class="control-label"></label>
                                 <input asp-for="Descripcion" class="form-control input-sm" />
                                 <span asp-validation-for="Descripcion" class="text-danger"></span>
-                            </div>
-                            
+                            </div>                            
                         </div>
                         <!-- /.box-body -->
 

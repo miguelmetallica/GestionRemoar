@@ -11,7 +11,7 @@ namespace Gestion.Web.Controllers
     [Authorize]
     public class ProvinciasController : Controller
     {
-        private readonly IProvinciasRepository repository;
+        private readonly IProvinciasRepository repository; 
         private readonly IUserHelper userHelper;
 
         public ProvinciasController(IProvinciasRepository repository, IUserHelper userHelper)
@@ -20,107 +20,26 @@ namespace Gestion.Web.Controllers
             this.userHelper = userHelper;
         }
 
-        //public async Task<IActionResult> DeleteLocalidad(int? id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    //var localidad = await this.repository.GetLocalidadesAsync(id.Value);
-        //    //if (localidad == null)
-        //    //{
-        //    //    return NotFound();
-        //    //}
-
-        //    //var provinciaId = await this.repository.DeleteLocalidadAsync(localidad);
-
-        //    //return this.RedirectToAction($"Details/{provinciaId}");
-        //    return this.RedirectToAction($"Index");
-        //}
-
-        //public async Task<IActionResult> EditLocalidad(int? id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    var localidades = await this.repository.GetLocalidadesAsync(id.Value);
-        //    if (localidades == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    return View(localidades);
-        //    return View();
-        //}
-
-        //[HttpPost]
-        //public async Task<IActionResult> EditLocalidad(Localidades localidad)
-        //{
-        //    if (this.ModelState.IsValid)
-        //    {
-        //        var ProvinciaId = await this.repository.UpdateLocalidadAsync(localidad);
-        //        if (ProvinciaId != 0)
-        //        {
-        //            return this.RedirectToAction($"Details/{ProvinciaId}");
-        //        }
-        //    }
-
-        //    return this.View(localidad);
-        //}
-
-        //public async Task<IActionResult> AddLocalidad(string id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    var country = await this.repository.GetByIdAsync(id);
-        //    if (country == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    var model = new LocalidadesViewModel { ProvinciaId = country.Id };
-        //    return View(model);
-        //}
-
-        //[HttpPost]
-        //public async Task<IActionResult> AddLocalidad(LocalidadesViewModel model)
-        //{
-        //    if (this.ModelState.IsValid)
-        //    {
-        //        await this.repository.AddLocalidadesAsync(model);
-        //        return this.RedirectToAction($"Details/{model.ProvinciaId}");
-        //    }
-
-        //    return this.View(model);
-        //}
-
         public IActionResult Index()
         {
-            return View();// this.repository.GetProvinciasWithLocalidades());
+            return View(repository.GetAll());
         }
 
-        //public async Task<IActionResult> Details(int? id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return NotFound();
-        //    }
+        public async Task<IActionResult> Details(string id)
+        {
+            if (id == null)
+            {
+                return new NotFoundViewResult("NoExiste");
+            }
 
-        //    //var provincias = await this.repository.GetProvinciasWithLocalidadesAsync(id.Value);
-        //    //if (provincias == null)
-        //    //{
-        //    //    return NotFound();
-        //    //}
+            var Provincias = await this.repository.GetByIdAsync(id);
+            if (Provincias == null)
+            {
+                return new NotFoundViewResult("NoExiste");
+            }
 
-        //    //return View(provincias);
-        //    return View();
-        //}
+            return this.View(Provincias);
+        }
 
         public IActionResult Create()
         {
@@ -129,63 +48,81 @@ namespace Gestion.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(ParamProvincias provincias)
+        public async Task<IActionResult> Create(ParamProvincias Provincias)
         {
             if (ModelState.IsValid)
             {
-                await this.repository.CreateAsync(provincias);
+                Provincias.Estado = true;
+                await repository.CreateAsync(Provincias);
                 return RedirectToAction(nameof(Index));
             }
-
-            return View(provincias);
+            return View(Provincias);
         }
 
         public async Task<IActionResult> Edit(string id)
         {
             if (id == null)
             {
-                return NotFound();
+                return new NotFoundViewResult("NoExiste");
             }
 
-            var provincias = await this.repository.GetByIdAsync(id);
-            if (provincias == null)
+            var Provincias = await this.repository.GetByIdAsync(id);
+            if (Provincias == null)
             {
-                return NotFound();
+                return new NotFoundViewResult("NoExiste");
             }
-            return View(provincias);
+
+            return this.View(Provincias);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(ParamProvincias provincias)
+        public async Task<IActionResult> Edit(string id, ParamProvincias Provincias)
         {
-            if (ModelState.IsValid)
+            if (id != Provincias.Id)
             {
-                await this.repository.UpdateAsync(provincias);
-                return RedirectToAction(nameof(Index));
+                return new NotFoundViewResult("NoExiste");
             }
 
-            return View(provincias);
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    await repository.UpdateAsync(Provincias);
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!await repository.ExistAsync(Provincias.Id))
+                    {
+                        return new NotFoundViewResult("NoExiste");
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToAction(nameof(Index));
+            }
+            return View(Provincias);
         }
 
         public async Task<IActionResult> Delete(string id)
         {
             if (id == null)
             {
-                return NotFound();
+                return new NotFoundViewResult("NoExiste");
             }
 
-            var provincias = await this.repository.GetByIdAsync(id);
-            if (provincias == null)
+            var Provincias = await this.repository.GetByIdAsync(id);
+            if (Provincias == null)
             {
-                return NotFound();
+                return new NotFoundViewResult("NoExiste");
             }
 
-            await this.repository.DeleteAsync(provincias);
+            Provincias.Estado = !Provincias.Estado;
+            await repository.DeleteAsync(Provincias);
             return RedirectToAction(nameof(Index));
-        }
-
+        }        
 
     }
-
 }

@@ -30,6 +30,7 @@
 
   <ItemGroup>
     <Content Remove="Views\Clientes\Delete.cshtml" />
+    <Content Remove="Views\PresupuestosEstados\Delete.cshtml" />
     <Content Remove="Views\Productos\Delete.cshtml" />
   </ItemGroup>
 
