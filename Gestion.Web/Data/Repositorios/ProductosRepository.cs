@@ -62,23 +62,20 @@ namespace Gestion.Web.Data
                         //le asignamos los parámetros para el stored procedure
                         //los valores viene en el parámetro item del procedimiento
                         oCmd.Parameters.AddWithValue("@Id", productos.Id);
-                        oCmd.Parameters.AddWithValue("@Producto", productos.Producto);
                         oCmd.Parameters.AddWithValue("@TipoProductoId", productos.TipoProductoId);
+                        oCmd.Parameters.AddWithValue("@Producto", productos.Producto);                        
                         oCmd.Parameters.AddWithValue("@DescripcionCorta", productos.DescripcionCorta);
                         oCmd.Parameters.AddWithValue("@DescripcionLarga", productos.DescripcionLarga);
+                        oCmd.Parameters.AddWithValue("@CodigoBarra", productos.CodigoBarra);
                         oCmd.Parameters.AddWithValue("@Peso", productos.Peso);
                         oCmd.Parameters.AddWithValue("@DimencionesLongitud", productos.DimencionesLongitud);
                         oCmd.Parameters.AddWithValue("@DimencionesAncho", productos.DimencionesAncho);
-                        oCmd.Parameters.AddWithValue("@DimencionesAltura", productos.DimencionesAltura);
-                        oCmd.Parameters.AddWithValue("@PrecioCompra", productos.PrecioCompra);
-                        oCmd.Parameters.AddWithValue("@CuentaVentaId", productos.CuentaVentaId);
+                        oCmd.Parameters.AddWithValue("@DimencionesAltura", productos.DimencionesAltura);                        
                         oCmd.Parameters.AddWithValue("@CuentaCompraId", productos.CuentaCompraId);
+                        oCmd.Parameters.AddWithValue("@CuentaVentaId", productos.CuentaVentaId);
                         oCmd.Parameters.AddWithValue("@UnidadMedidaId", productos.UnidadMedidaId);
-                        oCmd.Parameters.AddWithValue("@MarcaId", productos.MarcaId);
-                        oCmd.Parameters.AddWithValue("@Visible", productos.Visible);
-                        oCmd.Parameters.AddWithValue("@PrecioNormal", productos.PrecioNormal);
-                        oCmd.Parameters.AddWithValue("@PrecioRebajado", productos.PrecioRebajado);
-                        oCmd.Parameters.AddWithValue("@EstadoInventarioId", null);
+                        oCmd.Parameters.AddWithValue("@AlicuotaId", productos.AlicuotaId);
+                        oCmd.Parameters.AddWithValue("@PrecioVenta", productos.PrecioVenta);
                         oCmd.Parameters.AddWithValue("@Estado", true);
                         oCmd.Parameters.AddWithValue("@EsVendedor", productos.EsVendedor);
                         oCmd.Parameters.AddWithValue("@Usuario", productos.UsuarioAlta);

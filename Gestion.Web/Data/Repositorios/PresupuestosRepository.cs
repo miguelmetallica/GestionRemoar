@@ -80,7 +80,7 @@ namespace Gestion.Web.Data
                     Id = Guid.NewGuid().ToString(),
                     PresupuestoId = model.PresupuestoId,
                     ProductoId = model.ProductoId,
-                    Precio = (decimal)product.PrecioNormal,
+                    Precio = (decimal)product.PrecioVenta,
                     Cantidad = model.Cantidad,
                     UsuarioAlta = userName,
                 };
@@ -214,7 +214,7 @@ namespace Gestion.Web.Data
                         //los valores viene en el parámetro item del procedimiento
                         oCmd.Parameters.AddWithValue("@Id", presupuestos.Id);
                         oCmd.Parameters.AddWithValue("@ClienteId", presupuestos.ClienteId);
-                        oCmd.Parameters.AddWithValue("@EstadoId", presupuestos.EstadoId);
+                        //oCmd.Parameters.AddWithValue("@EstadoId", presupuestos.EstadoId);
                         oCmd.Parameters.AddWithValue("@Usuario", presupuestos.UsuarioAlta);
 
                         //Ejecutamos el comando y retornamos el id generado
@@ -255,7 +255,48 @@ namespace Gestion.Web.Data
                         //los valores viene en el parámetro item del procedimiento
                         oCmd.Parameters.AddWithValue("@Id", presupuestos.Id);
                         oCmd.Parameters.AddWithValue("@ClienteId", presupuestos.ClienteId);
-                        oCmd.Parameters.AddWithValue("@EstadoId", presupuestos.EstadoId);
+                        //oCmd.Parameters.AddWithValue("@EstadoId", presupuestos.EstadoId);
+                        oCmd.Parameters.AddWithValue("@Usuario", presupuestos.UsuarioAlta);
+
+                        //Ejecutamos el comando y retornamos el id generado
+                        await oCmd.ExecuteScalarAsync();
+
+                        return 1;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error al insertar el registro: " + ex.Message);
+            }
+            finally
+            {
+                factoryConnection.CloseConnection();
+            }
+        }
+
+        public async Task<int> spAprobar(Presupuestos presupuestos)
+        {
+            try
+            {
+                using (var oCnn = factoryConnection.GetConnection())
+                {
+                    using (SqlCommand oCmd = new SqlCommand())
+                    {
+                        //asignamos la conexion de trabajo
+                        oCmd.Connection = oCnn;
+
+                        //utilizamos stored procedures
+                        oCmd.CommandType = System.Data.CommandType.StoredProcedure;
+
+                        //el indicamos cual stored procedure utilizar
+                        oCmd.CommandText = "PresupuestosAprobar";
+
+                        //le asignamos los parámetros para el stored procedure
+                        //los valores viene en el parámetro item del procedimiento
+                        oCmd.Parameters.AddWithValue("@Id", presupuestos.Id);
+                        oCmd.Parameters.AddWithValue("@ClienteId", presupuestos.ClienteId);
+                        //oCmd.Parameters.AddWithValue("@EstadoId", presupuestos.EstadoId);
                         oCmd.Parameters.AddWithValue("@Usuario", presupuestos.UsuarioAlta);
 
                         //Ejecutamos el comando y retornamos el id generado

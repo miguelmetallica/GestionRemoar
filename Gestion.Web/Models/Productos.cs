@@ -28,7 +28,7 @@ namespace Gestion.Web.Models
         [Display(Name = "Resumen")]
         [MaxLength(4000, ErrorMessage = "The field {0} only can contain {1} characters length.")]
         public string DescripcionLarga { get; set; }
-        
+        public string CodigoBarra { get; set; }
         public decimal? Peso { get; set; }
 
         [Display(Name = "Longitud")]
@@ -43,9 +43,9 @@ namespace Gestion.Web.Models
         [Range(0, double.MaxValue, ErrorMessage = "The field {0} acepta valores entre {1} y {2}")]
         public decimal? DimencionesAltura { get; set; }
 
-        [Display(Name = "Precio de Compra")]
-        [Range(0, double.MaxValue, ErrorMessage = "The field {0} acepta valores entre {1} y {2}")]
-        public decimal? PrecioCompra { get; set; }
+        //[Display(Name = "Precio de Compra")]
+        //[Range(0, double.MaxValue, ErrorMessage = "The field {0} acepta valores entre {1} y {2}")]
+        //public decimal? PrecioCompra { get; set; }
 
         [Display(Name = "Cuenta de Venta")]
         public string CuentaVentaId { get; set; }
@@ -56,18 +56,18 @@ namespace Gestion.Web.Models
         [Display(Name = "Unid. Medida")]
         public string UnidadMedidaId { get; set; }
 
-        [Display(Name = "Marca")]
-        public string MarcaId { get; set; }
+        [Display(Name = "Alicuota")]
+        public string AlicuotaId { get; set; }
 
-        public bool Visible { get; set; }
+        //public bool Visible { get; set; }
 
         [Display(Name = "Precio")]
         [Range(0, double.MaxValue, ErrorMessage = "The field {0} acepta valores entre {1} y {2}")]
-        public decimal? PrecioNormal { get; set; }
+        public decimal? PrecioVenta { get; set; }
 
-        [Display(Name = "Rebajado")]
-        [Range(0, double.MaxValue, ErrorMessage = "The field {0} acepta valores entre {1} y {2}")]
-        public decimal? PrecioRebajado { get; set; }
+        //[Display(Name = "Rebajado")]
+        //[Range(0, double.MaxValue, ErrorMessage = "The field {0} acepta valores entre {1} y {2}")]
+        //public decimal? PrecioRebajado { get; set; }
 
         public bool Estado { get; set; }
 

@@ -38,6 +38,8 @@ namespace Gestion.Web.Data
         public DbSet<CajasMovimientos> CajasMovimientos { get; set; }
         public DbSet<ParamCajasMovimientosTipos> ParamCajasMovimientosTipos { get; set; }
 
+        public DbSet<SistemaConfiguraciones> SistemaConfiguraciones { get; set; }        
+
         public DataContext(DbContextOptions<DataContext> options) : base(options)
         {
         }

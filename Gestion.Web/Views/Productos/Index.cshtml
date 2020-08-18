@@ -34,11 +34,11 @@
                                 @Html.DisplayNameFor(model => model.DescripcionCorta)
                             </th>
                             <th>
-                                @Html.DisplayNameFor(model => model.PrecioNormal)
+                                @Html.DisplayNameFor(model => model.PrecioVenta)
                             </th>
-                            <th>
+                            @*<th>
                                 @Html.DisplayNameFor(model => model.PrecioRebajado)
-                            </th>
+                            </th>*@
 
                             <th></th>
                         </tr>
@@ -60,11 +60,11 @@
                                     @Html.DisplayFor(modelItem => item.DescripcionCorta)
                                 </td>
                                 <td>
-                                    @Html.DisplayFor(modelItem => item.PrecioNormal)
+                                    @Html.DisplayFor(modelItem => item.PrecioVenta)
                                 </td>
-                                <td>
+                                @*<td>
                                     @Html.DisplayFor(modelItem => item.PrecioRebajado)
-                                </td>
+                                </td>*@
                                 <td >
                                     <a asp-action="Edit" class="btn btn-default" asp-route-id="@item.Id"><i class="fa fa-pencil"></i></a>
                                     <a asp-action="Details" class="btn btn-default" asp-route-id="@item.Id"><i class="fa fa-list"></i></a>

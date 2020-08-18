@@ -27,5 +27,7 @@ namespace Gestion.Web.Data
 
         Task<int> spEditar(Presupuestos presupuestos);
 
+        Task<int> spAprobar(Presupuestos presupuestos);
+
     }
 }

@@ -17,11 +17,35 @@
                 <li class="active">@ViewData["Title"]</li>
             </ol>
         </section>
-        
 
-        <partial name="_ClienteCreate" model="Model" />
-
-        
+        <!-- Main content -->
+        <section class="content">
+            <div class="row">
+                <!-- left column -->
+                <div class="col-md-6">
+                    <!-- general form elements -->
+                    <div class="box box-primary">
+                        <div class="box-header with-border">
+                            <h3 class="box-title">Ficha del Cliente</h3>
+                        </div>
+                        <!-- /.box-header -->
+                        <!-- form start -->
+                        <form asp-action="ClienteCreate" enctype="multipart/form-data">
+                            <div class="box-body">
+                                <partial name="_ClienteCreate" model="Model" />
+                                <div class="box-footer">
+                                    <input type="submit" value="Guardar" class="btn btn-primary" />
+                                    <a asp-action="Index" class="btn btn-default pull-right">Volver al Listado</a>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <!-- /.box -->
+                </div>
+                <!--/.col-->
+            </div>
+            <!-- /.row -->
+        </section>
     </div>
 <!-- /.content-wrapper -->
 

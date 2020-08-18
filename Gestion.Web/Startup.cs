@@ -111,7 +111,9 @@ namespace Gestion.Web
 
             services.AddScoped<IPresupuestosEstadosRepository, PresupuestosEstadosRepository>();
             services.AddScoped<IPresupuestosRepository, PresupuestosRepository>();
-            
+
+            services.AddScoped<IConfiguracionesRepository, ConfiguracionesRepository>();
+
             services.AddScoped<IUserHelper, UserHelper>();
             services.AddScoped<IMailHelper, MailHelper>();
 

@@ -145,8 +145,8 @@
                                 </span>
                             </a>
                             <ul class="treeview-menu">
-                                <li><a asp-controller="PresupuestosEstados" asp-action="Index"><i class="fa fa-circle-o"></i> Estados</a></li>
-                                <li><a asp-controller="Presupuestos" asp-action="Index"><i class="fa fa-circle-o"></i> Presupuestos</a></li>
+                                <li><a asp-action="ClienteBuscar" asp-route-id="@Guid.NewGuid().ToString()" ><i class="fa fa-circle-o"></i> Nuevo</a></li>                                
+                                <li><a asp-controller="Presupuestos" asp-action="Index"><i class="fa fa-circle-o"></i> Pendientes</a></li>
                                 <li><a href="../charts/flot.html"><i class="fa fa-circle-o"></i> Flot</a></li>
                                 <li><a href="../charts/inline.html"><i class="fa fa-circle-o"></i> Inline charts</a></li>
                             </ul>
@@ -167,7 +167,7 @@
                                 </span>
                             </a>
                             <ul class="treeview-menu">
-                                <li><a asp-controller="PresupuestosEstados" asp-action="Index"><i class="fa fa-circle-o"></i> Estados del Presup.</a></li>
+                                <li><a asp-controller="PresupuestosEstados" asp-action="Index"><i class="fa fa-circle-o"></i> Estados Presupuesto</a></li>
                                 <li><a asp-controller="TiposDocumentos" asp-action="Index"><i class="fa fa-circle-o"></i> Tipos Documentos</a></li>
                                 <li><a asp-controller="Provincias" asp-action="Index"><i class="fa fa-circle-o"></i> Provincias</a></li>
                             </ul>

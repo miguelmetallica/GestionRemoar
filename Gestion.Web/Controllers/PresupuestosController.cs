@@ -53,7 +53,6 @@ namespace Gestion.Web.Controllers
             }
             else
             {
-                presupuestos.EstadoId = presupuesto.EstadoId;
                 repository.spEditar(presupuestos);
             }
             
@@ -80,12 +79,15 @@ namespace Gestion.Web.Controllers
                 {
                     ModelState.AddModelError("NroDocumento", "El Tipo y Nro de Documento ya esta cargado en la base de datos");
                 }
-                var cuitcuil = await this.clientesRepository.ExistCuitCuilAsync("", clientes.CuilCuit);
-                if (cuitcuil)
+                if (clientes.CuilCuit != null)                 
                 {
-                    ModelState.AddModelError("CuilCuit", "El Cuil ya esta cargado en la base de datos");
+                    var cuitcuil = await this.clientesRepository.ExistCuitCuilAsync("", clientes.CuilCuit);
+                    if (cuitcuil)
+                    {
+                        ModelState.AddModelError("CuilCuit", "El Cuil ya esta cargado en la base de datos");
+                    }
                 }
-
+                
                 if (ModelState.IsValid)
                 {
                     clientes.Id = Guid.NewGuid().ToString();
@@ -105,7 +107,6 @@ namespace Gestion.Web.Controllers
                     {
                         presupuesto.ClienteId = clientes.Id;
                         presupuesto.UsuarioAlta = User.Identity.Name;
-                        presupuesto.EstadoId = presupuesto.EstadoId;
                         await repository.spEditar(presupuesto);
                     }
 
@@ -144,7 +145,7 @@ namespace Gestion.Web.Controllers
                 var producto = new Productos();
                 producto.Id = Guid.NewGuid().ToString();
                 producto.Producto = presupuestos.NombreProducto;
-                producto.PrecioNormal = presupuestos.Precio;
+                producto.PrecioVenta = presupuestos.Precio;
                 producto.UsuarioAlta = User.Identity.Name;
                 producto.EsVendedor = true;
                 var result = await productosRepository.spInsertar(producto);
@@ -235,7 +236,7 @@ namespace Gestion.Web.Controllers
         {
             var prod = await productosRepository.GetByIdAsync(presupuestos.ProductoId);
             presupuestos.Cantidad = 1;
-            presupuestos.Precio = (decimal)prod.PrecioNormal;
+            presupuestos.Precio = (decimal)prod.PrecioVenta;
             await repository.AddItemAsync(presupuestos, User.Identity.Name);
             
             return RedirectToAction("Presupuesto", new { id = presupuestos.PresupuestoId });
@@ -245,10 +246,10 @@ namespace Gestion.Web.Controllers
         {
             var presupuestos = await repository.GetByIdAsync(id);
             
-            presupuestos.EstadoId = "aeb79e2d-c583-44f2-bbd2-d60b63dd6c6c";
-            await repository.UpdateAsync(presupuestos);
+            presupuestos.UsuarioAlta = User.Identity.Name;
+            await repository.spAprobar(presupuestos);
 
-            return RedirectToAction("Presupuesto", new { id = id });
+            return RedirectToAction("Index");
         }
     }
 }

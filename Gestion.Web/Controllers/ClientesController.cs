@@ -69,10 +69,14 @@ namespace Gestion.Web.Controllers
                 {
                     ModelState.AddModelError("NroDocumento", "El Tipo y Nro de Documento ya esta cargado en la base de datos");                                       
                 }
-                var cuitcuil = await this.repository.ExistCuitCuilAsync("",clientes.CuilCuit);
-                if (cuitcuil)
+                
+                if (clientes.CuilCuit != null)
                 {
-                    ModelState.AddModelError("CuilCuit", "El Cuil ya esta cargado en la base de datos");                                       
+                    var cuitcuil = await this.repository.ExistCuitCuilAsync("", clientes.CuilCuit);
+                    if (cuitcuil)
+                    {
+                        ModelState.AddModelError("CuilCuit", "El Cuil ya esta cargado en la base de datos");
+                    }
                 }
 
                 if (ModelState.IsValid)
@@ -119,11 +123,15 @@ namespace Gestion.Web.Controllers
             {
                 ModelState.AddModelError("NroDocumento", "El Tipo y Nro de Documento ya esta cargado en la base de datos");
             }
-            var cuitcuil = await this.repository.ExistCuitCuilAsync(clientes.Id, clientes.CuilCuit);
-            if (cuitcuil)
+
+            if (clientes.CuilCuit != null)
             {
-                ModelState.AddModelError("CuilCuit", "El Cuil ya esta cargado en la base de datos");
-            }
+                var cuitcuil = await this.repository.ExistCuitCuilAsync(clientes.Id, clientes.CuilCuit);
+                if (cuitcuil)
+                {
+                    ModelState.AddModelError("CuilCuit", "El Cuil ya esta cargado en la base de datos");
+                }
+            }            
 
             if (ModelState.IsValid)
             {

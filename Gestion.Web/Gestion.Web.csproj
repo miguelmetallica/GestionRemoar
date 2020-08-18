@@ -8,18 +8,22 @@
     <Compile Remove="Views\Categorias\**" />
     <Compile Remove="Views\Etiquetas\**" />
     <Compile Remove="Views\Localidades\**" />
+    <Compile Remove="Views\Productos\**" />
     <Compile Remove="wwwroot\admin\bower_components\fullcalendar\**" />
     <Content Remove="Views\Categorias\**" />
     <Content Remove="Views\Etiquetas\**" />
     <Content Remove="Views\Localidades\**" />
+    <Content Remove="Views\Productos\**" />
     <Content Remove="wwwroot\admin\bower_components\fullcalendar\**" />
     <EmbeddedResource Remove="Views\Categorias\**" />
     <EmbeddedResource Remove="Views\Etiquetas\**" />
     <EmbeddedResource Remove="Views\Localidades\**" />
+    <EmbeddedResource Remove="Views\Productos\**" />
     <EmbeddedResource Remove="wwwroot\admin\bower_components\fullcalendar\**" />
     <None Remove="Views\Categorias\**" />
     <None Remove="Views\Etiquetas\**" />
     <None Remove="Views\Localidades\**" />
+    <None Remove="Views\Productos\**" />
     <None Remove="wwwroot\admin\bower_components\fullcalendar\**" />
   </ItemGroup>
 
@@ -31,7 +35,6 @@
   <ItemGroup>
     <Content Remove="Views\Clientes\Delete.cshtml" />
     <Content Remove="Views\PresupuestosEstados\Delete.cshtml" />
-    <Content Remove="Views\Productos\Delete.cshtml" />
   </ItemGroup>
 
   <ItemGroup>
