@@ -28,6 +28,12 @@ namespace Gestion.Web.Data
             return await this.context.Clientes.AnyAsync(e => e.TipoDocumentoId == tipo && e.NroDocumento == nro && e.Id != id);
         }
 
+        public Clientes GetOne(string id)
+        {
+            var cliente = this.context.Clientes.Where(x => x.Id == id).FirstOrDefault();
+            return cliente;
+        }
+
         public List<Clientes> GetAllActivos() 
         {
             var clientes = this.context.Clientes.Where(x => x.Estado == true).OrderBy(x => x.NroDocumento).ToList();

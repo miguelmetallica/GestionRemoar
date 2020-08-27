@@ -8,6 +8,7 @@ namespace Gestion.Web.Data
     public interface IClientesRepository : IGenericRepository<Clientes>
     {
         List<Clientes> GetAllActivos();
+        Clientes GetOne(string id);
         Task<bool> ExistCuitCuilAsync(string id, string cuitcuil);
 
         Task<bool> ExistNroDocAsync(string id, string tipo, string nro);

@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Gestion.Web.Models.Presupuestos>
+﻿@model IEnumerable<Gestion.Web.Models.PresupuestosIndex>
 
 @{
     ViewData["Title"] = "Listado de Presupuestos Pendientes";
@@ -40,22 +40,22 @@ BREADCRUMB
                                 @Html.DisplayNameFor(model => model.FechaVencimiento)
                             </th>
                             <th>
-                                @Html.DisplayNameFor(model => model.Cliente.RazonSocial)
+                                @Html.DisplayNameFor(model => model.RazonSocial)
                             </th>
                             <th>
-                                @Html.DisplayNameFor(model => model.Cliente.NroDocumento)
+                                @Html.DisplayNameFor(model => model.NroDocumento)
                             </th>
                             <th>
-                                @Html.DisplayNameFor(model => model.Cliente.CuilCuit)
-                            </th>
-                            <th>
-                                @Html.DisplayNameFor(model => model.Estado.Descripcion)
+                                @Html.DisplayNameFor(model => model.CuilCuit)
                             </th>
                             <th>
                                 @Html.DisplayNameFor(model => model.Total)
                             </th>
                             <th>
                                 @Html.DisplayNameFor(model => model.Cantidad)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.UsuarioAlta)
                             </th>
                             <th>Operaciones</th>
                         </tr>
@@ -74,16 +74,13 @@ BREADCRUMB
                                 @Html.DisplayFor(modelItem => item.FechaVencimiento)
                             </td>
                             <td>
-                                @Html.DisplayFor(modelItem => item.Cliente.RazonSocial)
+                                @Html.DisplayFor(modelItem => item.RazonSocial)
                             </td>
                             <td>
-                                @Html.DisplayFor(modelItem => item.Cliente.NroDocumento)
+                                @Html.DisplayFor(modelItem => item.NroDocumento)
                             </td>
                             <td>
-                                @Html.DisplayFor(modelItem => item.Cliente.CuilCuit)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Estado.Descripcion)
+                                @Html.DisplayFor(modelItem => item.CuilCuit)
                             </td>
                             <td>
                                 @Html.DisplayFor(modelItem => item.Total)
@@ -92,8 +89,11 @@ BREADCRUMB
                                 @Html.DisplayFor(modelItem => item.Cantidad)
                             </td>
                             <td>
+                                @Html.DisplayFor(modelItem => item.UsuarioAlta)
+                            </td>
+                            <td>
                                 <div class="btn-group">
-                                    <a class="btn btn-info" asp-action="Presupuesto" asp-route-id="@item.Id"><i class="fa fa-search-plus"></i></a>
+                                    <a class="btn btn-primary btn-sm" asp-action="Pendiente" asp-route-id="@item.Id"><i class="fa fa-search"></i></a>
                                 </div>
                             </td>
                         </tr>

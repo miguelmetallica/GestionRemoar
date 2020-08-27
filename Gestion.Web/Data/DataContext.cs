@@ -7,9 +7,9 @@ namespace Gestion.Web.Data
     public class DataContext : IdentityDbContext<Usuarios>
     {
         public virtual DbSet<Clientes> Clientes { get; set; }
+        public virtual DbSet<ParamAlicuotas> ParamAlicuotas { get; set; }
         public virtual DbSet<ParamCategorias> ParamCategorias { get; set; }
         public virtual DbSet<ParamColores> ParamColores { get; set; }
-        public virtual DbSet<ParamComprobantesTipos> ParamComprobantesTipos { get; set; }
         public virtual DbSet<ParamCondicionesIva> ParamCondicionesIva { get; set; }
         public virtual DbSet<ParamCuentasCompras> ParamCuentasCompras { get; set; }
         public virtual DbSet<ParamCuentasVentas> ParamCuentasVentas { get; set; }
@@ -17,7 +17,10 @@ namespace Gestion.Web.Data
         public virtual DbSet<ParamMarcas> ParamMarcas { get; set; }
         public virtual DbSet<ParamProvincias> ParamProvincias { get; set; }
         public virtual DbSet<ParamTiposDocumentos> ParamTiposDocumentos { get; set; }
+        public virtual DbSet<ParamTiposComprobantes> ParamTiposComprobantes { get; set; }
+        public virtual DbSet<ParamConceptosIncluidos> ParamConceptosIncluidos { get; set; }
         public virtual DbSet<ParamTiposProductos> ParamTiposProductos { get; set; }
+        public virtual DbSet<ParamTiposResponsables> ParamTiposResponsables { get; set; }
         public virtual DbSet<ParamUnidadesMedidas> ParamUnidadesMedidas { get; set; }
 
         public virtual DbSet<Productos> Productos { get; set; }

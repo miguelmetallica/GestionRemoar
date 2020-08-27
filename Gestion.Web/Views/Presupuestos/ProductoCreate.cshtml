@@ -55,8 +55,8 @@
                         <!-- /.box-body -->
 
                         <div class="box-footer">
-                            <input type="submit" value="Guardar" class="btn btn-primary" />
-                            <a asp-action="Index" class="btn btn-default pull-right">Volver al Listado</a>
+                            <input type="submit" value="Guardar" class="btn btn-primary btn-sm" />
+                            <a asp-controller="Presupuestos" asp-action="Pendiente" asp-route-id="@Model.PresupuestoId" class="btn btn-default btn-sm pull-right">Volver</a>
                         </div>
                     </form>
                 </div>
@@ -104,7 +104,7 @@
                                                 @{
                                                     var param = new Dictionary<string, string> { { "productoId", item.Id }, { "presupuestoId", Model.PresupuestoId } };
                                                 }
-                                                <a class="btn btn-warning" asp-action="ProductoSeleccion" asp-all-route-data="@param">Seleccionar Producto</a>
+                                                <a class="btn btn-warning btn-sm" asp-action="ProductoSeleccion" asp-all-route-data="@param">Seleccionar Producto</a>
 
                                             </div>
                                         </td>

@@ -7,7 +7,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectVersion>4.1</ProjectVersion>
     <ProjectGuid>{4d7d39de-edd7-4b0d-9a21-61150c269867}</ProjectGuid>
-    <DSP>Microsoft.Data.Tools.Schema.Sql.Sql130DatabaseSchemaProvider</DSP>
+    <DSP>Microsoft.Data.Tools.Schema.Sql.Sql110DatabaseSchemaProvider</DSP>
     <OutputType>Database</OutputType>
     <RootPath>
     </RootPath>
@@ -59,7 +59,7 @@
     <Folder Include="dbo\" />
     <Folder Include="dbo\Tables\" />
     <Folder Include="dbo\Functions\" />
-    <Folder Include="dbo\Stored Procedures\" />
+    <Folder Include="dbo\Stored Procedures" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="dbo\Tables\Sucursales.sql" />
@@ -119,117 +119,13 @@
     <Build Include="dbo\Tables\AspNetRoles.sql" />
     <Build Include="dbo\Tables\AspNetRoleClaims.sql" />
     <Build Include="dbo\Functions\encriptar.sql" />
-    <Build Include="dbo\Stored Procedures\UsuarioAutorizado.sql" />
-    <Build Include="dbo\Stored Procedures\Sucursales_Get.sql" />
-    <Build Include="dbo\Stored Procedures\Sucursales_Delete.sql" />
-    <Build Include="dbo\Stored Procedures\Sucursales_AddEdit.sql" />
-    <Build Include="dbo\Stored Procedures\SeguridadUsuariosRoles_Get.sql" />
-    <Build Include="dbo\Stored Procedures\SeguridadUsuariosRoles_Delete.sql" />
-    <Build Include="dbo\Stored Procedures\SeguridadUsuariosRoles_Add.sql" />
-    <Build Include="dbo\Stored Procedures\SeguridadUsuarios_Login.sql" />
-    <Build Include="dbo\Stored Procedures\SeguridadUsuarios_Get.sql" />
-    <Build Include="dbo\Stored Procedures\SeguridadUsuarios_Delete.sql" />
-    <Build Include="dbo\Stored Procedures\SeguridadUsuarios_AddEdit.sql" />
-    <Build Include="dbo\Stored Procedures\SeguridadRolesOperaciones_Get.sql" />
-    <Build Include="dbo\Stored Procedures\SeguridadRolesOperaciones_Delete.sql" />
-    <Build Include="dbo\Stored Procedures\SeguridadRolesOperaciones_AddEdit.sql" />
-    <Build Include="dbo\Stored Procedures\SeguridadRoles_Get.sql" />
-    <Build Include="dbo\Stored Procedures\SeguridadRoles_Delete.sql" />
-    <Build Include="dbo\Stored Procedures\SeguridadRoles_AddEdit.sql" />
-    <Build Include="dbo\Stored Procedures\SeguridadOperaciones_Get.sql" />
-    <Build Include="dbo\Stored Procedures\SeguridadOperaciones_Delete.sql" />
-    <Build Include="dbo\Stored Procedures\SeguridadOperaciones_AddEdit.sql" />
-    <Build Include="dbo\Stored Procedures\SeguridadModulos_Get.sql" />
-    <Build Include="dbo\Stored Procedures\SeguridadModulos_Delete.sql" />
-    <Build Include="dbo\Stored Procedures\SeguridadModulos_AddEdit.sql" />
-    <Build Include="dbo\Stored Procedures\ProductosInsertar.sql" />
-    <Build Include="dbo\Stored Procedures\Productos_Get.sql" />
-    <Build Include="dbo\Stored Procedures\Productos_Delete.sql" />
-    <Build Include="dbo\Stored Procedures\Productos_AddEdit.sql" />
+    <Build Include="dbo\Stored Procedures\Clientes_GetAll.sql" />
+    <Build Include="dbo\Stored Procedures\ClientesPersonaFisicaInsertar.sql" />
+    <Build Include="dbo\Stored Procedures\ClientesPersonaFisicaEditar.sql" />
+    <Build Include="dbo\Stored Procedures\NextNumber.sql" />
     <Build Include="dbo\Stored Procedures\PresupuestosInsertar.sql" />
     <Build Include="dbo\Stored Procedures\PresupuestosEditar.sql" />
     <Build Include="dbo\Stored Procedures\PresupuestosAprobar.sql" />
-    <Build Include="dbo\Stored Procedures\PedidosDetalles_Get.sql" />
-    <Build Include="dbo\Stored Procedures\PedidosDetalles_Delete.sql" />
-    <Build Include="dbo\Stored Procedures\PedidosDetalles_AddEdit.sql" />
-    <Build Include="dbo\Stored Procedures\Pedidos_Get.sql" />
-    <Build Include="dbo\Stored Procedures\Pedidos_Delete.sql" />
-    <Build Include="dbo\Stored Procedures\Pedidos_AddEdit.sql" />
-    <Build Include="dbo\Stored Procedures\ParamUnidadesMedidas_Get.sql" />
-    <Build Include="dbo\Stored Procedures\ParamUnidadesMedidas_Delete.sql" />
-    <Build Include="dbo\Stored Procedures\ParamUnidadesMedidas_AddEdit.sql" />
-    <Build Include="dbo\Stored Procedures\ParamTiposResponsables_Get.sql" />
-    <Build Include="dbo\Stored Procedures\ParamTiposResponsables_Delete.sql" />
-    <Build Include="dbo\Stored Procedures\ParamTiposResponsables_AddEdit.sql" />
-    <Build Include="dbo\Stored Procedures\ParamTiposDocumentos_Get.sql" />
-    <Build Include="dbo\Stored Procedures\ParamTiposDocumentos_Delete.sql" />
-    <Build Include="dbo\Stored Procedures\ParamTiposDocumentos_AddEdit.sql" />
-    <Build Include="dbo\Stored Procedures\ParamTiposComprobantes_Get.sql" />
-    <Build Include="dbo\Stored Procedures\ParamTiposComprobantes_Delete.sql" />
-    <Build Include="dbo\Stored Procedures\ParamTiposComprobantes_AddEdit.sql" />
-    <Build Include="dbo\Stored Procedures\ParamTarjetasCreditosDebitos_Get.sql" />
-    <Build Include="dbo\Stored Procedures\ParamTarjetasCreditosDebitos_Delete.sql" />
-    <Build Include="dbo\Stored Procedures\ParamTarjetasCreditosDebitos_AddEdit.sql" />
-    <Build Include="dbo\Stored Procedures\ParamProvincias_Get.sql" />
-    <Build Include="dbo\Stored Procedures\ParamProvincias_Delete.sql" />
-    <Build Include="dbo\Stored Procedures\ParamProvincias_AddEdit.sql" />
-    <Build Include="dbo\Stored Procedures\ParamPaises_Get.sql" />
-    <Build Include="dbo\Stored Procedures\ParamPaises_Delete.sql" />
-    <Build Include="dbo\Stored Procedures\ParamPaises_AddEdit.sql" />
-    <Build Include="dbo\Stored Procedures\ParamLocalidades_Get.sql" />
-    <Build Include="dbo\Stored Procedures\ParamLocalidades_Delete.sql" />
-    <Build Include="dbo\Stored Procedures\ParamLocalidades_AddEdit.sql" />
-    <Build Include="dbo\Stored Procedures\ParamImpuestos_Get.sql" />
-    <Build Include="dbo\Stored Procedures\ParamImpuestos_Delete.sql" />
-    <Build Include="dbo\Stored Procedures\ParamImpuestos_AddEdit.sql" />
-    <Build Include="dbo\Stored Procedures\ParamCuentasVentas_Get.sql" />
-    <Build Include="dbo\Stored Procedures\ParamCuentasVentas_Delete.sql" />
-    <Build Include="dbo\Stored Procedures\ParamCuentasVentas_AddEdit.sql" />
-    <Build Include="dbo\Stored Procedures\ParamCuentasCompras_Get.sql" />
-    <Build Include="dbo\Stored Procedures\ParamCuentasCompras_Delete.sql" />
-    <Build Include="dbo\Stored Procedures\ParamCuentasCompras_AddEdit.sql" />
-    <Build Include="dbo\Stored Procedures\ParamConceptosIncluidos_Get.sql" />
-    <Build Include="dbo\Stored Procedures\ParamConceptosIncluidos_Delete.sql" />
-    <Build Include="dbo\Stored Procedures\ParamConceptosIncluidos_AddEdit.sql" />
-    <Build Include="dbo\Stored Procedures\ParamBancos_Get.sql" />
-    <Build Include="dbo\Stored Procedures\ParamBancos_Delete.sql" />
-    <Build Include="dbo\Stored Procedures\ParamBancos_AddEdit.sql" />
-    <Build Include="dbo\Stored Procedures\NextNumber.sql" />
-    <Build Include="dbo\Stored Procedures\FormasPagosCuotas_Get.sql" />
-    <Build Include="dbo\Stored Procedures\FormasPagosCuotas_Delete.sql" />
-    <Build Include="dbo\Stored Procedures\FormasPagosCuotas_AddEdit.sql" />
-    <Build Include="dbo\Stored Procedures\FormasPagos_Get.sql" />
-    <Build Include="dbo\Stored Procedures\FormasPagos_Delete.sql" />
-    <Build Include="dbo\Stored Procedures\FormasPagos_AddEdit.sql" />
-    <Build Include="dbo\Stored Procedures\ComprobantesFormasPagos_Tarjeta.sql" />
-    <Build Include="dbo\Stored Procedures\ComprobantesFormasPagos_GetOne.sql" />
-    <Build Include="dbo\Stored Procedures\ComprobantesFormasPagos_Get.sql" />
-    <Build Include="dbo\Stored Procedures\ComprobantesFormasPagos_Efectivo.sql" />
-    <Build Include="dbo\Stored Procedures\ComprobantesFormasPagos_Delete.sql" />
-    <Build Include="dbo\Stored Procedures\ComprobantesFormasPagos_Cheque.sql" />
-    <Build Include="dbo\Stored Procedures\ComprobantesDetalles_Get.sql" />
-    <Build Include="dbo\Stored Procedures\ComprobantesDetalles_Delete.sql" />
-    <Build Include="dbo\Stored Procedures\ComprobantesDetalles_AddEdit.sql" />
-    <Build Include="dbo\Stored Procedures\Comprobantes_Resumen.sql" />
-    <Build Include="dbo\Stored Procedures\Comprobantes_Reporte_Recibo.sql" />
-    <Build Include="dbo\Stored Procedures\Comprobantes_Recibo.sql" />
-    <Build Include="dbo\Stored Procedures\Comprobantes_Delete.sql" />
-    <Build Include="dbo\Stored Procedures\Comprobantes_ComprobanteRecibo.sql" />
-    <Build Include="dbo\Stored Procedures\Comprobantes_ComprobanteCaja.sql" />
-    <Build Include="dbo\Stored Procedures\Comprobantes_Comprobante.sql" />
-    <Build Include="dbo\Stored Procedures\Comprobantes_Cliente_Get.sql" />
-    <Build Include="dbo\Stored Procedures\Comprobantes_Cliente.sql" />
-    <Build Include="dbo\Stored Procedures\Comprobantes_CabeceraConfirmaRecibo.sql" />
-    <Build Include="dbo\Stored Procedures\Comprobantes_CabeceraConfirma.sql" />
-    <Build Include="dbo\Stored Procedures\Comprobantes_Cabecera_Get.sql" />
-    <Build Include="dbo\Stored Procedures\Comprobantes_Cabecera.sql" />
-    <Build Include="dbo\Stored Procedures\ClientesPersonaFisicaInsertar.sql" />
-    <Build Include="dbo\Stored Procedures\ClientesPersonaFisicaEditar.sql" />
-    <Build Include="dbo\Stored Procedures\Clientes_GetAll.sql" />
-    <Build Include="dbo\Stored Procedures\Clientes_Get.sql" />
-    <Build Include="dbo\Stored Procedures\Clientes_Edit.sql" />
-    <Build Include="dbo\Stored Procedures\Clientes_Delete.sql" />
-    <Build Include="dbo\Stored Procedures\Clientes_AddEdit.sql" />
-    <Build Include="dbo\Stored Procedures\Clientes_Add.sql" />
+    <Build Include="dbo\Stored Procedures\ProductosInsertar.sql" />
   </ItemGroup>
 </Project>

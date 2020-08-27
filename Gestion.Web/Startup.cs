@@ -83,6 +83,7 @@ namespace Gestion.Web
             });
 
 
+            services.AddScoped<ITiposProductosRepository, TiposProductosRepository>();
             services.AddScoped<ITiposDocumentosRepository, TiposDocumentosRepository>();
             services.AddScoped<ICategoriasRepository, CategoriasRepository>();
             services.AddScoped<IColoresRepository, ColoresRepository>();
@@ -111,6 +112,13 @@ namespace Gestion.Web
 
             services.AddScoped<IPresupuestosEstadosRepository, PresupuestosEstadosRepository>();
             services.AddScoped<IPresupuestosRepository, PresupuestosRepository>();
+
+
+            services.AddScoped<IAlicuotasRepository, AlicuotasRepository>();
+            services.AddScoped<IConceptosIncluidosRepository, ConceptosIncluidosRepository>();
+            services.AddScoped<ITiposComprobantesRepository, TiposComprobantesRepository>();
+            services.AddScoped<ITiposResponsablesRepository, TiposResponsablesRepository>();
+            services.AddScoped<IAlicuotasRepository, AlicuotasRepository>();
 
             services.AddScoped<IConfiguracionesRepository, ConfiguracionesRepository>();
 

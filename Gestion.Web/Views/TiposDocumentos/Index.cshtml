@@ -40,6 +40,9 @@ BREADCRUMB
                                 @Html.DisplayNameFor(model => model.Descripcion)
                             </th>
                             <th>
+                                @Html.DisplayNameFor(model => model.Defecto)
+                            </th>
+                            <th>
                                 @Html.DisplayNameFor(model => model.Estado)
                             </th>
                             <th>Operaciones</th>
@@ -48,46 +51,49 @@ BREADCRUMB
                     <tbody>
                         @foreach (var item in Model)
                         {
-                            <tr>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Codigo)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Descripcion)
-                                </td>                                
-                                <td>
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Codigo)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Descripcion)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Defecto)
+                            </td>
+                            <td>
+                                @{
+                                    if (item.Estado)
+                                    {
+                                        <span class="label label-success">Activo</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="label label-danger">Inactivo</span>
+                                    }
+
+                                }
+
+
+                            </td>
+                            <td>
+                                <div class="btn-group">
+                                    <a class="btn btn-warning" asp-action="Edit" asp-route-id="@item.Id"><i class="fa fa-pen"></i></a>
+                                    <a class="btn btn-info" asp-action="Details" asp-route-id="@item.Id"><i class="fa fa-search-plus"></i></a>
                                     @{
                                         if (item.Estado)
                                         {
-                                            <span class="label label-success">Activo</span>
+                                            <a class="btn btn-danger" asp-action="Delete" asp-route-id="@item.Id"><i class="glyphicon glyphicon-remove"></i></a>
                                         }
                                         else
                                         {
-                                            <span class="label label-danger">Inactivo</span>
+                                            <a class="btn btn-success" asp-action="Delete" asp-route-id="@item.Id"><i class="glyphicon glyphicon-ok"></i></a>
                                         }
 
                                     }
-                                    
-                                    
-                                </td>
-                                <td>
-                                    <div class="btn-group">
-                                        <a class="btn btn-warning" asp-action="Edit" asp-route-id="@item.Id"><i class="fa fa-pen"></i></a>
-                                        <a class="btn btn-info" asp-action="Details" asp-route-id="@item.Id"><i class="fa fa-search-plus"></i></a>
-                                            @{
-                                                if (item.Estado)
-                                                {
-                                                    <a class="btn btn-danger" asp-action="Delete" asp-route-id="@item.Id"><i class="glyphicon glyphicon-remove"></i></a>
-                                                }
-                                                else
-                                                {
-                                                    <a class="btn btn-success" asp-action="Delete" asp-route-id="@item.Id"><i class="glyphicon glyphicon-ok"></i></a>
-                                                }
-
-                                            }                                                                                    
-                                    </div>
-                                </td>
-                            </tr>
+                                </div>
+                            </td>
+                        </tr>
                         }
                     </tbody>
                 </table>

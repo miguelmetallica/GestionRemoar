@@ -3,6 +3,7 @@ using Gestion.Web.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Gestion.Web.Controllers
@@ -30,9 +31,9 @@ namespace Gestion.Web.Controllers
             this.provinciasRepository = provinciasRepository;
         }
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Pendientes()
         {
-            var model = await repository.GetOrdersAsync(this.User.Identity.Name);
+            var model = await repository.spPresupuestosPendientes();                
             return View(model);            
         }
 
@@ -42,21 +43,28 @@ namespace Gestion.Web.Controllers
             return this.View(this.clientesRepository.GetAllActivos());
         }
 
-        public IActionResult ClienteSeleccion(Presupuestos presupuestos)
+        public async Task<IActionResult> ClienteSeleccion(Presupuestos presupuestos)
         {
-            var presupuesto = this.repository.GetPresupuestoId(presupuestos.Id);
+            var presupuesto = this.repository.GetPresupuestoPendientesId(presupuestos.Id);
             presupuestos.UsuarioAlta = User.Identity.Name;
 
             if (presupuesto == null)
             {
-                repository.spInsertar(presupuestos);
+                await repository.spInsertar(presupuestos);
             }
             else
             {
-                repository.spEditar(presupuestos);
+                var presup = await this.repository.spPresupuestosPendiente(presupuestos.Id);
+
+                if (presup == null || presup.Count == 0)
+                {
+                    return RedirectToAction("Pendientes", "Presupuestos");
+                }
+
+                await repository.spEditar(presupuestos);
             }
             
-            return RedirectToAction("Presupuesto", new { id = presupuestos.Id });
+            return RedirectToAction("Pendiente", new { id = presupuestos.Id });
         }
 
         public IActionResult ClienteCreate(string id)
@@ -93,7 +101,7 @@ namespace Gestion.Web.Controllers
                     clientes.Id = Guid.NewGuid().ToString();
                     clientes.UsuarioAlta = User.Identity.Name;
                     var result = await clientesRepository.spInsertar(clientes);
-                    Presupuestos presupuesto = this.repository.GetPresupuestoId(clientes.ExternalId);                    
+                    Presupuestos presupuesto = this.repository.GetPresupuestoPendientesId(clientes.ExternalId);                    
 
                     if (presupuesto == null)
                     {
@@ -105,12 +113,19 @@ namespace Gestion.Web.Controllers
                     }
                     else
                     {
+                        var presup = await this.repository.spPresupuestosPendiente(presupuesto.Id);
+
+                        if (presup == null || presup.Count == 0)
+                        {
+                            return RedirectToAction("Pendientes", "Presupuestos");
+                        }
+
                         presupuesto.ClienteId = clientes.Id;
                         presupuesto.UsuarioAlta = User.Identity.Name;
                         await repository.spEditar(presupuesto);
                     }
 
-                    return RedirectToAction("Presupuesto", new { id = presupuesto.Id });
+                    return RedirectToAction("Pendiente", new { id = presupuesto.Id });
                 }
             }
 
@@ -120,10 +135,17 @@ namespace Gestion.Web.Controllers
             return View(clientes);
         }
 
-        public IActionResult Presupuesto(string id)
+        public async Task<IActionResult> Pendiente(string id)
         {
-            var presupuesto = this.repository.GetPresupuestoId(id);
-            return View(presupuesto);
+            var presupuesto = await this.repository.spPresupuestosPendiente(id);
+
+            if (presupuesto == null || presupuesto.Count == 0) 
+            {
+                return RedirectToAction("Pendientes", "Presupuestos");
+            }
+
+            ViewData["Detalle"] = presupuesto;
+            return View(presupuesto.FirstOrDefault());
         }
 
         public IActionResult ProductoCreate(string id)
@@ -139,7 +161,6 @@ namespace Gestion.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ProductoCreate(PresupuestosDetalle presupuestos)
         {
-            
             if (ModelState.IsValid)
             {
                 var producto = new Productos();
@@ -151,36 +172,19 @@ namespace Gestion.Web.Controllers
                 var result = await productosRepository.spInsertar(producto);
                 presupuestos.ProductoId = producto.Id;
 
+                var presup = await this.repository.spPresupuestosPendiente(presupuestos.Id);
+
+                if (presup == null || presup.Count == 0)
+                {
+                    return RedirectToAction("Pendientes", "Presupuestos");
+                }
+
                 await repository.AddItemAsync(presupuestos, User.Identity.Name);
-                return RedirectToAction("Presupuesto", new { id = presupuestos.Id });
+                return RedirectToAction("Pendiente", new { id = presupuestos.Id });
             }
             
             return View(presupuestos);
         }
-
-        //public IActionResult AddProduct()
-        //{
-        //    var model = new AddItemViewModel
-        //    {
-        //        Cantidad = 1,
-        //        Productos = this.productosRepository.GetComboProducts()
-        //    };
-
-        //    return View(model);
-        //}
-
-        //[HttpPost]
-        //public async Task<IActionResult> AddProduct(PresupuestosDetalle model)
-        //{
-        //    if (this.ModelState.IsValid)
-        //    {
-        //        await this.repository.AddItemAsync(model, this.User.Identity.Name);
-        //        return this.RedirectToAction("Create");
-        //    }
-
-        //    return this.View(model);
-        //}
-
         public IActionResult ProductoDelete(string id)
         {
             if (id == null)
@@ -196,8 +200,16 @@ namespace Gestion.Web.Controllers
         public async Task<IActionResult> DeleteConfirmed(string id)
         {
             var presupuestos = repository.GetDetalle(id);
+
+            var presup = await this.repository.spPresupuestosPendiente(presupuestos.PresupuestoId);
+
+            if (presup == null || presup.Count == 0)
+            {
+                return RedirectToAction("Pendientes", "Presupuestos");
+            }
+
             await repository.DeleteDetailAsync(id);
-            return RedirectToAction("Presupuesto", new { id = presupuestos.PresupuestoId });
+            return RedirectToAction("Pendiente", new { id = presupuestos.PresupuestoId });
         }        
 
         public async Task<IActionResult> Incrementar(string id,string id2)
@@ -210,10 +222,16 @@ namespace Gestion.Web.Controllers
             {
                 return NotFound();
             }
-            
+
+            var presup = await this.repository.spPresupuestosPendiente(id2);
+
+            if (presup == null || presup.Count == 0)
+            {
+                return RedirectToAction("Pendientes", "Presupuestos");
+            }
 
             await this.repository.ModifyCantidadesAsync(id, 1);
-            return RedirectToAction("Presupuesto", new { id = id2 });
+            return RedirectToAction("Pendiente", new { id = id2 });
         }
 
         public async Task<IActionResult> Decrementar(string id, string id2)
@@ -227,29 +245,133 @@ namespace Gestion.Web.Controllers
                 return NotFound();
             }
 
+            var presup = await this.repository.spPresupuestosPendiente(id2);
+
+            if (presup == null || presup.Count == 0)
+            {
+                return RedirectToAction("Pendientes", "Presupuestos");
+            }
 
             await this.repository.ModifyCantidadesAsync(id, -1);
-            return RedirectToAction("Presupuesto", new { id = id2 });
+            return RedirectToAction("Pendiente", new { id = id2 });
         }
 
         public async Task<IActionResult> ProductoSeleccion(PresupuestosDetalle presupuestos)
         {
+            var presup = await this.repository.spPresupuestosPendiente(presupuestos.PresupuestoId);
+
+            if (presup == null || presup.Count == 0)
+            {
+                return RedirectToAction("Pendientes", "Presupuestos");
+            }
+
             var prod = await productosRepository.GetByIdAsync(presupuestos.ProductoId);
             presupuestos.Cantidad = 1;
             presupuestos.Precio = (decimal)prod.PrecioVenta;
             await repository.AddItemAsync(presupuestos, User.Identity.Name);
             
-            return RedirectToAction("Presupuesto", new { id = presupuestos.PresupuestoId });
+            return RedirectToAction("Pendiente", new { id = presupuestos.PresupuestoId });
         }
 
         public async Task<IActionResult> PresupuestoPendienteAprobar(string id)
         {
-            var presupuestos = await repository.GetByIdAsync(id);
-            
-            presupuestos.UsuarioAlta = User.Identity.Name;
-            await repository.spAprobar(presupuestos);
+            var presup = await this.repository.spPresupuestosPendiente(id);
 
-            return RedirectToAction("Index");
+            if (presup == null || presup.Count == 0)
+            {
+                return RedirectToAction("Pendientes", "Presupuestos");
+            }
+
+            if (presup[0].Cantidad == 0)
+            {
+                return RedirectToAction("Pendiente", new { id = id });
+            }
+
+            var presupuesto = await this.repository.GetByIdAsync(id);
+            presupuesto.UsuarioAlta = User.Identity.Name;
+            await repository.spAprobar(presupuesto);
+
+            return RedirectToAction("Pendientes");
         }
+
+        public async Task<IActionResult> PresupuestoPendienteRechazar(string id)
+        {
+            var presup = await this.repository.spPresupuestosPendiente(id);
+
+            if (presup == null || presup.Count == 0)
+            {
+                return RedirectToAction("Pendientes", "Presupuestos");
+            }            
+
+            var presupuesto = await this.repository.GetByIdAsync(id);
+            presupuesto.UsuarioAlta = User.Identity.Name;
+            await repository.spRechazar(presupuesto);
+
+            return RedirectToAction("Pendientes");
+        }
+
+        public async Task<IActionResult> Vencidos()
+        {
+            var model = await repository.spPresupuestosVencidos();
+            return View(model);
+        }
+
+        public IActionResult Vencido(string id)
+        {
+            var presupuesto = this.repository.GetPresupuestoId(id);
+
+            if (presupuesto == null)
+            {
+                return RedirectToAction("Vencidos", "Presupuestos");
+            }
+            return View(presupuesto);
+        }
+
+        public async Task<IActionResult> PresupuestoVencidoCopia(string id)
+        {
+            var presupuesto = await this.repository.GetByIdAsync(id);
+            presupuesto.UsuarioAlta = User.Identity.Name;
+            var nuevoId = Guid.NewGuid().ToString();
+            await repository.spVencidoCopiar(presupuesto, nuevoId);
+
+            return RedirectToAction("Pendiente","Presupuestos",new { id = nuevoId });
+        }
+
+        public async Task<IActionResult> Rechazados()
+        {
+            var model = await repository.spPresupuestosRechazados();
+            return View(model);
+        }
+
+        public async Task<IActionResult> Rechazado(string id)
+        {
+            var presupuesto = await this.repository.spPresupuestosRechazado(id);
+
+            if (presupuesto == null)
+            {
+                return RedirectToAction("Vencidos", "Presupuestos");
+            }
+            ViewData["Detalle"] = presupuesto;
+            return View(presupuesto.FirstOrDefault());
+        }
+
+        public async Task<IActionResult> Aprobados()
+        {
+            var model = await repository.spPresupuestosAprobados();
+            return View(model);
+        }
+
+        public async Task<IActionResult> Aprobado(string id)
+        {
+            var presupuesto = await this.repository.spPresupuestosAprobado(id);
+
+            if (presupuesto == null)
+            {
+                return RedirectToAction("Aprobados", "Presupuestos");
+            }
+            ViewData["Detalle"] = presupuesto;
+            return View(presupuesto.FirstOrDefault());
+        }
+
     }
 }

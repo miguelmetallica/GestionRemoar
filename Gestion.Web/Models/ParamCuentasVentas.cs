@@ -15,7 +15,7 @@ namespace Gestion.Web.Models
         [Required(ErrorMessage = "El campo {0} es obligatorio.")]
         [MaxLength(150)]
         public string Descripcion { get; set; }
-
+        public bool Defecto { get; set; }
         public bool Estado { get; set; }
     }
 }

@@ -9,11 +9,11 @@
         <section class="content-header">
             <h1>
                 Sistema de gestíon
-                <small>Gestion de Clientes</small>
+                <small>Gestion de Presupuestos</small>
             </h1>
             <ol class="breadcrumb">
-                <li><a asp-controller="Home"><i class="fas fa-tachometer-alt"></i> Inicio</a></li>
-                <li><a asp-controller="Clientes">Listado de Clientes</a></li>
+                <li><a asp-controller="Home" asp-action="Index"><i class="fas fa-tachometer-alt"></i> Inicio</a></li>
+                <li><a asp-controller="Presupuestos" asp-action="Pendientes">Listado de Presupuestos Pendientes</a></li>
                 <li class="active">@ViewData["Title"]</li>
             </ol>
         </section>
@@ -35,7 +35,7 @@
                                 <partial name="_ClienteCreate" model="Model" />
                                 <div class="box-footer">
                                     <input type="submit" value="Guardar" class="btn btn-primary" />
-                                    <a asp-action="Index" class="btn btn-default pull-right">Volver al Listado</a>
+                                    <a asp-action="Pendiente" asp-route-id="@Model.ExternalId" class="btn btn-default pull-right">Volver</a>
                                 </div>
                             </div>
                         </form>

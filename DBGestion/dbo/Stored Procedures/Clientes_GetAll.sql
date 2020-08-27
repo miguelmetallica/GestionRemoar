@@ -4,6 +4,6 @@ AS
 BEGIN
 	SELECT C.Id,C.Codigo,C.RazonSocial,
 	C.NroDocumento,C.CuilCuit,C.Estado,
-	CASE WHEN C.ESTADO = 1 THEN 'ACTIVO' ELSE 'INACTIVO' END EstadoDescripcion
+	CASE WHEN C.Estado = 1 THEN 'ACTIVO' ELSE 'INACTIVO' END EstadoDescripcion
 	FROM Clientes C
 END

@@ -2,7 +2,7 @@
 
 namespace Gestion.Web.Models
 {
-    public partial class ParamComprobantesTipos : IEntidades
+    public partial class ParamTiposComprobantes : IEntidades
     {
         public string Id { get; set; }
         
@@ -13,9 +13,7 @@ namespace Gestion.Web.Models
         [Required(ErrorMessage = "El campo {0} es obligatorio.")]
         [MaxLength(150)]
         public string Descripcion { get; set; }
-        
-        [MaxLength(50)]
-        public string Abreviatura { get; set; }
+        public bool Defecto { get; set; }
         public bool Estado { get; set; }
 
     }

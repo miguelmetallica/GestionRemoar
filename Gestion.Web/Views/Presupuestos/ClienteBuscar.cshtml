@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<Gestion.Web.Models.Clientes>
 
 @{
-    ViewData["Title"] = "Listado de Clientes";
+    ViewData["Title"] = "Seleccion de Clientes";
     string presupuestoId = ViewBag.Id;
 }
 
@@ -77,7 +77,7 @@ BREADCRUMB
                                             var param = new Dictionary<string, string> { { "id", presupuestoId }, { "clienteId", item.Id } };
                                         }
 
-                                        <a class="btn btn-warning" asp-action="ClienteSeleccion" asp-all-route-data="@param">Seleccionar Cliente</a>
+                                        <a class="btn btn-warning btn-sm" asp-action="ClienteSeleccion" asp-all-route-data="@param">Seleccionar Cliente</a>
                                     </div>
                                 </td>
                             </tr>
