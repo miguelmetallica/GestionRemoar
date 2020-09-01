@@ -18,7 +18,8 @@ namespace Gestion.Web.Controllers
         private readonly ICuentasComprasRepository cuentasCompras;
         private readonly ICuentasVentasRepository cuentasVentas;
         private readonly IUnidadesMedidasRepository unidadesMedidas;
-        private readonly IMarcasRepository marcas;
+        private readonly IAlicuotasRepository alicuotas;
+        
 
         public ProductosController(IProductosRepository repository, 
                                 IUserHelper userHelper, 
@@ -26,7 +27,7 @@ namespace Gestion.Web.Controllers
                                 ICuentasComprasRepository cuentasCompras,
                                 ICuentasVentasRepository cuentasVentas,
                                 IUnidadesMedidasRepository unidadesMedidas,
-                                IMarcasRepository marcas
+                                IAlicuotasRepository alicuotas 
                                 )
         {
             this.repository = repository;
@@ -35,12 +36,12 @@ namespace Gestion.Web.Controllers
             this.cuentasCompras = cuentasCompras;
             this.cuentasVentas = cuentasVentas;
             this.unidadesMedidas = unidadesMedidas;
-            this.marcas = marcas;
+            this.alicuotas = alicuotas;            
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View(repository.GetAll());            
+            return View(await repository.spProductosGet());
         }
         
         public async Task<IActionResult> Details(string id)
@@ -50,7 +51,7 @@ namespace Gestion.Web.Controllers
                 return new NotFoundViewResult("NoExiste");
             }
 
-            var Productos = await this.repository.GetByIdAsync(id);
+            var Productos = await this.repository.GetProducto(id);
             if (Productos == null)
             {
                 return new NotFoundViewResult("NoExiste");
@@ -65,7 +66,8 @@ namespace Gestion.Web.Controllers
             ViewBag.CuentasCompras = this.cuentasCompras.GetCombo();
             ViewBag.CuentasVentas = this.cuentasVentas.GetCombo();
             ViewBag.UnidadesMedidas = this.unidadesMedidas.GetCombo();
-            ViewBag.Marcas = this.marcas.GetCombo();
+            ViewBag.Alicuotas = this.alicuotas.GetCombo();
+
             return View();
         }
 
@@ -75,18 +77,19 @@ namespace Gestion.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                var codigo = await repository.ExistCodigoAsync("", productos.Codigo);
-                if (codigo) 
-                {
-                    ModelState.AddModelError("Codigo", "El Codigo ya existe en la base de datos");                
-                }
+                //var codigo = await repository.ExistCodigoAsync("", productos.Codigo);
+                //if (codigo) 
+                //{
+                //    ModelState.AddModelError("Codigo", "El Codigo ya existe en la base de datos");                
+                //}
 
                 if (ModelState.IsValid)
                 {
                     productos.Id = Guid.NewGuid().ToString();
+                    productos.Estado = true;
                     productos.FechaAlta = DateTime.Now;
                     productos.UsuarioAlta = User.Identity.Name;
-                    await repository.CreateAsync(productos);
+                    await repository.spInsertar(productos);
                     return RedirectToAction(nameof(Index));
                 }
             }
@@ -95,7 +98,8 @@ namespace Gestion.Web.Controllers
             ViewBag.CuentasCompras = this.cuentasCompras.GetCombo();
             ViewBag.CuentasVentas = this.cuentasVentas.GetCombo();
             ViewBag.UnidadesMedidas = this.unidadesMedidas.GetCombo();
-            ViewBag.Marcas = this.marcas.GetCombo();
+            ViewBag.Alicuotas = this.alicuotas.GetCombo();
+
 
             return View(productos);
         }
@@ -117,7 +121,7 @@ namespace Gestion.Web.Controllers
             ViewBag.CuentasCompras = this.cuentasCompras.GetCombo();
             ViewBag.CuentasVentas = this.cuentasVentas.GetCombo();
             ViewBag.UnidadesMedidas = this.unidadesMedidas.GetCombo();
-            ViewBag.Marcas = this.marcas.GetCombo();
+            ViewBag.Alicuotas = this.alicuotas.GetCombo();
 
             return this.View(productos);
         }
@@ -136,15 +140,19 @@ namespace Gestion.Web.Controllers
             {
                 try
                 {
-                    var codigo = await repository.ExistCodigoAsync(id, productos.Codigo);
-                    if (codigo)
-                    {
-                        ModelState.AddModelError("Codigo", "El Codigo ya existe en la base de datos");
-                    }
+                    //var codigo = await repository.ExistCodigoAsync(id, productos.Codigo);
+                    //if (codigo)
+                    //{
+                    //    ModelState.AddModelError("Codigo", "El Codigo ya existe en la base de datos");
+                    //}
 
                     if (ModelState.IsValid)
                     {
-                        await repository.UpdateAsync(productos);
+                        productos.Estado = true;
+                        productos.FechaAlta = DateTime.Now;
+                        productos.UsuarioAlta = User.Identity.Name;
+
+                        await repository.spEditar(productos);
                     }
                 }
                 catch (DbUpdateConcurrencyException)
@@ -165,7 +173,7 @@ namespace Gestion.Web.Controllers
             ViewBag.CuentasCompras = this.cuentasCompras.GetCombo();
             ViewBag.CuentasVentas = this.cuentasVentas.GetCombo();
             ViewBag.UnidadesMedidas = this.unidadesMedidas.GetCombo();
-            ViewBag.Marcas = this.marcas.GetCombo();
+            ViewBag.Alicuotas = this.alicuotas.GetCombo();
 
             return View(productos);
         }
@@ -202,3 +210,4 @@ namespace Gestion.Web.Controllers
 
     }
 }
+

@@ -29,10 +29,11 @@ BEGIN TRY
 
 		INSERT INTO Presupuestos(Id,Codigo,Fecha,
 							FechaVencimiento,ClienteId,EstadoId,
+							DescuentoId,DescuentoPorcentaje,
 							Estado,FechaAlta,UsuarioAlta)
 					VALUES(@Id,UPPER(@Codigo),
 							DATEADD(HH,4,GETDATE()),DATEADD(DD,3,DATEADD(HH,4,GETDATE())),
-							@ClienteId,@EstadoId,
+							@ClienteId,@EstadoId,NULL,0,
 							1,DATEADD(HH,4,GETDATE()),UPPER(@Usuario))
 		
 

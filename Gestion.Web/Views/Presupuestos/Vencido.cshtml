@@ -1,7 +1,8 @@
-﻿@model Gestion.Web.Models.Presupuestos
+﻿@model Gestion.Web.Models.PresupuestosDetalleDTO
 
 @{
     ViewData["Title"] = "Presupuesto Vencido";
+    var Detalle = (IEnumerable<PresupuestosDetalleDTO>)ViewData["Detalle"];
 }
 
 <div class="content-wrapper">
@@ -35,55 +36,61 @@
                     <form>
                         <div class="box-body">
                             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                            <input type="hidden" asp-for="Id" />
-                            <input type="hidden" asp-for="ClienteId" />
+                            <input type="hidden" asp-for="@Model.Id" />
+                            <input type="hidden" asp-for="@Model.ClienteId" />
 
                             <div class="form-group col-md-6">
-                                <label asp-for="Codigo" class="control-label"></label>
-                                <input asp-for="Codigo" readonly class="form-control input-sm" />
-                                <span asp-validation-for="Codigo" class="text-danger"></span>
+                                <label asp-for="@Model.Codigo" class="control-label"></label>
+                                <input asp-for="@Model.Codigo" readonly class="form-control input-sm" />
+                                <span asp-validation-for="@Model.Codigo" class="text-danger"></span>
                             </div>
 
                             <div class="form-group col-md-6">
-                                <label asp-for="Estado.Descripcion" class="control-label"></label>
-                                <input asp-for="Estado.Descripcion" readonly class="form-control input-sm" />
-                                <span asp-validation-for="Estado.Descripcion" class="text-danger"></span>
+                                <label asp-for="@Model.Estado" class="control-label"></label>
+                                <input asp-for="@Model.Estado" readonly class="form-control input-sm" />
+                                <span asp-validation-for="@Model.Estado" class="text-danger"></span>
                             </div>
 
                             <div class="form-group col-md-6">
-                                <label asp-for="Fecha" class="control-label"></label>
-                                <input asp-for="Fecha" readonly class="form-control input-sm" />
-                                <span asp-validation-for="Fecha" class="text-danger"></span>
+                                <label asp-for="@Model.Fecha" class="control-label"></label>
+                                <input asp-for="@Model.Fecha" type="date" readonly class="form-control input-sm" />
+                                <span asp-validation-for="@Model.Fecha" class="text-danger"></span>
                             </div>
 
                             <div class="form-group col-md-6">
-                                <label asp-for="FechaVencimiento" class="control-label"></label>
-                                <input asp-for="FechaVencimiento" readonly class="form-control input-sm" />
-                                <span asp-validation-for="FechaVencimiento" class="text-danger"></span>
+                                <label asp-for="@Model.FechaVencimiento" class="control-label"></label>
+                                <input asp-for="@Model.FechaVencimiento" type="date" readonly class="form-control input-sm" />
+                                <span asp-validation-for="@Model.FechaVencimiento" class="text-danger"></span>
                             </div>
 
                             <div class="form-group col-md-6">
-                                <label asp-for="Cliente.Codigo" class="control-label"></label>
-                                <input asp-for="Cliente.Codigo" readonly class="form-control input-sm" />
-                                <span asp-validation-for="Cliente.Codigo" class="text-danger"></span>
+                                <label asp-for="@Model.ClienteCodigo" class="control-label"></label>
+                                <input asp-for="@Model.ClienteCodigo" readonly class="form-control input-sm" />
+                                <span asp-validation-for="@Model.ClienteCodigo" class="text-danger"></span>
                             </div>
 
                             <div class="form-group col-md-6">
-                                <label asp-for="Cliente.RazonSocial" class="control-label"></label>
-                                <input asp-for="Cliente.RazonSocial" readonly class="form-control input-sm" />
-                                <span asp-validation-for="Cliente.RazonSocial" class="text-danger"></span>
+                                <label asp-for="@Model.ClienteRazonSocial" class="control-label"></label>
+                                <input asp-for="@Model.ClienteRazonSocial" readonly class="form-control input-sm" />
+                                <span asp-validation-for="@Model.ClienteRazonSocial" class="text-danger"></span>
                             </div>
 
                             <div class="form-group col-md-6">
-                                <label asp-for="Cliente.NroDocumento" class="control-label"></label>
-                                <input asp-for="Cliente.NroDocumento" readonly class="form-control input-sm" />
-                                <span asp-validation-for="Cliente.NroDocumento" class="text-danger"></span>
+                                <label asp-for="@Model.ClienteNroDocumento" class="control-label"></label>
+                                <input asp-for="@Model.ClienteNroDocumento" readonly class="form-control input-sm" />
+                                <span asp-validation-for="@Model.ClienteNroDocumento" class="text-danger"></span>
                             </div>
 
                             <div class="form-group col-md-6">
-                                <label asp-for="Cliente.CuilCuit" class="control-label"></label>
-                                <input asp-for="Cliente.CuilCuit" readonly class="form-control input-sm" />
-                                <span asp-validation-for="Cliente.CuilCuit" class="text-danger"></span>
+                                <label asp-for="@Model.ClienteCuilCuit" class="control-label"></label>
+                                <input asp-for="@Model.ClienteCuilCuit" readonly class="form-control input-sm" />
+                                <span asp-validation-for="@Model.ClienteCuilCuit" class="text-danger"></span>
+                            </div>
+
+                            <div class="form-group col-md-6">
+                                <label asp-for="@Model.UsuarioAlta" class="control-label"></label>
+                                <input asp-for="@Model.UsuarioAlta" readonly class="form-control input-sm" />
+                                <span asp-validation-for="@Model.UsuarioAlta" class="text-danger"></span>
                             </div>
 
 
@@ -103,8 +110,56 @@
                 <!-- general form elements -->
                 <div class="box box-primary">
                     <div class="box-header with-border">
+                        <h3 class="box-title">Resumen</h3>
+                    </div>
+                    <!-- /.box-header -->
+                    <!-- form start -->
+                    <div class="box-body">
+                        <div class="form-group col-md-4">
+                            <label asp-for="@Model.Cantidad" class="control-label"></label>
+                            <input asp-for="@Model.Cantidad" readonly class="form-control input-sm" />
+                        </div>
+
+                        <div class="form-group col-md-4">
+                            <label asp-for="@Model.TotalDescuento" class="control-label"></label>
+                            <input asp-for="@Model.TotalDescuento" readonly class="form-control input-sm" />
+                        </div>
+
+                        <div class="form-group col-md-4">
+                            <label asp-for="@Model.TotalSinImpuestoDescuento" class="control-label"></label>
+                            <input asp-for="@Model.TotalSinImpuestoDescuento" readonly class="form-control input-sm" />
+                        </div>
+
+                        <div class="form-group col-md-4">
+                            <label asp-for="@Model.Descuento" class="control-label"></label>
+                            <div class="input-group input-group-sm">
+                                <input asp-for="@Model.Descuento" readonly type="text" class="form-control">
+                                @*<span class="input-group-btn">
+                            <a asp-action="Descuento" asp-route-id="@Model.Id" class="btn btn-primary btn-flat" aria-hidden="true">Descuento</a>
+                        </span>*@
+                            </div>
+                        </div>
+
+                        <div class="form-group col-md-4">
+                            <label asp-for="@Model.Total" class="control-label"></label>
+                            <input asp-for="@Model.Total" readonly class="form-control input-sm" />
+                        </div>
+
+                        <div class="form-group col-md-4">
+                            <label asp-for="@Model.TotalSinImpuesto" class="control-label"></label>
+                            <input asp-for="@Model.TotalSinImpuesto" readonly class="form-control input-sm" />
+                        </div>
+                    </div>
+                    <!-- /.box-body -->
+
+                </div>
+                <!-- /.box -->
+
+                <!-- general form elements -->
+                <div class="box box-primary">
+                    <div class="box-header with-border">
                         <h3 class="box-title">Listado de Productos</h3>
-                                         </div>
+                    </div>
                     <div class="box-body">
                         <table id="dTable" class="table dt-responsive table-condensed table-bordered table-striped" width="100%">
                             <thead>
@@ -119,60 +174,72 @@
                                         Precio
                                     </th>
                                     <th>
+                                        Sin Impuesto
+                                    </th>
+                                    <th>
                                         Cantidad
                                     </th>
                                     <th>
                                         SubTotal
                                     </th>
-                                    
+                                    <th>
+                                        SubTotal Sin Imp
+                                    </th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @if (Model.Item.Count() > 0)
+                                @if (Detalle.Count() > 0)
                                 {
-                                    @foreach (var item in Model.Item)
+                                    @foreach (var item in Detalle)
                                     {
-                                    <tr>
-                                        <td>
-                                            @Html.DisplayFor(modelItem => item.Producto.Codigo)
-                                        </td>
-                                        <td>
-                                            @Html.DisplayFor(modelItem => item.Producto.Producto)
-                                        </td>
-                                        <td>
-                                            @Html.DisplayFor(modelItem => item.Precio)
-                                        </td>
-                                        <td>
-                                            @Html.DisplayFor(modelItem => item.Cantidad)
-                                        </td>
-                                        <td>
-                                            @Html.DisplayFor(modelItem => item.SubTotal)
-                                        </td>
-                                        
-                                    </tr>
+                                        if (item.ProductoCodigo != "")
+                                        {
+                                            <tr>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.ProductoCodigo)
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.ProductoNombre)
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.ProductoPrecio)
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.ProductoPrecioSinImpuesto)
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.ProductoCantidad)
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.SubTotal)
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.SubTotalSinImpuesto)
+                                                </td>
+                                            </tr>
+                                        }
+
                                     }
                                 }
-                                else
-                                { 
-                                    <tr>
-                                        <td colspan="6">
-                                            No hay productos cargados
-                                        </td>                                
-                                    </tr>
-                                }
+
                             </tbody>
                             <tfoot>
                                 <tr>
-                                    <th colspan="3">                                        
+                                    <th colspan="3">
                                     </th>
                                     <th>
-                                        Cantidad : @Model.Item.Sum(x => x.Cantidad)
+
                                     </th>
                                     <th>
-                                        Total : @Model.Item.Sum(x => x.SubTotal)
+                                        Cantidad : @Html.DisplayFor(x => x.Cantidad)
                                     </th>
-                                    <td>
-                                    </td>
+                                    <th>
+                                        Total : @Html.DisplayFor(x => x.Total)
+                                    </th>
+                                    <th>
+                                        Sin Impuesto : @Html.DisplayFor(x => x.TotalSinImpuesto)
+                                    </th>
+
                                 </tr>
                             </tfoot>
                         </table>

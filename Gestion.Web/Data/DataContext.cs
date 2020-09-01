@@ -22,6 +22,7 @@ namespace Gestion.Web.Data
         public virtual DbSet<ParamTiposProductos> ParamTiposProductos { get; set; }
         public virtual DbSet<ParamTiposResponsables> ParamTiposResponsables { get; set; }
         public virtual DbSet<ParamUnidadesMedidas> ParamUnidadesMedidas { get; set; }
+        public virtual DbSet<ComprobantesNumeraciones> ComprobantesNumeraciones { get; set; }
 
         public virtual DbSet<Productos> Productos { get; set; }
         public virtual DbSet<ProductosCategorias> ProductosCategorias { get; set; }
@@ -35,6 +36,7 @@ namespace Gestion.Web.Data
         public DbSet<PresupuestosDetalle> PresupuestosDetalle { get; set; }
         public DbSet<PresupuestosDetalleTemp> PresupuestosDetalleTemp { get; set; }
         public DbSet<ParamPresupuestosEstados> ParamPresupuestosEstados { get; set; }
+        public DbSet<ParamPresupuestosDescuentos> ParamPresupuestosDescuentos { get; set; }
 
         public DbSet<Cajas> Cajas  { get; set; }
         public DbSet<CajasAperturasCierres> CajasAperturasCierres { get; set; }

@@ -1,60 +1,156 @@
 ﻿@model Gestion.Web.Models.Productos
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Detalle del Alicuota";
 }
 
-<h1>Details</h1>
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <h1>
+            Sistema de gestíon
+            <small>Gestion de Productos</small>
+        </h1>
+        <ol class="breadcrumb">
+            <li><a asp-controller="Home" asp-action="Index"><i class="fas fa-tachometer-alt"></i> Inicio</a></li>
+            <li><a asp-controller="Productos" asp-action="Index">Listado de Productos</a></li>
+            <li class="active">@ViewData["Title"]</li>
+        </ol>
+    </section>
 
-<div>
-    <h4>Productos</h4>
-    <hr />
-    <dl class="row">
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Id)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Id)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.TipoProductoId)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.TipoProductoId)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Codigo)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Codigo)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Producto)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Producto)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.DescripcionCorta)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.DescripcionCorta)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.DescripcionLarga)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.DescripcionLarga)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.PrecioNormal)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.PrecioNormal)
-        </dd>
-    </dl>
+    <!-- Main content -->
+    <section class="content">
+        <div class="row">
+            <!-- left column -->
+            <div class="col-md-6">
+                <!-- general form elements -->
+                <div class="box box-primary">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">Datos del Producto</h3>
+                    </div>
+                    <!-- /.box-header -->
+                    <!-- form start -->
+                    <form asp-action="Create" enctype="multipart/form-data">
+                        <div class="box-body">
+                            <dl class="dl-horizontal">
+                                <dt>
+                                    @Html.DisplayNameFor(model => model.Codigo)
+                                </dt>
+                                <dd>
+                                    @Html.DisplayFor(model => model.Codigo)
+                                </dd>
+                                <dt>
+                                    @Html.DisplayNameFor(model => model.TipoProductoId)
+                                </dt>
+                                <dd>
+                                    @Html.DisplayFor(model => model.TipoProducto.Descripcion)
+                                </dd>
+                                <dt>
+                                    @Html.DisplayNameFor(model => model.Producto)
+                                </dt>
+                                <dd>
+                                    @Html.DisplayFor(model => model.Producto)
+                                </dd>
+                                <dt>
+                                    @Html.DisplayNameFor(model => model.DescripcionCorta)
+                                </dt>
+                                <dd>
+                                    @Html.DisplayFor(model => model.DescripcionCorta)
+                                </dd>
+                                <dt>
+                                    @Html.DisplayNameFor(model => model.DescripcionLarga)
+                                </dt>
+                                <dd>
+                                    @Html.DisplayFor(model => model.DescripcionLarga)
+                                </dd>
+                                <dt>
+                                    @Html.DisplayNameFor(model => model.PrecioVenta)
+                                </dt>
+                                <dd>
+                                    @Html.DisplayFor(model => model.PrecioVenta)
+                                </dd>
+                                <dt>
+                                    @Html.DisplayNameFor(model => model.Peso)
+                                </dt>
+                                <dd>
+                                    @Html.DisplayFor(model => model.Peso)
+                                </dd>
+                                <dt>
+                                    @Html.DisplayNameFor(model => model.DimencionesLongitud)
+                                </dt>
+                                <dd>
+                                    @Html.DisplayFor(model => model.DimencionesLongitud)
+                                </dd>
+                                <dt>
+                                    @Html.DisplayNameFor(model => model.DimencionesAncho)
+                                </dt>
+                                <dd>
+                                    @Html.DisplayFor(model => model.DimencionesAncho)
+                                </dd>
+                                <dt>
+                                    @Html.DisplayNameFor(model => model.DimencionesAltura)
+                                </dt>
+                                <dd>
+                                    @Html.DisplayFor(model => model.DimencionesAltura)
+                                </dd>
+                                <dt>
+                                    @Html.DisplayNameFor(model => model.CuentaCompraId)
+                                </dt>
+                                <dd>
+                                    @Html.DisplayFor(model => model.CuentaCompra.Descripcion)
+                                </dd>
+                                <dt>
+                                    @Html.DisplayNameFor(model => model.CuentaVentaId)
+                                </dt>
+                                <dd>
+                                    @Html.DisplayFor(model => model.CuentaVenta.Descripcion)
+                                </dd>
+                                <dt>
+                                    @Html.DisplayNameFor(model => model.UnidadMedidaId)
+                                </dt>
+                                <dd>
+                                    @Html.DisplayFor(model => model.UnidadMedida.Descripcion)
+                                </dd>
+                                <dt>
+                                    @Html.DisplayNameFor(model => model.AlicuotaId)
+                                </dt>
+                                <dd>
+                                    @Html.DisplayFor(model => model.Alicuota.Descripcion)
+                                </dd>
+                                <dd>
+                                    @{
+                                        if (Model.Estado)
+                                        {
+                                            <span class="label label-success">Activo</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="label label-danger">Inactivo</span>
+                                        }
+
+                                    }
+                                </dd>
+                            </dl>
+                        </div>
+                        <!-- /.box-body -->
+
+                        <div class="box-footer">
+                            <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">Editar datos del Producto</a>
+                            <a asp-action="Index" class="btn btn-default pull-right">Volver al Listado</a>
+                        </div>
+                    </form>
+                </div>
+                <!-- /.box -->
+            </div>
+            <!--/.col-->
+        </div>
+        <!-- /.row -->
+    </section>
+    <!-- /.content -->
 </div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
-</div>
+<!-- /.content-wrapper -->
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

@@ -9,7 +9,7 @@ namespace Gestion.Web.Data
     {
         Task<IQueryable<Presupuestos>> GetOrdersAsync(string userName);
 
-        PresupuestosDetalle GetDetalle(string id);
+        Task<PresupuestosDetalle> GetDetalle(string id);
 
         Task AddItemAsync(PresupuestosDetalle model, string userName);
 
@@ -32,9 +32,9 @@ namespace Gestion.Web.Data
         Task<int> spRechazar(Presupuestos presupuestos);
 
         Task<List<PresupuestosIndex>> spPresupuestosPendientes();
-        Task<List<PresupuestosIndex>> spPresupuestosVencidos();
-
         Task<List<PresupuestosDetalleDTO>> spPresupuestosPendiente(string id);
+        Task<List<PresupuestosIndex>> spPresupuestosVencidos();
+        Task<List<PresupuestosDetalleDTO>> spPresupuestosVencido(string id);
 
         Task<int> spVencidoCopiar(Presupuestos presupuestos, string id);
 
@@ -45,6 +45,8 @@ namespace Gestion.Web.Data
         Task<List<PresupuestosIndex>> spPresupuestosAprobados();
 
         Task<List<PresupuestosDetalleDTO>> spPresupuestosAprobado(string id);
+
+        Task<int> spDescuentoAplica(string presupuestoId, string descuentoId, string usuario);
 
     }
 }

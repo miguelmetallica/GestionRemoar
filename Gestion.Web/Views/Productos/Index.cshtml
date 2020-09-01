@@ -1,89 +1,140 @@
-﻿@model IEnumerable<Gestion.Web.Models.Productos>
+﻿@model IEnumerable<Gestion.Web.Models.ProductosIndex>
 
 @{
-    ViewData["Title"] = "Productos";
+    ViewData["Title"] = "Listado de Productos";
 }
 
-<link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" />
-<br />
-
-<p>
-    <a asp-action="Create" class="btn btn-primary"><i class="glyphicon glyphicon-plus"></i> Create New</a>
-</p>
-
-<div class="row">
-    <div class="col-md-12">
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <h3 class="panel-title">Productos</h3>
+<!--================================
+BREADCRUMB
+=================================-->
+<div class="content-wrapper">
+    <section class="content-header">
+        <h1>
+            Sistema de gestíon <small>Gestion de Productos</small>
+        </h1>
+        <ol class="breadcrumb">
+            <li><a asp-controller="Home" asp-action="Index"><i class="fas fa-tachometer-alt"></i> Inicio</a></li>
+            <li class="active">@ViewData["Title"]</li>
+        </ol>
+    </section>
+    <!--================================
+        CONTENIDO
+    =================================-->
+    <section class="content">
+        <div class="box box-primary">
+            <div class="box-header with-border">
+                <h3 class="box-title">@ViewData["Title"]</h3>
+                <p><a asp-action="Create" class="btn btn-primary btn-sm pull-right" aria-hidden="true">Nuevo Producto</a></p>
             </div>
-            <div class="panel-body">
-                <table class="table table-hover table-responsive table-striped" id="ProductsTable">
+            <div class="box-body">
+                <p>
+
+                </p>
+                <table id="dTable" class="table dt-responsive table-condensed table-bordered table-striped" width="100%">
                     <thead>
                         <tr>
                             <th>
-                                @Html.DisplayNameFor(model => model.TipoProductoId)
+                                @Html.DisplayNameFor(model => model.Codigo)
                             </th>
                             <th>
-                                @Html.DisplayNameFor(model => model.Codigo)
+                                @Html.DisplayNameFor(model => model.TipoProducto)
                             </th>
                             <th>
                                 @Html.DisplayNameFor(model => model.Producto)
                             </th>
                             <th>
-                                @Html.DisplayNameFor(model => model.DescripcionCorta)
-                            </th>
-                            <th>
                                 @Html.DisplayNameFor(model => model.PrecioVenta)
                             </th>
-                            @*<th>
-                                @Html.DisplayNameFor(model => model.PrecioRebajado)
-                            </th>*@
-
-                            <th></th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Estado)
+                            </th>
+                            <th>Operaciones</th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach (var item in Model)
                         {
-                            <tr>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.TipoProductoId)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Codigo)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Producto)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.DescripcionCorta)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.PrecioVenta)
-                                </td>
-                                @*<td>
-                                    @Html.DisplayFor(modelItem => item.PrecioRebajado)
-                                </td>*@
-                                <td >
-                                    <a asp-action="Edit" class="btn btn-default" asp-route-id="@item.Id"><i class="fa fa-pencil"></i></a>
-                                    <a asp-action="Details" class="btn btn-default" asp-route-id="@item.Id"><i class="fa fa-list"></i></a>
-                                    <a asp-action="Delete" class="btn btn-danger" asp-route-id="@item.Id"><i class="fa fa-trash"></i></a>
-                                </td>
-                            </tr>
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Codigo)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.TipoProducto)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Producto)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.PrecioVenta)
+                            </td>
+                            <td>
+                                @{
+                                    if (item.Estado)
+                                    {
+                                        <span class="label label-success">Activo</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="label label-danger">Inactivo</span>
+                                    }
+
+                                }
+
+
+                            </td>
+                            <td>
+                                <div class="btn-group">
+                                    <a class="btn btn-warning" asp-action="Edit" asp-route-id="@item.Id"><i class="fa fa-pen"></i></a>
+                                    <a class="btn btn-info" asp-action="Details" asp-route-id="@item.Id"><i class="fa fa-search-plus"></i></a>
+                                    @{
+                                        if (item.Estado)
+                                        {
+                                            <a class="btn btn-danger" asp-action="Delete" asp-route-id="@item.Id"><i class="glyphicon glyphicon-remove"></i></a>
+                                        }
+                                        else
+                                        {
+                                            <a class="btn btn-success" asp-action="Delete" asp-route-id="@item.Id"><i class="glyphicon glyphicon-ok"></i></a>
+                                        }
+
+                                    }
+                                </div>
+                            </td>
+                        </tr>
                         }
                     </tbody>
                 </table>
-            </div>
+            </div>            
         </div>
-    </div>
+    </section>
 </div>
 
+
 @section Scripts {
-    <script src="//cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
-    <script>
-    	$(document).ready(function () {
-        	$('#ProductsTable').DataTable();
-    	});
+
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            $('#dTable').DataTable({
+                "processing": "true",
+                "retrieve": "true",
+                "language": {
+                    "processing": "Procesando... Espere por favor",
+                    "lengthMenu": "Mostrar _MENU_ registros por pagina",
+                    "zeroRecords": "Nada encontrado",
+                    "info": "Mostrando página _PAGE_ de _PAGES_",
+                    "infoEmpty": "No hay registros disponibles",
+                    "sInfoFiltered": "(filtrado de un total de _MAX_ registros)",
+                    "sSearch": "Buscar:",
+                    "oPaginate": {
+                        "sFirst": "Primero",
+                        "sLast": "Último",
+                        "sNext": "Siguiente",
+                        "sPrevious": "Anterior"
+                    }
+                }
+            });
+        });
+
     </script>
 }

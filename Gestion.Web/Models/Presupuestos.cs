@@ -91,18 +91,23 @@ namespace Gestion.Web.Models
 
     public partial class PresupuestosDetalleDTO
     {
+        //campos del prespuestos
         public string Id { get; set; }
         public string DetalleId { get; set; }
-
         public string Codigo { get; set; }
-
         [Display(Name = "Fecha")]
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         public DateTime Fecha { get; set; }
-
         [Display(Name = "Vence")]
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         public DateTime FechaVencimiento { get; set; }
+        public string Estado { get; set; }
+        [Display(Name = "Descuento")]
+        public decimal Descuento { get; set; }
+        [Display(Name = "Usuario")]
+        public string UsuarioAlta { get; set; }
+
+        //campos del cliente
         [Display(Name = "ClienteId")]
         public string ClienteId { get; set; }
         [Display(Name = "Codigo Cliente")]
@@ -115,26 +120,39 @@ namespace Gestion.Web.Models
         [Display(Name = "Cuil/Cuit")]
         public string ClienteCuilCuit { get; set; }
         
-        public string Estado { get; set; }
-        [Display(Name = "Usuario")]
-        public string UsuarioAlta { get; set; }
-
+       
+        //campos totales
+        //cantidad total de productos
         [DisplayFormat(DataFormatString = "{0:N0}")]
         public int Cantidad { get; set; }
 
+        //total de la venta
         [DisplayFormat(DataFormatString = "{0:C2}")]
         public decimal Total { get; set; }
 
+        //total de la venta
+        [DisplayFormat(DataFormatString = "{0:C2}")]
+        public decimal TotalDescuento { get; set; }
+
+        //total sin impuestos de la venta
         [DisplayFormat(DataFormatString = "{0:C2}")]
         [Display(Name = "Total Sin Imp")]
         public decimal TotalSinImpuesto { get; set; }
 
         [DisplayFormat(DataFormatString = "{0:C2}")]
+        [Display(Name = "Total Sin Imp")]
+        public decimal TotalSinImpuestoDescuento { get; set; }
+
+        //subtotal por producto
+        [DisplayFormat(DataFormatString = "{0:C2}")]
         public decimal SubTotal { get; set; }
 
+        //subtotal sin impuestos por producto
         [DisplayFormat(DataFormatString = "{0:C2}")]
         public decimal SubTotalSinImpuesto { get; set; }
-
+        
+        
+        //campos del productos
         [Display(Name = "ProductoId")]
         public string ProductoId { get; set; }
         [Display(Name = "Codigo")]
@@ -147,10 +165,10 @@ namespace Gestion.Web.Models
         [Display(Name = "Precio Sin Imp")]
         [DisplayFormat(DataFormatString = "{0:C2}")]
         public decimal ProductoPrecioSinImpuesto { get; set; }
-
         [Display(Name = "Cantidad")]
         [DisplayFormat(DataFormatString = "{0:N0}")]
-        public int ProductoCantidad { get; set; }               
+        public int ProductoCantidad { get; set; }    
+       
 
     }
 }

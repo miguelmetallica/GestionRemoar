@@ -13,7 +13,7 @@
 	@CuentaVentaId nvarchar(150) = NULL,
 	@UnidadMedidaId nvarchar(150) = NULL,
 	@AlicuotaId nvarchar(150) = NULL,
-	@PrecioVenta numeric(18,2) = NULL,
+	@PrecioVenta numeric(18,2) = 0,
 	@Estado bit = 0,
 	@EsVendedor bit = 0,
 	@Usuario nvarchar(256)
@@ -23,7 +23,7 @@ BEGIN TRY
 	DECLARE @SucursalId nvarchar(5);
 	DECLARE @Numero INT;
 	DECLARE @Codigo nvarchar(20);
-
+	
 	SELECT @SucursalId = S.Codigo
 	FROM AspNetUsers U
 	INNER JOIN Sucursales S ON S.Id = U.SucursalId
@@ -32,10 +32,46 @@ BEGIN TRY
 	IF @SucursalId IS NULL
 		SET @SucursalId = 0;
 
+	IF @TipoProductoId IS NULL
+	BEGIN
+		SELECT @TipoProductoId = MIN(A.Id)
+		FROM ParamTiposProductos A 
+		WHERE A.Defecto = 1		
+	END
+
+	IF @CuentaCompraId IS NULL
+	BEGIN
+		SELECT @CuentaCompraId = MIN(A.Id)
+		FROM ParamCuentasCompras A 
+		WHERE A.Defecto = 1		
+	END
+
+	IF @CuentaVentaId IS NULL
+	BEGIN
+		SELECT @CuentaVentaId = MIN(A.Id)
+		FROM ParamCuentasVentas A 
+		WHERE A.Defecto = 1		
+	END
+
+	IF @UnidadMedidaId IS NULL
+	BEGIN
+		SELECT @UnidadMedidaId = MIN(A.Id)
+		FROM ParamUnidadesMedidas A 
+		WHERE A.Defecto = 1		
+	END
+
+	IF @AlicuotaId IS NULL
+	BEGIN
+		SELECT @AlicuotaId = MIN(A.Id)
+		FROM ParamAlicuotas A 
+		WHERE A.Defecto = 1		
+	END
+
+
 	BEGIN TRAN
 			EXEC @Numero = NextNumber 'PRODUCTOS'
 			IF @EsVendedor = 1
-				SET @Codigo = RIGHT('P00' + RTRIM(LTRIM(CONVERT(VARCHAR(2),@SucursalId))),3) + RIGHT('0000000000' + RTRIM(LTRIM(CONVERT(VARCHAR(10),@Numero))) ,8)
+				SET @Codigo = 'P' + RIGHT('000' + RTRIM(LTRIM(CONVERT(VARCHAR(3),@SucursalId))),3) + RIGHT('0000000000' + RTRIM(LTRIM(CONVERT(VARCHAR(10),@Numero))) ,8)
 			ELSE
 				SET @Codigo = RIGHT('000' + RTRIM(LTRIM(CONVERT(VARCHAR(3),@SucursalId))),3) + RIGHT('0000000000' + RTRIM(LTRIM(CONVERT(VARCHAR(10),@Numero))) ,8)
 			

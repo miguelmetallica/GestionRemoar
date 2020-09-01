@@ -121,7 +121,27 @@
                 <div class="box-body">
                     <div class="form-group col-md-4">
                         <label asp-for="@Model.Cantidad" class="control-label"></label>
-                        <input asp-for="@Model.Cantidad" readonly class="form-control input-sm" />                            
+                        <input asp-for="@Model.Cantidad" readonly class="form-control input-sm" />
+                    </div>
+
+                    <div class="form-group col-md-4">
+                        <label asp-for="@Model.TotalDescuento" class="control-label"></label>
+                        <input asp-for="@Model.TotalDescuento" readonly class="form-control input-sm" />
+                    </div>
+
+                    <div class="form-group col-md-4">
+                        <label asp-for="@Model.TotalSinImpuestoDescuento" class="control-label"></label>
+                        <input asp-for="@Model.TotalSinImpuestoDescuento" readonly class="form-control input-sm" />
+                    </div>
+
+                    <div class="form-group col-md-4">
+                        <label asp-for="@Model.Descuento" class="control-label"></label>
+                        <div class="input-group input-group-sm">
+                            <input asp-for="@Model.Descuento" readonly type="text" class="form-control">
+                            <span class="input-group-btn">
+                                <a asp-action="Descuento" asp-route-id="@Model.Id" class="btn btn-primary btn-flat" aria-hidden="true">Descuento</a>
+                            </span>
+                        </div>
                     </div>
 
                     <div class="form-group col-md-4">
@@ -132,7 +152,7 @@
                     <div class="form-group col-md-4">
                         <label asp-for="@Model.TotalSinImpuesto" class="control-label"></label>
                         <input asp-for="@Model.TotalSinImpuesto" readonly class="form-control input-sm" />
-                    </div>
+                    </div>                    
                 </div>
                 <!-- /.box-body -->                    
                 

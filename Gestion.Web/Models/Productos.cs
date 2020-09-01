@@ -10,7 +10,7 @@ namespace Gestion.Web.Models
         [Key]
         public string Id { get; set; }
 
-        [Required(ErrorMessage = "El campo {0} es obligatorio.")]
+        //[Required(ErrorMessage = "El campo {0} es obligatorio.")]
         [MaxLength(20, ErrorMessage = "The field {0} only can contain {1} characters length.")]
         public string Codigo { get; set; }
         
@@ -20,6 +20,7 @@ namespace Gestion.Web.Models
 
         [Display(Name = "Tipo de Producto")]
         public string TipoProductoId { get; set; }
+        public ParamTiposProductos TipoProducto { get; set; }
 
         [Display(Name = "Descripcion")]
         [MaxLength(500, ErrorMessage = "The field {0} only can contain {1} characters length.")]
@@ -43,31 +44,25 @@ namespace Gestion.Web.Models
         [Range(0, double.MaxValue, ErrorMessage = "The field {0} acepta valores entre {1} y {2}")]
         public decimal? DimencionesAltura { get; set; }
 
-        //[Display(Name = "Precio de Compra")]
-        //[Range(0, double.MaxValue, ErrorMessage = "The field {0} acepta valores entre {1} y {2}")]
-        //public decimal? PrecioCompra { get; set; }
-
         [Display(Name = "Cuenta de Venta")]
         public string CuentaVentaId { get; set; }
+        public ParamCuentasVentas CuentaVenta { get; set; }
 
         [Display(Name = "Cuenta de Compra")]
         public string CuentaCompraId { get; set; }
+        public ParamCuentasCompras CuentaCompra { get; set; }
 
         [Display(Name = "Unid. Medida")]
         public string UnidadMedidaId { get; set; }
+        public ParamUnidadesMedidas UnidadMedida { get; set; }
 
         [Display(Name = "Alicuota")]
         public string AlicuotaId { get; set; }
-
-        //public bool Visible { get; set; }
+        public ParamAlicuotas Alicuota { get; set; }
 
         [Display(Name = "Precio")]
         [Range(0, double.MaxValue, ErrorMessage = "The field {0} acepta valores entre {1} y {2}")]
         public decimal? PrecioVenta { get; set; }
-
-        //[Display(Name = "Rebajado")]
-        //[Range(0, double.MaxValue, ErrorMessage = "The field {0} acepta valores entre {1} y {2}")]
-        //public decimal? PrecioRebajado { get; set; }
 
         public bool Estado { get; set; }
 
@@ -82,5 +77,26 @@ namespace Gestion.Web.Models
         public IEnumerable<ProductosCategorias> ProductosCategorias { get; set; }
         public IEnumerable<ProductosEtiquetas> ProductosEtiquetas { get; set; }
         public IEnumerable<ProductosImagenes> ProductosImagenes { get; set; }
+    }
+
+    public partial class ProductosIndex : IEntidades
+    {
+        public string Id { get; set; }
+
+        [MaxLength(20, ErrorMessage = "The field {0} only can contain {1} characters length.")]
+        public string Codigo { get; set; }
+
+        [Required(ErrorMessage = "El campo {0} es obligatorio.")]
+        [MaxLength(150, ErrorMessage = "The field {0} only can contain {1} characters length.")]
+        public string Producto { get; set; }
+
+        [Display(Name = "Tipo de Producto")]
+        public string TipoProducto { get; set; }
+        
+        [Display(Name = "Precio")]
+        [Range(0, double.MaxValue, ErrorMessage = "The field {0} acepta valores entre {1} y {2}")]
+        public decimal PrecioVenta { get; set; }
+
+        public bool Estado { get; set; }        
     }
 }

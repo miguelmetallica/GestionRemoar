@@ -1,10 +1,13 @@
 ﻿CREATE TABLE [dbo].[ParamTiposResponsables] (
-    [TipoResponsableId]     INT            NOT NULL,
-    [TipoResponsableCodigo] VARCHAR (5)    NULL,
-    [TipoResponsable]       VARCHAR (150)  NULL,
-    [Estado]                BIT            NULL,
-    [FechaAlta]             DATETIME       NULL,
-    [UsuarioAlta]           NVARCHAR (256) NULL,
-    CONSTRAINT [PK_ParamTiposResponsables] PRIMARY KEY CLUSTERED ([TipoResponsableId] ASC)
+    [Id]          NVARCHAR (150) NOT NULL,
+    [Codigo]      NVARCHAR (50)  NULL,
+    [Descripcion] NVARCHAR (150) NULL,
+    [Defecto]     BIT            NULL,
+    [Estado]      BIT            NULL,
+    [FechaAlta]   DATETIME       NULL,
+    [UsuarioAlta] NVARCHAR (256) NULL,
+    CONSTRAINT [PK_ParamTiposResponsables] PRIMARY KEY CLUSTERED ([Id] ASC)
 );
+
+
 

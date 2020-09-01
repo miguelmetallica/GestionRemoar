@@ -22,6 +22,9 @@
     CONSTRAINT [FK_Productos_ParamAlicuotas] FOREIGN KEY ([AlicuotaId]) REFERENCES [dbo].[ParamAlicuotas] ([Id]),
     CONSTRAINT [FK_Productos_ParamCuentasCompras] FOREIGN KEY ([CuentaCompraId]) REFERENCES [dbo].[ParamCuentasCompras] ([Id]),
     CONSTRAINT [FK_Productos_ParamCuentasVentas] FOREIGN KEY ([CuentaVentaId]) REFERENCES [dbo].[ParamCuentasVentas] ([Id]),
-    CONSTRAINT [FK_Productos_ParamUnidadesMedidas] FOREIGN KEY ([CuentaCompraId]) REFERENCES [dbo].[ParamUnidadesMedidas] ([Id])
+    CONSTRAINT [FK_Productos_ParamTiposProductos] FOREIGN KEY ([TipoProductoId]) REFERENCES [dbo].[ParamTiposProductos] ([Id]),
+    CONSTRAINT [FK_Productos_ParamUnidadesMedidas1] FOREIGN KEY ([UnidadMedidaId]) REFERENCES [dbo].[ParamUnidadesMedidas] ([Id])
 );
+
+
 

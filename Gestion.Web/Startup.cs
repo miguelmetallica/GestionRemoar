@@ -111,12 +111,14 @@ namespace Gestion.Web
             services.AddScoped<ICajasTiposMovimientosRepository, CajasTiposMovimientosRepository>();
 
             services.AddScoped<IPresupuestosEstadosRepository, PresupuestosEstadosRepository>();
+            services.AddScoped<IPresupuestosDescuentosRepository, PresupuestosDescuentosRepository>();
             services.AddScoped<IPresupuestosRepository, PresupuestosRepository>();
 
 
             services.AddScoped<IAlicuotasRepository, AlicuotasRepository>();
             services.AddScoped<IConceptosIncluidosRepository, ConceptosIncluidosRepository>();
             services.AddScoped<ITiposComprobantesRepository, TiposComprobantesRepository>();
+            services.AddScoped<IComprobantesNumeracionesRepository, ComprobantesNumeracionesRepository>();
             services.AddScoped<ITiposResponsablesRepository, TiposResponsablesRepository>();
             services.AddScoped<IAlicuotasRepository, AlicuotasRepository>();
 

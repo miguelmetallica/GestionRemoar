@@ -24,7 +24,7 @@ namespace Gestion.Web.Data
 
             list.Insert(0, new SelectListItem
             {
-                Text = "(Selecciona una Tipo de Producto...)",
+                Text = "(Selecciona un Tipo de Producto...)",
                 Value = ""
             });
 

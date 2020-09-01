@@ -16,12 +16,14 @@ namespace Gestion.Web.Controllers
         private readonly IClientesRepository clientesRepository;
         private readonly ITiposDocumentosRepository tiposDocumentosRepository;
         private readonly IProvinciasRepository provinciasRepository;
+        private readonly IPresupuestosDescuentosRepository descuentosRepository;
 
         public PresupuestosController(IPresupuestosRepository repository,
             IProductosRepository productosRepository, 
             IClientesRepository clientesRepository,
             ITiposDocumentosRepository tiposDocumentosRepository,
-            IProvinciasRepository provinciasRepository
+            IProvinciasRepository provinciasRepository,
+            IPresupuestosDescuentosRepository descuentosRepository
             )
         {
             this.repository = repository;
@@ -29,6 +31,7 @@ namespace Gestion.Web.Controllers
             this.clientesRepository = clientesRepository;
             this.tiposDocumentosRepository = tiposDocumentosRepository;
             this.provinciasRepository = provinciasRepository;
+            this.descuentosRepository = descuentosRepository;
         }
 
         public async Task<IActionResult> Pendientes()
@@ -142,10 +145,43 @@ namespace Gestion.Web.Controllers
             if (presupuesto == null || presupuesto.Count == 0) 
             {
                 return RedirectToAction("Pendientes", "Presupuestos");
-            }
-
+            }            
             ViewData["Detalle"] = presupuesto;
             return View(presupuesto.FirstOrDefault());
+        }
+
+        public async Task<IActionResult> Descuento(string id)
+        {
+            var presupuesto = await this.repository.spPresupuestosPendiente(id);
+
+            if (presupuesto == null || presupuesto.Count == 0)
+            {
+                return RedirectToAction("Pendientes", "Presupuestos");
+            }
+            ViewData["Descuentos"] = descuentosRepository.GetAll().Where(x => x.Estado == true).OrderBy(x => x.Porcentaje);
+            return View(presupuesto.FirstOrDefault());
+        }
+
+        public async Task<IActionResult> DescuentoAplica(string id, string id2)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+            if (id2 == null)
+            {
+                return NotFound();
+            }
+
+            var presup = await this.repository.spPresupuestosPendiente(id2);
+
+            if (presup == null || presup.Count == 0)
+            {
+                return RedirectToAction("Pendientes", "Presupuestos");
+            }
+
+            await this.repository.spDescuentoAplica(id2, id,User.Identity.Name);
+            return RedirectToAction("Pendiente", new { id = id2 });
         }
 
         public IActionResult ProductoCreate(string id)
@@ -199,7 +235,7 @@ namespace Gestion.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(string id)
         {
-            var presupuestos = repository.GetDetalle(id);
+            var presupuestos = await repository.GetDetalle(id);
 
             var presup = await this.repository.spPresupuestosPendiente(presupuestos.PresupuestoId);
 
@@ -316,15 +352,16 @@ namespace Gestion.Web.Controllers
             return View(model);
         }
 
-        public IActionResult Vencido(string id)
+        public async Task<IActionResult> Vencido(string id)
         {
-            var presupuesto = this.repository.GetPresupuestoId(id);
+            var presupuesto = await this.repository.spPresupuestosVencido(id);
 
-            if (presupuesto == null)
+            if (presupuesto == null || presupuesto.Count == 0)
             {
-                return RedirectToAction("Vencidos", "Presupuestos");
+                return RedirectToAction("Pendientes", "Presupuestos");
             }
-            return View(presupuesto);
+            ViewData["Detalle"] = presupuesto;
+            return View(presupuesto.FirstOrDefault());
         }
 
         public async Task<IActionResult> PresupuestoVencidoCopia(string id)
