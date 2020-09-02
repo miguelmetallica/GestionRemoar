@@ -6,7 +6,7 @@ AS
 BEGIN TRY
 	SET NOCOUNT ON;
 	DECLARE @EstadoId nvarchar(150);
-
+	 
 	SELECT @EstadoId = E.Id
 	FROM SistemaConfiguraciones C
 	INNER JOIN ParamPresupuestosEstados E ON E.Codigo = C.Valor
@@ -16,6 +16,8 @@ BEGIN TRY
 		UPDATE Presupuestos
 		SET EstadoId = @EstadoId							
 		WHERE Id = @Id
+
+		EXEC ComprobantesInsertarPresupuesto @Id,@Usuario
 	COMMIT;
 
 	SELECT 1 Id

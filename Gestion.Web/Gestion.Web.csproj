@@ -7112,6 +7112,10 @@
     <TypeScriptCompile Include="wwwroot\admin\bower_components\moment\moment.d.ts" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\catalogo\" />
+  </ItemGroup>
+
   <ProjectExtensions><VisualStudio><UserProperties appsettings_1json__JsonSchema="" /></VisualStudio></ProjectExtensions>
 
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'">

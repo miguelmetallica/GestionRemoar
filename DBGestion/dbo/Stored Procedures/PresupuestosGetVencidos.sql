@@ -35,4 +35,5 @@ BEGIN
 		ISNULL(C.CuilCuit,''),
 		E.Descripcion,
 		P.UsuarioAlta
+	ORDER BY P.Fecha DESC
 END

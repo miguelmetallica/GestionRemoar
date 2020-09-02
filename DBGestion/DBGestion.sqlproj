@@ -144,5 +144,9 @@
     <Build Include="dbo\Stored Procedures\PresupuestosDetalleEditar.sql" />
     <Build Include="dbo\Stored Procedures\PresupuestosDescuentoAplica.sql" />
     <Build Include="dbo\Stored Procedures\PresupuestosGetVencido.sql" />
+    <Build Include="dbo\Tables\ComprobantesNumeraciones.sql" />
+    <Build Include="dbo\Stored Procedures\NextNumberComprobante.sql" />
+    <Build Include="dbo\Stored Procedures\ComprobantesInsertarPresupuesto.sql" />
+    <Build Include="dbo\Stored Procedures\ComprobantesGet.sql" />
   </ItemGroup>
 </Project>

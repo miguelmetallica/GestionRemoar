@@ -32,7 +32,7 @@ BEGIN TRY
 	WHERE UserName = @Usuario
 
 	IF @SucursalId IS NULL
-		SET @SucursalId = 0;
+		SET @SucursalId = '000';
 
 	SET @RazonSocial = CONVERT(VARCHAR(140),@Apellido) + ' ' + @Nombre
 

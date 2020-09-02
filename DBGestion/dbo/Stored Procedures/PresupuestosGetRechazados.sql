@@ -36,4 +36,5 @@ BEGIN
 		ISNULL(P.DescuentoPorcentaje,0),
 		E.Descripcion,
 		P.UsuarioAlta
+	ORDER BY P.Fecha DESC
 END

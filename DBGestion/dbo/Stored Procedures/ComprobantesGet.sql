@@ -1,0 +1,66 @@
+﻿CREATE PROCEDURE ComprobantesGet
+	@ClienteId nvarchar(150) = ''
+AS
+BEGIN
+	SELECT Id
+	,Codigo
+	,TipoComprobanteId
+	,TipoComprobante
+	,TipoComprobanteCodigo
+	,PresupuestoId
+	,Letra
+	,PtoVenta
+	,Numero
+	,FechaComprobante
+	,ConceptoIncluidoId
+	,ConceptoIncluidoCodigo
+	,ConceptoIncluido
+	,PeriodoFacturadoDesde
+	,PeriodoFacturadoHasta
+	,FechaVencimiento
+	,TipoResponsableId
+	,TipoResponsableCodigo
+	,TipoResponsable
+	,ClienteId
+	,ClienteCodigo
+	,TipoDocumentoId
+	,TipoDocumentoCodigo
+	,TipoDocumento
+	,NroDocumento
+	,CuilCuit
+	,RazonSocial
+	,ProvinciaId
+	,ProvinciaCodigo
+	,Provincia
+	,Localidad
+	,CodigoPostal
+	,Calle
+	,CalleNro
+	,PisoDpto
+	,OtrasReferencias
+	,Email
+	,Telefono
+	,Celular
+	,Total
+	,TotalSinImpuesto
+	,TotalSinDescuento
+	,TotalSinImpuestoSinDescuento
+	,DescuentoPorcentaje
+	,DescuentoTotal
+	,DescuentoSinImpuesto
+	,ImporteTributos
+	,Observaciones
+	,Confirmado
+	,Cobrado
+	,Anulado
+	,FechaAnulacion
+	,TipoComprobanteAnulaId
+	,TipoComprobanteAnulaCodigo
+	,TipoComprobanteAnula
+	,LetraAnula
+	,PtoVtaAnula
+	,NumeroAnula
+	FROM Comprobantes C
+	WHERE C.ClienteId = @ClienteId	
+END
+;

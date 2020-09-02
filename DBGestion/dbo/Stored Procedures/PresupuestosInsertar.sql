@@ -16,7 +16,7 @@ BEGIN TRY
 	WHERE UserName = @Usuario
 
 	IF @SucursalId IS NULL
-		SET @SucursalId = 0;
+		SET @SucursalId = '000';
 	
 	SELECT @EstadoId = E.Id
 	FROM SistemaConfiguraciones C

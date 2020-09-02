@@ -30,7 +30,7 @@ BEGIN TRY
 	WHERE UserName = @Usuario
 
 	IF @SucursalId IS NULL
-		SET @SucursalId = 0;
+		SET @SucursalId = '000';
 
 	IF @TipoProductoId IS NULL
 	BEGIN
