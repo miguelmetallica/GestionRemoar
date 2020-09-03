@@ -1,69 +1,93 @@
-﻿@model Gestion.Web.Models.Categorias
+﻿@model Gestion.Web.Models.ParamCategorias
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Detalle del Categoria";
 }
 
-<h1>Details</h1>
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <h1>
+            Sistema de gestíon
+            <small>Gestion de Clientes</small>
+        </h1>
+        <ol class="breadcrumb">
+            <li><a asp-controller="Home" asp-action="Index"><i class="fas fa-tachometer-alt"></i> Inicio</a></li>
+            <li><a asp-controller="Categorias" asp-action="Index">Listado de Categorias</a></li>
+            <li class="active">@ViewData["Title"]</li>
+        </ol>
+    </section>
 
-<div>
-    <h4>Categorias</h4>
-    <hr />
-    <dl class="row">
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Id)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Id)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Nombre)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Nombre)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Slug)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Slug)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.ParentId)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.ParentId)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Descripcion)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Descripcion)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Display)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Display)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Imagen)
-        </dt>
-        <dd class="col-sm-10">
-            @if (!string.IsNullOrEmpty(Model.Imagen))
-            {
-                <img src="@Url.Content(Model.Imagen)" alt="Image" style="width:200px;height:300px;max-width: 100%; height: auto;" />
-            }
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.MenuOrden)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.MenuOrden)
-        </dd>
-    </dl>
+    <!-- Main content -->
+    <section class="content">
+        <div class="row">
+            <!-- left column -->
+            <div class="col-md-6">
+                <!-- general form elements -->
+                <div class="box box-primary">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">Datos de Categorias</h3>
+                    </div>
+                    <!-- /.box-header -->
+                    <!-- form start -->
+                    <form asp-action="Create" enctype="multipart/form-data">
+                        <div class="box-body">
+                            <dl class="dl-horizontal">
+                                <dt>
+                                    @Html.DisplayNameFor(model => model.Descripcion)
+                                </dt>
+                                <dd>
+                                    @Html.DisplayFor(model => model.Descripcion)
+                                </dd>
+                                <dt>
+                                    @Html.DisplayNameFor(model => model.Padre.Id)
+                                </dt>
+                                <dd>
+                                    @Html.DisplayFor(model => model.Padre.Descripcion)
+                                </dd>
+                                <dt>
+                                    @Html.DisplayNameFor(model => model.Defecto)
+                                </dt>
+                                <dd>
+                                    @Html.DisplayFor(model => model.Defecto)
+                                </dd>
+                                <dt>
+                                    @Html.DisplayNameFor(model => model.Estado)
+                                </dt>
+                                <dd>
+                                    @{
+                                        if (Model.Estado)
+                                        {
+                                            <span class="label label-success">Activo</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="label label-danger">Inactivo</span>
+                                        }
+
+                                    }
+                                </dd>
+                            </dl>
+                        </div>
+                        <!-- /.box-body -->
+
+                        <div class="box-footer">
+                            <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">Editar datos del Categoria</a>
+                            <a asp-action="Index" class="btn btn-default pull-right">Volver al Listado</a>
+                        </div>
+                    </form>
+                </div>
+                <!-- /.box -->
+            </div>
+            <!--/.col-->
+        </div>
+        <!-- /.row -->
+    </section>
+    <!-- /.content -->
 </div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
-</div>
+<!-- /.content-wrapper -->
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

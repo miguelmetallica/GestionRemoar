@@ -6,26 +6,29 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Views\Categorias\**" />
     <Compile Remove="Views\Etiquetas\**" />
     <Compile Remove="Views\Localidades\**" />
     <Compile Remove="wwwroot\admin\bower_components\fullcalendar\**" />
-    <Content Remove="Views\Categorias\**" />
+    <Compile Remove="wwwroot\catalogo\woocommerce\assets\js\**" />
+    <Compile Remove="wwwroot\catalogo\woocommerce\packages\woocommerce-blocks\**" />
     <Content Remove="Views\Etiquetas\**" />
     <Content Remove="Views\Localidades\**" />
     <Content Remove="wwwroot\admin\bower_components\fullcalendar\**" />
-    <EmbeddedResource Remove="Views\Categorias\**" />
+    <Content Remove="wwwroot\catalogo\woocommerce\assets\js\**" />
+    <Content Remove="wwwroot\catalogo\woocommerce\packages\woocommerce-blocks\**" />
     <EmbeddedResource Remove="Views\Etiquetas\**" />
     <EmbeddedResource Remove="Views\Localidades\**" />
     <EmbeddedResource Remove="wwwroot\admin\bower_components\fullcalendar\**" />
-    <None Remove="Views\Categorias\**" />
+    <EmbeddedResource Remove="wwwroot\catalogo\woocommerce\assets\js\**" />
+    <EmbeddedResource Remove="wwwroot\catalogo\woocommerce\packages\woocommerce-blocks\**" />
     <None Remove="Views\Etiquetas\**" />
     <None Remove="Views\Localidades\**" />
     <None Remove="wwwroot\admin\bower_components\fullcalendar\**" />
+    <None Remove="wwwroot\catalogo\woocommerce\assets\js\**" />
+    <None Remove="wwwroot\catalogo\woocommerce\packages\woocommerce-blocks\**" />
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Remove="Controllers\CategoriasController.cs" />
     <Compile Remove="Models\Provincias.cs" />
   </ItemGroup>
 

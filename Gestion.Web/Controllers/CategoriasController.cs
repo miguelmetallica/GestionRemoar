@@ -4,10 +4,7 @@ using Gestion.Web.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Newtonsoft.Json;
-using System;
-using System.IO;
-using System.Net;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Gestion.Web.Controllers
@@ -26,127 +23,80 @@ namespace Gestion.Web.Controllers
 
         public IActionResult Index()
         {
-
-            return View(repository.GetAll());
-            
+            return View(repository.GetCategorias());
         }
 
-        public async Task<IActionResult> Details(int? id)
+        public IActionResult Details(string id)
         {
             if (id == null)
             {
                 return new NotFoundViewResult("NoExiste");
             }
 
-            var Categorias = await this.repository.GetByIdAsync(id.Value);
+            var Categorias = this.repository.GetCategorias().Where( x => x.Id == id).FirstOrDefault();
             if (Categorias == null)
             {
                 return new NotFoundViewResult("NoExiste");
             }
-            
+
             return this.View(Categorias);
         }
 
         public IActionResult Create()
         {
+            ViewBag.Categorias = repository.GetCombo();
             return View();
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(CategoriasViewModel view)
+        public async Task<IActionResult> Create(ParamCategorias Categorias)
         {
             if (ModelState.IsValid)
             {
-                var path = string.Empty;
-
-                if (view.ImagenFile != null && view.ImagenFile.Length > 0)
-                {
-
-                    var guid = Guid.NewGuid().ToString();
-                    var file = $"{guid}.jpg";
-
-                    path = Path.Combine(
-                        Directory.GetCurrentDirectory(), 
-                        "wwwroot\\images\\categorias", 
-                        file);
-
-                    using (var stream = new FileStream(path, FileMode.Create))
-                    {
-                        await view.ImagenFile.CopyToAsync(stream);
-                    }
-
-                    path = $"~/images/categorias/{file}";
-                }
-                
-                var categorias = this.ToCategoria(view, path);
-                await repository.CreateAsync(categorias);
+                Categorias.Estado = true;                
+                await repository.CreateAsync(Categorias);
                 return RedirectToAction(nameof(Index));
             }
-            return View(view);
+            ViewBag.Categorias = repository.GetCombo();
+            return View(Categorias);
         }
 
-        public async Task<IActionResult> Edit(int? id)
+        public async Task<IActionResult> Edit(string id)
         {
             if (id == null)
             {
                 return new NotFoundViewResult("NoExiste");
             }
 
-            var Categorias = await this.repository.GetByIdAsync(id.Value);
+            var Categorias = await this.repository.GetByIdAsync(id);
             if (Categorias == null)
             {
                 return new NotFoundViewResult("NoExiste");
             }
-            var view = this.ToCategoria(Categorias);
-            return this.View(view);
-        }
 
+            ViewBag.Categorias = repository.GetCombo().Where(x => x.Value != id);
+            return this.View(Categorias);
+        }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(string id, CategoriasViewModel view)
+        public async Task<IActionResult> Edit(string id, ParamCategorias Categorias)
         {
-            if (id != view.Id)
+            if (id != Categorias.Id)
             {
                 return new NotFoundViewResult("NoExiste");
             }
 
             if (ModelState.IsValid)
             {
-                var path = string.Empty;
-
-                if (view.ImagenFile != null && view.ImagenFile.Length > 0)
-                {
-                    var guid = Guid.NewGuid().ToString();
-                    var file = $"{guid}.jpg";
-
-                    path = Path.Combine(
-                        Directory.GetCurrentDirectory(),
-                        "wwwroot\\images\\categorias",
-                        file);
-
-                    using (var stream = new FileStream(path, FileMode.Create))
-                    {
-                        await view.ImagenFile.CopyToAsync(stream);
-                    }
-
-                    path = $"~/images/categorias/{file}";
-                }
-                else
-                {
-                    path = view.Imagen;
-                }
-
-                var categorias = this.ToCategoria(view, path);
-
                 try
                 {
-                    await repository.UpdateAsync(categorias);
+                    await repository.UpdateAsync(Categorias);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!await repository.ExistAsync(view.Id))
+                    if (!await repository.ExistAsync(Categorias.Id))
                     {
                         return new NotFoundViewResult("NoExiste");
                     }
@@ -157,86 +107,28 @@ namespace Gestion.Web.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(view);
+
+            ViewBag.Categorias = repository.GetCombo().Where(x => x.Value != Categorias.PadreId);
+            return View(Categorias);
         }
 
-        public async Task<IActionResult> Delete(int? id)
+        public async Task<IActionResult> Delete(string id)
         {
             if (id == null)
             {
                 return new NotFoundViewResult("NoExiste");
             }
 
-            var Categorias = await this.repository.GetByIdAsync(id.Value);
+            var Categorias = await this.repository.GetByIdAsync(id);
             if (Categorias == null)
             {
                 return new NotFoundViewResult("NoExiste");
             }
 
-            return this.View(Categorias);
-        }
-
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            var Categorias = await repository.GetByIdAsync(id);
+            Categorias.Estado = !Categorias.Estado;
             await repository.DeleteAsync(Categorias);
             return RedirectToAction(nameof(Index));
-        }
-
-        //private Categorias ToCategoria(CategoriasViewModel view, string path)
-        //{
-        //    return new Categorias
-        //    {
-        //        Id = view.Id,
-        //        Nombre = view.Nombre,
-        //        Slug = view.Slug,
-        //        ParentId = view.ParentId,
-        //        Descripcion = view.Descripcion,
-        //        Imagen = path,
-        //        MenuOrden = view.MenuOrden,
-        //    };
-        //}
-
-        //private CategoriasViewModel ToCategoria(Categorias categorias)
-        //{
-        //    return new CategoriasViewModel
-        //    {
-        //        Id = categorias.Id,
-        //        Nombre = categorias.Nombre,
-        //        Slug = categorias.Slug,
-        //        ParentId = categorias.ParentId,
-        //        Descripcion = categorias.Descripcion,
-        //        Imagen = categorias.Imagen,
-        //        MenuOrden = categorias.MenuOrden,
-        //    };
-        //}
-
-        public IActionResult NoExiste()
-        {
-            return this.View();
-        }
+        }        
 
     }
-
-    //public class MyRestAPI : RestAPI
-    //{
-    //    public MyRestAPI(string url, string key, string secret, bool authorizedHeader = true,
-    //        Func<string, string> jsonSerializeFilter = null,
-    //        Func<string, string> jsonDeserializeFilter = null,
-    //        Action<HttpWebRequest> requestFilter = null) : base(url, key, secret, authorizedHeader, jsonSerializeFilter, jsonDeserializeFilter, requestFilter)
-    //    {
-    //    }
-
-    //    public override T DeserializeJSon<T>(string jsonString)
-    //    {
-    //        return JsonConvert.DeserializeObject<T>(jsonString);
-    //    }
-
-    //    public override string SerializeJSon<T>(T t)
-    //    {
-    //        return JsonConvert.SerializeObject(t);
-    //    }
-    //}
 }
