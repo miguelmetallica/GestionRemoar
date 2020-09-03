@@ -72,7 +72,6 @@
     <Build Include="dbo\Tables\SeguridadOperaciones.sql" />
     <Build Include="dbo\Tables\SeguridadModulos.sql" />
     <Build Include="dbo\Tables\Proveedores.sql" />
-    <Build Include="dbo\Tables\ProductosSubCategorias.sql" />
     <Build Include="dbo\Tables\ProductosPrecios.sql" />
     <Build Include="dbo\Tables\ProductosMarcas.sql" />
     <Build Include="dbo\Tables\ProductosColores.sql" />
@@ -89,7 +88,6 @@
     <Build Include="dbo\Tables\ParamTiposDocumentos.sql" />
     <Build Include="dbo\Tables\ParamTiposComprobantes.sql" />
     <Build Include="dbo\Tables\ParamTarjetasCreditosDebitos.sql" />
-    <Build Include="dbo\Tables\ParamSubCategorias.sql" />
     <Build Include="dbo\Tables\ParamProvincias.sql" />
     <Build Include="dbo\Tables\ParamPresupuestosEstados.sql" />
     <Build Include="dbo\Tables\ParamPaises.sql" />
