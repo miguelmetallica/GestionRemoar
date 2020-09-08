@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 
 namespace Gestion.Web.Models
@@ -7,7 +8,12 @@ namespace Gestion.Web.Models
     {
         public string Id { get; set; }
         public string ProductoId { get; set; }
-        public string ImagenUrl { get; set; }
-        public string NombreImagen { get; set; }
+        public Productos Producto { get; set; }
+        public string ImagenUrl { get; set; }        
+    }
+
+    public partial class ProductosImagenesViewModel : ProductosImagenes
+    {
+        public IFormFile ImageFile { get; set; }        
     }
 }

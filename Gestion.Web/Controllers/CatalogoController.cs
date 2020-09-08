@@ -11,17 +11,16 @@ namespace Gestion.Web.Controllers
     
     public class CatalogoController : Controller
     {
-        //private readonly ICatalogoRepository repository; 
-        //private readonly IUserHelper userHelper;
+        private readonly IProductosRepository productos;
 
-        public CatalogoController()//ICatalogoRepository repository, IUserHelper userHelper)
+        public CatalogoController(IProductosRepository productos)
         {
-            //this.repository = repository;
-            //this.userHelper = userHelper;
+            this.productos = productos;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
+            ViewBag.Productos = await productos.spCatalogoProductosGet();
             return View();
         }
 

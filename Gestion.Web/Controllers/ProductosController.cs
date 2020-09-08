@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.IO;
 using System.Threading.Tasks;
 
 namespace Gestion.Web.Controllers
@@ -19,7 +20,9 @@ namespace Gestion.Web.Controllers
         private readonly ICuentasVentasRepository cuentasVentas;
         private readonly IUnidadesMedidasRepository unidadesMedidas;
         private readonly IAlicuotasRepository alicuotas;
-        
+        private readonly ICategoriasRepository categorias;
+        private readonly IProductosCategoriasRepository productosCategorias;
+        private readonly IProductosImagenesRepository productosImagenes;
 
         public ProductosController(IProductosRepository repository, 
                                 IUserHelper userHelper, 
@@ -27,7 +30,10 @@ namespace Gestion.Web.Controllers
                                 ICuentasComprasRepository cuentasCompras,
                                 ICuentasVentasRepository cuentasVentas,
                                 IUnidadesMedidasRepository unidadesMedidas,
-                                IAlicuotasRepository alicuotas 
+                                IAlicuotasRepository alicuotas,
+                                ICategoriasRepository categorias,
+                                IProductosCategoriasRepository productosCategorias,
+                                IProductosImagenesRepository productosImagenes
                                 )
         {
             this.repository = repository;
@@ -36,7 +42,10 @@ namespace Gestion.Web.Controllers
             this.cuentasCompras = cuentasCompras;
             this.cuentasVentas = cuentasVentas;
             this.unidadesMedidas = unidadesMedidas;
-            this.alicuotas = alicuotas;            
+            this.alicuotas = alicuotas;
+            this.categorias = categorias;
+            this.productosCategorias = productosCategorias;
+            this.productosImagenes = productosImagenes;
         }
 
         public async Task<IActionResult> Index()
@@ -56,9 +65,15 @@ namespace Gestion.Web.Controllers
             {
                 return new NotFoundViewResult("NoExiste");
             }
-            
+
+            ViewBag.ProductosCategorias = await productosCategorias.spProductosCategoriasGet(id);
+
+            ViewBag.ProductosImagenes = await productosImagenes.GetImagenes(id);
+
             return this.View(Productos);
         }
+
+
 
         public IActionResult Create()
         {
@@ -77,12 +92,6 @@ namespace Gestion.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                //var codigo = await repository.ExistCodigoAsync("", productos.Codigo);
-                //if (codigo) 
-                //{
-                //    ModelState.AddModelError("Codigo", "El Codigo ya existe en la base de datos");                
-                //}
-
                 if (ModelState.IsValid)
                 {
                     productos.Id = Guid.NewGuid().ToString();
@@ -206,6 +215,107 @@ namespace Gestion.Web.Controllers
         public IActionResult NoExiste()
         {
             return this.View();
+        }
+
+        public async Task<IActionResult> CategoriaOn(string id, string id2)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+            if (id2 == null)
+            {
+                return NotFound();
+            }
+
+
+            var categoria = await this.productosCategorias.spProductosCategoriasOn(Guid.NewGuid().ToString(), id, id2);
+            return RedirectToAction("Details", new { id = id });
+        }
+
+        public async Task<IActionResult> CategoriaOff(string id, string id2)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+            
+            var categoria = await this.productosCategorias.spProductosCategoriasOff(id, id2);
+            return RedirectToAction("Details", new { id = id });
+        }
+
+        public async Task<IActionResult> AddImage(string id)
+        {
+            if (id == null)
+            {
+                return new NotFoundViewResult("NoExiste");
+            }
+
+            var Productos = await this.repository.GetProducto(id);
+            if (Productos == null)
+            {
+                return new NotFoundViewResult("NoExiste");
+            }
+
+            var Imagen = new ProductosImagenesViewModel();
+            Imagen.ProductoId = id;
+
+            return this.View(Imagen);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddImage(ProductosImagenesViewModel imagenes)
+        {
+            if (ModelState.IsValid)
+            {
+                if (ModelState.IsValid)
+                {
+                    var path = string.Empty;
+
+                    if (imagenes.ImageFile != null && imagenes.ImageFile.Length > 0)
+                    {
+                        var guid = Guid.NewGuid().ToString();
+                        var file = $"{guid}.jpg";
+
+                        path = Path.Combine(Directory.GetCurrentDirectory(),"wwwroot\\images\\Products",file);
+
+                        using (var stream = new FileStream(path, FileMode.Create))
+                        {
+                            await imagenes.ImageFile.CopyToAsync(stream);
+                        }
+
+                        path = $"~/images/Products/{file}";
+                    }
+
+                    var productImg = new ProductosImagenes();
+                    productImg.Id = Guid.NewGuid().ToString();
+                    productImg.ProductoId = imagenes.ProductoId;
+                    productImg.ImagenUrl = path;
+                    
+                    await productosImagenes.CreateAsync(productImg);
+                    return RedirectToAction("Details", new { id = imagenes.ProductoId });
+                }
+            }
+
+            return View(imagenes);
+        }
+
+        public async Task<IActionResult> DeleteImage(string id)
+        {
+            if (id == null)
+            {
+                return new NotFoundViewResult("NoExiste");
+            }
+
+            var imagenes = await this.productosImagenes.GetByIdAsync(id);
+            if (imagenes == null)
+            {
+                return new NotFoundViewResult("NoExiste");
+            }
+            await productosImagenes.DeleteImage(imagenes);
+            
+            return RedirectToAction("Details", new { id = imagenes.ProductoId });
         }
 
     }

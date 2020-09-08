@@ -1,0 +1,67 @@
+﻿@model Gestion.Web.Models.ProductosImagenesViewModel
+
+@{
+    ViewData["Title"] = "Nueva Imagen";
+}
+
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <h1>
+            Sistema de gestíon
+            <small>Gestion de Productos</small>
+        </h1>
+        <ol class="breadcrumb">
+            <li><a asp-controller="Home" asp-action="Index"><i class="fas fa-tachometer-alt"></i> Inicio</a></li>
+            <li><a asp-controller="Productos" asp-action="Index">Listado de Productos</a></li>
+            <li class="active">@ViewData["Title"]</li>
+        </ol>
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+        <div class="row">
+            <!-- left column -->
+            <div class="col-md-6">
+                <!-- general form elements -->
+                <div class="box box-primary">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">Ficha del Producto</h3>
+                    </div>
+                    <!-- /.box-header -->
+                    <!-- form start -->
+                    <form asp-action="AddImage" enctype="multipart/form-data">
+                        <div class="box-body">
+                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                            <input asp-for="ProductoId" type="hidden" />
+                            
+                            <div class="form-group">
+                                <label asp-for="ImageFile" class="control-label"></label>
+                                <input asp-for="ImageFile" class="form-control input-sm" type="file" />
+                                <span asp-validation-for="ImageFile" class="text-danger"></span>
+                            </div>
+                            
+
+                        </div>
+                        <!-- /.box-body -->
+
+                        <div class="box-footer">
+                            <input type="submit" value="Guardar" class="btn btn-primary" />
+                            <a asp-action="Index" class="btn btn-default pull-right">Volver al Listado</a>
+                        </div>
+                    </form>
+                </div>
+                <!-- /.box -->
+            </div>
+            <!--/.col-->
+        </div>
+        <!-- /.row -->
+    </section>
+    <!-- /.content -->
+</div>
+<!-- /.content-wrapper -->
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

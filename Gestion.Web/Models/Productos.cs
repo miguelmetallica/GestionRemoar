@@ -99,4 +99,15 @@ namespace Gestion.Web.Models
 
         public bool Estado { get; set; }        
     }
+
+    public partial class ProductosCatalogo : IEntidades
+    {
+        public string Id { get; set; }
+        public string Codigo { get; set; }
+        public string Producto { get; set; }
+        public string ImagenUrl { get; set; }
+        public int Cantidad { get; set; }
+        public decimal Precio { get; set; }
+        public bool Estado { get; set; }
+    }
 }

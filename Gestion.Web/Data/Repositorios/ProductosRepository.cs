@@ -228,5 +228,71 @@ namespace Gestion.Web.Data
                 }
             }
         }
+
+        public async Task<List<ProductosCatalogo>> spCatalogoProductosGet()
+        {
+            //Creamos la conexión a utilizar.
+            //Utilizamos la sentencia Using para asegurarnos de cerrar la conexión
+            //y liberar el objeto al salir de esta sección de manera automática            
+            using (var oCnn = factoryConnection.GetConnection())
+            {
+                using (SqlCommand oCmd = new SqlCommand())
+                {
+                    //asignamos la conexion de trabajo
+                    oCmd.Connection = oCnn;
+
+                    //utilizamos stored procedures
+                    oCmd.CommandType = System.Data.CommandType.StoredProcedure;
+
+                    //el indicamos cual stored procedure utilizar
+                    oCmd.CommandText = "CatalogoProductosGet";
+
+                    //le asignamos el parámetro para el stored procedure
+                    //oCmd.Parameters.AddWithValue("@CuentaVentaId", Id);                    
+
+
+                    //aunque debemos buscar solo un elemento, siempre devolvemos
+                    //una colección. Es más fácil de manipular y controlar 
+                    var objs = new List<ProductosCatalogo>();
+
+                    //No retornamos DataSets, siempre utilizamos objetos para hacernos 
+                    //independientes de la estructura de las tablas en el resto
+                    //de las capas. Para ellos leemos con el DataReader y creamos
+                    //los objetos asociados que se esperan
+                    try
+                    {
+                        //Ejecutamos el comando y retornamos los valores
+                        using (SqlDataReader oReader = await oCmd.ExecuteReaderAsync())
+                        {
+                            while (oReader.Read())
+                            {
+                                //si existe algun valor, creamos el objeto y lo almacenamos
+                                //en la colección
+                                var obj = new ProductosCatalogo();
+                                obj.Id = oReader["Id"].ToString();
+                                obj.Codigo = oReader["Codigo"].ToString();
+                                obj.Producto = (string)oReader["Producto"];
+                                obj.ImagenUrl = (string)oReader["ImagenUrl"];
+                                obj.Cantidad = (int)oReader["Cantidad"];
+                                obj.Precio = (decimal)oReader["PrecioVenta"];
+                                
+                                //Agregamos el objeto a la coleccion de resultados
+                                objs.Add(obj);
+                                obj = null;
+                            }
+                        }
+                        //retornamos los valores encontrados
+                        return objs;
+                    }
+
+                    finally
+                    {
+                        //el Finally nos da siempre la oportunidad de liberar
+                        //la memoria utilizada por los objetos 
+                        objs = null;
+                    }
+                }
+            }
+        }
     }
 }

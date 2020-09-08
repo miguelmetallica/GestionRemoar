@@ -7117,6 +7117,7 @@
 
   <ItemGroup>
     <Folder Include="wwwroot\catalogo\" />
+    <Folder Include="wwwroot\images\Products\" />
   </ItemGroup>
 
   <ProjectExtensions><VisualStudio><UserProperties appsettings_1json__JsonSchema="" /></VisualStudio></ProjectExtensions>

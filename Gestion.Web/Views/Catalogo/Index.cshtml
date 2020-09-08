@@ -1,6 +1,7 @@
 ﻿
 @{
     Layout = null;
+    var productos = (List<ProductosCatalogo>)ViewBag.Productos;
 }
 
 <!DOCTYPE html>
@@ -435,71 +436,21 @@
             b[c] += (window.postMessage && request ? ' ' : ' no-') + cs;
         }());
     </script>
-    @*<div id="wpadminbar" class="nojq nojs">
-        <a class="screen-reader-shortcut" href="#wp-toolbar" tabindex="1">Ir a la barra de herramientas</a>
-        <div class="quicklinks" id="wp-toolbar" role="navigation" aria-label="Barra de herramientas">
-            <ul id='wp-admin-bar-root-default' class="ab-top-menu"><li id='wp-admin-bar-wp-logo' class="menupop"><a class='ab-item' aria-haspopup="true" href='http://remoar.com.ar/catalogo/wp-admin/about.php'><span class="ab-icon"></span><span class="screen-reader-text">Acerca de WordPress</span></a><div class="ab-sub-wrapper"><ul id='wp-admin-bar-wp-logo-default' class="ab-submenu"><li id='wp-admin-bar-about'><a class='ab-item' href='http://remoar.com.ar/catalogo/wp-admin/about.php'>Acerca de WordPress</a></li></ul><ul id='wp-admin-bar-wp-logo-external' class="ab-sub-secondary ab-submenu"><li id='wp-admin-bar-wporg'><a class='ab-item' href='https://es.wordpress.org/'>WordPress.org</a></li><li id='wp-admin-bar-documentation'><a class='ab-item' href='https://codex.wordpress.org/'>Documentación</a></li><li id='wp-admin-bar-support-forums'><a class='ab-item' href='https://es.wordpress.org/support/'>Soporte</a></li><li id='wp-admin-bar-feedback'><a class='ab-item' href='https://es.wordpress.org/support/forum/comunidad/peticiones-y-feedback/'>Sugerencias</a></li></ul></div></li><li id='wp-admin-bar-site-name' class="menupop"><a class='ab-item' aria-haspopup="true" href='http://remoar.com.ar/catalogo/wp-admin/'>Remoar</a><div class="ab-sub-wrapper"><ul id='wp-admin-bar-site-name-default' class="ab-submenu"><li id='wp-admin-bar-dashboard'><a class='ab-item' href='http://remoar.com.ar/catalogo/wp-admin/'>Escritorio</a></li></ul><ul id='wp-admin-bar-appearance' class="ab-submenu"><li id='wp-admin-bar-themes'><a class='ab-item' href='http://remoar.com.ar/catalogo/wp-admin/themes.php'>Temas</a></li><li id='wp-admin-bar-widgets'><a class='ab-item' href='http://remoar.com.ar/catalogo/wp-admin/widgets.php'>Widgets</a></li><li id='wp-admin-bar-menus'><a class='ab-item' href='http://remoar.com.ar/catalogo/wp-admin/nav-menus.php'>Menús</a></li><li id='wp-admin-bar-background' class="hide-if-customize"><a class='ab-item' href='http://remoar.com.ar/catalogo/wp-admin/themes.php?page=custom-background'>Fondo</a></li><li id='wp-admin-bar-header' class="hide-if-customize"><a class='ab-item' href='http://remoar.com.ar/catalogo/wp-admin/themes.php?page=custom-header'>Cabecera</a></li></ul></div></li><li id='wp-admin-bar-customize' class="hide-if-no-customize"><a class='ab-item' href='http://remoar.com.ar/catalogo/wp-admin/customize.php?url=http%3A%2F%2Fremoar.com.ar%2Fcatalogo%2Fhome-1%2F'>Personalizar</a></li><li id='wp-admin-bar-updates'><a class='ab-item' href='http://remoar.com.ar/catalogo/wp-admin/update-core.php' title='1 actualización de plugin, 7 actualizaciones de temas'><span class="ab-icon"></span><span class="ab-label">8</span><span class="screen-reader-text">1 actualización de plugin, 7 actualizaciones de temas</span></a></li><li id='wp-admin-bar-comments'><a class='ab-item' href='http://remoar.com.ar/catalogo/wp-admin/edit-comments.php'><span class="ab-icon"></span><span class="ab-label awaiting-mod pending-count count-0" aria-hidden="true">0</span><span class="screen-reader-text comments-in-moderation-text">0 comentarios en moderación</span></a></li><li id='wp-admin-bar-new-content' class="menupop"><a class='ab-item' aria-haspopup="true" href='http://remoar.com.ar/catalogo/wp-admin/post-new.php'><span class="ab-icon"></span><span class="ab-label">Añadir</span></a><div class="ab-sub-wrapper"><ul id='wp-admin-bar-new-content-default' class="ab-submenu"><li id='wp-admin-bar-new-post'><a class='ab-item' href='http://remoar.com.ar/catalogo/wp-admin/post-new.php'>Entrada</a></li><li id='wp-admin-bar-new-media'><a class='ab-item' href='http://remoar.com.ar/catalogo/wp-admin/media-new.php'>Medio</a></li><li id='wp-admin-bar-new-page'><a class='ab-item' href='http://remoar.com.ar/catalogo/wp-admin/post-new.php?post_type=page'>Página</a></li><li id='wp-admin-bar-new-product'><a class='ab-item' href='http://remoar.com.ar/catalogo/wp-admin/post-new.php?post_type=product'>Producto</a></li><li id='wp-admin-bar-new-shop_order'><a class='ab-item' href='http://remoar.com.ar/catalogo/wp-admin/post-new.php?post_type=shop_order'>Pedido</a></li><li id='wp-admin-bar-new-shop_coupon'><a class='ab-item' href='http://remoar.com.ar/catalogo/wp-admin/post-new.php?post_type=shop_coupon'>Cupón</a></li><li id='wp-admin-bar-new-cpt_layouts'><a class='ab-item' href='http://remoar.com.ar/catalogo/wp-admin/post-new.php?post_type=cpt_layouts'>Layout</a></li><li id='wp-admin-bar-new-cpt_services'><a class='ab-item' href='http://remoar.com.ar/catalogo/wp-admin/post-new.php?post_type=cpt_services'>Service</a></li><li id='wp-admin-bar-new-cpt_team'><a class='ab-item' href='http://remoar.com.ar/catalogo/wp-admin/post-new.php?post_type=cpt_team'>Team member</a></li><li id='wp-admin-bar-new-cpt_testimonials'><a class='ab-item' href='http://remoar.com.ar/catalogo/wp-admin/post-new.php?post_type=cpt_testimonials'>Testimonial</a></li><li id='wp-admin-bar-new-user'><a class='ab-item' href='http://remoar.com.ar/catalogo/wp-admin/user-new.php'>Usuario</a></li></ul></div></li><li id='wp-admin-bar-edit'><a class='ab-item' href='http://remoar.com.ar/catalogo/wp-admin/post.php?post=2&#038;action=edit'>Editar la página</a></li><li id='wp-admin-bar-delete-cache'><a class='ab-item' href='http://remoar.com.ar/catalogo/wp-admin/index.php?action=delcachepage&#038;path=%2Fhome-1%2F&#038;_wpnonce=fe0974b113' title='Borrar la caché de la página actual'>Vaciar la caché</a></li><li id='wp-admin-bar-vc_inline-admin-bar-link' class="vc_inline-link"><a class='ab-item' href='http://remoar.com.ar/catalogo/wp-admin/post.php?vc_action=vc_inline&#038;post_id=2&#038;post_type=page'>Edit with WPBakery Page Builder</a></li><li id='wp-admin-bar-revslider' class="menupop revslider-menu"><a class='ab-item' aria-haspopup="true" href='http://remoar.com.ar/catalogo/wp-admin/admin.php?page=revslider'><span class="rs-label">Slider Revolution</span></a><div class="ab-sub-wrapper"><ul id='wp-admin-bar-revslider-default' class="ab-submenu"><li id='wp-admin-bar-slider-1' class="revslider-sub-menu"><a class='ab-item' href='http://remoar.com.ar/catalogo/wp-admin/admin.php?page=revslider&#038;view=slide&#038;id=slider-1'><span class="rs-label" data-alias="slider-1">slider-1</span></a></li><li id='wp-admin-bar-slider-2' class="revslider-sub-menu"><a class='ab-item' href='http://remoar.com.ar/catalogo/wp-admin/admin.php?page=revslider&#038;view=slide&#038;id=slider-2'><span class="rs-label" data-alias="slider-2">slider-2</span></a></li></ul></div></li></ul><ul id='wp-admin-bar-top-secondary' class="ab-top-secondary ab-top-menu"><li id='wp-admin-bar-search' class="admin-bar-search"><div class="ab-item ab-empty-item" tabindex="-1"><form action="http://remoar.com.ar/catalogo/" method="get" id="adminbarsearch"><input class="adminbar-input" name="s" id="adminbar-search" type="text" value="" maxlength="150" /><label for="adminbar-search" class="screen-reader-text">Buscar</label><input type="submit" class="adminbar-button" value="Buscar" /></form></div></li><li id='wp-admin-bar-my-account' class="menupop with-avatar"><a class='ab-item' aria-haspopup="true" href='http://remoar.com.ar/catalogo/wp-admin/profile.php'>Hola, <span class="display-name">c1770575</span><img alt='' src='http://0.gravatar.com/avatar/6ed3faed6249f0e66185e2137400230f?s=26&#038;d=mm&#038;r=g' srcset='http://0.gravatar.com/avatar/6ed3faed6249f0e66185e2137400230f?s=52&#038;d=mm&#038;r=g 2x' class='avatar avatar-26 photo' height='26' width='26' loading='lazy' /></a><div class="ab-sub-wrapper"><ul id='wp-admin-bar-user-actions' class="ab-submenu"><li id='wp-admin-bar-user-info'><a class='ab-item' tabindex="-1" href='http://remoar.com.ar/catalogo/wp-admin/profile.php'><img alt='' src='http://0.gravatar.com/avatar/6ed3faed6249f0e66185e2137400230f?s=64&#038;d=mm&#038;r=g' srcset='http://0.gravatar.com/avatar/6ed3faed6249f0e66185e2137400230f?s=128&#038;d=mm&#038;r=g 2x' class='avatar avatar-64 photo' height='64' width='64' loading='lazy' /><span class='display-name'>c1770575</span></a></li><li id='wp-admin-bar-edit-profile'><a class='ab-item' href='http://remoar.com.ar/catalogo/wp-admin/profile.php'>Editar el perfil</a></li><li id='wp-admin-bar-logout'><a class='ab-item' href='http://remoar.com.ar/catalogo/wp-login.php?action=logout&#038;_wpnonce=7f0a6c39e3'>Salir</a></li></ul></div></li></ul>
-        </div>
-        <a class="screen-reader-shortcut" href="http://remoar.com.ar/catalogo/wp-login.php?action=logout&#038;_wpnonce=7f0a6c39e3">Salir</a>
-    </div>*@
-
-
     <div class="body_wrap">
 
         <div class="page_wrap">
             <header class="top_panel top_panel_custom top_panel_custom_20 top_panel_custom_header-fullwidth with_bg_image mendel_inline_239776449 scheme_default">
                 <div class="vc_row wpb_row vc_row-fluid vc_custom_1500893297996 vc_row-o-equal-height vc_row-o-content-middle vc_row-flex sc_layouts_row sc_layouts_row_type_compact sc_layouts_row_fixed scheme_dark">
-                    <div class="wpb_column vc_column_container vc_col-sm-3 sc_layouts_column sc_layouts_column_align_left sc_layouts_column_icons_position_left"><div class="vc_column-inner"><div class="wpb_wrapper"><div class="vc_empty_space  vc_custom_1500893364703" style="height: 0px"><span class="vc_empty_space_inner"></span></div><div class="sc_layouts_item"><a href="http://remoar.com.ar/catalogo/" id="sc_layouts_logo_1175067605" class="sc_layouts_logo sc_layouts_logo_default"><span class="logo_text">Remoar</span><span class="logo_slogan">Espacio Interior</span></a><!-- /.sc_layouts_logo --></div></div></div></div><div class="wpb_column vc_column_container vc_col-sm-6 sc_layouts_column sc_layouts_column_align_center sc_layouts_column_icons_position_left">
+                    <div class="wpb_column vc_column_container vc_col-sm-3 sc_layouts_column sc_layouts_column_align_left sc_layouts_column_icons_position_left"><div class="vc_column-inner"><div class="wpb_wrapper"><div class="vc_empty_space  vc_custom_1500893364703" style="height: 0px"><span class="vc_empty_space_inner"></span></div><div class="sc_layouts_item"><a asp-controller="Catalogo" asp-action="Index" id="sc_layouts_logo_1175067605" class="sc_layouts_logo sc_layouts_logo_default"><span class="logo_text">Remoar</span><span class="logo_slogan">Espacio Interior</span></a><!-- /.sc_layouts_logo --></div></div></div></div><div class="wpb_column vc_column_container vc_col-sm-6 sc_layouts_column sc_layouts_column_align_center sc_layouts_column_icons_position_left">
                         <div class="vc_column-inner">
                             <div class="wpb_wrapper">
                                 <div class="sc_layouts_item">
                                     <nav class="sc_layouts_menu sc_layouts_menu_default menu_hover_fade hide_on_mobile" id="sc_layouts_menu_1795654035" data-animation-in="fadeInUpSmall" data-animation-out="fadeOutDownSmall">
                                         <ul id="menu-main-menu" class="sc_layouts_menu_nav">
-                                            <li id="menu-item-103" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-has-children menu-item-103">
-                                                <a href="#"><span>About Us</span></a>
-                                                <ul class="sub-menu"><li id="menu-item-78" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-78"><a href="http://remoar.com.ar/catalogo/about-1/"><span>About 1</span></a></li><li id="menu-item-79" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-79"><a href="http://remoar.com.ar/catalogo/about-2/"><span>About 2</span></a></li></ul>
-                                            </li>
-                                            <li id="menu-item-95" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-95"><a href="http://remoar.com.ar/catalogo/our-services/"><span>Services</span></a></li>
-                                            <li id="menu-item-96" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-home menu-item-96"><a href="http://remoar.com.ar/catalogo/"><span>Shop</span></a></li>
-                                            <li id="menu-item-98" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-98"><a href="http://remoar.com.ar/catalogo/specials/"><span>Specials</span></a></li>
-                                            <li id="menu-item-104" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-has-children menu-item-104">
-                                                <a href="#"><span>Features</span></a>
-                                                <ul class="sub-menu">
-                                                    <li id="menu-item-105" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-has-children menu-item-105">
-                                                        <a href="#"><span>Pages</span></a>
-                                                        <ul class="sub-menu">
-                                                            <li id="menu-item-112" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-has-children menu-item-112">
-                                                                <a href="#"><span>Blog</span></a>
-                                                                <ul class="sub-menu">
-                                                                    <li id="menu-item-106" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-has-children menu-item-106">
-                                                                        <a href="#"><span>Classic</span></a>
-                                                                        <ul class="sub-menu"><li id="menu-item-83" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-83"><a href="http://remoar.com.ar/catalogo/classic-1/"><span>Classic 1</span></a></li><li id="menu-item-84" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-84"><a href="http://remoar.com.ar/catalogo/classic-2/"><span>Classic 2</span></a></li><li id="menu-item-85" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-85"><a href="http://remoar.com.ar/catalogo/classic-3/"><span>Classic 3</span></a></li></ul>
-                                                                    </li>
-                                                                    <li id="menu-item-107" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-has-children menu-item-107">
-                                                                        <a href="#"><span>Chess</span></a>
-                                                                        <ul class="sub-menu"><li id="menu-item-80" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-80"><a href="http://remoar.com.ar/catalogo/chess-2/"><span>Chess 2</span></a></li><li id="menu-item-81" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-81"><a href="http://remoar.com.ar/catalogo/chess-4/"><span>Chess 4</span></a></li><li id="menu-item-82" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-82"><a href="http://remoar.com.ar/catalogo/chess-6/"><span>Chess 6</span></a></li></ul>
-                                                                    </li>
-                                                                    <li id="menu-item-108" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-has-children menu-item-108">
-                                                                        <a href="#"><span>Portfolio</span></a>
-                                                                        <ul class="sub-menu"><li id="menu-item-92" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-92"><a href="http://remoar.com.ar/catalogo/portfolio-2/"><span>Portfolio 2</span></a></li><li id="menu-item-93" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-93"><a href="http://remoar.com.ar/catalogo/portfolio-3/"><span>Portfolio 3</span></a></li><li id="menu-item-94" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-94"><a href="http://remoar.com.ar/catalogo/portfolio-4/"><span>Portfolio 4</span></a></li></ul>
-                                                                    </li>
-                                                                </ul>
-                                                            </li>
-                                                            <li id="menu-item-109" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-has-children menu-item-109">
-                                                                <a href="#"><span>Gallery</span></a>
-                                                                <ul class="sub-menu"><li id="menu-item-89" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-89"><a href="http://remoar.com.ar/catalogo/grid/"><span>Grid</span></a></li><li id="menu-item-91" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-91"><a href="http://remoar.com.ar/catalogo/masonry/"><span>Masonry</span></a></li><li id="menu-item-86" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-86"><a href="http://remoar.com.ar/catalogo/cobbles/"><span>Cobbles</span></a></li></ul>
-                                                            </li>
-                                                        </ul>
-                                                    </li>
-                                                    <li id="menu-item-110" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-has-children menu-item-110">
-                                                        <a href="#"><span>Tools</span></a>
-                                                        <ul class="sub-menu"><li id="menu-item-97" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-97"><a href="http://remoar.com.ar/catalogo/shortcodes/"><span>Shortcodes</span></a></li><li id="menu-item-100" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-100"><a href="http://remoar.com.ar/catalogo/typography/"><span>Typography</span></a></li></ul>
-                                                    </li>
-                                                    <li id="menu-item-861" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-861"><a href="http://remoar.com.ar/catalogo/service-plus/"><span>Service Plus</span></a></li>
-                                                    <li id="menu-item-862" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-862"><a href="http://remoar.com.ar/catalogo/privacy-policy/"><span>Privacy Policy</span></a></li>
-                                                </ul>
-                                            </li>
-                                            <li id="menu-item-87" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-87"><a href="http://remoar.com.ar/catalogo/contact/"><span>Contact</span></a></li>
+                                            <li id="menu-item-96" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-home menu-item-96"><a asp-controller="Catalogo" asp-action="Index"><span>Catalogo</span></a></li>
+                                            <li id="menu-item-98" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-98"><a asp-controller="Catalogo" asp-action="Carrito"><span>Carrito</span></a></li>
+                                            <li id="menu-item-87" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-87"><a asp-controller="Catalogo" asp-action="MiCuenta"><span>Mi Cuenta</span></a></li>
+                                            <li id="menu-item-98" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-98"><a asp-controller="Catalogo" asp-action="FinalizarCompra"><span>Finalizar Compra</span></a></li>                                            
                                         </ul>
                                     </nav><!-- /.sc_layouts_menu --><div class="sc_layouts_iconed_text sc_layouts_menu_mobile_button">
                                         <a class="sc_layouts_item_link sc_layouts_iconed_text_link" href="#">
@@ -509,102 +460,30 @@
                                 </div>
                             </div>
                         </div>
-                    </div><div class="wpb_column vc_column_container vc_col-sm-3 vc_hidden-sm vc_hidden-xs sc_layouts_column sc_layouts_column_align_right sc_layouts_column_icons_position_left">
-                        <div class="vc_column-inner">
-                            <div class="wpb_wrapper">
-                                <div class="vc_empty_space  vc_custom_1500893543863" style="height: 0px"><span class="vc_empty_space_inner"></span></div><div class="sc_layouts_item"><div id="sc_layouts_iconed_text_106670407" class="sc_layouts_iconed_text"><a href="/my-account/" class="sc_layouts_item_link sc_layouts_iconed_text_link"><span class="sc_layouts_item_icon sc_layouts_iconed_text_icon icon-user"></span></a></div><!-- /.sc_layouts_iconed_text --></div><div class="sc_layouts_item">
-                                    <div id="sc_layouts_cart_2146004465" class="sc_layouts_cart">
-                                        <span class="sc_layouts_item_icon sc_layouts_cart_icon trx_addons_icon-basket"></span>
-                                        <span class="sc_layouts_item_details sc_layouts_cart_details">
-                                            <span class="sc_layouts_item_details_line2 sc_layouts_cart_totals">
-                                                <span class="sc_layouts_cart_items">0 items</span>
-                                                -
-                                                <span class="sc_layouts_cart_summa">&#36;0.00</span>
-                                            </span>
-                                        </span><!-- /.sc_layouts_cart_details -->
-                                        <span class="sc_layouts_cart_items_short">0</span>
-                                        <div class="sc_layouts_cart_widget widget_area">
-                                            <span class="sc_layouts_cart_widget_close trx_addons_icon-cancel"></span>
-                                            <div class="widget woocommerce widget_shopping_cart"><div class="widget_shopping_cart_content"></div></div>
-                                        </div><!-- /.sc_layouts_cart_widget -->
-                                    </div><!-- /.sc_layouts_cart -->
-                                </div><div class="sc_layouts_item"><div id="sc_layouts_iconed_text_542938483" class="sc_layouts_iconed_text"><a href="mailto:example@test.com" class="sc_layouts_item_link sc_layouts_iconed_text_link"><span class="sc_layouts_item_icon sc_layouts_iconed_text_icon icon-mail-1"></span></a></div><!-- /.sc_layouts_iconed_text --></div><div class="sc_layouts_item">
-                                    <div id="sc_layouts_search_1280576482" class="sc_layouts_search">
-                                        <div class="search_wrap search_style_fullscreen search_ajax layouts_search">
-                                            <div class="search_form_wrap">
-                                                <form role="search" method="get" class="search_form" action="http://remoar.com.ar/catalogo/">
-                                                    <input type="text" class="search_field" placeholder="Search" value="" name="s">
-                                                    <button type="submit" class="search_submit trx_addons_icon-search"></button>
-                                                    <a class="search_close trx_addons_icon-delete"></a>
-                                                </form>
-                                            </div>
-                                            <div class="search_results widget_area"><a href="#" class="search_results_close trx_addons_icon-cancel"></a><div class="search_results_content"></div></div>
-                                        </div>
-                                    </div><!-- /.sc_layouts_search -->
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    </div>                    
                 </div>
-            </header><div class="menu_mobile_overlay"></div>
+            </header>
+        <div class="menu_mobile_overlay"></div>
             <div class="menu_mobile menu_mobile_fullscreen scheme_dark">
                 <div class="menu_mobile_inner">
-                    <a class="menu_mobile_close icon-cancel"></a><a class="sc_layouts_logo" href="http://remoar.com.ar/catalogo/"><span class="logo_text">Remoar</span><span class="logo_slogan">Espacio Interior</span></a><nav class="menu_mobile_nav_area">
+                    <a class="menu_mobile_close icon-cancel"></a>
+                    <a class="sc_layouts_logo" asp-controller="Catalogo" asp-action="Index"><span class="logo_text">Remoar</span><span class="logo_slogan">Espacio Interior</span></a>
+                    <nav class="menu_mobile_nav_area">
                         <ul id="menu_mobile-main-menu" class="">
-                            <li id="menu_mobile-item-103" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-has-children menu-item-103">
-                                <a href="#"><span>About Us</span></a>
-                                <ul class="sub-menu"><li id="menu_mobile-item-78" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-78"><a href="http://remoar.com.ar/catalogo/about-1/"><span>About 1</span></a></li><li id="menu_mobile-item-79" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-79"><a href="http://remoar.com.ar/catalogo/about-2/"><span>About 2</span></a></li></ul>
-                            </li>
-                            <li id="menu_mobile-item-95" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-95"><a href="http://remoar.com.ar/catalogo/our-services/"><span>Services</span></a></li>
-                            <li id="menu_mobile-item-96" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-home menu-item-96"><a href="http://remoar.com.ar/catalogo/"><span>Shop</span></a></li>
-                            <li id="menu_mobile-item-98" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-98"><a href="http://remoar.com.ar/catalogo/specials/"><span>Specials</span></a></li>
-                            <li id="menu_mobile-item-104" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-has-children menu-item-104">
-                                <a href="#"><span>Features</span></a>
-                                <ul class="sub-menu">
-                                    <li id="menu_mobile-item-105" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-has-children menu-item-105">
-                                        <a href="#"><span>Pages</span></a>
-                                        <ul class="sub-menu">
-                                            <li id="menu_mobile-item-112" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-has-children menu-item-112">
-                                                <a href="#"><span>Blog</span></a>
-                                                <ul class="sub-menu">
-                                                    <li id="menu_mobile-item-106" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-has-children menu-item-106">
-                                                        <a href="#"><span>Classic</span></a>
-                                                        <ul class="sub-menu"><li id="menu_mobile-item-83" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-83"><a href="http://remoar.com.ar/catalogo/classic-1/"><span>Classic 1</span></a></li><li id="menu_mobile-item-84" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-84"><a href="http://remoar.com.ar/catalogo/classic-2/"><span>Classic 2</span></a></li><li id="menu_mobile-item-85" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-85"><a href="http://remoar.com.ar/catalogo/classic-3/"><span>Classic 3</span></a></li></ul>
-                                                    </li>
-                                                    <li id="menu_mobile-item-107" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-has-children menu-item-107">
-                                                        <a href="#"><span>Chess</span></a>
-                                                        <ul class="sub-menu"><li id="menu_mobile-item-80" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-80"><a href="http://remoar.com.ar/catalogo/chess-2/"><span>Chess 2</span></a></li><li id="menu_mobile-item-81" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-81"><a href="http://remoar.com.ar/catalogo/chess-4/"><span>Chess 4</span></a></li><li id="menu_mobile-item-82" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-82"><a href="http://remoar.com.ar/catalogo/chess-6/"><span>Chess 6</span></a></li></ul>
-                                                    </li>
-                                                    <li id="menu_mobile-item-108" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-has-children menu-item-108">
-                                                        <a href="#"><span>Portfolio</span></a>
-                                                        <ul class="sub-menu"><li id="menu_mobile-item-92" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-92"><a href="http://remoar.com.ar/catalogo/portfolio-2/"><span>Portfolio 2</span></a></li><li id="menu_mobile-item-93" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-93"><a href="http://remoar.com.ar/catalogo/portfolio-3/"><span>Portfolio 3</span></a></li><li id="menu_mobile-item-94" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-94"><a href="http://remoar.com.ar/catalogo/portfolio-4/"><span>Portfolio 4</span></a></li></ul>
-                                                    </li>
-                                                </ul>
-                                            </li>
-                                            <li id="menu_mobile-item-109" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-has-children menu-item-109">
-                                                <a href="#"><span>Gallery</span></a>
-                                                <ul class="sub-menu"><li id="menu_mobile-item-89" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-89"><a href="http://remoar.com.ar/catalogo/grid/"><span>Grid</span></a></li><li id="menu_mobile-item-91" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-91"><a href="http://remoar.com.ar/catalogo/masonry/"><span>Masonry</span></a></li><li id="menu_mobile-item-86" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-86"><a href="http://remoar.com.ar/catalogo/cobbles/"><span>Cobbles</span></a></li></ul>
-                                            </li>
-                                        </ul>
-                                    </li>
-                                    <li id="menu_mobile-item-110" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-has-children menu-item-110">
-                                        <a href="#"><span>Tools</span></a>
-                                        <ul class="sub-menu"><li id="menu_mobile-item-97" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-97"><a href="http://remoar.com.ar/catalogo/shortcodes/"><span>Shortcodes</span></a></li><li id="menu_mobile-item-100" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-100"><a href="http://remoar.com.ar/catalogo/typography/"><span>Typography</span></a></li></ul>
-                                    </li>
-                                    <li id="menu_mobile-item-861" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-861"><a href="http://remoar.com.ar/catalogo/service-plus/"><span>Service Plus</span></a></li>
-                                    <li id="menu_mobile-item-862" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-862"><a href="http://remoar.com.ar/catalogo/privacy-policy/"><span>Privacy Policy</span></a></li>
-                                </ul>
-                            </li>
-                            <li id="menu_mobile-item-87" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-87"><a href="http://remoar.com.ar/catalogo/contact/"><span>Contact</span></a></li>
+                            <li id="menu_mobile-item-95" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-95"><a asp-controller="Catalogo" asp-action="Index"><span>Catalogo</span></a></li>
+                            <li id="menu_mobile-item-96" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-home menu-item-96"><a asp-controller="Catalogo" asp-action="Carrito"><span>Carrito</span></a></li>
+                            <li id="menu_mobile-item-98" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-98"><a asp-controller="Catalogo" asp-action="MiCuenta"><span>Mi Cuenta</span></a></li>
+                            <li id="menu_mobile-item-87" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-87"><a asp-controller="Catalogo" asp-action="FinalizarCompra"><span>Finalizar Compra</span></a></li>
                         </ul>
-                    </nav><div class="search_wrap search_style_normal search_mobile">
+                    </nav>
+                    @*<div class="search_wrap search_style_normal search_mobile">
                         <div class="search_form_wrap">
                             <form role="search" method="get" class="search_form" action="http://remoar.com.ar/catalogo/">
                                 <input type="text" class="search_field" placeholder="Search" value="" name="s">
                                 <button type="submit" class="search_submit trx_addons_icon-search"></button>
                             </form>
                         </div>
-                    </div><div class="socials_mobile"><a target="_blank" href="https://www.facebook.com/AncoraThemes/" class="social_item social_item_style_icons social_item_type_icons"><span class="social_icon social_facebook"><span class="icon-facebook"></span></span></a><a target="_blank" href="https://www.instagram.com/ancora_themes/" class="social_item social_item_style_icons social_item_type_icons"><span class="social_icon social_instagramm"><span class="icon-instagramm"></span></span></a><a target="_blank" href="https://www.youtube.com/channel/UCdIjRh7-lPVHqTTKpaf8PLA" class="social_item social_item_style_icons social_item_type_icons"><span class="social_icon social_youtube"><span class="icon-youtube"></span></span></a><a target="_blank" href="https://dribbble.com/AncoraThemes" class="social_item social_item_style_icons social_item_type_icons"><span class="social_icon social_dribbble"><span class="icon-dribbble"></span></span></a></div>
+                    </div><div class="socials_mobile"><a target="_blank" href="https://www.facebook.com/AncoraThemes/" class="social_item social_item_style_icons social_item_type_icons"><span class="social_icon social_facebook"><span class="icon-facebook"></span></span></a><a target="_blank" href="https://www.instagram.com/ancora_themes/" class="social_item social_item_style_icons social_item_type_icons"><span class="social_icon social_instagramm"><span class="icon-instagramm"></span></span></a><a target="_blank" href="https://www.youtube.com/channel/UCdIjRh7-lPVHqTTKpaf8PLA" class="social_item social_item_style_icons social_item_type_icons"><span class="social_icon social_youtube"><span class="icon-youtube"></span></span></a><a target="_blank" href="https://dribbble.com/AncoraThemes" class="social_item social_item_style_icons social_item_type_icons"><span class="social_icon social_dribbble"><span class="icon-dribbble"></span></span></a></div>*@
                 </div>
             </div>
 
@@ -631,53 +510,34 @@
                                                         <rs-slides>
                                                             <rs-slide data-key="rs-1" data-title="Slide" data-duration="4980" data-anim="ei:d;eo:d;s:600;r:0;t:fade;sl:d;">
                                                                 <img src="//remoar.com.ar/catalogo/wp-content/plugins/revslider/public/assets/assets/dummy.png" title="01_home_1_slide_11.jpg" width="1860" height="890" data-lazyload="//remoar.com.ar/catalogo/wp-content/uploads/revslider/slider-1/01_home_1_slide_11.jpg" class="rev-slidebg" data-no-retina>
-                                                                <!--
-                                                                                            -->
-                                                                <h6 id="slider-1-slide-1-layer-1"
-                                                                    class="rs-layer"
-                                                                    data-type="text"
-                                                                    data-color="#caae7b"
-                                                                    data-rsp_ch="on"
-                                                                    data-xy="x:c;y:m;yo:-118px,-118px,-118px,-66px;"
-                                                                    data-text="s:13,13,22,22;l:22;ls:1px;fw:700;a:inherit;"
-                                                                    data-frame_0="tp:600;"
-                                                                    data-frame_1="tp:600;st:990;sp:1000;sR:990;"
-                                                                    data-frame_999="o:0;tp:600;st:w;sR:2990;"
-                                                                    style="z-index:5;font-family:Open Sans;text-transform:uppercase;">
-                                                                    in wood we trust
-                                                                </h6>
+                                                                
+                                                            <h1 id="slider-1-slide-1-layer-2"
+                                                                class="rs-layer"
+                                                                data-type="text"
+                                                                data-rsp_ch="on"
+                                                                data-xy="x:c;y:m;yo:-26px,-26px,-26px,-6px;"
+                                                                data-text="s:52,52,52,16;l:62,62,62,29;ls:5px;fw:700;a:center;"
+                                                                data-frame_0="tp:600;"
+                                                                data-frame_1="tp:600;st:990;sp:1000;sR:990;"
+                                                                data-frame_999="o:0;tp:600;st:w;sR:2990;"
+                                                                style="z-index:6;font-family:Arvo;text-transform:uppercase;">
+                                                                nosotros diseñamos y construimos.
+                                                            </h1>
                                                                 <!--
 
                                                                 -->
-                                                                <h1 id="slider-1-slide-1-layer-2"
-                                                                    class="rs-layer"
-                                                                    data-type="text"
-                                                                    data-rsp_ch="on"
-                                                                    data-xy="x:c;y:m;yo:-26px,-26px,-26px,-6px;"
-                                                                    data-text="s:52,52,52,16;l:62,62,62,29;ls:5px;fw:700;a:center;"
-                                                                    data-frame_0="tp:600;"
-                                                                    data-frame_1="tp:600;st:990;sp:1000;sR:990;"
-                                                                    data-frame_999="o:0;tp:600;st:w;sR:2990;"
-                                                                    style="z-index:6;font-family:Arvo;text-transform:uppercase;">
-                                                                    we design. we build.<br>
-                                                                    we restore.
-                                                                </h1>
-                                                                <!--
-
-                                                                -->
-                                                                <rs-layer id="slider-1-slide-1-layer-3"
-                                                                          data-type="text"
-                                                                          data-rsp_ch="on"
-                                                                          data-xy="x:c;y:m;yo:71px,71px,102px,59px;"
-                                                                          data-text="w:nowrap,nowrap,normal,normal;s:17,17,22,12;l:28,28,25,20;ls:1px;a:center;"
-                                                                          data-dim="w:auto,auto,450px,293px;"
-                                                                          data-frame_0="tp:600;"
-                                                                          data-frame_1="tp:600;st:2010;sp:1000;sR:2010;"
-                                                                          data-frame_999="o:0;tp:600;st:w;sR:1970;"
-                                                                          style="z-index:7;font-family:Source Sans Pro;">
-                                                                    Our highly skilled and experienced team specialises in all aspects of<br />
-                                                                    antique furniture repair and restoration
-                                                                </rs-layer>
+                                                            <rs-layer id="slider-1-slide-1-layer-3"
+                                                                      data-type="text"
+                                                                      data-rsp_ch="on"
+                                                                      data-xy="x:c;y:m;yo:71px,71px,102px,59px;"
+                                                                      data-text="w:nowrap,nowrap,normal,normal;s:17,17,22,12;l:28,28,25,20;ls:1px;a:center;"
+                                                                      data-dim="w:auto,auto,450px,293px;"
+                                                                      data-frame_0="tp:600;"
+                                                                      data-frame_1="tp:600;st:2010;sp:1000;sR:2010;"
+                                                                      data-frame_999="o:0;tp:600;st:w;sR:1970;"
+                                                                      style="z-index:7;font-family:Source Sans Pro;">
+                                                                Nuestro equipo altamente calificado y experimentado se especializa en todos los aspectos <br > del diseño muebles
+                                                            </rs-layer>
                                                                 <!--
 
                                                                 -->
@@ -688,32 +548,14 @@
                                                                           data-text="w:normal;s:20,20,12,4;l:25,25,15,6;a:center;"
                                                                           data-frame_1="st:2010;sp:1000;"
                                                                           data-frame_999="o:0;st:w;"
-                                                                          style="z-index:11;font-family:Roboto;">
-                                                                    <a href="/shop/" id="sc_button_767355326" class="sc_button color_style_default sc_button_default sc_button_size_normal sc_button_icon_left"><span class="sc_button_text"><span class="sc_button_title">order now</span></span><!-- /.sc_button_text --></a><!-- /.sc_button -->
+                                                                          style="z-index:11;font-family:Roboto;">                                                                    
                                                                 </rs-layer>
                                                                 <!--
                                                                 -->
                                                             </rs-slide>
                                                             <rs-slide data-key="rs-2" data-title="Slide" data-duration="4980" data-anim="ei:d;eo:d;s:600;r:0;t:fade;sl:d;">
-                                                                <img src="//remoar.com.ar/catalogo/wp-content/plugins/revslider/public/assets/assets/dummy.png" title="01_home_1_slide_21.jpg" width="1860" height="890" data-lazyload="//remoar.com.ar/catalogo/wp-content/uploads/revslider/slider-1/01_home_1_slide_21.jpg" class="rev-slidebg" data-no-retina>
-                                                                <!--
-                                                                                            -->
-                                                                <h6 id="slider-1-slide-2-layer-1"
-                                                                    class="rs-layer"
-                                                                    data-type="text"
-                                                                    data-color="#caae7b"
-                                                                    data-rsp_ch="on"
-                                                                    data-xy="x:c;y:m;yo:-118px,-118px,-118px,-66px;"
-                                                                    data-text="s:13,13,22,22;l:22;ls:1px;fw:700;a:inherit;"
-                                                                    data-frame_0="tp:600;"
-                                                                    data-frame_1="tp:600;st:990;sp:1000;sR:990;"
-                                                                    data-frame_999="o:0;tp:600;st:w;sR:2990;"
-                                                                    style="z-index:8;font-family:Open Sans;text-transform:uppercase;">
-                                                                    in wood we trust
-                                                                </h6>
-                                                                <!--
+                                                                <img src="//remoar.com.ar/catalogo/wp-content/plugins/revslider/public/assets/assets/dummy.png" title="01_home_1_slide_21.jpg" width="1860" height="890" data-lazyload="//remoar.com.ar/catalogo/wp-content/uploads/revslider/slider-1/01_home_1_slide_21.jpg" class="rev-slidebg" data-no-retina>                                                                
 
-                                                                -->
                                                                 <h1 id="slider-1-slide-2-layer-2"
                                                                     class="rs-layer"
                                                                     data-type="text"
@@ -724,8 +566,7 @@
                                                                     data-frame_1="tp:600;st:990;sp:1000;sR:990;"
                                                                     data-frame_999="o:0;tp:600;st:w;sR:2990;"
                                                                     style="z-index:9;font-family:Arvo;text-transform:uppercase;">
-                                                                    Vintage & Used<br>
-                                                                    Furniture
+                                                                    Vintage
                                                                 </h1>
                                                                 <!--
 
@@ -740,8 +581,7 @@
                                                                           data-frame_1="tp:600;st:2010;sp:1000;sR:2010;"
                                                                           data-frame_999="o:0;tp:600;st:w;sR:1970;"
                                                                           style="z-index:10;font-family:Source Sans Pro;">
-                                                                    Our highly skilled and experienced team specialises in all aspects of<br />
-                                                                    antique furniture repair and restoration
+                                                                    Nuestro equipo altamente calificado y experimentado en la creacion de ambientes.
                                                                 </rs-layer>
                                                                 <!--
 
@@ -753,17 +593,16 @@
                                                                           data-text="w:normal;s:20,20,12,4;l:25,25,15,6;a:center;"
                                                                           data-frame_1="st:2010;sp:1000;"
                                                                           data-frame_999="o:0;st:w;"
-                                                                          style="z-index:11;font-family:Roboto;">
-                                                                    <a href="/shop/" id="sc_button_154228959" class="sc_button color_style_default sc_button_default sc_button_size_normal sc_button_icon_left"><span class="sc_button_text"><span class="sc_button_title">order now</span></span><!-- /.sc_button_text --></a><!-- /.sc_button -->
+                                                                          style="z-index:11;font-family:Roboto;">                                                                    
                                                                 </rs-layer>
                                                                 <!--
                                                                 -->
                                                             </rs-slide>
-                                                            <rs-slide data-key="rs-3" data-title="Slide" data-duration="4980" data-anim="ei:d;eo:d;s:600;r:0;t:fade;sl:d;">
-                                                                <img src="//remoar.com.ar/catalogo/wp-content/plugins/revslider/public/assets/assets/dummy.png" title="01_home_1_slide_31.jpg" width="1860" height="890" data-lazyload="//remoar.com.ar/catalogo/wp-content/uploads/revslider/slider-1/01_home_1_slide_31.jpg" class="rev-slidebg" data-no-retina>
+                                                            <!--<rs-slide data-key="rs-3" data-title="Slide" data-duration="4980" data-anim="ei:d;eo:d;s:600;r:0;t:fade;sl:d;">
+                                                                <img src="//remoar.com.ar/catalogo/wp-content/plugins/revslider/public/assets/assets/dummy.png" title="01_home_1_slide_31.jpg" width="1860" height="890" data-lazyload="//remoar.com.ar/catalogo/wp-content/uploads/revslider/slider-1/01_home_1_slide_31.jpg" class="rev-slidebg" data-no-retina>-->
                                                                 <!--
                                                                                             -->
-                                                                <h6 id="slider-1-slide-3-layer-1"
+                                                                <!--<h6 id="slider-1-slide-3-layer-1"
                                                                     class="rs-layer"
                                                                     data-type="text"
                                                                     data-color="#caae7b"
@@ -775,11 +614,11 @@
                                                                     data-frame_999="o:0;tp:600;st:w;sR:2990;"
                                                                     style="z-index:5;font-family:Open Sans;text-transform:uppercase;">
                                                                     in wood we trust
-                                                                </h6>
+                                                                </h6>-->
                                                                 <!--
 
                                                                 -->
-                                                                <h1 id="slider-1-slide-3-layer-2"
+                                                                <!--<h1 id="slider-1-slide-3-layer-2"
                                                                     class="rs-layer"
                                                                     data-type="text"
                                                                     data-rsp_ch="on"
@@ -791,11 +630,11 @@
                                                                     style="z-index:6;font-family:Arvo;text-transform:uppercase;">
                                                                     Antique furniture<br>
                                                                     repair
-                                                                </h1>
+                                                                </h1>-->
                                                                 <!--
 
                                                                 -->
-                                                                <rs-layer id="slider-1-slide-3-layer-3"
+                                                                <!--<rs-layer id="slider-1-slide-3-layer-3"
                                                                           data-type="text"
                                                                           data-rsp_ch="on"
                                                                           data-xy="x:c;y:m;yo:71px,71px,102px,59px;"
@@ -807,11 +646,11 @@
                                                                           style="z-index:7;font-family:Source Sans Pro;">
                                                                     Our highly skilled and experienced team specialises in all aspects of<br />
                                                                     antique furniture repair and restoration
-                                                                </rs-layer>
+                                                                </rs-layer>-->
                                                                 <!--
 
                                                                 -->
-                                                                <rs-layer id="slider-1-slide-3-layer-16"
+                                                                <!--<rs-layer id="slider-1-slide-3-layer-16"
                                                                           data-type="text"
                                                                           data-rsp_ch="on"
                                                                           data-xy="x:c;y:m;yo:165px,165px,210px,130px;"
@@ -819,11 +658,11 @@
                                                                           data-frame_1="st:2010;sp:1000;"
                                                                           data-frame_999="o:0;st:w;"
                                                                           style="z-index:11;font-family:Roboto;">
-                                                                    <a href="/shop/" id="sc_button_1265468616" class="sc_button color_style_default sc_button_default sc_button_size_normal sc_button_icon_left"><span class="sc_button_text"><span class="sc_button_title">order now</span></span><!-- /.sc_button_text --></a><!-- /.sc_button -->
-                                                                </rs-layer>
+                                                                    <a href="/shop/" id="sc_button_1265468616" class="sc_button color_style_default sc_button_default sc_button_size_normal sc_button_icon_left"><span class="sc_button_text"><span class="sc_button_title">order now</span></span>--><!-- /.sc_button_text --><!--</a>--><!-- /.sc_button -->
+                                                                <!--</rs-layer>-->
                                                                 <!--
                                                                 -->
-                                                            </rs-slide>
+                                                            <!--</rs-slide>-->
                                                         </rs-slides>
                                                     </rs-module>
                                                     <script type="text/javascript">
@@ -869,69 +708,90 @@
                                             </div>
                                         </div>
                                     </div>
-                                </div><div class="vc_row wpb_row vc_row-fluid">
+                                </div>                                                        
+                                <div data-vc-full-width="true" data-vc-full-width-init="false" class="vc_row wpb_row vc_row-fluid vc_custom_1500877717979 vc_row-has-fill">
                                     <div class="wpb_column vc_column_container vc_col-sm-12 sc_layouts_column_icons_position_left">
                                         <div class="vc_column-inner">
                                             <div class="wpb_wrapper">
-                                                <div class="vc_empty_space  vc_custom_1500877370784 height_large" style="height: 32px"><span class="vc_empty_space_inner"></span></div><div id="sc_title_97206365"
-                                                                                                                                                                                            class="sc_title color_style_default sc_title_Alternative">
-                                                    <h6 class="sc_item_subtitle sc_title_subtitle sc_align_center sc_item_title_style_Alternative">You Are Welcome!</h6><h2 class="sc_item_title sc_title_title sc_align_center sc_item_title_style_Alternative sc_item_title_tag">Need Restoration?</h2><div class="sc_item_descr sc_title_descr sc_align_center">
-                                                        <p>Furniture restoration offers you two huge benefits: an opportunity to create a new style for your home without overspending and a chance to preserve the value of your furniture, especially if you have antiques. We regularly import fine antique pieces that are sold at trade prices.</p>
-                                                    </div>
-                                                </div><!-- /.sc_title --><div class="vc_empty_space  vc_custom_1500877925728 height_large" style="height: 32px"><span class="vc_empty_space_inner"></span></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div><div class="vc_row wpb_row vc_row-fluid vc_custom_1500877443899">
-                                    <div class="z-index wpb_column vc_column_container vc_col-sm-6 sc_layouts_column_icons_position_left">
-                                        <div class="vc_column-inner vc_custom_1500877744753">
-                                            <div class="wpb_wrapper">
-                                                <div class="wpb_single_image wpb_content_element vc_align_left  vc_custom_1500877452000">
-
-                                                    <figure class="wpb_wrapper vc_figure">
-                                                        <div class="vc_single_image-wrapper   vc_box_border_grey"><img width="632" height="305" src="http://remoar.com.ar/catalogo/wp-content/uploads/2017/04/image-38.jpg" class="vc_single_image-img attachment-full" alt="" loading="lazy" srcset="http://remoar.com.ar/catalogo/wp-content/uploads/2017/04/image-38.jpg 632w, http://remoar.com.ar/catalogo/wp-content/uploads/2017/04/image-38-150x72.jpg 150w, http://remoar.com.ar/catalogo/wp-content/uploads/2017/04/image-38-300x145.jpg 300w, http://remoar.com.ar/catalogo/wp-content/uploads/2017/04/image-38-370x179.jpg 370w" sizes="(max-width: 632px) 100vw, 632px" /></div>
-                                                    </figure>
+                                                <div class="vc_empty_space  vc_custom_1500877994529 height_huge" style="height: 32px">
+                                                    <span class="vc_empty_space_inner"></span>
                                                 </div>
-                                                <div id="sc_action_685048228"
-                                                     class="sc_action color_style_link2 sc_action_simple">
-                                                    <div class="sc_action_content sc_item_content">
-                                                        <div class="sc_action_item sc_action_item_simple with_image with_bg_color sc_action_item_mc" style="background-color:#898f4b;">
-                                                            <div class="sc_action_item_mask"></div>
-                                                            <div class="sc_action_item_inner">
-                                                                <h6 class="sc_action_item_subtitle"><span>About Us</span></h6><h3 class="sc_action_item_title"><span>Explore Our Services &amp; Offers</span></h3>
-                                                            </div><!-- /.sc_action_item_inner --><a href="/our-services/" class="sc_action_item_link sc_action_item_link_over"></a>
-                                                        </div>
-                                                    </div>
-                                                </div><!-- /.sc_action -->
-                                            </div>
-                                        </div>
-                                    </div><div class="wpb_column vc_column_container vc_col-sm-6 sc_layouts_column_icons_position_left">
-                                        <div class="vc_column-inner vc_custom_1500877497840">
-                                            <div class="wpb_wrapper">
-                                                <div id="widget_video_279284482" class="widget_area sc_widget_video vc_widget_video wpb_content_element">
-                                                    <aside id="widget_video_279284482_widget" class="widget widget_video">
-                                                        <div id="sc_video_188798349" class="trx_addons_video_player with_cover hover_play"><img src="http://remoar.com.ar/catalogo/wp-content/uploads/2017/05/image-34.jpg" alt="" width="632" height="611"><div class="video_mask"></div><a class="video_hover trx_addons_popup_link" href="#sc_video_188798349_popup"></a></div><!-- .sc_popup --><div id="sc_video_188798349_popup" class="sc_popup">
-                                                            <div id="sc_video_188798349_popup_player" class="trx_addons_video_player without_cover">
-                                                                <div class="video_embed video_frame">
-                                                                    <iframe src="https://player.vimeo.com/video/12200080" width="640" height="360" frameborder="0" allowfullscreen="allowfullscreen"></iframe>
-
-                                                                    <a href="https://vimeo.com/12200080">Jonathan Charles - Fine Furniture</a> from <a href="https://vimeo.com/timjanssen">TIM JANSSEN</a> on <a href="https://vimeo.com">Vimeo</a>.
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </aside>
+                                                <div id="sc_title_1423176338" class="sc_title color_style_link2 sc_title_Alternative">
+                                                    <h6 class="sc_item_subtitle sc_title_subtitle sc_align_center sc_item_title_style_Alternative">Catalogo</h6>
+                                                    <h2 class="sc_item_title sc_title_title sc_align_center sc_item_title_style_Alternative sc_item_title_tag">Nuestros Muebles<br> En Venta</h2>
+                                                </div><!-- /.sc_title -->
+                                                <div class="vc_empty_space  vc_custom_1500878040256 height_small" style="height: 32px">
+                                                    <span class="vc_empty_space_inner"></span>
                                                 </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div><div data-vc-full-width="true" data-vc-full-width-init="false" class="vc_row wpb_row vc_row-fluid vc_custom_1500877717979 vc_row-has-fill">
-                                    <div class="wpb_column vc_column_container vc_col-sm-12 sc_layouts_column_icons_position_left">
-                                        <div class="vc_column-inner">
-                                            <div class="wpb_wrapper">
-                                                <div class="vc_empty_space  vc_custom_1500877994529 height_huge" style="height: 32px"><span class="vc_empty_space_inner"></span></div><div id="sc_title_1423176338"
-                                                                                                                                                                                           class="sc_title color_style_link2 sc_title_Alternative"><h6 class="sc_item_subtitle sc_title_subtitle sc_align_center sc_item_title_style_Alternative">Shop</h6><h2 class="sc_item_title sc_title_title sc_align_center sc_item_title_style_Alternative sc_item_title_tag">Our Vintage Furniture<br> For Sale</h2></div><!-- /.sc_title --><div class="vc_empty_space  vc_custom_1500878040256 height_small" style="height: 32px"><span class="vc_empty_space_inner"></span></div><div class="woocommerce columns-3 ">
+                                                <div class="woocommerce columns-3 ">
                                                     <ul class="products columns-3">
-                                                        <li class="product type-product post-265 status-publish first instock product_cat-chairs product_tag-antique product_tag-chair has-post-thumbnail shipping-taxable purchasable product-type-variable">
+                                                        @foreach(var item in productos) 
+                                                        { 
+                                                            <li class="product type-product post-265 status-publish first instock product_cat-chairs product_tag-antique product_tag-chair has-post-thumbnail shipping-taxable purchasable product-type-variable">
+                                                                <div class="post_item post_layout_thumbs">
+                                                                    <div class="post_featured hover_shop">
+                                                                        <a href="http://remoar.com.ar/catalogo/product/antique-chair-1734/">
+                                                                            <img width="150" height="150" src="@Url.Content(item.ImagenUrl)" 
+                                                                                 class="attachment-woocommerce_thumbnail size-woocommerce_thumbnail" alt="" loading="lazy" 
+                                                                                 srcset="@Url.Content(item.ImagenUrl) 150w, 
+                                                                                 @Url.Content(item.ImagenUrl) 100w, 
+                                                                                 @Url.Content(item.ImagenUrl) 300w, 
+                                                                                 @Url.Content(item.ImagenUrl) 768w, 
+                                                                                 @Url.Content(item.ImagenUrl) 370w, 
+                                                                                 @Url.Content(item.ImagenUrl) 90w, 
+                                                                                 @Url.Content(item.ImagenUrl) 540w, 
+                                                                                 @Url.Content(item.ImagenUrl) 760w, 
+                                                                                 @Url.Content(item.ImagenUrl) 1000w" 
+                                                                                 sizes="(max-width: 150px) 100vw, 150px" />
+                                                                            
+                                                                        </a>
+                                                                        <div class="mask">
+                                                                        </div>			
+                                                                        <div class="icons">
+                                                                            <a rel="nofollow" href="http://remoar.com.ar/catalogo/product/antique-chair-1734/"
+                                                                               aria-hidden="true"
+                                                                               data-quantity="@item.Cantidad"
+                                                                               data-product_id="@item.Id"
+                                                                               data-product_sku=""
+                                                                               class="shop_cart icon-cart-2 button add_to_cart_button product_type_variable">
+                                                                            </a>
+                                                                            <a href="http://remoar.com.ar/catalogo/product/antique-chair-1734/" aria-hidden="true" class="shop_link button icon-link">
+                                                                            </a>
+                                                                        </div>
+                                                                    </div><!-- /.post_featured -->
+                                                                    <div class="post_data">
+                                                                        <div class="post_data_inner">
+                                                                            <div class="post_header entry-header">
+                                                                                <div class="post_tags product_tags">
+                                                                                    <a href="http://remoar.com.ar/catalogo/product-tag/antique/" rel="tag">@item.Codigo</a>                                                                                   
+                                                                                </div>
+                                                                                <h2 class="woocommerce-loop-product__title">
+                                                                                    <a href="http://remoar.com.ar/catalogo/product/antique-chair-1734/">
+                                                                                        @item.Producto                                                                                        
+                                                                                    </a>
+                                                                                </h2>
+                                                                            @*<div class="star-rating" role="img" aria-label="Valorado en 5.00 de 5">
+                                                                                <span style="width:100%">
+                                                                                    Valorado en <strong class="rating">5.00</strong> de 5
+                                                                                </span>
+                                                                            </div>*@
+                                                                            </div><!-- /.post_header -->
+
+                                                                            <span class="price">
+                                                                                <span class="woocommerce-Price-amount amount">
+                                                                                    <bdi>
+                                                                                        <span class="woocommerce-Price-currencySymbol">&#36;</span>@item.Precio
+                                                                                    </bdi>
+                                                                                </span>                                                                                 
+                                                                            </span>
+                                                                            <a href="http://remoar.com.ar/catalogo/product/antique-chair-1734/" data-quantity="1" class="button product_type_variable add_to_cart_button" data-product_id="265" data-product_sku="" aria-label="Elige las opciones para &ldquo;Antique Chair 1734&rdquo;" rel="nofollow">Agregar al Carrito
+                                                                            </a>
+                                                                        </div><!-- /.post_data_inner -->
+                                                                    </div><!-- /.post_data -->
+                                                                </div><!-- /.post_item -->
+                                                            </li>    
+                                                        }
+                                                        <!--<li class="product type-product post-265 status-publish first instock product_cat-chairs product_tag-antique product_tag-chair has-post-thumbnail shipping-taxable purchasable product-type-variable">
                                                             <div class="post_item post_layout_thumbs">
                                                                 <div class="post_featured hover_shop">
                                                                     <a href="http://remoar.com.ar/catalogo/product/antique-chair-1734/">
@@ -944,19 +804,19 @@
                                                                            data-product_sku=""
                                                                            class="shop_cart icon-cart-2 button add_to_cart_button product_type_variable"></a><a href="http://remoar.com.ar/catalogo/product/antique-chair-1734/" aria-hidden="true" class="shop_link button icon-link"></a>
                                                                     </div>
-                                                                </div><!-- /.post_featured -->
-                                                                <div class="post_data">
+                                                                </div>--><!-- /.post_featured -->
+                                                                <!--<div class="post_data">
                                                                     <div class="post_data_inner">
                                                                         <div class="post_header entry-header">
                                                                             <div class="post_tags product_tags"><a href="http://remoar.com.ar/catalogo/product-tag/antique/" rel="tag">antique</a>, <a href="http://remoar.com.ar/catalogo/product-tag/chair/" rel="tag">chair</a></div><h2 class="woocommerce-loop-product__title"><a href="http://remoar.com.ar/catalogo/product/antique-chair-1734/">Antique Chair 1734</a></h2><div class="star-rating" role="img" aria-label="Valorado en 5.00 de 5"><span style="width:100%">Valorado en <strong class="rating">5.00</strong> de 5</span></div>
-                                                                        </div><!-- /.post_header -->
+                                                                        </div>--><!-- /.post_header -->
 
-                                                                        <span class="price"><span class="woocommerce-Price-amount amount"><bdi><span class="woocommerce-Price-currencySymbol">&#36;</span>550<span class="decimals">00</span></bdi></span> &ndash; <span class="woocommerce-Price-amount amount"><bdi><span class="woocommerce-Price-currencySymbol">&#36;</span>600<span class="decimals">00</span></bdi></span></span>
+                                                                        <!--<span class="price"><span class="woocommerce-Price-amount amount"><bdi><span class="woocommerce-Price-currencySymbol">&#36;</span>550<span class="decimals">00</span></bdi></span> &ndash; <span class="woocommerce-Price-amount amount"><bdi><span class="woocommerce-Price-currencySymbol">&#36;</span>600<span class="decimals">00</span></bdi></span></span>
                                                                         <a href="http://remoar.com.ar/catalogo/product/antique-chair-1734/" data-quantity="1" class="button product_type_variable add_to_cart_button" data-product_id="265" data-product_sku="" aria-label="Elige las opciones para &ldquo;Antique Chair 1734&rdquo;" rel="nofollow">add to cart</a>
-                                                                    </div><!-- /.post_data_inner -->
-                                                                </div><!-- /.post_data -->
-                                                            </div><!-- /.post_item -->
-                                                        </li>
+                                                                    </div>--><!-- /.post_data_inner -->
+                                                                <!--</div>--><!-- /.post_data -->
+                                                            <!--</div>--><!-- /.post_item -->
+                                                        <!--</li>
                                                         <li class="product type-product post-243 status-publish instock product_cat-chairs product_cat-leather-furniture product_tag-armchair product_tag-leather has-post-thumbnail shipping-taxable purchasable product-type-variable">
                                                             <div class="post_item post_layout_thumbs">
                                                                 <div class="post_featured hover_shop">
@@ -970,19 +830,19 @@
                                                                            data-product_sku=""
                                                                            class="shop_cart icon-cart-2 button add_to_cart_button product_type_variable"></a><a href="http://remoar.com.ar/catalogo/product/vintage-leather-chair/" aria-hidden="true" class="shop_link button icon-link"></a>
                                                                     </div>
-                                                                </div><!-- /.post_featured -->
-                                                                <div class="post_data">
+                                                                </div>--><!-- /.post_featured -->
+                                                                <!--<div class="post_data">
                                                                     <div class="post_data_inner">
                                                                         <div class="post_header entry-header">
                                                                             <div class="post_tags product_tags"><a href="http://remoar.com.ar/catalogo/product-tag/armchair/" rel="tag">armchair</a>, <a href="http://remoar.com.ar/catalogo/product-tag/leather/" rel="tag">leather</a></div><h2 class="woocommerce-loop-product__title"><a href="http://remoar.com.ar/catalogo/product/vintage-leather-chair/">Vintage leather chair</a></h2><div class="star-rating" role="img" aria-label="Valorado en 4.00 de 5"><span style="width:80%">Valorado en <strong class="rating">4.00</strong> de 5</span></div>
-                                                                        </div><!-- /.post_header -->
+                                                                        </div>--><!-- /.post_header -->
 
-                                                                        <span class="price"><span class="woocommerce-Price-amount amount"><bdi><span class="woocommerce-Price-currencySymbol">&#36;</span>700<span class="decimals">00</span></bdi></span> &ndash; <span class="woocommerce-Price-amount amount"><bdi><span class="woocommerce-Price-currencySymbol">&#36;</span>900<span class="decimals">00</span></bdi></span></span>
+                                                                        <!--<span class="price"><span class="woocommerce-Price-amount amount"><bdi><span class="woocommerce-Price-currencySymbol">&#36;</span>700<span class="decimals">00</span></bdi></span> &ndash; <span class="woocommerce-Price-amount amount"><bdi><span class="woocommerce-Price-currencySymbol">&#36;</span>900<span class="decimals">00</span></bdi></span></span>
                                                                         <a href="http://remoar.com.ar/catalogo/product/vintage-leather-chair/" data-quantity="1" class="button product_type_variable add_to_cart_button" data-product_id="243" data-product_sku="" aria-label="Elige las opciones para &ldquo;Vintage leather chair&rdquo;" rel="nofollow">add to cart</a>
-                                                                    </div><!-- /.post_data_inner -->
-                                                                </div><!-- /.post_data -->
-                                                            </div><!-- /.post_item -->
-                                                        </li>
+                                                                    </div>--><!-- /.post_data_inner -->
+                                                                <!--</div>--><!-- /.post_data -->
+                                                            <!--</div>--><!-- /.post_item -->
+                                                        <!--</li>
                                                         <li class="product type-product post-238 status-publish last instock product_cat-dressers product_tag-antique product_tag-drawer product_tag-french product_tag-gold product_tag-silver has-post-thumbnail shipping-taxable purchasable product-type-variable">
                                                             <div class="post_item post_layout_thumbs">
                                                                 <div class="post_featured hover_shop">
@@ -996,19 +856,19 @@
                                                                            data-product_sku=""
                                                                            class="shop_cart icon-cart-2 button add_to_cart_button product_type_variable"></a><a href="http://remoar.com.ar/catalogo/product/antique-french-drawer/" aria-hidden="true" class="shop_link button icon-link"></a>
                                                                     </div>
-                                                                </div><!-- /.post_featured -->
-                                                                <div class="post_data">
+                                                                </div>--><!-- /.post_featured -->
+                                                                <!--<div class="post_data">
                                                                     <div class="post_data_inner">
                                                                         <div class="post_header entry-header">
                                                                             <div class="post_tags product_tags"><a href="http://remoar.com.ar/catalogo/product-tag/antique/" rel="tag">antique</a>, <a href="http://remoar.com.ar/catalogo/product-tag/drawer/" rel="tag">drawer</a>, <a href="http://remoar.com.ar/catalogo/product-tag/french/" rel="tag">french</a>, <a href="http://remoar.com.ar/catalogo/product-tag/gold/" rel="tag">gold</a>, <a href="http://remoar.com.ar/catalogo/product-tag/silver/" rel="tag">silver</a></div><h2 class="woocommerce-loop-product__title"><a href="http://remoar.com.ar/catalogo/product/antique-french-drawer/">Antique French Drawer</a></h2><div class="star-rating" role="img" aria-label="Valorado en 3.00 de 5"><span style="width:60%">Valorado en <strong class="rating">3.00</strong> de 5</span></div>
-                                                                        </div><!-- /.post_header -->
+                                                                        </div>--><!-- /.post_header -->
 
-                                                                        <span class="price"><span class="woocommerce-Price-amount amount"><bdi><span class="woocommerce-Price-currencySymbol">&#36;</span>1,500<span class="decimals">00</span></bdi></span> &ndash; <span class="woocommerce-Price-amount amount"><bdi><span class="woocommerce-Price-currencySymbol">&#36;</span>2,000<span class="decimals">00</span></bdi></span></span>
+                                                                        <!--<span class="price"><span class="woocommerce-Price-amount amount"><bdi><span class="woocommerce-Price-currencySymbol">&#36;</span>1,500<span class="decimals">00</span></bdi></span> &ndash; <span class="woocommerce-Price-amount amount"><bdi><span class="woocommerce-Price-currencySymbol">&#36;</span>2,000<span class="decimals">00</span></bdi></span></span>
                                                                         <a href="http://remoar.com.ar/catalogo/product/antique-french-drawer/" data-quantity="1" class="button product_type_variable add_to_cart_button" data-product_id="238" data-product_sku="" aria-label="Elige las opciones para &ldquo;Antique French Drawer&rdquo;" rel="nofollow">add to cart</a>
-                                                                    </div><!-- /.post_data_inner -->
-                                                                </div><!-- /.post_data -->
-                                                            </div><!-- /.post_item -->
-                                                        </li>
+                                                                    </div>--><!-- /.post_data_inner -->
+                                                                <!--</div>--><!-- /.post_data -->
+                                                            <!--</div>--><!-- /.post_item -->
+                                                        <!--</li>
                                                         <li class="product type-product post-249 status-publish first instock product_cat-tables product_tag-antique product_tag-table product_tag-wooden has-post-thumbnail shipping-taxable purchasable product-type-variable">
                                                             <div class="post_item post_layout_thumbs">
                                                                 <div class="post_featured hover_shop">
@@ -1022,19 +882,19 @@
                                                                            data-product_sku=""
                                                                            class="shop_cart icon-cart-2 button add_to_cart_button product_type_variable"></a><a href="http://remoar.com.ar/catalogo/product/antique-table-1874/" aria-hidden="true" class="shop_link button icon-link"></a>
                                                                     </div>
-                                                                </div><!-- /.post_featured -->
-                                                                <div class="post_data">
+                                                                </div>--><!-- /.post_featured -->
+                                                                <!--<div class="post_data">
                                                                     <div class="post_data_inner">
                                                                         <div class="post_header entry-header">
                                                                             <div class="post_tags product_tags"><a href="http://remoar.com.ar/catalogo/product-tag/antique/" rel="tag">antique</a>, <a href="http://remoar.com.ar/catalogo/product-tag/table/" rel="tag">table</a>, <a href="http://remoar.com.ar/catalogo/product-tag/wooden/" rel="tag">wooden</a></div><h2 class="woocommerce-loop-product__title"><a href="http://remoar.com.ar/catalogo/product/antique-table-1874/">Antique Table 1874</a></h2><div class="star-rating" role="img" aria-label="Valorado en 2.00 de 5"><span style="width:40%">Valorado en <strong class="rating">2.00</strong> de 5</span></div>
-                                                                        </div><!-- /.post_header -->
+                                                                        </div>--><!-- /.post_header -->
 
-                                                                        <span class="price"><span class="woocommerce-Price-amount amount"><bdi><span class="woocommerce-Price-currencySymbol">&#36;</span>2,600<span class="decimals">00</span></bdi></span> &ndash; <span class="woocommerce-Price-amount amount"><bdi><span class="woocommerce-Price-currencySymbol">&#36;</span>3,000<span class="decimals">00</span></bdi></span></span>
+                                                                        <!--<span class="price"><span class="woocommerce-Price-amount amount"><bdi><span class="woocommerce-Price-currencySymbol">&#36;</span>2,600<span class="decimals">00</span></bdi></span> &ndash; <span class="woocommerce-Price-amount amount"><bdi><span class="woocommerce-Price-currencySymbol">&#36;</span>3,000<span class="decimals">00</span></bdi></span></span>
                                                                         <a href="http://remoar.com.ar/catalogo/product/antique-table-1874/" data-quantity="1" class="button product_type_variable add_to_cart_button" data-product_id="249" data-product_sku="" aria-label="Elige las opciones para &ldquo;Antique Table 1874&rdquo;" rel="nofollow">add to cart</a>
-                                                                    </div><!-- /.post_data_inner -->
-                                                                </div><!-- /.post_data -->
-                                                            </div><!-- /.post_item -->
-                                                        </li>
+                                                                    </div>--><!-- /.post_data_inner -->
+                                                                <!--</div>--><!-- /.post_data -->
+                                                            <!--</div>--><!-- /.post_item -->
+                                                        <!--</li>
                                                         <li class="product type-product post-253 status-publish instock product_cat-drawers product_tag-dresser product_tag-gold product_tag-silver product_tag-wooden has-post-thumbnail shipping-taxable purchasable product-type-simple">
                                                             <div class="post_item post_layout_thumbs">
                                                                 <div class="post_featured hover_shop">
@@ -1048,19 +908,19 @@
                                                                            data-product_sku=""
                                                                            class="shop_cart icon-cart-2 button add_to_cart_button product_type_simple ajax_add_to_cart"></a><a href="http://remoar.com.ar/catalogo/product/antique-dresser/" aria-hidden="true" class="shop_link button icon-link"></a>
                                                                     </div>
-                                                                </div><!-- /.post_featured -->
-                                                                <div class="post_data">
+                                                                </div>--><!-- /.post_featured -->
+                                                                <!--<div class="post_data">
                                                                     <div class="post_data_inner">
                                                                         <div class="post_header entry-header">
                                                                             <div class="post_tags product_tags"><a href="http://remoar.com.ar/catalogo/product-tag/dresser/" rel="tag">dresser</a>, <a href="http://remoar.com.ar/catalogo/product-tag/gold/" rel="tag">gold</a>, <a href="http://remoar.com.ar/catalogo/product-tag/silver/" rel="tag">silver</a>, <a href="http://remoar.com.ar/catalogo/product-tag/wooden/" rel="tag">wooden</a></div><h2 class="woocommerce-loop-product__title"><a href="http://remoar.com.ar/catalogo/product/antique-dresser/">Antique Dresser</a></h2><div class="star-rating" role="img" aria-label="Valorado en 1.00 de 5"><span style="width:20%">Valorado en <strong class="rating">1.00</strong> de 5</span></div>
-                                                                        </div><!-- /.post_header -->
+                                                                        </div>--><!-- /.post_header -->
 
-                                                                        <span class="price"><span class="woocommerce-Price-amount amount"><bdi><span class="woocommerce-Price-currencySymbol">&#36;</span>100<span class="decimals">00</span></bdi></span></span>
+                                                                        <!--<span class="price"><span class="woocommerce-Price-amount amount"><bdi><span class="woocommerce-Price-currencySymbol">&#36;</span>100<span class="decimals">00</span></bdi></span></span>
                                                                         <a href="?add-to-cart=253" data-quantity="1" class="button product_type_simple add_to_cart_button ajax_add_to_cart" data-product_id="253" data-product_sku="" aria-label="Añade &ldquo;Antique Dresser&rdquo; a tu carrito" rel="nofollow">add to cart</a>
-                                                                    </div><!-- /.post_data_inner -->
-                                                                </div><!-- /.post_data -->
-                                                            </div><!-- /.post_item -->
-                                                        </li>
+                                                                    </div>--><!-- /.post_data_inner -->
+                                                                <!--</div>--><!-- /.post_data -->
+                                                            <!--</div>--><!-- /.post_item -->
+                                                        <!--</li>
                                                         <li class="product type-product post-259 status-publish last instock product_cat-chairs product_tag-antique product_tag-armchair has-post-thumbnail shipping-taxable purchasable product-type-variable">
                                                             <div class="post_item post_layout_thumbs">
                                                                 <div class="post_featured hover_shop">
@@ -1074,407 +934,29 @@
                                                                            data-product_sku=""
                                                                            class="shop_cart icon-cart-2 button add_to_cart_button product_type_variable"></a><a href="http://remoar.com.ar/catalogo/product/vintage-red-armchair/" aria-hidden="true" class="shop_link button icon-link"></a>
                                                                     </div>
-                                                                </div><!-- /.post_featured -->
-                                                                <div class="post_data">
+                                                                </div>--><!-- /.post_featured -->
+                                                                <!--<div class="post_data">
                                                                     <div class="post_data_inner">
                                                                         <div class="post_header entry-header">
                                                                             <div class="post_tags product_tags"><a href="http://remoar.com.ar/catalogo/product-tag/antique/" rel="tag">antique</a>, <a href="http://remoar.com.ar/catalogo/product-tag/armchair/" rel="tag">armchair</a></div><h2 class="woocommerce-loop-product__title"><a href="http://remoar.com.ar/catalogo/product/vintage-red-armchair/">Vintage Red Armchair</a></h2><div class="star-rating" role="img" aria-label="Valorado en 1.00 de 5"><span style="width:20%">Valorado en <strong class="rating">1.00</strong> de 5</span></div>
-                                                                        </div><!-- /.post_header -->
+                                                                        </div>--><!-- /.post_header -->
 
-                                                                        <span class="price"><span class="woocommerce-Price-amount amount"><bdi><span class="woocommerce-Price-currencySymbol">&#36;</span>700<span class="decimals">00</span></bdi></span> &ndash; <span class="woocommerce-Price-amount amount"><bdi><span class="woocommerce-Price-currencySymbol">&#36;</span>900<span class="decimals">00</span></bdi></span></span>
+                                                                        <!--<span class="price"><span class="woocommerce-Price-amount amount"><bdi><span class="woocommerce-Price-currencySymbol">&#36;</span>700<span class="decimals">00</span></bdi></span> &ndash; <span class="woocommerce-Price-amount amount"><bdi><span class="woocommerce-Price-currencySymbol">&#36;</span>900<span class="decimals">00</span></bdi></span></span>
                                                                         <a href="http://remoar.com.ar/catalogo/product/vintage-red-armchair/" data-quantity="1" class="button product_type_variable add_to_cart_button" data-product_id="259" data-product_sku="" aria-label="Elige las opciones para &ldquo;Vintage Red Armchair&rdquo;" rel="nofollow">add to cart</a>
-                                                                    </div><!-- /.post_data_inner -->
-                                                                </div><!-- /.post_data -->
-                                                            </div><!-- /.post_item -->
-                                                        </li>
+                                                                    </div>--><!-- /.post_data_inner -->
+                                                                <!--</div>--><!-- /.post_data -->
+                                                            <!--</div>--><!-- /.post_item -->
+                                                        <!--</li>-->
                                                     </ul>
-                                                </div><div class="vc_empty_space  vc_custom_1500878075688 height_large" style="height: 32px"><span class="vc_empty_space_inner"></span></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div><div class="vc_row-full-width vc_clearfix"></div><div data-vc-full-width="true" data-vc-full-width-init="false" class="vc_row wpb_row vc_row-fluid vc_custom_1500878214299 vc_row-has-fill scheme_dark">
-                                    <div class="wpb_column vc_column_container vc_col-sm-12 sc_layouts_column_icons_position_left">
-                                        <div class="vc_column-inner">
-                                            <div class="wpb_wrapper">
-                                                <div class="vc_empty_space  vc_custom_1500878486385 height_huge" style="height: 32px"><span class="vc_empty_space_inner"></span></div><div id="sc_title_751323205"
-                                                                                                                                                                                           class="sc_title color_style_default sc_title_default">
-                                                    <h6 class="sc_item_subtitle sc_title_subtitle sc_align_center sc_item_title_style_default">Repairs & Refinishing</h6><h1 class="sc_item_title sc_title_title sc_align_center sc_item_title_style_default sc_item_title_tag">WOOD TELLS US A STORY</h1><div class="sc_item_descr sc_title_descr sc_align_center">
-                                                        <p>Even the smallest acorn’s journey may span hundreds of years. Spare a<br /> few moments to dream with us.</p>
-                                                    </div>
-                                                </div><!-- /.sc_title --><div class="vc_empty_space  vc_custom_1500878567841 height_small" style="height: 32px"><span class="vc_empty_space_inner"></span></div><div class="sc_item_button sc_button_wrap sc_align_center"><a href="/contact/" id="sc_button_1450964784" class="sc_button color_style_link2 sc_button_default sc_button_size_normal sc_button_icon_left"><span class="sc_button_text"><span class="sc_button_title">Join the masterclass</span></span><!-- /.sc_button_text --></a><!-- /.sc_button --></div><!-- /.sc_item_button --><div class="vc_empty_space  vc_custom_1500878589569 height_huge" style="height: 32px"><span class="vc_empty_space_inner"></span></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div><div class="vc_row-full-width vc_clearfix"></div><div class="vc_row wpb_row vc_row-fluid">
-                                    <div class="wpb_column vc_column_container vc_col-sm-12 sc_layouts_column_icons_position_left">
-                                        <div class="vc_column-inner">
-                                            <div class="wpb_wrapper">
-                                                <div class="vc_empty_space  vc_custom_1500878719185 height_large" style="height: 32px"><span class="vc_empty_space_inner"></span></div><div id="sc_title_1952164266"
-                                                                                                                                                                                            class="sc_title color_style_default sc_title_Alternative"><h6 class="sc_item_subtitle sc_title_subtitle sc_align_center sc_item_title_style_Alternative">About us</h6><h2 class="sc_item_title sc_title_title sc_align_center sc_item_title_style_Alternative sc_item_title_tag">Our Experience</h2></div><!-- /.sc_title --><div class="vc_empty_space  emp_480 vc_custom_1568813558217 height_large" style="height: 32px"><span class="vc_empty_space_inner"></span></div><div class="vc_row wpb_row vc_inner vc_row-fluid vc_custom_1500878992065">
-                                                    <div class="wpb_column vc_column_container vc_col-sm-6 sc_layouts_column_icons_position_left">
-                                                        <div class="vc_column-inner vc_custom_1500879003713">
-                                                            <div class="wpb_wrapper">
-                                                                <div class="wpb_single_image wpb_content_element vc_align_left">
-
-                                                                    <figure class="wpb_wrapper vc_figure">
-                                                                        <div class="vc_single_image-wrapper   vc_box_border_grey"><img width="632" height="464" src="http://remoar.com.ar/catalogo/wp-content/uploads/2017/05/image-37.jpg" class="vc_single_image-img attachment-full" alt="" loading="lazy" srcset="http://remoar.com.ar/catalogo/wp-content/uploads/2017/05/image-37.jpg 632w, http://remoar.com.ar/catalogo/wp-content/uploads/2017/05/image-37-150x110.jpg 150w, http://remoar.com.ar/catalogo/wp-content/uploads/2017/05/image-37-300x220.jpg 300w, http://remoar.com.ar/catalogo/wp-content/uploads/2017/05/image-37-370x272.jpg 370w" sizes="(max-width: 632px) 100vw, 632px" /></div>
-                                                                    </figure>
-                                                                </div>
-                                                                <div class="vc_empty_space  vc_custom_1500878773929" style="height: 0px"><span class="vc_empty_space_inner"></span></div>
-                                                            </div>
-                                                        </div>
-                                                    </div><div class="wpb_column vc_column_container vc_col-sm-6 vc_col-has-fill sc_layouts_column_icons_position_left">
-                                                        <div class="vc_column-inner vc_custom_1500879021601">
-                                                            <div class="wpb_wrapper">
-                                                                <div class="vc_tta-container" data-vc-action="collapse">
-                                                                    <div class="vc_general vc_tta vc_tta-tabs vc_tta-color-green vc_tta-style-modern vc_tta-shape-rounded vc_tta-spacing-1 vc_tta-tabs-position-top vc_tta-controls-align-left">
-                                                                        <div class="vc_tta-tabs-container"><ul class="vc_tta-tabs-list"><li class="vc_tta-tab vc_active" data-vc-tab><a href="#1500878784548-48b372ae-b21d" data-vc-tabs data-vc-container=".vc_tta"><span class="vc_tta-title-text">1974</span></a></li><li class="vc_tta-tab" data-vc-tab><a href="#1500878942484-05d2f5a5-67bb" data-vc-tabs data-vc-container=".vc_tta"><span class="vc_tta-title-text">1980</span></a></li><li class="vc_tta-tab" data-vc-tab><a href="#1500878941246-992791c0-4602" data-vc-tabs data-vc-container=".vc_tta"><span class="vc_tta-title-text">1995</span></a></li><li class="vc_tta-tab" data-vc-tab><a href="#1500878940150-028d06d8-3984" data-vc-tabs data-vc-container=".vc_tta"><span class="vc_tta-title-text">2004</span></a></li><li class="vc_tta-tab" data-vc-tab><a href="#1500878938801-c5afcce3-da5c" data-vc-tabs data-vc-container=".vc_tta"><span class="vc_tta-title-text">2012</span></a></li></ul></div><div class="vc_tta-panels-container">
-                                                                            <div class="vc_tta-panels">
-                                                                                <div class="vc_tta-panel vc_active" id="1500878784548-48b372ae-b21d" data-vc-content=".vc_tta-panel-body">
-                                                                                    <div class="vc_tta-panel-heading"><h4 class="vc_tta-panel-title"><a href="#1500878784548-48b372ae-b21d" data-vc-accordion data-vc-container=".vc_tta-container"><span class="vc_tta-title-text">1974</span></a></h4></div><div class="vc_tta-panel-body">
-                                                                                        <div class="vc_empty_space  vc_custom_1500878805386 height_small" style="height: 32px"><span class="vc_empty_space_inner"></span></div><div id="sc_title_1737062862"
-                                                                                                                                                                                                                                    class="sc_title color_style_default sc_title_default"><h3 class="sc_item_title sc_title_title sc_align_center sc_item_title_style_default sc_item_title_tag">The story</h3></div><!-- /.sc_title --><div class="vc_empty_space  vc_custom_1500878819513 height_small" style="height: 32px"><span class="vc_empty_space_inner"></span></div>
-                                                                                        <div class="wpb_text_column wpb_content_element ">
-                                                                                            <div class="wpb_wrapper">
-                                                                                                <p style="text-align: center;">We have two fully equipped furniture workshops one for restoration and one for finishing. Restoration &amp; Conservation work is highly skilled and time consuming. We endeavour to keep the cost as reasonable as we possibly can&#8230;</p>
-
-                                                                                            </div>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                </div><div class="vc_tta-panel" id="1500878942484-05d2f5a5-67bb" data-vc-content=".vc_tta-panel-body">
-                                                                                    <div class="vc_tta-panel-heading"><h4 class="vc_tta-panel-title"><a href="#1500878942484-05d2f5a5-67bb" data-vc-accordion data-vc-container=".vc_tta-container"><span class="vc_tta-title-text">1980</span></a></h4></div><div class="vc_tta-panel-body">
-                                                                                        <div class="vc_empty_space  vc_custom_1500878805386 height_small" style="height: 32px"><span class="vc_empty_space_inner"></span></div><div id="sc_title_209108968"
-                                                                                                                                                                                                                                    class="sc_title color_style_default sc_title_default"><h3 class="sc_item_title sc_title_title sc_align_center sc_item_title_style_default sc_item_title_tag">The story</h3></div><!-- /.sc_title --><div class="vc_empty_space  vc_custom_1500878819513 height_small" style="height: 32px"><span class="vc_empty_space_inner"></span></div>
-                                                                                        <div class="wpb_text_column wpb_content_element ">
-                                                                                            <div class="wpb_wrapper">
-                                                                                                <p style="text-align: center;">We have two fully equipped furniture workshops one for restoration and one for finishing. Restoration &amp; Conservation work is highly skilled and time consuming. We endeavour to keep the cost as reasonable as we possibly can&#8230;</p>
-
-                                                                                            </div>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                </div><div class="vc_tta-panel" id="1500878941246-992791c0-4602" data-vc-content=".vc_tta-panel-body">
-                                                                                    <div class="vc_tta-panel-heading"><h4 class="vc_tta-panel-title"><a href="#1500878941246-992791c0-4602" data-vc-accordion data-vc-container=".vc_tta-container"><span class="vc_tta-title-text">1995</span></a></h4></div><div class="vc_tta-panel-body">
-                                                                                        <div class="vc_empty_space  vc_custom_1500878805386 height_small" style="height: 32px"><span class="vc_empty_space_inner"></span></div><div id="sc_title_899576334"
-                                                                                                                                                                                                                                    class="sc_title color_style_default sc_title_default"><h3 class="sc_item_title sc_title_title sc_align_center sc_item_title_style_default sc_item_title_tag">The story</h3></div><!-- /.sc_title --><div class="vc_empty_space  vc_custom_1500878819513 height_small" style="height: 32px"><span class="vc_empty_space_inner"></span></div>
-                                                                                        <div class="wpb_text_column wpb_content_element ">
-                                                                                            <div class="wpb_wrapper">
-                                                                                                <p style="text-align: center;">We have two fully equipped furniture workshops one for restoration and one for finishing. Restoration &amp; Conservation work is highly skilled and time consuming. We endeavour to keep the cost as reasonable as we possibly can&#8230;</p>
-
-                                                                                            </div>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                </div><div class="vc_tta-panel" id="1500878940150-028d06d8-3984" data-vc-content=".vc_tta-panel-body">
-                                                                                    <div class="vc_tta-panel-heading"><h4 class="vc_tta-panel-title"><a href="#1500878940150-028d06d8-3984" data-vc-accordion data-vc-container=".vc_tta-container"><span class="vc_tta-title-text">2004</span></a></h4></div><div class="vc_tta-panel-body">
-                                                                                        <div class="vc_empty_space  vc_custom_1500878805386 height_small" style="height: 32px"><span class="vc_empty_space_inner"></span></div><div id="sc_title_2085684751"
-                                                                                                                                                                                                                                    class="sc_title color_style_default sc_title_default"><h3 class="sc_item_title sc_title_title sc_align_center sc_item_title_style_default sc_item_title_tag">The story</h3></div><!-- /.sc_title --><div class="vc_empty_space  vc_custom_1500878819513 height_small" style="height: 32px"><span class="vc_empty_space_inner"></span></div>
-                                                                                        <div class="wpb_text_column wpb_content_element ">
-                                                                                            <div class="wpb_wrapper">
-                                                                                                <p style="text-align: center;">We have two fully equipped furniture workshops one for restoration and one for finishing. Restoration &amp; Conservation work is highly skilled and time consuming. We endeavour to keep the cost as reasonable as we possibly can&#8230;</p>
-
-                                                                                            </div>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                </div><div class="vc_tta-panel" id="1500878938801-c5afcce3-da5c" data-vc-content=".vc_tta-panel-body">
-                                                                                    <div class="vc_tta-panel-heading"><h4 class="vc_tta-panel-title"><a href="#1500878938801-c5afcce3-da5c" data-vc-accordion data-vc-container=".vc_tta-container"><span class="vc_tta-title-text">2012</span></a></h4></div><div class="vc_tta-panel-body">
-                                                                                        <div class="vc_empty_space  vc_custom_1500878805386 height_small" style="height: 32px"><span class="vc_empty_space_inner"></span></div><div id="sc_title_220283911"
-                                                                                                                                                                                                                                    class="sc_title color_style_default sc_title_default"><h3 class="sc_item_title sc_title_title sc_align_center sc_item_title_style_default sc_item_title_tag">The story</h3></div><!-- /.sc_title --><div class="vc_empty_space  vc_custom_1500878819513 height_small" style="height: 32px"><span class="vc_empty_space_inner"></span></div>
-                                                                                        <div class="wpb_text_column wpb_content_element ">
-                                                                                            <div class="wpb_wrapper">
-                                                                                                <p style="text-align: center;">We have two fully equipped furniture workshops one for restoration and one for finishing. Restoration &amp; Conservation work is highly skilled and time consuming. We endeavour to keep the cost as reasonable as we possibly can&#8230;</p>
-
-                                                                                            </div>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div><div class="vc_empty_space  vc_custom_1500879146834 height_large" style="height: 32px"><span class="vc_empty_space_inner"></span></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div><div data-vc-full-width="true" data-vc-full-width-init="false" class="vc_row wpb_row vc_row-fluid">
-                                    <div class="wpb_column vc_column_container vc_col-sm-12 sc_layouts_column_icons_position_left">
-                                        <div class="vc_column-inner">
-                                            <div class="wpb_wrapper">
-                                                <div class="sc_team color_style_default sc_team_default">
-                                                    <h6 class="sc_item_subtitle sc_team_subtitle sc_align_center sc_item_title_style_default">They Create</h6><h2 class="sc_item_title sc_team_title sc_align_center sc_item_title_style_default sc_item_title_tag">Wood Masters</h2><div class="sc_team_columns_wrap sc_item_columns trx_addons_columns_wrap columns_padding_bottom">
-                                                        <div class="trx_addons_column-1_3">
-                                                            <div class="sc_team_item">
-                                                                <div class="post_featured with_thumb hover_dots sc_team_item_thumb"><img width="540" height="540" src="http://remoar.com.ar/catalogo/wp-content/uploads/2017/05/image-31-540x540.jpg" class="attachment-mendel-thumb-team size-mendel-thumb-team wp-post-image" alt="Richard Mendel" loading="lazy" srcset="http://remoar.com.ar/catalogo/wp-content/uploads/2017/05/image-31-540x540.jpg 540w, http://remoar.com.ar/catalogo/wp-content/uploads/2017/05/image-31-150x150.jpg 150w, http://remoar.com.ar/catalogo/wp-content/uploads/2017/05/image-31-100x100.jpg 100w, http://remoar.com.ar/catalogo/wp-content/uploads/2017/05/image-31-300x300.jpg 300w, http://remoar.com.ar/catalogo/wp-content/uploads/2017/05/image-31-1024x1024.jpg 1024w, http://remoar.com.ar/catalogo/wp-content/uploads/2017/05/image-31-768x768.jpg 768w, http://remoar.com.ar/catalogo/wp-content/uploads/2017/05/image-31-370x370.jpg 370w, http://remoar.com.ar/catalogo/wp-content/uploads/2017/05/image-31-90x90.jpg 90w, http://remoar.com.ar/catalogo/wp-content/uploads/2017/05/image-31-760x760.jpg 760w, http://remoar.com.ar/catalogo/wp-content/uploads/2017/05/image-31.jpg 1200w" sizes="(max-width: 540px) 100vw, 540px" /><div class="mask"></div><a href="http://remoar.com.ar/catalogo/team/richard-mendel/" aria-hidden="true" class="icons"><span></span><span></span><span></span></a></div>	<div class="sc_team_item_info">
-                                                                    <div class="sc_team_item_header">
-                                                                        <div class="sc_team_item_subtitle">Business Owner</div>
-                                                                        <h5 class="sc_team_item_title"><a href="http://remoar.com.ar/catalogo/team/richard-mendel/">Richard Mendel</a></h5>
-                                                                    </div>
-                                                                    <div class="sc_team_item_content">
-                                                                        <p>Professional and hard-working team member.</p>
-                                                                    </div>
-                                                                    <div class="sc_team_item_socials socials_wrap"><a target="_blank" href="https://www.facebook.com/AncoraThemes/" class="social_item social_item_style_icons social_item_type_icons"><span class="social_icon social_facebook"><span class="icon-facebook"></span></span></a><a target="_blank" href="https://twitter.com/ancora_themes" class="social_item social_item_style_icons social_item_type_icons"><span class="social_icon social_twitter"><span class="icon-twitter"></span></span></a><a target="_blank" href="https://www.pinterest.com/themerex0063" class="social_item social_item_style_icons social_item_type_icons"><span class="social_icon social_pinterest-circled"><span class="icon-pinterest-circled"></span></span></a></div>		<div class="sc_team_item_button"><a href="http://remoar.com.ar/catalogo/team/richard-mendel/" class="sc_button sc_button_simple">Learn more</a></div>
-                                                                </div>
-                                                            </div>
-                                                        </div><div class="trx_addons_column-1_3">
-                                                            <div class="sc_team_item">
-                                                                <div class="post_featured with_thumb hover_dots sc_team_item_thumb"><img width="540" height="540" src="http://remoar.com.ar/catalogo/wp-content/uploads/2017/05/image-32-540x540.jpg" class="attachment-mendel-thumb-team size-mendel-thumb-team wp-post-image" alt="Anthony Dean" loading="lazy" srcset="http://remoar.com.ar/catalogo/wp-content/uploads/2017/05/image-32-540x540.jpg 540w, http://remoar.com.ar/catalogo/wp-content/uploads/2017/05/image-32-150x150.jpg 150w, http://remoar.com.ar/catalogo/wp-content/uploads/2017/05/image-32-100x100.jpg 100w, http://remoar.com.ar/catalogo/wp-content/uploads/2017/05/image-32-300x300.jpg 300w, http://remoar.com.ar/catalogo/wp-content/uploads/2017/05/image-32-1024x1024.jpg 1024w, http://remoar.com.ar/catalogo/wp-content/uploads/2017/05/image-32-768x768.jpg 768w, http://remoar.com.ar/catalogo/wp-content/uploads/2017/05/image-32-370x370.jpg 370w, http://remoar.com.ar/catalogo/wp-content/uploads/2017/05/image-32-90x90.jpg 90w, http://remoar.com.ar/catalogo/wp-content/uploads/2017/05/image-32-760x760.jpg 760w, http://remoar.com.ar/catalogo/wp-content/uploads/2017/05/image-32.jpg 1200w" sizes="(max-width: 540px) 100vw, 540px" /><div class="mask"></div><a href="http://remoar.com.ar/catalogo/team/anthony-dean/" aria-hidden="true" class="icons"><span></span><span></span><span></span></a></div>	<div class="sc_team_item_info">
-                                                                    <div class="sc_team_item_header">
-                                                                        <div class="sc_team_item_subtitle">Furniture Designer</div>
-                                                                        <h5 class="sc_team_item_title"><a href="http://remoar.com.ar/catalogo/team/anthony-dean/">Anthony Dean</a></h5>
-                                                                    </div>
-                                                                    <div class="sc_team_item_content">
-                                                                        <p>Professional and hard-working team member.</p>
-                                                                    </div>
-                                                                    <div class="sc_team_item_socials socials_wrap"><a target="_blank" href="https://www.facebook.com/AncoraThemes/" class="social_item social_item_style_icons social_item_type_icons"><span class="social_icon social_facebook"><span class="icon-facebook"></span></span></a><a target="_blank" href="https://twitter.com/ancora_themes" class="social_item social_item_style_icons social_item_type_icons"><span class="social_icon social_twitter"><span class="icon-twitter"></span></span></a><a target="_blank" href="https://www.pinterest.com/themerex0063" class="social_item social_item_style_icons social_item_type_icons"><span class="social_icon social_pinterest-circled"><span class="icon-pinterest-circled"></span></span></a></div>		<div class="sc_team_item_button"><a href="http://remoar.com.ar/catalogo/team/anthony-dean/" class="sc_button sc_button_simple">Learn more</a></div>
-                                                                </div>
-                                                            </div>
-                                                        </div><div class="trx_addons_column-1_3">
-                                                            <div class="sc_team_item">
-                                                                <div class="post_featured with_thumb hover_dots sc_team_item_thumb"><img width="540" height="540" src="http://remoar.com.ar/catalogo/wp-content/uploads/2017/05/image-33-540x540.jpg" class="attachment-mendel-thumb-team size-mendel-thumb-team wp-post-image" alt="Austin Pearson" loading="lazy" srcset="http://remoar.com.ar/catalogo/wp-content/uploads/2017/05/image-33-540x540.jpg 540w, http://remoar.com.ar/catalogo/wp-content/uploads/2017/05/image-33-150x150.jpg 150w, http://remoar.com.ar/catalogo/wp-content/uploads/2017/05/image-33-100x100.jpg 100w, http://remoar.com.ar/catalogo/wp-content/uploads/2017/05/image-33-300x300.jpg 300w, http://remoar.com.ar/catalogo/wp-content/uploads/2017/05/image-33-1024x1024.jpg 1024w, http://remoar.com.ar/catalogo/wp-content/uploads/2017/05/image-33-768x768.jpg 768w, http://remoar.com.ar/catalogo/wp-content/uploads/2017/05/image-33-370x370.jpg 370w, http://remoar.com.ar/catalogo/wp-content/uploads/2017/05/image-33-90x90.jpg 90w, http://remoar.com.ar/catalogo/wp-content/uploads/2017/05/image-33-760x760.jpg 760w, http://remoar.com.ar/catalogo/wp-content/uploads/2017/05/image-33.jpg 1200w" sizes="(max-width: 540px) 100vw, 540px" /><div class="mask"></div><a href="http://remoar.com.ar/catalogo/team/austin-pearson/" aria-hidden="true" class="icons"><span></span><span></span><span></span></a></div>	<div class="sc_team_item_info">
-                                                                    <div class="sc_team_item_header">
-                                                                        <div class="sc_team_item_subtitle">Restorer</div>
-                                                                        <h5 class="sc_team_item_title"><a href="http://remoar.com.ar/catalogo/team/austin-pearson/">Austin Pearson</a></h5>
-                                                                    </div>
-                                                                    <div class="sc_team_item_content">
-                                                                        <p>Professional and hard-working team member.</p>
-                                                                    </div>
-                                                                    <div class="sc_team_item_socials socials_wrap"><a target="_blank" href="https://www.facebook.com/AncoraThemes/" class="social_item social_item_style_icons social_item_type_icons"><span class="social_icon social_facebook"><span class="icon-facebook"></span></span></a><a target="_blank" href="https://twitter.com/ancora_themes" class="social_item social_item_style_icons social_item_type_icons"><span class="social_icon social_twitter"><span class="icon-twitter"></span></span></a><a target="_blank" href="https://www.pinterest.com/themerex0063" class="social_item social_item_style_icons social_item_type_icons"><span class="social_icon social_pinterest-circled"><span class="icon-pinterest-circled"></span></span></a></div>		<div class="sc_team_item_button"><a href="http://remoar.com.ar/catalogo/team/austin-pearson/" class="sc_button sc_button_simple">Learn more</a></div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div><!-- /.sc_team --><div class="sc_item_button sc_button_wrap sc_align_center"><a href="/team/" id="sc_button_499644858" class="sc_button color_style_dark sc_button_default sc_button_size_normal sc_button_icon_left"><span class="sc_button_text"><span class="sc_button_title">View all</span></span><!-- /.sc_button_text --></a><!-- /.sc_button --></div><!-- /.sc_item_button --><div class="vc_empty_space  vc_custom_1500879389584 height_large" style="height: 32px"><span class="vc_empty_space_inner"></span></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div><div class="vc_row-full-width vc_clearfix"></div><div data-vc-full-width="true" data-vc-full-width-init="false" class="vc_row wpb_row vc_row-fluid vc_custom_1500879459658 vc_row-has-fill scheme_dark">
-                                    <div class="wpb_column vc_column_container vc_col-sm-8 vc_col-lg-offset-2 vc_col-md-offset-2 vc_col-sm-offset-2 sc_layouts_column_icons_position_left">
-                                        <div class="vc_column-inner">
-                                            <div class="wpb_wrapper">
-                                                <div class="vc_empty_space  vc_custom_1500879452330 height_huge" style="height: 32px"><span class="vc_empty_space_inner"></span></div><div class="sc_testimonials color_style_default sc_testimonials_default">
-                                                    <h2 class="sc_item_title sc_testimonials_title sc_align_center sc_item_title_style_default sc_item_title_tag">Clients Say</h2><div class="sc_testimonials_slider sc_item_slider slider_swiper_outer slider_outer_nocontrols slider_outer_nopagination slider_outer_one">
-                                                        <div class="swiper-slider-container slider_swiper slider_noresize slider_nocontrols slider_nopagination slider_one" data-slides-min-width="290" data-pagination="bullets">
-                                                            <div class="slides swiper-wrapper sc_item_columns_1">
-                                                                <div class="swiper-slide">
-                                                                    <div class="sc_testimonials_item">
-                                                                        <div class="sc_testimonials_item_content">
-                                                                            <p>Mendel’s staff have provided us with restoration services in the most professional manner. From the start, the entire team was dedicated and enthusiastic about the project. The finished product is excellent. It is handsomely made, practical in design and pleasing to the eye.</p>
-                                                                        </div>
-                                                                        <div class="sc_testimonials_item_author">
-                                                                            <div class="sc_testimonials_item_author_data">
-                                                                                <h4 class="sc_testimonials_item_author_title">Kendrick Johnson,</h4>
-                                                                                <div class="sc_testimonials_item_author_subtitle">Washington</div>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                </div><div class="swiper-slide">
-                                                                    <div class="sc_testimonials_item">
-                                                                        <div class="sc_testimonials_item_content">
-                                                                            <p>From start to finish, the work of this great team exceeded my expectations. It was a wonderful experience to work with Mendel&#8217;s team on the design and creation of this beautiful piece of furniture. We love the result, and work was reasonably priced for work of that high quality.</p>
-                                                                        </div>
-                                                                        <div class="sc_testimonials_item_author">
-                                                                            <div class="sc_testimonials_item_author_data">
-                                                                                <h4 class="sc_testimonials_item_author_title">Jane Down,</h4>
-                                                                                <div class="sc_testimonials_item_author_subtitle">Los Angeles</div>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                </div><div class="swiper-slide">
-                                                                    <div class="sc_testimonials_item">
-                                                                        <div class="sc_testimonials_item_content">
-                                                                            <p>Excellent customer service, polite and friendly with good products and great prices! The quality of the workmanship is tremendous, also care and attention to detail throughout the project gave us great confidence and peace of mind!</p>
-                                                                        </div>
-                                                                        <div class="sc_testimonials_item_author">
-                                                                            <div class="sc_testimonials_item_author_data">
-                                                                                <h4 class="sc_testimonials_item_author_title">Paul Bradley,</h4>
-                                                                                <div class="sc_testimonials_item_author_subtitle">New York</div>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div><!-- /.sc_testimonials --><div class="vc_empty_space  vc_custom_1500879475767 height_huge" style="height: 32px"><span class="vc_empty_space_inner"></span></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div><div class="vc_row-full-width vc_clearfix"></div><div class="vc_row wpb_row vc_row-fluid vc_custom_1500880152440">
-                                    <div class="wpb_column vc_column_container vc_col-sm-6 vc_hidden-xs sc_layouts_column_icons_position_left">
-                                        <div class="vc_column-inner vc_custom_1568878555611">
-                                            <div class="wpb_wrapper">
-                                                <div class="wpb_single_image wpb_content_element vc_align_left">
-
-                                                    <figure class="wpb_wrapper vc_figure">
-                                                        <div class="vc_single_image-wrapper   vc_box_border_grey"><img width="632" height="611" src="http://remoar.com.ar/catalogo/wp-content/uploads/2017/04/image-39.jpg" class="vc_single_image-img attachment-full" alt="" loading="lazy" srcset="http://remoar.com.ar/catalogo/wp-content/uploads/2017/04/image-39.jpg 632w, http://remoar.com.ar/catalogo/wp-content/uploads/2017/04/image-39-150x145.jpg 150w, http://remoar.com.ar/catalogo/wp-content/uploads/2017/04/image-39-300x290.jpg 300w, http://remoar.com.ar/catalogo/wp-content/uploads/2017/04/image-39-370x358.jpg 370w" sizes="(max-width: 632px) 100vw, 632px" /></div>
-                                                    </figure>
                                                 </div>
-                                            </div>
-                                        </div>
-                                    </div><div class="wpb_column vc_column_container vc_col-sm-6 sc_layouts_column_icons_position_left">
-                                        <div class="vc_column-inner vc_custom_1500879564465">
-                                            <div class="wpb_wrapper">
-                                                <div id="sc_action_1141174852"
-                                                     class="sc_action color_style_link2 scheme_dark sc_action_simple">
-                                                    <div class="sc_action_content sc_item_content">
-                                                        <div class="sc_action_item sc_action_item_simple with_image with_bg_color sc_action_item_mc" style="background-color:#ffffff;">
-                                                            <div class="sc_action_item_mask"></div>
-                                                            <div class="sc_action_item_inner">
-                                                                <h6 class="sc_action_item_subtitle"><span>Buy &amp; Restore!</span></h6><h3 class="sc_action_item_title"><span>Buy Vintage &amp; Used Furniture</span></h3>
-                                                            </div><!-- /.sc_action_item_inner --><a href="/shop/" class="sc_action_item_link sc_action_item_link_over"></a>
-                                                        </div>
-                                                    </div>
-                                                </div><!-- /.sc_action -->
-                                                <div class="wpb_single_image wpb_content_element vc_align_left">
-
-                                                    <figure class="wpb_wrapper vc_figure">
-                                                        <div class="vc_single_image-wrapper   vc_box_border_grey"><img width="632" height="305" src="http://remoar.com.ar/catalogo/wp-content/uploads/2017/04/image-40.jpg" class="vc_single_image-img attachment-full" alt="" loading="lazy" srcset="http://remoar.com.ar/catalogo/wp-content/uploads/2017/04/image-40.jpg 632w, http://remoar.com.ar/catalogo/wp-content/uploads/2017/04/image-40-150x72.jpg 150w, http://remoar.com.ar/catalogo/wp-content/uploads/2017/04/image-40-300x145.jpg 300w, http://remoar.com.ar/catalogo/wp-content/uploads/2017/04/image-40-370x179.jpg 370w" sizes="(max-width: 632px) 100vw, 632px" /></div>
-                                                    </figure>
+                                                <div class="vc_empty_space  vc_custom_1500878075688 height_large" style="height: 32px">
+                                                    <span class="vc_empty_space_inner"></span>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div><div class="vc_row wpb_row vc_row-fluid">
-                                    <div class="wpb_column vc_column_container vc_col-sm-12 sc_layouts_column_icons_position_left">
-                                        <div class="vc_column-inner">
-                                            <div class="wpb_wrapper">
-                                                <div class="vc_empty_space  vc_custom_1500880904097 height_large" style="height: 32px"><span class="vc_empty_space_inner"></span></div><div id="sc_title_92408523"
-                                                                                                                                                                                            class="sc_title color_style_default sc_title_Alternative"><h6 class="sc_item_subtitle sc_title_subtitle sc_align_center sc_item_title_style_Alternative">Articles</h6><h2 class="sc_item_title sc_title_title sc_align_center sc_item_title_style_Alternative sc_item_title_tag">Our Blog</h2></div><!-- /.sc_title --><div class="vc_empty_space  emp_480_m_b vc_custom_1568813523519 height_huge" style="height: 32px"><span class="vc_empty_space_inner"></span></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div><div data-vc-full-width="true" data-vc-full-width-init="false" class="vc_row wpb_row vc_row-fluid vc_custom_1496054061096 vc_row-has-fill">
-                                    <div class="wpb_column vc_column_container vc_col-sm-12 sc_layouts_column_icons_position_left">
-                                        <div class="vc_column-inner vc_custom_1500881072690">
-                                            <div class="wpb_wrapper">
-                                                <div class="sc_blogger color_style_default sc_blogger_default">
-                                                    <div class="sc_blogger_columns_wrap sc_item_columns trx_addons_columns_wrap columns_padding_bottom">
-                                                        <div class="trx_addons_column-1_3">
-                                                            <div class="sc_blogger_item post_format_standard post-135 post type-post status-publish format-standard has-post-thumbnail hentry category-furniture-wax tag-antique tag-repair">
-                                                                <div class="post_featured with_thumb hover_dots sc_blogger_item_featured"><img width="740" height="460" src="http://remoar.com.ar/catalogo/wp-content/uploads/2017/05/image-2-740x460.jpg" class="attachment-mendel-thumb-med size-mendel-thumb-med wp-post-image" alt="We are leading antique furniture restorers" loading="lazy" srcset="http://remoar.com.ar/catalogo/wp-content/uploads/2017/05/image-2-740x460.jpg 740w, http://remoar.com.ar/catalogo/wp-content/uploads/2017/05/image-2-150x94.jpg 150w" sizes="(max-width: 740px) 100vw, 740px" /><div class="mask"></div><a href="http://remoar.com.ar/catalogo/we-are-leading-antique-furniture-restorers/" aria-hidden="true" class="icons"><span></span><span></span><span></span></a></div><div class="sc_blogger_item_content entry-content">
-                                                                    <div class="sc_blogger_item_header entry-header">
-                                                                        <h5 class="sc_blogger_item_title entry-title"><a href="http://remoar.com.ar/catalogo/we-are-leading-antique-furniture-restorers/" rel="bookmark">We are leading antique furniture restorers</a></h5><div class="post_meta">
-                                                                            <span class="post_meta_item post_categories"><a href="http://remoar.com.ar/catalogo/category/furniture-wax/" rel="category tag">Furniture Wax</a></span>
-                                                                        </div><!-- .post_meta -->
-                                                                    </div><!-- .entry-header --><div class="sc_blogger_item_excerpt">
-                                                                        <div class="sc_blogger_item_excerpt_text">
-                                                                            <p>Ut etiam nec, diam vel consectetuer a nibh, ullamcorper quos sed cursus. Elementum ratione pellentesque, purus velit, venenatis magna donec inceptos dui soluta, nunc erat impedit. A suspendisse ultricies et ut curabitur a, donec curabitur curabitur mus faucibus, erat aliquet, non sem. Felis lorem facere venenatis, amet ut ipsum quis, dui dictumst dolor ut consequat nunc sollicitudin, nam taciti, vivamus&hellip;</p>
-                                                                        </div>
-                                                                        <div class="sc_blogger_item_button sc_item_button"><a href="http://remoar.com.ar/catalogo/we-are-leading-antique-furniture-restorers/" class="sc_button sc_button_simple">Read more</a></div>
-                                                                    </div><!-- .sc_blogger_item_excerpt -->
-                                                                </div><!-- .entry-content -->
-                                                            </div><!-- .sc_blogger_item -->
-                                                        </div><div class="trx_addons_column-1_3">
-                                                            <div class="sc_blogger_item post_format_standard post-132 post type-post status-publish format-standard has-post-thumbnail hentry category-furniture-wax tag-decorating tag-news">
-                                                                <div class="post_featured with_thumb hover_dots sc_blogger_item_featured"><img width="740" height="460" src="http://remoar.com.ar/catalogo/wp-content/uploads/2017/05/image-3-740x460.jpg" class="attachment-mendel-thumb-med size-mendel-thumb-med wp-post-image" alt="We can design and build items to order" loading="lazy" srcset="http://remoar.com.ar/catalogo/wp-content/uploads/2017/05/image-3-740x460.jpg 740w, http://remoar.com.ar/catalogo/wp-content/uploads/2017/05/image-3-150x94.jpg 150w" sizes="(max-width: 740px) 100vw, 740px" /><div class="mask"></div><a href="http://remoar.com.ar/catalogo/we-can-design-and-build-items-to-order/" aria-hidden="true" class="icons"><span></span><span></span><span></span></a></div><div class="sc_blogger_item_content entry-content">
-                                                                    <div class="sc_blogger_item_header entry-header">
-                                                                        <h5 class="sc_blogger_item_title entry-title"><a href="http://remoar.com.ar/catalogo/we-can-design-and-build-items-to-order/" rel="bookmark">We can design and build items to order</a></h5><div class="post_meta">
-                                                                            <span class="post_meta_item post_categories"><a href="http://remoar.com.ar/catalogo/category/furniture-wax/" rel="category tag">Furniture Wax</a></span>
-                                                                        </div><!-- .post_meta -->
-                                                                    </div><!-- .entry-header --><div class="sc_blogger_item_excerpt">
-                                                                        <div class="sc_blogger_item_excerpt_text">
-                                                                            <p>Nulla leo accumsan urna pulvinar urna odio, magna convallis sit. Nulla arcu hendrerit tortor sed, pellentesque wisi, metus ornare a pellentesque. Est eros cum sodales neque donec, eros vivamus mattis molestie, varius malesuada mauris sapien adipiscing mi, ut curabitur sit vestibulum a non vulputate, porttitor pretium donec tempor nunc lectus quam. Mauris sed malesuada at mus dictum, eu tempor erat.&hellip;</p>
-                                                                        </div>
-                                                                        <div class="sc_blogger_item_button sc_item_button"><a href="http://remoar.com.ar/catalogo/we-can-design-and-build-items-to-order/" class="sc_button sc_button_simple">Read more</a></div>
-                                                                    </div><!-- .sc_blogger_item_excerpt -->
-                                                                </div><!-- .entry-content -->
-                                                            </div><!-- .sc_blogger_item -->
-                                                        </div><div class="trx_addons_column-1_3">
-                                                            <div class="sc_blogger_item post_format_standard post-1 post type-post status-publish format-standard has-post-thumbnail hentry category-furniture-wax tag-news">
-                                                                <div class="post_featured with_thumb hover_dots sc_blogger_item_featured"><img width="740" height="460" src="http://remoar.com.ar/catalogo/wp-content/uploads/2017/04/image-1-740x460.jpg" class="attachment-mendel-thumb-med size-mendel-thumb-med wp-post-image" alt="We work closely with a  skilled upholsterer" loading="lazy" srcset="http://remoar.com.ar/catalogo/wp-content/uploads/2017/04/image-1-740x460.jpg 740w, http://remoar.com.ar/catalogo/wp-content/uploads/2017/04/image-1-150x94.jpg 150w" sizes="(max-width: 740px) 100vw, 740px" /><div class="mask"></div><a href="http://remoar.com.ar/catalogo/we-work-closely-with-a-skilled-upholsterer/" aria-hidden="true" class="icons"><span></span><span></span><span></span></a></div><div class="sc_blogger_item_content entry-content">
-                                                                    <div class="sc_blogger_item_header entry-header">
-                                                                        <h5 class="sc_blogger_item_title entry-title"><a href="http://remoar.com.ar/catalogo/we-work-closely-with-a-skilled-upholsterer/" rel="bookmark">We work closely with a  skilled upholsterer</a></h5><div class="post_meta">
-                                                                            <span class="post_meta_item post_categories"><a href="http://remoar.com.ar/catalogo/category/furniture-wax/" rel="category tag">Furniture Wax</a></span>
-                                                                        </div><!-- .post_meta -->
-                                                                    </div><!-- .entry-header --><div class="sc_blogger_item_excerpt">
-                                                                        <div class="sc_blogger_item_excerpt_text">
-                                                                            <p>Eget ultricies leo faucibus ut quisque gravida, nascetur nunc nunc curabitur lectus varius dolor, elit augue aliquet lectus. Dolor molestie donec at vivamus mollis ut, lorem proin. Augue eget viverra elit leo ac, ante mauris volutpat tortor pellentesque sociosqu pulvinar. Volutpat gravida tellus sed neque amet, justo vitae elementum gravida metus nonummy, tortor pellentesque ornare facilisis sed, est tortor amet&hellip;</p>
-                                                                        </div>
-                                                                        <div class="sc_blogger_item_button sc_item_button"><a href="http://remoar.com.ar/catalogo/we-work-closely-with-a-skilled-upholsterer/" class="sc_button sc_button_simple">Read more</a></div>
-                                                                    </div><!-- .sc_blogger_item_excerpt -->
-                                                                </div><!-- .entry-content -->
-                                                            </div><!-- .sc_blogger_item -->
-                                                        </div>
-                                                    </div>
-                                                </div><!-- /.sc_blogger --><div class="vc_empty_space  vc_custom_1500882281504 height_tiny" style="height: 32px"><span class="vc_empty_space_inner"></span></div><div class="sc_item_button sc_button_wrap sc_align_center"><a href="/classic-1/" id="sc_button_426366313" class="sc_button color_style_dark sc_button_default sc_button_size_normal sc_button_icon_left"><span class="sc_button_text"><span class="sc_button_title">View all</span></span><!-- /.sc_button_text --></a><!-- /.sc_button --></div><!-- /.sc_item_button --><div class="vc_empty_space  vc_custom_1500882301417 height_large" style="height: 32px"><span class="vc_empty_space_inner"></span></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div><div class="vc_row-full-width vc_clearfix"></div><div data-vc-full-width="true" data-vc-full-width-init="false" class="vc_row wpb_row vc_row-fluid vc_custom_1500882372635 vc_row-has-fill scheme_dark">
-                                    <div class="wpb_column vc_column_container vc_col-sm-12 sc_layouts_column_icons_position_left">
-                                        <div class="vc_column-inner">
-                                            <div class="wpb_wrapper">
-                                                <div class="vc_empty_space  vc_custom_1500882390624 height_huge" style="height: 32px"><span class="vc_empty_space_inner"></span></div><div id="sc_title_342911192"
-                                                                                                                                                                                           class="sc_title color_style_link2 sc_title_default">
-                                                    <h1 class="sc_item_title sc_title_title sc_align_center sc_item_title_style_default sc_item_title_tag">We Buy Vintage Furniture</h1><div class="sc_item_descr sc_title_descr sc_align_center">
-                                                        <p>Anything from industrial lighting, lockers, workbenches, filing cabinets and pigeon holes, clocks, vintage signs, vintage warehouse furniture – we consider anything you’d like to send us photos of.</p>
-                                                    </div><div class="sc_item_button sc_button_wrap sc_align_center"><a href="/contact/" id="sc_button_310709839" class="sc_button color_style_link2 sc_button_default sc_item_button sc_item_button_default sc_title_button sc_button_size_normal sc_button_icon_left"><span class="sc_button_text"><span class="sc_button_title">call us now</span></span><!-- /.sc_button_text --></a><!-- /.sc_button --></div><!-- /.sc_item_button -->
-                                                </div><!-- /.sc_title --><div class="vc_empty_space  vc_custom_1500882408008 height_huge" style="height: 32px"><span class="vc_empty_space_inner"></span></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div><div class="vc_row-full-width vc_clearfix"></div><div data-vc-full-width="true" data-vc-full-width-init="false" class="vc_row wpb_row vc_row-fluid vc_custom_1496061749248 vc_row-has-fill">
-                                    <div class="wpb_column vc_column_container vc_col-sm-12 sc_layouts_column_icons_position_left">
-                                        <div class="vc_column-inner">
-                                            <div class="wpb_wrapper">
-                                                <div class="vc_empty_space  vc_custom_1500882570592 height_large" style="height: 32px"><span class="vc_empty_space_inner"></span></div><div id="sc_title_779251258"
-                                                                                                                                                                                            class="sc_title color_style_default sc_title_Alternative"><h6 class="sc_item_subtitle sc_title_subtitle sc_align_center sc_item_title_style_Alternative">Follow us on instagram</h6><h2 class="sc_item_title sc_title_title sc_align_center sc_item_title_style_Alternative sc_item_title_tag"># Furniture restoration</h2></div><!-- /.sc_title --><div class="vc_empty_space  emp_480 vc_custom_1568813713585 height_large" style="height: 32px"><span class="vc_empty_space_inner"></span></div>
-                                                <div class="wpb_text_column wpb_content_element ">
-                                                    <div class="wpb_wrapper">
-
-                                                        <div id="sb_instagram" class="sbi sbi_col_4  sbi_width_resp" style="width: 100%;" data-feedid="sbi_17841439482228828#20" data-res="auto" data-cols="4" data-num="20" data-shortcode-atts="{}">
-
-                                                            <div id="sbi_images">
-                                                                <div class="sbi_item sbi_type_image sbi_new sbi_transition" id="sbi_17871133663845623" data-date="1595420627">
-                                                                    <div class="sbi_photo_wrap">
-                                                                        <a class="sbi_photo" href="https://www.instagram.com/p/CC8blzUpVDk/" target="_blank" rel="noopener nofollow" data-full-res="https://scontent.cdninstagram.com/v/t51.29350-15/115863608_123463262758359_2844234503521167635_n.jpg?_nc_cat=109&#038;_nc_sid=8ae9d6&#038;_nc_ohc=xNp_60AXV7sAX8YxZPU&#038;_nc_ht=scontent.cdninstagram.com&#038;oh=51be0362ec398f4ee19261184d39c199&#038;oe=5F7269D0" data-img-src-set="{&quot;d&quot;:&quot;https:\/\/scontent.cdninstagram.com\/v\/t51.29350-15\/115863608_123463262758359_2844234503521167635_n.jpg?_nc_cat=109&amp;_nc_sid=8ae9d6&amp;_nc_ohc=xNp_60AXV7sAX8YxZPU&amp;_nc_ht=scontent.cdninstagram.com&amp;oh=51be0362ec398f4ee19261184d39c199&amp;oe=5F7269D0&quot;,&quot;150&quot;:&quot;https:\/\/www.instagram.com\/p\/CC8blzUpVDk\/media\/?size=t&quot;,&quot;320&quot;:&quot;https:\/\/www.instagram.com\/p\/CC8blzUpVDk\/media\/?size=m&quot;,&quot;640&quot;:&quot;https:\/\/scontent.cdninstagram.com\/v\/t51.29350-15\/115863608_123463262758359_2844234503521167635_n.jpg?_nc_cat=109&amp;_nc_sid=8ae9d6&amp;_nc_ohc=xNp_60AXV7sAX8YxZPU&amp;_nc_ht=scontent.cdninstagram.com&amp;oh=51be0362ec398f4ee19261184d39c199&amp;oe=5F7269D0&quot;}">
-                                                                            <span class="sbi-screenreader">Entrada de Instagram 17871133663845623</span>
-                                                                            <img src="http://remoar.com.ar/catalogo/wp-content/plugins/instagram-feed/img/placeholder.png" alt="Entrada de Instagram 17871133663845623">
-                                                                        </a>
-                                                                    </div>
-                                                                </div><div class="sbi_item sbi_type_image sbi_new sbi_transition" id="sbi_17873116651790753" data-date="1595420612">
-                                                                    <div class="sbi_photo_wrap">
-                                                                        <a class="sbi_photo" href="https://www.instagram.com/p/CC8bkDBpuOY/" target="_blank" rel="noopener nofollow" data-full-res="https://scontent.cdninstagram.com/v/t51.29350-15/109963333_276194610329699_3107416607316328030_n.jpg?_nc_cat=111&#038;_nc_sid=8ae9d6&#038;_nc_ohc=4E7p84L1vX0AX-ac0Mv&#038;_nc_ht=scontent.cdninstagram.com&#038;oh=8c0360526b15f9ffd13e920754fa2a0c&#038;oe=5F73C608" data-img-src-set="{&quot;d&quot;:&quot;https:\/\/scontent.cdninstagram.com\/v\/t51.29350-15\/109963333_276194610329699_3107416607316328030_n.jpg?_nc_cat=111&amp;_nc_sid=8ae9d6&amp;_nc_ohc=4E7p84L1vX0AX-ac0Mv&amp;_nc_ht=scontent.cdninstagram.com&amp;oh=8c0360526b15f9ffd13e920754fa2a0c&amp;oe=5F73C608&quot;,&quot;150&quot;:&quot;https:\/\/www.instagram.com\/p\/CC8bkDBpuOY\/media\/?size=t&quot;,&quot;320&quot;:&quot;https:\/\/www.instagram.com\/p\/CC8bkDBpuOY\/media\/?size=m&quot;,&quot;640&quot;:&quot;https:\/\/scontent.cdninstagram.com\/v\/t51.29350-15\/109963333_276194610329699_3107416607316328030_n.jpg?_nc_cat=111&amp;_nc_sid=8ae9d6&amp;_nc_ohc=4E7p84L1vX0AX-ac0Mv&amp;_nc_ht=scontent.cdninstagram.com&amp;oh=8c0360526b15f9ffd13e920754fa2a0c&amp;oe=5F73C608&quot;}">
-                                                                            <span class="sbi-screenreader">Entrada de Instagram 17873116651790753</span>
-                                                                            <img src="http://remoar.com.ar/catalogo/wp-content/plugins/instagram-feed/img/placeholder.png" alt="Entrada de Instagram 17873116651790753">
-                                                                        </a>
-                                                                    </div>
-                                                                </div><div class="sbi_item sbi_type_image sbi_new sbi_transition" id="sbi_17871080746829542" data-date="1595420598">
-                                                                    <div class="sbi_photo_wrap">
-                                                                        <a class="sbi_photo" href="https://www.instagram.com/p/CC8biT0pM81/" target="_blank" rel="noopener nofollow" data-full-res="https://scontent.cdninstagram.com/v/t51.29350-15/113357471_1226207547724860_5641531654662453355_n.jpg?_nc_cat=111&#038;_nc_sid=8ae9d6&#038;_nc_ohc=E_h92ynqX_sAX9FFqAD&#038;_nc_ht=scontent.cdninstagram.com&#038;oh=4f838ad939cf506598230f9aa8180996&#038;oe=5F73F3EB" data-img-src-set="{&quot;d&quot;:&quot;https:\/\/scontent.cdninstagram.com\/v\/t51.29350-15\/113357471_1226207547724860_5641531654662453355_n.jpg?_nc_cat=111&amp;_nc_sid=8ae9d6&amp;_nc_ohc=E_h92ynqX_sAX9FFqAD&amp;_nc_ht=scontent.cdninstagram.com&amp;oh=4f838ad939cf506598230f9aa8180996&amp;oe=5F73F3EB&quot;,&quot;150&quot;:&quot;https:\/\/www.instagram.com\/p\/CC8biT0pM81\/media\/?size=t&quot;,&quot;320&quot;:&quot;https:\/\/www.instagram.com\/p\/CC8biT0pM81\/media\/?size=m&quot;,&quot;640&quot;:&quot;https:\/\/scontent.cdninstagram.com\/v\/t51.29350-15\/113357471_1226207547724860_5641531654662453355_n.jpg?_nc_cat=111&amp;_nc_sid=8ae9d6&amp;_nc_ohc=E_h92ynqX_sAX9FFqAD&amp;_nc_ht=scontent.cdninstagram.com&amp;oh=4f838ad939cf506598230f9aa8180996&amp;oe=5F73F3EB&quot;}">
-                                                                            <span class="sbi-screenreader">Entrada de Instagram 17871080746829542</span>
-                                                                            <img src="http://remoar.com.ar/catalogo/wp-content/plugins/instagram-feed/img/placeholder.png" alt="Entrada de Instagram 17871080746829542">
-                                                                        </a>
-                                                                    </div>
-                                                                </div><div class="sbi_item sbi_type_image sbi_new sbi_transition" id="sbi_17856695141075263" data-date="1595420579">
-                                                                    <div class="sbi_photo_wrap">
-                                                                        <a class="sbi_photo" href="https://www.instagram.com/p/CC8bf8hp0lx/" target="_blank" rel="noopener nofollow" data-full-res="https://scontent.cdninstagram.com/v/t51.29350-15/111407559_632268321035708_8168523778346928273_n.jpg?_nc_cat=100&#038;_nc_sid=8ae9d6&#038;_nc_ohc=0stXuNjBoVgAX8YSlEh&#038;_nc_ht=scontent.cdninstagram.com&#038;oh=f8dd09e274a55a82a948903fe119c5a9&#038;oe=5F74586F" data-img-src-set="{&quot;d&quot;:&quot;https:\/\/scontent.cdninstagram.com\/v\/t51.29350-15\/111407559_632268321035708_8168523778346928273_n.jpg?_nc_cat=100&amp;_nc_sid=8ae9d6&amp;_nc_ohc=0stXuNjBoVgAX8YSlEh&amp;_nc_ht=scontent.cdninstagram.com&amp;oh=f8dd09e274a55a82a948903fe119c5a9&amp;oe=5F74586F&quot;,&quot;150&quot;:&quot;https:\/\/www.instagram.com\/p\/CC8bf8hp0lx\/media\/?size=t&quot;,&quot;320&quot;:&quot;https:\/\/www.instagram.com\/p\/CC8bf8hp0lx\/media\/?size=m&quot;,&quot;640&quot;:&quot;https:\/\/scontent.cdninstagram.com\/v\/t51.29350-15\/111407559_632268321035708_8168523778346928273_n.jpg?_nc_cat=100&amp;_nc_sid=8ae9d6&amp;_nc_ohc=0stXuNjBoVgAX8YSlEh&amp;_nc_ht=scontent.cdninstagram.com&amp;oh=f8dd09e274a55a82a948903fe119c5a9&amp;oe=5F74586F&quot;}">
-                                                                            <span class="sbi-screenreader">Entrada de Instagram 17856695141075263</span>
-                                                                            <img src="http://remoar.com.ar/catalogo/wp-content/plugins/instagram-feed/img/placeholder.png" alt="Entrada de Instagram 17856695141075263">
-                                                                        </a>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-
-                                                            <div id="sbi_load">
-
-
-
-                                                            </div>
-                                                            <span class="sbi_resized_image_data" data-feed-id="sbi_17841439482228828#20" data-resized="{&quot;17871133663845623&quot;:{&quot;id&quot;:&quot;115863608_123463262758359_2844234503521167635_n&quot;,&quot;ratio&quot;:&quot;1.00&quot;,&quot;sizes&quot;:{&quot;full&quot;:640,&quot;low&quot;:320}},&quot;17873116651790753&quot;:{&quot;id&quot;:&quot;109963333_276194610329699_3107416607316328030_n&quot;,&quot;ratio&quot;:&quot;1.00&quot;,&quot;sizes&quot;:{&quot;full&quot;:640,&quot;low&quot;:320}},&quot;17871080746829542&quot;:{&quot;id&quot;:&quot;113357471_1226207547724860_5641531654662453355_n&quot;,&quot;ratio&quot;:&quot;1.00&quot;,&quot;sizes&quot;:{&quot;full&quot;:640,&quot;low&quot;:320}},&quot;17856695141075263&quot;:{&quot;id&quot;:&quot;111407559_632268321035708_8168523778346928273_n&quot;,&quot;ratio&quot;:&quot;1.00&quot;,&quot;sizes&quot;:{&quot;full&quot;:640,&quot;low&quot;:320}}}">
-                                                            </span>
-                                                        </div>
-
-
-
-                                                    </div>
-                                                </div>
-                                                <div class="vc_empty_space  vc_custom_1500882619227 height_large" style="height: 32px"><span class="vc_empty_space_inner"></span></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div><div class="vc_row-full-width vc_clearfix"></div>
+                                </div>
+                                <div class="vc_row-full-width vc_clearfix"></div>
                             </div><!-- .entry-content -->
 
 

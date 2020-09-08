@@ -2,6 +2,9 @@
 
 @{
     ViewData["Title"] = "Detalle del Alicuota";
+
+    var productosCategorias = (List<ProductosCategoriasDTO>)ViewBag.ProductosCategorias;
+    var productosImagenes = (List<ProductosImagenes>)ViewBag.ProductosImagenes;
 }
 
 <div class="content-wrapper">
@@ -135,14 +138,117 @@
                         <!-- /.box-body -->
 
                         <div class="box-footer">
-                            <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">Editar datos del Producto</a>
-                            <a asp-action="Index" class="btn btn-default pull-right">Volver al Listado</a>
+                            <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning btn-sm">Editar datos del Producto</a>
+                            <a asp-action="AddImage" asp-route-id="@Model.Id" class="btn btn-primary btn-sm">Agregar Imagenes</a>
+                            <a asp-action="Index" class="btn btn-default pull-right btn-sm">Volver al Listado</a>
                         </div>
                     </form>
                 </div>
                 <!-- /.box -->
             </div>
             <!--/.col-->
+            <!-- left column -->
+            <div class="col-md-6">
+                <!-- general form elements -->
+                <div class="box box-primary">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">Categorias</h3>
+
+                    </div>
+                    <!-- /.box-header -->
+                    <!-- form start -->
+                    <form enctype="multipart/form-data">
+                        <div class="box-body">
+                            <table id="dTable" class="table dt-responsive table-condensed table-bordered table-striped" width="100%">
+                                <thead>
+                                    <tr>
+                                        <th>
+                                            Categoria
+                                        </th>
+                                        <th>Operaciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in productosCategorias)
+                                    {
+                                        <tr>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.Categoria)
+                                            </td>
+                                            <td>
+                                                @{
+                                                    var param = new Dictionary<string, string> { { "id", item.ProductoId }, { "id2", item.CategoriaId } };
+                                                }
+                                                @if (item.Activa >= 1)
+                                                {
+                                                    <a asp-action="CategoriaOff" asp-all-route-data="@param" class="btn btn-warning">Off</a>
+                                                }
+                                                else
+                                                {
+                                                    <a asp-action="CategoriaOn" asp-all-route-data="@param" class="btn btn-primary">On</a>
+                                                }
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                        <!-- /.box-body -->
+                    </form>
+                </div>
+                <!-- /.box -->
+            </div>
+            <!--/.col-->
+
+        </div>
+
+        <div class="row">
+            <!-- left column -->
+            <div class="col-md-6">
+                <!-- general form elements -->
+                <div class="box box-primary">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">Imagenes</h3>
+
+                    </div>
+                    <!-- /.box-header -->
+                    <!-- form start -->
+                    <form enctype="multipart/form-data">
+                        <div class="box-body">
+                            <table id="dTable" class="table dt-responsive table-condensed table-bordered table-striped" width="100%">
+                                <thead>
+                                    <tr>
+                                        <th>
+                                            Categoria
+                                        </th>
+                                        <th>Operaciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in productosImagenes)
+                                    {
+                                        <tr>
+                                            <td>
+                                                @if (!string.IsNullOrEmpty(item.ImagenUrl))
+                                                {
+                                                    <img src="@Url.Content(item.ImagenUrl)" alt="Image" style="width:100px;height:150px;max-width: 100%; height: auto;" />
+                                                }                                                
+                                            </td>
+                                            <td>
+                                                <a class="btn btn-danger" asp-action="DeleteImage" asp-route-id="@item.Id"><i class="glyphicon glyphicon-remove"></i></a>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                        <!-- /.box-body -->
+                    </form>
+                </div>
+                <!-- /.box -->
+            </div>
+            <!--/.col-->
+
         </div>
         <!-- /.row -->
     </section>
@@ -152,5 +258,31 @@
 
 
 @section Scripts {
+
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            $('#dTable').DataTable({
+                "processing": "true",
+                "retrieve": "true",
+                "language": {
+                    "processing": "Procesando... Espere por favor",
+                    "lengthMenu": "Mostrar _MENU_ registros por pagina",
+                    "zeroRecords": "Nada encontrado",
+                    "info": "Mostrando página _PAGE_ de _PAGES_",
+                    "infoEmpty": "No hay registros disponibles",
+                    "sInfoFiltered": "(filtrado de un total de _MAX_ registros)",
+                    "sSearch": "Buscar:",
+                    "oPaginate": {
+                        "sFirst": "Primero",
+                        "sLast": "Último",
+                        "sNext": "Siguiente",
+                        "sPrevious": "Anterior"
+                    }
+                }
+            });
+        });
+
+    </script>
 }
