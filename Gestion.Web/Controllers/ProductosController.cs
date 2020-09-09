@@ -268,8 +268,6 @@ namespace Gestion.Web.Controllers
         public async Task<IActionResult> AddImage(ProductosImagenesViewModel imagenes)
         {
             if (ModelState.IsValid)
-            {
-                if (ModelState.IsValid)
                 {
                     var path = string.Empty;
 
@@ -296,8 +294,7 @@ namespace Gestion.Web.Controllers
                     await productosImagenes.CreateAsync(productImg);
                     return RedirectToAction("Details", new { id = imagenes.ProductoId });
                 }
-            }
-
+            
             return View(imagenes);
         }
 
