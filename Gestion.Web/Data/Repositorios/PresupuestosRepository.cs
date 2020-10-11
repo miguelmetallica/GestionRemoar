@@ -507,7 +507,7 @@ namespace Gestion.Web.Data
                                 obj.FechaVencimiento = (DateTime)oReader["FechaVencimiento"];
                                 obj.RazonSocial = oReader["RazonSocial"].ToString();
                                 obj.NroDocumento = oReader["NroDocumento"].ToString();
-                                obj.CuilCuit = oReader["CuilCuit"].ToString();
+                                obj.CuilCuit = oReader["CuilCuit"].ToString();                                
                                 obj.Estado = oReader["Estado"].ToString();
                                 obj.UsuarioAlta = oReader["UsuarioAlta"].ToString();
                                 obj.Total = (decimal)oReader["Precio"];
@@ -748,7 +748,10 @@ namespace Gestion.Web.Data
                                 obj.ClienteRazonSocial = (string)oReader["RazonSocial"];
                                 obj.ClienteNroDocumento = (string)oReader["NroDocumento"];
                                 obj.ClienteCuilCuit = (string)oReader["CuilCuit"];
-                                
+
+                                obj.TipoResponsableId = (string)oReader["TipoResponsableId"];
+                                obj.TipoResponsable = (string)oReader["TipoResponsable"];
+
                                 obj.ProductoId = (string)oReader["ProductoId"];
                                 obj.ProductoCodigo = (string)oReader["ProductoCodigo"];
                                 obj.ProductoNombre = (string)oReader["Producto"];
@@ -1177,6 +1180,46 @@ namespace Gestion.Web.Data
                         //los valores viene en el parámetro item del procedimiento
                         oCmd.Parameters.AddWithValue("@Id", presupuestoId);
                         oCmd.Parameters.AddWithValue("@DescuentoId", descuentoId);
+                        oCmd.Parameters.AddWithValue("@Usuario", usuario);
+
+                        //Ejecutamos el comando y retornamos el id generado
+                        await oCmd.ExecuteScalarAsync();
+
+                        return 1;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error al insertar el registro: " + ex.Message);
+            }
+            finally
+            {
+                factoryConnection.CloseConnection();
+            }
+        }
+
+        public async Task<int> spTipoResponsableAplica(string presupuestoId, string tipoResponsableId, string usuario)
+        {
+            try
+            {
+                using (var oCnn = factoryConnection.GetConnection())
+                {
+                    using (SqlCommand oCmd = new SqlCommand())
+                    {
+                        //asignamos la conexion de trabajo
+                        oCmd.Connection = oCnn;
+
+                        //utilizamos stored procedures
+                        oCmd.CommandType = System.Data.CommandType.StoredProcedure;
+
+                        //el indicamos cual stored procedure utilizar
+                        oCmd.CommandText = "PresupuestosTipoResponsableAplica";
+
+                        //le asignamos los parámetros para el stored procedure
+                        //los valores viene en el parámetro item del procedimiento
+                        oCmd.Parameters.AddWithValue("@Id", presupuestoId);
+                        oCmd.Parameters.AddWithValue("@TipoResponsableId", tipoResponsableId);
                         oCmd.Parameters.AddWithValue("@Usuario", usuario);
 
                         //Ejecutamos el comando y retornamos el id generado

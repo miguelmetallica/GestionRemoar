@@ -48,5 +48,7 @@ namespace Gestion.Web.Data
 
         Task<int> spDescuentoAplica(string presupuestoId, string descuentoId, string usuario);
 
+        Task<int> spTipoResponsableAplica(string presupuestoId, string tipoResponsableId, string usuario);
+
     }
 }

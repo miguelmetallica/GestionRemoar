@@ -119,8 +119,10 @@ namespace Gestion.Web.Models
         public string ClienteNroDocumento { get; set; }
         [Display(Name = "Cuil/Cuit")]
         public string ClienteCuilCuit { get; set; }
-        
-       
+        [Display(Name = "Tipo Responsable")]
+        public string TipoResponsableId { get; set; }
+        [Display(Name = "Tipo Responsable")]
+        public string TipoResponsable { get; set; }
         //campos totales
         //cantidad total de productos
         [DisplayFormat(DataFormatString = "{0:N0}")]

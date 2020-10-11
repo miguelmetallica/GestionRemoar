@@ -4,6 +4,7 @@
     [Fecha]               DATETIME        NULL,
     [FechaVencimiento]    DATETIME        NULL,
     [ClienteId]           NVARCHAR (150)  NULL,
+    [TipoResponsableId]   NVARCHAR (150)  NULL,
     [EstadoId]            NVARCHAR (150)  NULL,
     [DescuentoId]         NVARCHAR (150)  NULL,
     [DescuentoPorcentaje] NUMERIC (18, 2) NULL,
@@ -13,8 +14,11 @@
     CONSTRAINT [PK_Presupuestos] PRIMARY KEY CLUSTERED ([Id] ASC),
     CONSTRAINT [FK_Presupuestos_Clientes] FOREIGN KEY ([ClienteId]) REFERENCES [dbo].[Clientes] ([Id]),
     CONSTRAINT [FK_Presupuestos_ParamPresupuestosDescuentos] FOREIGN KEY ([DescuentoId]) REFERENCES [dbo].[ParamPresupuestosDescuentos] ([Id]),
-    CONSTRAINT [FK_Presupuestos_ParamPresupuestosEstados] FOREIGN KEY ([EstadoId]) REFERENCES [dbo].[ParamPresupuestosEstados] ([Id])
+    CONSTRAINT [FK_Presupuestos_ParamPresupuestosEstados] FOREIGN KEY ([EstadoId]) REFERENCES [dbo].[ParamPresupuestosEstados] ([Id]),
+    CONSTRAINT [FK_Presupuestos_ParamTiposResponsables] FOREIGN KEY ([TipoResponsableId]) REFERENCES [dbo].[ParamTiposResponsables] ([Id])
 );
+
+
 
 
 

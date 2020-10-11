@@ -17,13 +17,15 @@ namespace Gestion.Web.Controllers
         private readonly ITiposDocumentosRepository tiposDocumentosRepository;
         private readonly IProvinciasRepository provinciasRepository;
         private readonly IPresupuestosDescuentosRepository descuentosRepository;
+        private readonly ITiposResponsablesRepository tiposResponsablesRepository;
 
         public PresupuestosController(IPresupuestosRepository repository,
             IProductosRepository productosRepository, 
             IClientesRepository clientesRepository,
             ITiposDocumentosRepository tiposDocumentosRepository,
             IProvinciasRepository provinciasRepository,
-            IPresupuestosDescuentosRepository descuentosRepository
+            IPresupuestosDescuentosRepository descuentosRepository,
+            ITiposResponsablesRepository tiposResponsablesRepository
             )
         {
             this.repository = repository;
@@ -32,6 +34,7 @@ namespace Gestion.Web.Controllers
             this.tiposDocumentosRepository = tiposDocumentosRepository;
             this.provinciasRepository = provinciasRepository;
             this.descuentosRepository = descuentosRepository;
+            this.tiposResponsablesRepository = tiposResponsablesRepository;
         }
 
         public async Task<IActionResult> Pendientes()
@@ -148,6 +151,45 @@ namespace Gestion.Web.Controllers
             }            
             ViewData["Detalle"] = presupuesto;
             return View(presupuesto.FirstOrDefault());
+        }
+
+        public async Task<IActionResult> TiposResponsables(string id)
+        {
+            var presupuesto = await this.repository.spPresupuestosPendiente(id);
+            ViewBag.TiposResponsables = this.tiposResponsablesRepository.GetCombo();
+            return View(presupuesto.FirstOrDefault());
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> TiposResponsables(PresupuestosDetalleDTO presupuestosDetalleDTO)
+        {
+            if (presupuestosDetalleDTO == null)
+            {
+                return NotFound();
+            }
+            
+            var presup = await this.repository.spPresupuestosPendiente(presupuestosDetalleDTO.Id);
+
+            if (presup == null || presup.Count == 0)
+            {
+                return RedirectToAction("Pendientes", "Presupuestos");
+            }
+
+            if (presupuestosDetalleDTO.TipoResponsableId == null)
+            {
+                await this.repository.spTipoResponsableAplica(presupuestosDetalleDTO.Id, presup.FirstOrDefault().TipoResponsableId, User.Identity.Name);
+            }
+            else 
+            { 
+                if (presupuestosDetalleDTO.TipoResponsableId != presup.FirstOrDefault().TipoResponsableId) 
+                {
+                    await this.repository.spTipoResponsableAplica(presupuestosDetalleDTO.Id, presupuestosDetalleDTO.TipoResponsableId, User.Identity.Name);
+                }
+            }
+
+
+            return RedirectToAction("Pendiente", new { id = presupuestosDetalleDTO.Id });
         }
 
         public async Task<IActionResult> Descuento(string id)

@@ -151,5 +151,6 @@
     <Build Include="dbo\Stored Procedures\ProductosCategoriasGet.sql" />
     <Build Include="dbo\Stored Procedures\ProductosCategoriasEliminar.sql" />
     <Build Include="dbo\Stored Procedures\CatalogoProductosGet.sql" />
+    <Build Include="dbo\Stored Procedures\PresupuestosTipoResponsableAplica.sql" />
   </ItemGroup>
 </Project>

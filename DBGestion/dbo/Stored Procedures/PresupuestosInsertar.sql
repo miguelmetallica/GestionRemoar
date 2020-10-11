@@ -9,6 +9,7 @@ BEGIN TRY
 	DECLARE @Numero INT;
 	DECLARE @Codigo nvarchar(20);
 	DECLARE @EstadoId nvarchar(150);
+	DECLARE @TipoResponsableId nvarchar(150);	
 	
 	SELECT @SucursalId = S.Codigo
 	FROM AspNetUsers U
@@ -23,17 +24,22 @@ BEGIN TRY
 	INNER JOIN ParamPresupuestosEstados E ON E.Codigo = C.Valor
 	WHERE C.Configuracion = 'PRESUPUESTO_PENDIENTE_CLIENTE'
 
+	SELECT TOP 1 @TipoResponsableId = Id
+	FROM ParamTiposResponsables
+	WHERE Defecto = 1
+
 	BEGIN TRAN
 		EXEC @Numero = NextNumber 'PRESUPUESTOS'
 		SET @Codigo = RIGHT('000' + RTRIM(LTRIM(CONVERT(VARCHAR(3),@SucursalId))),3) + RIGHT('0000000000' + RTRIM(LTRIM(CONVERT(VARCHAR(10),@Numero))) ,8)
 
 		INSERT INTO Presupuestos(Id,Codigo,Fecha,
-							FechaVencimiento,ClienteId,EstadoId,
+							FechaVencimiento,ClienteId,
+							TipoResponsableId,EstadoId,
 							DescuentoId,DescuentoPorcentaje,
 							Estado,FechaAlta,UsuarioAlta)
 					VALUES(@Id,UPPER(@Codigo),
 							DATEADD(HH,4,GETDATE()),DATEADD(DD,3,DATEADD(HH,4,GETDATE())),
-							@ClienteId,@EstadoId,NULL,0,
+							@ClienteId,@TipoResponsableId,@EstadoId,NULL,0,
 							1,DATEADD(HH,4,GETDATE()),UPPER(@Usuario))
 		
 
