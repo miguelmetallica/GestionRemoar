@@ -656,6 +656,9 @@ namespace Gestion.Web.Data
                                 obj.ClienteNroDocumento = (string)oReader["NroDocumento"];
                                 obj.ClienteCuilCuit = (string)oReader["CuilCuit"];
 
+                                obj.TipoResponsableId = (string)oReader["TipoResponsableId"];
+                                obj.TipoResponsable = (string)oReader["TipoResponsable"];
+
                                 obj.ProductoId = (string)oReader["ProductoId"];
                                 obj.ProductoCodigo = (string)oReader["ProductoCodigo"];
                                 obj.ProductoNombre = (string)oReader["Producto"];
@@ -955,6 +958,9 @@ namespace Gestion.Web.Data
                                 obj.ClienteNroDocumento = (string)oReader["NroDocumento"];
                                 obj.ClienteCuilCuit = (string)oReader["CuilCuit"];
 
+                                obj.TipoResponsableId = oReader["TipoResponsableId"] as string;
+                                obj.TipoResponsable = oReader["TipoResponsable"] as string;
+
                                 obj.ProductoId = (string)oReader["ProductoId"];
                                 obj.ProductoCodigo = (string)oReader["ProductoCodigo"];
                                 obj.ProductoNombre = (string)oReader["Producto"];
@@ -1118,6 +1124,9 @@ namespace Gestion.Web.Data
                                 obj.ClienteRazonSocial = (string)oReader["RazonSocial"];
                                 obj.ClienteNroDocumento = (string)oReader["NroDocumento"];
                                 obj.ClienteCuilCuit = (string)oReader["CuilCuit"];
+
+                                obj.TipoResponsableId = oReader["TipoResponsableId"] as string;
+                                obj.TipoResponsable = oReader["TipoResponsable"] as string ;
 
                                 obj.ProductoId = (string)oReader["ProductoId"];
                                 obj.ProductoCodigo = (string)oReader["ProductoCodigo"];

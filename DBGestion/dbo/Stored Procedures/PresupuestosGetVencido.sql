@@ -14,6 +14,8 @@ BEGIN
 	RazonSocial,
 	NroDocumento,
 	CuilCuit,
+	TipoResponsableId,
+	TipoResponsable,
 	Estado,
 	ProductoId,
 	ProductoCodigo,
@@ -41,6 +43,9 @@ BEGIN
 				C.RazonSocial,
 				C.NroDocumento,
 				ISNULL(C.CuilCuit,'')CuilCuit,
+				ISNULL(P.TipoResponsableId,'')TipoResponsableId,
+				ISNULL(TR.Descripcion,'')TipoResponsable,
+
 				E.Descripcion Estado,
 				ISNULL(D.ProductoId,'')ProductoId,
 				ISNULL(PR.Codigo,'')ProductoCodigo,
@@ -59,6 +64,7 @@ BEGIN
 	INNER JOIN ParamPresupuestosEstados E ON E.Id = P.EstadoId
 	LEFT JOIN PresupuestosDetalle D ON D.PresupuestoId = P.Id
 	LEFT JOIN Productos PR ON PR.Id = D.ProductoId
+	LEFT JOIN ParamTiposResponsables TR ON TR.Id = P.TipoResponsableId
 	WHERE P.Id = @Id
 	AND CONVERT(DATE,P.FechaVencimiento) < CONVERT(DATE,GETDATE())
 	AND P.Estado = 1 AND 

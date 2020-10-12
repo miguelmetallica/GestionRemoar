@@ -21,130 +21,125 @@
     <!-- Main content -->
     <section class="content">
         <div class="row">
-            <!-- left column -->
-            <div class="col-md-6">
-                <!-- general form elements -->
+            <div class="col-md-3">
+
+                <!-- Profile Image -->
+                <div class="box box-primary">
+                    <div class="box-body box-profile">
+                        <h3 class="profile-username text-center">@Model.RazonSocial</h3>
+
+                        <p class="text-muted text-center">@Model.Codigo</p>
+
+                        <ul class="list-group list-group-unbordered">
+                            <li class="list-group-item">
+                                <b>Nro Documento</b> <a class="pull-right">@Model.NroDocumento</a>
+                            </li>
+                            <li class="list-group-item">
+                                <b>CUIT/CUIL</b> <a class="pull-right">@Model.CuilCuit</a>
+                            </li>
+                            <li class="list-group-item">
+                                <b>Fecha Nacimiento</b> <a class="pull-right">@Model.FechaNacimiento</a>
+                            </li>
+                        </ul>
+                        <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning btn-sm">Editar datos del Cliente</a>
+                        <a asp-action="Index" class="btn btn-default pull-right btn-sm">Volver</a>
+                    </div>
+                    <!-- /.box-body -->
+                </div>
+                <!-- /.box -->                
                 <div class="box box-primary">
                     <div class="box-header with-border">
-                        <h3 class="box-title">Ficha del Cliente</h3>
+                        <h3 class="box-title">Datos Adicionales</h3>
                     </div>
                     <!-- /.box-header -->
-                    <!-- form start -->
-                    <form asp-action="Create" enctype="multipart/form-data">
-                        <div class="box-body">
-                            <dl class="dl-horizontal">
-                                <dt>
-                                    @Html.DisplayNameFor(model => model.Codigo)
-                                </dt>
-                                <dd>
-                                    @Html.DisplayFor(model => model.Codigo)
-                                </dd>
-                                <dt>
-                                    @Html.DisplayNameFor(model => model.RazonSocial)
-                                </dt>
-                                <dd>
-                                    @Html.DisplayFor(model => model.RazonSocial)
-                                </dd>
-                                <dt>
-                                    @Html.DisplayNameFor(model => model.NroDocumento)
-                                </dt>
-                                <dd>
-                                    @Html.DisplayFor(model => model.NroDocumento)
-                                </dd>
-                                <dt>
-                                    @Html.DisplayNameFor(model => model.CuilCuit)
-                                </dt>
-                                <dd>
-                                    @Html.DisplayFor(model => model.CuilCuit)
-                                </dd>
-                                <dt>
-                                    @Html.DisplayNameFor(model => model.FechaNacimiento)
-                                </dt>
-                                <dd>
-                                    @Html.DisplayFor(model => model.FechaNacimiento)
-                                </dd>
-                                <dt>
-                                    @Html.DisplayNameFor(model => model.ProvinciaId)
-                                </dt>
-                                <dd>
-                                    @Html.DisplayFor(model => model.ProvinciaId)
-                                </dd>
-                                <dt>
-                                    @Html.DisplayNameFor(model => model.Localidad)
-                                </dt>
-                                <dd>
-                                    @Html.DisplayFor(model => model.Localidad)
-                                </dd>
-                                <dt>
-                                    @Html.DisplayNameFor(model => model.CodigoPostal)
-                                </dt>
-                                <dd>
-                                    @Html.DisplayFor(model => model.CodigoPostal)
-                                </dd>
-                                <dt>
-                                    @Html.DisplayNameFor(model => model.Calle)
-                                </dt>
-                                <dd>
-                                    @Html.DisplayFor(model => model.Calle)
-                                </dd>
+                    <div class="box-body">
+                        <strong><i class="fa fa-phone margin-r-5"></i> Celular</strong>
 
-                                <dt>
-                                    @Html.DisplayNameFor(model => model.CalleNro)
-                                </dt>
-                                <dd>
-                                    @Html.DisplayFor(model => model.CalleNro)
-                                </dd>
+                        <p class="text-muted">
+                            @Model.Celular
+                        </p>
 
-                                <dt>
-                                    @Html.DisplayNameFor(model => model.PisoDpto)
-                                </dt>
-                                <dd>
-                                    @Html.DisplayFor(model => model.PisoDpto)
-                                </dd>
+                        @if (Model.Telefono != "")
+                        {
+                            <strong><i class="fa fa-phone margin-r-5"></i> Telefono</strong>
 
-                                <dt>
-                                    @Html.DisplayNameFor(model => model.OtrasReferencias)
-                                </dt>
-                                <dd>
-                                    @Html.DisplayFor(model => model.OtrasReferencias)
-                                </dd>
-                                <dt>
-                                    @Html.DisplayNameFor(model => model.Telefono)
-                                </dt>
-                                <dd>
-                                    @Html.DisplayFor(model => model.Telefono)
-                                </dd>
-                                <dt>
-                                    @Html.DisplayNameFor(model => model.Celular)
-                                </dt>
-                                <dd>
-                                    @Html.DisplayFor(model => model.Celular)
-                                </dd>
-                                <dt>
-                                    @Html.DisplayNameFor(model => model.Email)
-                                </dt>
-                                <dd>
-                                    @Html.DisplayFor(model => model.Email)
-                                </dd>
-                            </dl>
-                        </div>
-                        <!-- /.box-body -->
+                            <p class="text-muted">
+                                @Model.Telefono
+                            </p>
+                        }
 
-                        <div class="box-footer">
-                            <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">Editar datos del Cliente</a>
-                            <a asp-action="Index" class="btn btn-default pull-right">Volver al Listado</a>                            
-                        </div>
-                    </form>
+                        <hr>
+
+                        <strong><i class="fa fa-mail-bulk margin-r-5"></i> Email</strong>
+
+                        <p class="text-muted">@Model.Email</p>
+
+                        <hr>
+
+                        <strong><i class="fa fa-map-marker margin-r-5"></i> Domicilio</strong>
+
+                        <p class="text-muted">@Model.ProvinciaId </p>
+                        <p class="text-muted">@Model.Localidad </p>
+                        <p class="text-muted">@Model.CodigoPostal </p>
+                        <p class="text-muted">@Model.Calle @Model.CalleNro</p>
+                        <p class="text-muted">@Model.PisoDpto </p>
+                        <p class="text-muted">@Model.OtrasReferencias </p>
+
+                        
+                    </div>
+                    <!-- /.box-body -->
                 </div>
                 <!-- /.box -->
             </div>
-            <!--/.col-->
+            <div class="col-md-9">
+                <!-- general form elements -->
+                <div class="box box-primary">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">Listado de Comprobantes</h3>
+                        <a asp-action="ProductoCreate" asp-route-id="@Model.Id" class="btn btn-primary btn-sm pull-right" aria-hidden="true">Agregar Productos</a>
+                    </div>
+                    <div class="box-body">
+                        <table id="dTable" class="table dt-responsive table-condensed table-bordered table-striped" width="100%">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        Codigo
+                                    </th>
+                                    <th>
+                                        Producto
+                                    </th>
+                                    <th>
+                                        Precio
+                                    </th>
+                                    <th>
+                                        Sin Impuesto
+                                    </th>
+                                    <th>
+                                        Cantidad
+                                    </th>
+                                    <th>
+                                        SubTotal
+                                    </th>
+                                    <th>
+                                        SubTotal Sin Imp
+                                    </th>
+                                    <th>Operaciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                            <tfoot>                                
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+                <!-- /.box -->
+            </div>
         </div>
         <!-- /.row -->
     </section>
     <!-- /.content -->
 </div>
-<!-- /.content-wrapper -->
 
 
 @section Scripts {

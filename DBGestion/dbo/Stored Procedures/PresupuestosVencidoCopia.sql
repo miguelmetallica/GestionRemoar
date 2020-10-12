@@ -27,8 +27,10 @@ BEGIN TRY
 		EXEC @Numero = NextNumber 'PRESUPUESTOS'
 		SET @Codigo = RIGHT('000' + RTRIM(LTRIM(CONVERT(VARCHAR(3),@SucursalId))),3) + RIGHT('0000000000' + RTRIM(LTRIM(CONVERT(VARCHAR(10),@Numero))) ,8)		
 
-		INSERT INTO Presupuestos(Id,Codigo,Fecha,FechaVencimiento,ClienteId,EstadoId,DescuentoId,DescuentoPorcentaje,Estado,FechaAlta,UsuarioAlta)
-		SELECT @Id,UPPER(@Codigo),DATEADD(HH,4,GETDATE()),DATEADD(DD,3,DATEADD(HH,4,GETDATE())),P.ClienteId,@EstadoId,NULL,0,1,DATEADD(HH,4,GETDATE()),UPPER(@Usuario)
+		INSERT INTO Presupuestos(Id,Codigo,Fecha,FechaVencimiento,ClienteId,TipoResponsableId,
+								EstadoId,DescuentoId,DescuentoPorcentaje,Estado,FechaAlta,UsuarioAlta)
+		SELECT @Id,UPPER(@Codigo),DATEADD(HH,4,GETDATE()),DATEADD(DD,3,DATEADD(HH,4,GETDATE())),P.ClienteId,P.TipoResponsableId,
+			@EstadoId,NULL,0,1,DATEADD(HH,4,GETDATE()),UPPER(@Usuario)
 		FROM Presupuestos P
 		WHERE P.Id = @VencidoId
 		

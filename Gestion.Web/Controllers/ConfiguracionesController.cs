@@ -88,6 +88,7 @@ namespace Gestion.Web.Controllers
             {
                 try
                 {
+                    
                     await repository.UpdateAsync(Configuraciones);
                 }
                 catch (DbUpdateConcurrencyException)

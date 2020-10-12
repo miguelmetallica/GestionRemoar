@@ -88,6 +88,11 @@
                             </div>
 
                             <div class="form-group col-md-6">
+                                <label asp-for="@Model.TipoResponsable" class="control-label"></label>
+                                <input asp-for="@Model.TipoResponsable" readonly class="form-control input-sm" />
+                            </div>
+
+                            <div class="form-group col-md-6">
                                 <label asp-for="UsuarioAlta" class="control-label"></label>
                                 <input asp-for="UsuarioAlta" readonly class="form-control input-sm" />
                                 <span asp-validation-for="UsuarioAlta" class="text-danger"></span>

@@ -99,8 +99,12 @@ BEGIN TRY
 	SELECT 
 	@PresupuestoId =P.Id,
 	@ClienteId = P.ClienteId,
-	@DescuentoPorcentaje = P.DescuentoPorcentaje	
+	@DescuentoPorcentaje = P.DescuentoPorcentaje,
+	@TipoResponsableId = TP.Id,
+	@TipoResponsableCodigo = TP.Codigo,
+	@TipoResponsable = TP.Descripcion
 	FROM Presupuestos P
+	LEFT JOIN ParamTiposResponsables TP ON TP.Id = P.TipoResponsableId
 	WHERE P.Id = @PresupuestoId
 			
 
@@ -114,12 +118,15 @@ BEGIN TRY
 	FROM PresupuestosDetalle D
 	WHERE D.PresupuestoId = @PresupuestoId
 
-	SELECT TOP 1 
-	@TipoResponsableId = P.Id,
-	@TipoResponsableCodigo = P.Codigo,
-	@TipoResponsable = Descripcion
-	FROM ParamTiposResponsables P
-	WHERE P.Defecto = 1
+	IF ISNULL(@TipoResponsableId,'') = ''
+	BEGIN
+		SELECT TOP 1 
+		@TipoResponsableId = P.Id,
+		@TipoResponsableCodigo = P.Codigo,
+		@TipoResponsable = Descripcion
+		FROM ParamTiposResponsables P
+		WHERE P.Defecto = 1
+	END
 
 	SELECT TOP 1 
 	@ClienteId = P.Id,
@@ -144,8 +151,9 @@ BEGIN TRY
 	@Celular = P.Celular
 	FROM Clientes P
 	LEFT JOIN ParamTiposDocumentos D ON D.Id = P.TipoDocumentoId
-	LEFT JOIN ParamProvincias R ON R.Id = P.ProvinciaId
+	LEFT JOIN ParamProvincias R ON R.Id = P.ProvinciaId	
 	WHERE P.Id = @ClienteId
+
 
 	BEGIN TRAN		
 			EXEC @Numero = NextNumberComprobante @SucursalId,@TipoComprobanteId
