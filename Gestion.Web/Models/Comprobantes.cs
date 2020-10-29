@@ -15,13 +15,17 @@ namespace Gestion.Web.Models
         public string Letra { get; set; }
         public int PtoVenta { get; set; }
         public decimal Numero { get; set; }
+        
+        [DataType(DataType.Date, ErrorMessage = "El formato de la fecha no es valido")]
+        [Display(Name = "Fecha")]
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         public DateTime FechaComprobante { get; set; }
         public string ConceptoIncluidoId { get; set; }
         public string ConceptoIncluidoCodigo { get; set; }
         public string ConceptoIncluido { get; set; }
-        public DateTime PeriodoFacturadoDesde { get; set; }
-        public DateTime PeriodoFacturadoHasta { get; set; }
-        public DateTime FechaVencimiento { get; set; }
+        public DateTime? PeriodoFacturadoDesde { get; set; }
+        public DateTime? PeriodoFacturadoHasta { get; set; }
+        public DateTime? FechaVencimiento { get; set; }
         public string TipoResponsableId { get; set; }
         public string TipoResponsableCodigo { get; set; }
         public string TipoResponsable { get; set; }
@@ -64,5 +68,16 @@ namespace Gestion.Web.Models
         public DateTime FechaAlta { get; set; }
         public string UsuarioAlta { get; set; }
         public bool Estado { get; set; }
+
+        public decimal Saldo { get; set; }
+    }
+
+    public partial class ComprobantesReciboDTO 
+    {
+        public string ClienteId { get; set; }
+        public decimal Importe { get; set; }
+        public string Observaciones { get; set; }
+        public string Usuario { get; set; }        
+
     }
 }

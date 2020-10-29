@@ -3,10 +3,12 @@ using Gestion.Web.Helpers;
 using Gestion.Web.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Metadata;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Gestion.Web.Controllers
@@ -19,14 +21,16 @@ namespace Gestion.Web.Controllers
         private readonly ITiposDocumentosRepository tiposDocumentos;
         private readonly IProvinciasRepository provincias;
         private readonly IFactoryConnection factoryConnection;
+        private readonly IComprobantesRepository comprobantesRepository;
 
-        public ClientesController(IClientesRepository repository, IUserHelper userHelper, ITiposDocumentosRepository tiposDocumentos, IProvinciasRepository provincias,IFactoryConnection factoryConnection)
+        public ClientesController(IClientesRepository repository, IUserHelper userHelper, ITiposDocumentosRepository tiposDocumentos, IProvinciasRepository provincias,IFactoryConnection factoryConnection,IComprobantesRepository comprobantesRepository)
         {
             this.repository = repository;
             this.userHelper = userHelper;
             this.tiposDocumentos = tiposDocumentos;
             this.provincias = provincias;
             this.factoryConnection = factoryConnection;
+            this.comprobantesRepository = comprobantesRepository;
         }
 
         
@@ -42,13 +46,15 @@ namespace Gestion.Web.Controllers
                 return NotFound();
             }
 
-            var cliente = await this.repository.GetByIdAsync(id);
+            var cliente = await this.repository.spCliente(id);
             if (cliente == null)
             {
                 return NotFound();
             }
 
-            return View(cliente);            
+            ViewData["CC"] = await comprobantesRepository.spComprobantes(id);
+
+            return View(cliente.FirstOrDefault());            
         }
 
         public IActionResult Create()
@@ -352,6 +358,67 @@ namespace Gestion.Web.Controllers
             {
                 factoryConnection.CloseConnection();
             }
+        }
+
+        public async Task<IActionResult> Recibo(string id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var cliente = await this.repository.spCliente(id);
+            if (cliente == null)
+            {
+                return NotFound();
+            }
+
+            ViewData["Saldo"] = await comprobantesRepository.spComprobantes(id);
+            ViewData["Cliente"] = cliente.FirstOrDefault();
+            var recibo = new ComprobantesReciboDTO();
+            recibo.ClienteId = cliente.FirstOrDefault().Id;
+            
+            return View(recibo);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Recibo(ComprobantesReciboDTO reciboDTO)
+        {
+            var cliente = await this.repository.spCliente(reciboDTO.ClienteId);
+            if (cliente == null)
+            {
+                return NotFound();
+            }
+
+            var SaldoDto = await comprobantesRepository.spComprobantes(reciboDTO.ClienteId);
+            if (SaldoDto.Sum(x => x.Saldo) == 0)
+            {
+                ModelState.AddModelError("Importe", "El Saldo de la Cuenta es Cero");
+            }
+
+            if (ModelState.IsValid)
+            {
+                if (SaldoDto.Sum(x => x.Saldo) < reciboDTO.Importe)
+                {
+                    ModelState.AddModelError("Importe", "El Importe ingresado es mayor al Saldo de la Cuenta");
+
+                    ViewData["Saldo"] = SaldoDto;
+                    ViewData["Cliente"] = cliente.FirstOrDefault();
+
+                    return View(reciboDTO);
+                }
+
+                reciboDTO.Usuario = User.Identity.Name; 
+                await comprobantesRepository.spRecibo(reciboDTO);
+
+                return RedirectToAction(nameof(Details),new { id = reciboDTO.ClienteId });
+            }
+            
+            ViewData["Saldo"] = SaldoDto;            
+            ViewData["Cliente"] = cliente.FirstOrDefault();
+
+            return View(reciboDTO);
         }
 
     }

@@ -122,6 +122,8 @@ namespace Gestion.Web
             services.AddScoped<ITiposResponsablesRepository, TiposResponsablesRepository>();
             services.AddScoped<IAlicuotasRepository, AlicuotasRepository>();
 
+            services.AddScoped<IComprobantesRepository, ComprobantesRepository>();
+
             services.AddScoped<IConfiguracionesRepository, ConfiguracionesRepository>();
 
             services.AddScoped<IUserHelper, UserHelper>();

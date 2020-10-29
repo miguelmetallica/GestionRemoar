@@ -16,5 +16,7 @@ namespace Gestion.Web.Data
         Task<int> spInsertar(ClientesFisicoAdd item);
 
         Task<int> spEditar(ClientesFisicoEdit item);
+
+        Task<List<ClientesDTO>> spCliente(string id);
     }
 }

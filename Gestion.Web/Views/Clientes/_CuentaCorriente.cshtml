@@ -1,0 +1,80 @@
+﻿@model IEnumerable<Gestion.Web.Models.Comprobantes>
+
+<!-- general form elements -->
+<div class="box box-primary">
+    <div class="box-header with-border">
+        <h3 class="box-title">Cuenta Corriente</h3>
+        <a asp-action="Recibo" asp-route-id="@Model.FirstOrDefault().ClienteId" class="btn btn-primary btn-sm pull-right" aria-hidden="true">Generar Recibo</a>
+    </div>
+    <div class="box-body">
+        <table id="dTable" class="table dt-responsive table-condensed table-bordered table-striped" width="100%">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.TipoComprobante)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Codigo)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.FechaComprobante)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Total)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Saldo)
+                    </th>
+                    <th>Operaciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.TipoComprobante)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Codigo)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.FechaComprobante)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Total)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Saldo)
+                        </td>
+                        <td>
+                            <div class="btn-group">
+                                <a class="btn btn-primary btn-sm" asp-action="Pendiente" asp-route-id="@item.Id"><i class="fa fa-search"></i></a>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+            <tfoot>
+                <tr>
+                    <th>                        
+                    </th>
+                    <th>
+                    </th>
+                    <th>
+                    </th>
+                    <th>
+                        Total @Model.Sum(x => x.Total)
+                    </th>
+                    <th>
+                        Saldo @Model.Sum(x => x.Saldo)
+                    </th>
+                    <th>
+                    </th>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+</div>
+<!-- /.box -->
+

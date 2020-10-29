@@ -62,7 +62,7 @@ BEGIN TRY
 	DECLARE @LetraAnula char(1);
 	DECLARE @PtoVtaAnula int;
 	DECLARE @NumeroAnula numeric(12,0);
-	DECLARE @Estado bit;
+	DECLARE @Estado bit = 1;
 
 	
 	DECLARE @Numero numeric(10);
@@ -189,7 +189,7 @@ BEGIN TRY
 			0 ImporteBonificacion,P.AlicuotaId,A.Descripcion AlicuotaIva,A.Codigo AlicuotaIvaCodigo,A.Porcentaje AlicuotaProcentaje,0 ImporteNetoNoGravado,0 ImporteExento,0 ImporteNetoGravado,
 			CASE WHEN A.Porcentaje = 27 THEN (D.Precio * D.Cantidad) * 0.27 ELSE 0 END Iva27,
 			CASE WHEN A.Porcentaje = 21 THEN (D.Precio * D.Cantidad) * 0.21 ELSE 0 END Iva21,
-			CASE WHEN A.Porcentaje = 105 THEN (D.Precio * D.Cantidad) * 0.105 ELSE 0 END Iva105,
+			CASE WHEN A.Porcentaje = 10.5 THEN (D.Precio * D.Cantidad) * 0.105 ELSE 0 END Iva105,
 			CASE WHEN A.Porcentaje = 5 THEN (D.Precio * D.Cantidad) * 0.05 ELSE 0 END Iva5,
 			CASE WHEN A.Porcentaje = 25 THEN (D.Precio * D.Cantidad) * 0.25 ELSE 0 END Iva25,
 			CASE WHEN A.Porcentaje = 0 THEN (D.Precio * D.Cantidad) ELSE 0 END Iva0,
