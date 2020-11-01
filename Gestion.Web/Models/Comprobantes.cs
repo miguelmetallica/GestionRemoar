@@ -80,4 +80,57 @@ namespace Gestion.Web.Models
         public string Usuario { get; set; }        
 
     }
+
+    public partial class ComprobantesEfectivoDTO
+    {
+        public string ClienteId { get; set; }
+        public string FormaPagoId { get; set; }
+        public decimal Importe { get; set; }
+        public string Usuario { get; set; }
+
+    }
+
+    public partial class ComprobantesTarjetaDTO
+    {
+        public string ClienteId { get; set; }
+        public string FormaPagoId { get; set; }
+        public decimal Importe { get; set; }
+        public int Cuota { get; set; }
+        public decimal Interes { get; set; }
+        public decimal Total { get; set; }
+        public string TarjetaId { get; set; }
+        public string TarjetaNombre { get; set; }
+        public string TarjetaCliente { get; set; }
+        public string TarjetaNumero { get; set; }
+        public string TarjetaVenceMes { get; set; }
+        public string TarjetaVenceAño { get; set; }
+        public string TarjetaCodigoSeguridad { get; set; }
+        public bool TarjetaEsDebito { get; set; }
+        public string Usuario { get; set; }
+    }
+
+    public partial class ComprobantesChequeDTO
+    {
+        public string ClienteId { get; set; }
+        public string FormaPagoId { get; set; }
+        public decimal Importe { get; set; }
+        public string ChequeBancoId { get; set; }
+        public string ChequeBanco { get; set; }
+        public string ChequeNumero { get; set; }
+        public DateTime ChequeFechaEmision { get; set; }
+        public DateTime ChequeFechaVencimiento { get; set; }
+        public string ChequeCuit { get; set; }
+        public string ChequeNombre { get; set; }
+        public string ChequeCuenta { get; set; }
+        public string Usuario { get; set; }
+    }
+
+    public partial class ComprobantesOtroDTO
+    {
+        public string ClienteId { get; set; }
+        public decimal Importe { get; set; }
+        public string Observaciones { get; set; }
+        public string Usuario { get; set; }
+
+    }
 }

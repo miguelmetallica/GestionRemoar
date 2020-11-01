@@ -1,6 +1,7 @@
-﻿CREATE TABLE [dbo].[ComprobantesFormasPagos] (
+﻿CREATE TABLE [dbo].[ComprobantesFormasPagosTmp] (
     [Id]                     NVARCHAR (150)  NOT NULL,
-    [ComprobanteId]          NVARCHAR (150)  NULL,
+    [ClienteId]              NVARCHAR (150)  NULL,
+    [TipoComprobanteId]      NVARCHAR (150)  NULL,
     [FormaPagoId]            NVARCHAR (150)  NULL,
     [FormaPagoCodigo]        NVARCHAR (5)    NULL,
     [FormaPago]              NVARCHAR (150)  NULL,
@@ -27,13 +28,6 @@
     [Otros]                  NVARCHAR (500)  NULL,
     [FechaAlta]              DATETIME        NULL,
     [UsuarioAlta]            NVARCHAR (256)  NULL,
-    CONSTRAINT [PK_ComprobantesFormasPagos] PRIMARY KEY CLUSTERED ([Id] ASC),
-    CONSTRAINT [FK_ComprobantesFormasPagos_Comprobantes] FOREIGN KEY ([ComprobanteId]) REFERENCES [dbo].[Comprobantes] ([Id]),
-    CONSTRAINT [FK_ComprobantesFormasPagos_FormasPagos] FOREIGN KEY ([FormaPagoId]) REFERENCES [dbo].[FormasPagos] ([Id]),
-    CONSTRAINT [FK_ComprobantesFormasPagos_ParamBancos] FOREIGN KEY ([ChequeBancoId]) REFERENCES [dbo].[ParamBancos] ([Id])
+    CONSTRAINT [PK_ComprobantesFormasPagosTmp] PRIMARY KEY CLUSTERED ([Id] ASC)
 );
-
-
-
-
 

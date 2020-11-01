@@ -22,8 +22,12 @@ namespace Gestion.Web.Controllers
         private readonly IProvinciasRepository provincias;
         private readonly IFactoryConnection factoryConnection;
         private readonly IComprobantesRepository comprobantesRepository;
+        private readonly IFormasPagosRepository formasPagosRepository;
 
-        public ClientesController(IClientesRepository repository, IUserHelper userHelper, ITiposDocumentosRepository tiposDocumentos, IProvinciasRepository provincias,IFactoryConnection factoryConnection,IComprobantesRepository comprobantesRepository)
+        public ClientesController(IClientesRepository repository, IUserHelper userHelper, 
+                ITiposDocumentosRepository tiposDocumentos, IProvinciasRepository provincias,
+                IFactoryConnection factoryConnection,IComprobantesRepository comprobantesRepository,
+                IFormasPagosRepository formasPagosRepository)
         {
             this.repository = repository;
             this.userHelper = userHelper;
@@ -31,6 +35,7 @@ namespace Gestion.Web.Controllers
             this.provincias = provincias;
             this.factoryConnection = factoryConnection;
             this.comprobantesRepository = comprobantesRepository;
+            this.formasPagosRepository = formasPagosRepository;
         }
 
         
@@ -375,6 +380,7 @@ namespace Gestion.Web.Controllers
 
             ViewData["Saldo"] = await comprobantesRepository.spComprobantes(id);
             ViewData["Cliente"] = cliente.FirstOrDefault();
+            ViewData["FormasPagos"] = formasPagosRepository.GetAll();
             var recibo = new ComprobantesReciboDTO();
             recibo.ClienteId = cliente.FirstOrDefault().Id;
             
@@ -416,6 +422,67 @@ namespace Gestion.Web.Controllers
             }
             
             ViewData["Saldo"] = SaldoDto;            
+            ViewData["Cliente"] = cliente.FirstOrDefault();
+            ViewData["FormasPagos"] = formasPagosRepository.GetAll();
+            return View(reciboDTO);
+        }
+
+        public async Task<IActionResult> Efectivo(string id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var cliente = await this.repository.spCliente(id);
+            if (cliente == null)
+            {
+                return NotFound();
+            }
+
+            ViewData["Saldo"] = await comprobantesRepository.spComprobantes(id);
+            ViewData["Cliente"] = cliente.FirstOrDefault();
+            var recibo = new ComprobantesReciboDTO();
+            recibo.ClienteId = cliente.FirstOrDefault().Id;
+
+            return View(recibo);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Efectivo(ComprobantesReciboDTO reciboDTO)
+        {
+            var cliente = await this.repository.spCliente(reciboDTO.ClienteId);
+            if (cliente == null)
+            {
+                return NotFound();
+            }
+
+            var SaldoDto = await comprobantesRepository.spComprobantes(reciboDTO.ClienteId);
+            if (SaldoDto.Sum(x => x.Saldo) == 0)
+            {
+                ModelState.AddModelError("Importe", "El Saldo de la Cuenta es Cero");
+            }
+
+            if (ModelState.IsValid)
+            {
+                if (SaldoDto.Sum(x => x.Saldo) < reciboDTO.Importe)
+                {
+                    ModelState.AddModelError("Importe", "El Importe ingresado es mayor al Saldo de la Cuenta");
+
+                    ViewData["Saldo"] = SaldoDto;
+                    ViewData["Cliente"] = cliente.FirstOrDefault();
+
+                    return View(reciboDTO);
+                }
+
+                reciboDTO.Usuario = User.Identity.Name;
+                await comprobantesRepository.spRecibo(reciboDTO);
+
+                return RedirectToAction(nameof(Details), new { id = reciboDTO.ClienteId });
+            }
+
+            ViewData["Saldo"] = SaldoDto;
             ViewData["Cliente"] = cliente.FirstOrDefault();
 
             return View(reciboDTO);

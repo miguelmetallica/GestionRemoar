@@ -124,6 +124,8 @@ namespace Gestion.Web
 
             services.AddScoped<IComprobantesRepository, ComprobantesRepository>();
 
+            services.AddScoped<IFormasPagosRepository, FormasPagosRepository>();
+
             services.AddScoped<IConfiguracionesRepository, ConfiguracionesRepository>();
 
             services.AddScoped<IUserHelper, UserHelper>();
