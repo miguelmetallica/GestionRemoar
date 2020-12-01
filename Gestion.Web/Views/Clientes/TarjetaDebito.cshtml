@@ -1,0 +1,124 @@
+﻿@model Gestion.Web.Models.ComprobantesTarjetaDTO
+
+@{
+    ViewData["Title"] = "Detalle del Cliente";
+    var SaldoDTO = (IEnumerable<Comprobantes>)ViewData["Saldo"];
+    var formasPagosTMP = (IEnumerable<ComprobantesFormasPagosDTO>)ViewData["FormasPagosTMP"];
+}
+
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <h1>
+            Sistema de gestíon
+            <small>Gestion de Clientes</small>
+        </h1>
+        <ol class="breadcrumb">
+            <li><a asp-controller="Home" asp-action="Index"><i class="fas fa-tachometer-alt"></i> Inicio</a></li>
+            <li><a asp-controller="Clientes" asp-action="Index">Listado de Clientes</a></li>
+            <li class="active">@ViewData["Title"]</li>
+        </ol>
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+        <div class="row">
+            <div class="col-md-3">
+                <partial name="_ClienteDetalle" model='ViewData["Cliente"]' />
+            </div>
+            <div class="col-md-9">
+                <!-- general form elements -->
+                <div class="box box-primary">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">Tipo de Pago Tarjeta de Debito</h3>
+                    </div>
+                    <!-- /.box-header -->
+                    <!-- form start -->
+                    <form asp-action="TarjetaDebito" enctype="multipart/form-data">
+                        <div class="box-body">
+                            <div class="box-body">
+                                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                                <input type="hidden" asp-for="ClienteId" />
+                                <input type="hidden" asp-for="FormaPagoId" />
+                                <input type="hidden" asp-for="Cuota" />
+                                <input type="hidden" asp-for="Interes" />
+                                <input type="hidden" asp-for="Total" />
+
+                                <div class="form-group col-md-12">
+                                    <label class="control-label">Saldo</label>
+                                    <input value=@(SaldoDTO.Sum(x => x.Saldo) - formasPagosTMP.Sum(x => x.Total)) readonly class="form-control input-sm" />
+
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label asp-for="TarjetaCliente" class="control-label"></label>
+                                    <input asp-for="TarjetaCliente" class="form-control input-sm" />
+                                    <span asp-validation-for="TarjetaCliente" class="text-danger"></span>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label asp-for="TarjetaNumero" class="control-label"></label>
+                                    <input asp-for="TarjetaNumero" class="form-control input-sm" />
+                                    <span asp-validation-for="TarjetaNumero" class="text-danger"></span>
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label asp-for="TarjetaVenceAño" class="control-label"></label>
+                                    <input asp-for="TarjetaVenceAño" class="form-control input-sm" />
+                                    <span asp-validation-for="TarjetaVenceAño" class="text-danger"></span>
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label asp-for="TarjetaVenceMes" class="control-label"></label>
+                                    <input asp-for="TarjetaVenceMes" class="form-control input-sm" />
+                                    <span asp-validation-for="TarjetaVenceMes" class="text-danger"></span>
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label asp-for="TarjetaCodigoSeguridad" class="control-label"></label>
+                                    <input asp-for="TarjetaCodigoSeguridad" class="form-control input-sm" />
+                                    <span asp-validation-for="TarjetaCodigoSeguridad" class="text-danger"></span>
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <label asp-for="Importe" class="control-label"></label>
+                                    <input asp-for="Importe" class="form-control input-sm" />
+                                    <span asp-validation-for="Importe" class="text-danger"></span>
+                                </div>
+                                @*<div class="form-group col-md-3">
+            <label asp-for="Cuota" class="control-label"></label>
+            <input asp-for="Cuota" class="form-control input-sm" />
+            <span asp-validation-for="Cuota" class="text-danger"></span>
+        </div>
+        <div class="form-group col-md-3">
+            <label asp-for="Interes" class="control-label"></label>
+            <input asp-for="Interes" class="form-control input-sm" />
+            <span asp-validation-for="Interes" class="text-danger"></span>
+        </div>
+        <div class="form-group col-md-3">
+            <label asp-for="Total" class="control-label"></label>
+            <input asp-for="Total" class="form-control input-sm" />
+            <span asp-validation-for="Total" class="text-danger"></span>
+        </div>*@
+                                <div class="form-group col-md-12">
+                                    <label asp-for="Observaciones" class="control-label"></label>
+                                    <input asp-for="Observaciones" class="form-control input-sm" />
+                                    <span asp-validation-for="Observaciones" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="box-footer">
+                                <input type="submit" value="Guardar" class="btn btn-primary" />
+                                <a asp-action="Recibo" asp-route-id="@Model.ClienteId" class="btn btn-default pull-right">Volver</a>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <!-- /.box -->
+                
+
+            </div>
+        </div>
+        <!-- /.row -->
+    </section>
+    <!-- /.content -->
+</div>
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}    
+}

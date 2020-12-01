@@ -1,9 +1,10 @@
-﻿@model Gestion.Web.Models.ComprobantesEfectivoDTO
+﻿@model Gestion.Web.Models.ComprobantesOtroDTO
 
 @{
     ViewData["Title"] = "Detalle del Cliente";
     var SaldoDTO = (IEnumerable<Comprobantes>)ViewData["Saldo"];
     var formasPagosTMP = (IEnumerable<ComprobantesFormasPagosDTO>)ViewData["FormasPagosTMP"];
+
 }
 
 <div class="content-wrapper">
@@ -30,11 +31,11 @@
                 <!-- general form elements -->
                 <div class="box box-primary">
                     <div class="box-header with-border">
-                        <h3 class="box-title">Tipo de Pago Efectivo</h3>
+                        <h3 class="box-title">Tipo de Pago Otro</h3>
                     </div>
                     <!-- /.box-header -->
                     <!-- form start -->
-                    <form asp-action="Efectivo" enctype="multipart/form-data">
+                    <form asp-action="Otro" enctype="multipart/form-data">
                         <div class="box-body">
                             <div class="box-body">
                                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
@@ -44,7 +45,7 @@
 
                                 <div class="form-group">
                                     <label class="control-label">Saldo</label>
-                                    <input value="@(SaldoDTO.Sum(x => x.Saldo) - formasPagosTMP.Sum(x => x.Total))" readonly class="form-control input-sm" />
+                                    <input value=@(SaldoDTO.Sum(x => x.Saldo) - formasPagosTMP.Sum(x => x.Total)) readonly class="form-control input-sm" />
 
                                 </div>
 
@@ -52,6 +53,11 @@
                                     <label asp-for="Importe" class="control-label"></label>
                                     <input asp-for="Importe" class="form-control input-sm" />
                                     <span asp-validation-for="Importe" class="text-danger"></span>
+                                </div>
+                                <div class="form-group">
+                                    <label asp-for="FormaPago" class="control-label"></label>
+                                    <input asp-for="FormaPago" class="form-control input-sm" />
+                                    <span asp-validation-for="FormaPago" class="text-danger"></span>
                                 </div>
                                 <div class="form-group">
                                     <label asp-for="Observaciones" class="control-label"></label>

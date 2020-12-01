@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using System.Runtime.InteropServices;
 
 namespace Gestion.Web.Models
 {
@@ -84,8 +85,14 @@ namespace Gestion.Web.Models
     public partial class ComprobantesEfectivoDTO
     {
         public string ClienteId { get; set; }
+        public string TipoComprobanteId { get; set; }
         public string FormaPagoId { get; set; }
+       
+        [DisplayFormat(DataFormatString = "{0:C2}")]
+        [Required(ErrorMessage = "El campo {0} es obligatorio.")]
+        [Range(0.01, 9999999, ErrorMessage = "El campo {0} puede tomar valores entre {1} y {2}")]
         public decimal Importe { get; set; }
+        public string Observaciones { get; set; }
         public string Usuario { get; set; }
 
     }
@@ -94,6 +101,101 @@ namespace Gestion.Web.Models
     {
         public string ClienteId { get; set; }
         public string FormaPagoId { get; set; }
+        
+        [DisplayFormat(DataFormatString = "{0:C2}")]
+        [Required(ErrorMessage = "El campo {0} es obligatorio.")]
+        [Range(0.01, 9999999, ErrorMessage = "El campo {0} puede tomar valores entre {1} y {2}")]
+        public decimal Importe { get; set; }
+
+        [DisplayFormat(DataFormatString = "{0:N}")]
+        [Required(ErrorMessage = "El campo {0} es obligatorio.")]
+        //[Range(1, 9999999, ErrorMessage = "El campo {0} puede tomar valores entre {1} y {2}")]
+        public int Cuota { get; set; }
+
+        [DisplayFormat(DataFormatString = "{0:C2}")]
+        [Required(ErrorMessage = "El campo {0} es obligatorio.")]
+        [Range(0.00, 9999999, ErrorMessage = "El campo {0} puede tomar valores entre {1} y {2}")]
+        public decimal Interes { get; set; }
+
+        [DisplayFormat(DataFormatString = "{0:C2}")]               
+        public decimal Total { get; set; }
+        public string TarjetaId { get; set; }
+        
+        public string TarjetaNombre { get; set; }
+        [Required(ErrorMessage = "El campo {0} es obligatorio.")]
+        public string TarjetaCliente { get; set; }
+        [Required(ErrorMessage = "El campo {0} es obligatorio.")]
+        public string TarjetaNumero { get; set; }
+        [Required(ErrorMessage = "El campo {0} es obligatorio.")]
+        public string TarjetaVenceMes { get; set; }
+        [Required(ErrorMessage = "El campo {0} es obligatorio.")]
+        public string TarjetaVenceAño { get; set; }
+        
+        public string TarjetaCodigoSeguridad { get; set; }
+        public bool TarjetaEsDebito { get; set; }
+        public string Observaciones { get; set; }
+        public string Usuario { get; set; }
+    }
+
+    public partial class ComprobantesChequeDTO
+    {
+        public string ClienteId { get; set; }
+        public string FormaPagoId { get; set; }
+
+        [DisplayFormat(DataFormatString = "{0:C2}")]
+        [Required(ErrorMessage = "El campo {0} es obligatorio.")]
+        [Range(0.01, 9999999, ErrorMessage = "El campo {0} puede tomar valores entre {1} y {2}")]
+        public decimal Importe { get; set; }
+        public string ChequeBancoId { get; set; }
+        public string ChequeBanco { get; set; }
+
+        [Required(ErrorMessage = "El campo {0} es obligatorio.")]
+        public string ChequeNumero { get; set; }
+        [DataType(DataType.Date, ErrorMessage = "El formato de la fecha no es valido")]
+        [Display(Name = "Fecha de Emision")]
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
+        [Required(ErrorMessage = "El campo {0} es obligatorio.")]
+        public DateTime?ChequeFechaEmision { get; set; }
+        [DataType(DataType.Date, ErrorMessage = "El formato de la fecha no es valido")]
+        [Display(Name = "Fecha de Vencimiento")]
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
+        [Required(ErrorMessage = "El campo {0} es obligatorio.")]
+        public DateTime? ChequeFechaVencimiento { get; set; }
+        [Required(ErrorMessage = "El campo {0} es obligatorio.")]
+        public string ChequeCuit { get; set; }
+        [Required(ErrorMessage = "El campo {0} es obligatorio.")]
+        public string ChequeNombre { get; set; }
+        public string ChequeCuenta { get; set; }
+        public string Observaciones { get; set; }
+        public string Usuario { get; set; }
+    }
+
+    public partial class ComprobantesOtroDTO
+    {
+        public string ClienteId { get; set; }
+        public string FormaPagoId { get; set; }
+
+        [DisplayFormat(DataFormatString = "{0:C2}")]
+        [Required(ErrorMessage = "El campo {0} es obligatorio.")]
+        [Range(0.01, 9999999, ErrorMessage = "El campo {0} puede tomar valores entre {1} y {2}")]
+        public decimal Importe { get; set; }
+
+        [Required(ErrorMessage = "El campo {0} es obligatorio.")]
+        public string FormaPago{ get; set; }
+        public string Observaciones { get; set; }
+        public string Usuario { get; set; }
+
+    }
+
+    public partial class ComprobantesFormasPagosDTO
+    {
+        public string Id { get; set; }        
+        public string ClienteId { get; set; }
+        public string TipoComprobanteId { get; set; }
+        public string FormaPagoId { get; set; }
+        public string FormaPagoCodigo { get; set; }
+        public string FormaPagoTipo { get; set; }
+        public string FormaPago { get; set; }
         public decimal Importe { get; set; }
         public int Cuota { get; set; }
         public decimal Interes { get; set; }
@@ -102,35 +204,22 @@ namespace Gestion.Web.Models
         public string TarjetaNombre { get; set; }
         public string TarjetaCliente { get; set; }
         public string TarjetaNumero { get; set; }
-        public string TarjetaVenceMes { get; set; }
-        public string TarjetaVenceAño { get; set; }
-        public string TarjetaCodigoSeguridad { get; set; }
-        public bool TarjetaEsDebito { get; set; }
-        public string Usuario { get; set; }
-    }
-
-    public partial class ComprobantesChequeDTO
-    {
-        public string ClienteId { get; set; }
-        public string FormaPagoId { get; set; }
-        public decimal Importe { get; set; }
+        public int TarjetaVenceMes { get; set; }
+        public int TarjetaVenceAño { get; set; }
+        public int TarjetaCodigoSeguridad { get; set; }
+        public bool? TarjetaEsDebito { get; set; }
         public string ChequeBancoId { get; set; }
         public string ChequeBanco { get; set; }
         public string ChequeNumero { get; set; }
-        public DateTime ChequeFechaEmision { get; set; }
-        public DateTime ChequeFechaVencimiento { get; set; }
+        public DateTime? ChequeFechaEmision { get; set; }
+        public DateTime? ChequeFechaVencimiento { get; set; }
         public string ChequeCuit { get; set; }
         public string ChequeNombre { get; set; }
         public string ChequeCuenta { get; set; }
-        public string Usuario { get; set; }
-    }
-
-    public partial class ComprobantesOtroDTO
-    {
-        public string ClienteId { get; set; }
-        public decimal Importe { get; set; }
+        public string Otros { get; set; }
         public string Observaciones { get; set; }
-        public string Usuario { get; set; }
+        public DateTime FechaAlta { get; set; }
+        public string UsuarioAlta { get; set; }
 
     }
 }

@@ -377,10 +377,12 @@ namespace Gestion.Web.Controllers
             {
                 return NotFound();
             }
-
+            
+            ViewData["FormasPagosTMP"] = await comprobantesRepository.spComprobantesTmpFormasPagos(id);
             ViewData["Saldo"] = await comprobantesRepository.spComprobantes(id);
             ViewData["Cliente"] = cliente.FirstOrDefault();
             ViewData["FormasPagos"] = formasPagosRepository.GetAll();
+            
             var recibo = new ComprobantesReciboDTO();
             recibo.ClienteId = cliente.FirstOrDefault().Id;
             
@@ -396,11 +398,18 @@ namespace Gestion.Web.Controllers
             {
                 return NotFound();
             }
+            
+            var formasPagos = await comprobantesRepository.spComprobantesTmpFormasPagos(reciboDTO.ClienteId);
 
             var SaldoDto = await comprobantesRepository.spComprobantes(reciboDTO.ClienteId);
-            if (SaldoDto.Sum(x => x.Saldo) == 0)
+
+            if (SaldoDto.Sum(x => x.Saldo) < 0)
             {
                 ModelState.AddModelError("Importe", "El Saldo de la Cuenta es Cero");
+
+                ViewData["Saldo"] = SaldoDto;
+                ViewData["Cliente"] = cliente.FirstOrDefault();
+
             }
 
             if (ModelState.IsValid)
@@ -410,7 +419,7 @@ namespace Gestion.Web.Controllers
                     ModelState.AddModelError("Importe", "El Importe ingresado es mayor al Saldo de la Cuenta");
 
                     ViewData["Saldo"] = SaldoDto;
-                    ViewData["Cliente"] = cliente.FirstOrDefault();
+                    ViewData["Cliente"] = cliente.FirstOrDefault();                    
 
                     return View(reciboDTO);
                 }
@@ -424,12 +433,18 @@ namespace Gestion.Web.Controllers
             ViewData["Saldo"] = SaldoDto;            
             ViewData["Cliente"] = cliente.FirstOrDefault();
             ViewData["FormasPagos"] = formasPagosRepository.GetAll();
+
             return View(reciboDTO);
         }
 
-        public async Task<IActionResult> Efectivo(string id)
+        public async Task<IActionResult> Efectivo(string id, string fp)
         {
             if (id == null)
+            {
+                return NotFound();
+            }
+
+            if (fp == null)
             {
                 return NotFound();
             }
@@ -442,15 +457,92 @@ namespace Gestion.Web.Controllers
 
             ViewData["Saldo"] = await comprobantesRepository.spComprobantes(id);
             ViewData["Cliente"] = cliente.FirstOrDefault();
-            var recibo = new ComprobantesReciboDTO();
-            recibo.ClienteId = cliente.FirstOrDefault().Id;
+            ViewData["FormasPagosTMP"] = await comprobantesRepository.spComprobantesTmpFormasPagos(id);
 
+            var recibo = new ComprobantesEfectivoDTO();
+            recibo.ClienteId = cliente.FirstOrDefault().Id;
+            recibo.FormaPagoId = fp;
             return View(recibo);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Efectivo(ComprobantesReciboDTO reciboDTO)
+        public async Task<IActionResult> Efectivo(ComprobantesEfectivoDTO reciboDTO)
+        {
+            var cliente = await this.repository.spCliente(reciboDTO.ClienteId);
+            if (cliente == null)
+            {
+                return NotFound();
+            }
+            
+            var SaldoDto = await comprobantesRepository.spComprobantes(reciboDTO.ClienteId);
+            var SaldoTmp = await comprobantesRepository.spComprobantesTmpFormasPagos(reciboDTO.ClienteId);
+            if (SaldoDto.Sum(x => x.Saldo) - SaldoTmp.Sum(x => x.Total) == 0)
+            {
+                ModelState.AddModelError("Importe", "El Saldo de la Cuenta es Cero");
+                
+                ViewData["Saldo"] = SaldoDto;
+                ViewData["Cliente"] = cliente.FirstOrDefault();
+                ViewData["FormasPagosTMP"] = SaldoTmp;
+            }
+
+            if (ModelState.IsValid)
+            {
+                if (SaldoDto.Sum(x => x.Saldo) - SaldoTmp.Sum(x => x.Total) < reciboDTO.Importe)
+                {
+                    ModelState.AddModelError("Importe", "El Importe ingresado es mayor al Saldo de la Cuenta");
+
+                    ViewData["Saldo"] = SaldoDto;
+                    ViewData["Cliente"] = cliente.FirstOrDefault();
+                    ViewData["FormasPagosTMP"] = SaldoTmp;
+
+                    return View(reciboDTO);
+                }
+
+                reciboDTO.Usuario = User.Identity.Name;
+                await comprobantesRepository.spEfectivo(reciboDTO);
+
+                return RedirectToAction(nameof(Recibo), new { id = reciboDTO.ClienteId });
+            }
+
+            //ViewData["Saldo"] = SaldoDto;
+            //ViewData["Cliente"] = cliente.FirstOrDefault();
+            //ViewData["FormasPagosTMP"] = await comprobantesRepository.spComprobantesTmpFormasPagos(reciboDTO.ClienteId);
+
+            return View(reciboDTO);
+        }
+
+        public async Task<IActionResult> Otro(string id, string fp)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            if (fp == null)
+            {
+                return NotFound();
+            }
+
+            var cliente = await this.repository.spCliente(id);
+            if (cliente == null)
+            {
+                return NotFound();
+            }
+
+            ViewData["Saldo"] = await comprobantesRepository.spComprobantes(id);
+            ViewData["Cliente"] = cliente.FirstOrDefault();
+            ViewData["FormasPagosTMP"] = await comprobantesRepository.spComprobantesTmpFormasPagos(id);
+
+            var recibo = new ComprobantesOtroDTO();
+            recibo.ClienteId = cliente.FirstOrDefault().Id;
+            recibo.FormaPagoId = fp;
+            return View(recibo);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Otro(ComprobantesOtroDTO reciboDTO)
         {
             var cliente = await this.repository.spCliente(reciboDTO.ClienteId);
             if (cliente == null)
@@ -459,33 +551,321 @@ namespace Gestion.Web.Controllers
             }
 
             var SaldoDto = await comprobantesRepository.spComprobantes(reciboDTO.ClienteId);
-            if (SaldoDto.Sum(x => x.Saldo) == 0)
+            var SaldoTmp = await comprobantesRepository.spComprobantesTmpFormasPagos(reciboDTO.ClienteId);
+            
+            if (SaldoDto.Sum(x => x.Saldo) - SaldoTmp.Sum(x => x.Total) == 0)
             {
                 ModelState.AddModelError("Importe", "El Saldo de la Cuenta es Cero");
+                
+                ViewData["Saldo"] = SaldoDto;
+                ViewData["Cliente"] = cliente.FirstOrDefault();
+                ViewData["FormasPagosTMP"] = SaldoTmp;
             }
 
             if (ModelState.IsValid)
             {
-                if (SaldoDto.Sum(x => x.Saldo) < reciboDTO.Importe)
+                if (SaldoDto.Sum(x => x.Saldo) - SaldoTmp.Sum(x => x.Total) < reciboDTO.Importe)
                 {
                     ModelState.AddModelError("Importe", "El Importe ingresado es mayor al Saldo de la Cuenta");
 
                     ViewData["Saldo"] = SaldoDto;
                     ViewData["Cliente"] = cliente.FirstOrDefault();
+                    ViewData["FormasPagosTMP"] = SaldoTmp;
 
                     return View(reciboDTO);
                 }
 
                 reciboDTO.Usuario = User.Identity.Name;
-                await comprobantesRepository.spRecibo(reciboDTO);
+                await comprobantesRepository.spOtro(reciboDTO);
 
-                return RedirectToAction(nameof(Details), new { id = reciboDTO.ClienteId });
+                return RedirectToAction(nameof(Recibo), new { id = reciboDTO.ClienteId });
+            }
+
+            //ViewData["Saldo"] = SaldoDto;
+            //ViewData["Cliente"] = cliente.FirstOrDefault();
+
+            return View(reciboDTO);
+        }
+
+        public async Task<IActionResult> TarjetaDebito(string id, string fp)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            if (fp == null)
+            {
+                return NotFound();
+            }
+
+            var cliente = await this.repository.spCliente(id);
+            if (cliente == null)
+            {
+                return NotFound();
+            }
+
+            ViewData["Saldo"] = await comprobantesRepository.spComprobantes(id);
+            ViewData["Cliente"] = cliente.FirstOrDefault();
+            ViewData["FormasPagosTMP"] = await comprobantesRepository.spComprobantesTmpFormasPagos(id);
+
+            var recibo = new ComprobantesTarjetaDTO();
+            recibo.ClienteId = cliente.FirstOrDefault().Id;
+            recibo.FormaPagoId = fp;
+
+            recibo.Cuota = 1;
+            recibo.Interes = 0;
+            recibo.Total = 0;
+
+            return View(recibo);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> TarjetaDebito(ComprobantesTarjetaDTO reciboDTO)
+        {
+            reciboDTO.Cuota = 1;
+            reciboDTO.Interes = 0;
+            reciboDTO.Total = reciboDTO.Importe;
+
+            
+            var cliente = await this.repository.spCliente(reciboDTO.ClienteId);
+            if (cliente == null)
+            {
+                return NotFound();
+            }
+
+            var SaldoDto = await comprobantesRepository.spComprobantes(reciboDTO.ClienteId);
+            var SaldoTmp = await comprobantesRepository.spComprobantesTmpFormasPagos(reciboDTO.ClienteId);
+
+            if (SaldoDto.Sum(x => x.Saldo) - SaldoTmp.Sum(x => x.Total) == 0)
+            {
+                ModelState.AddModelError("Importe", "El Saldo de la Cuenta es Cero");
+                ViewData["Saldo"] = SaldoDto;
+                ViewData["Cliente"] = cliente.FirstOrDefault();
+                ViewData["FormasPagosTMP"] = SaldoTmp;
+
+            }
+            
+            
+
+            if (ModelState.IsValid)
+            {
+                if (SaldoDto.Sum(x => x.Saldo) - SaldoTmp.Sum(x => x.Total) < reciboDTO.Importe)
+                {
+                    ModelState.AddModelError("Importe", "El Importe ingresado es mayor al Saldo de la Cuenta");
+
+                    ViewData["Saldo"] = SaldoDto;
+                    ViewData["Cliente"] = cliente.FirstOrDefault();
+                    ViewData["FormasPagosTMP"] = SaldoTmp;
+
+                    return View(reciboDTO);
+                }
+
+                reciboDTO.Usuario = User.Identity.Name;
+                reciboDTO.TarjetaEsDebito = true;
+                reciboDTO.Cuota = 1;
+                reciboDTO.Interes= 0;
+                reciboDTO.Total = reciboDTO.Importe;
+
+                await comprobantesRepository.spTarjeta(reciboDTO);
+
+                return RedirectToAction(nameof(Recibo), new { id = reciboDTO.ClienteId });
             }
 
             ViewData["Saldo"] = SaldoDto;
             ViewData["Cliente"] = cliente.FirstOrDefault();
+            ViewData["FormasPagosTMP"] = SaldoTmp;
 
             return View(reciboDTO);
+        }
+
+        public async Task<IActionResult> TarjetaCredito(string id, string fp)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            if (fp == null)
+            {
+                return NotFound();
+            }
+
+            var cliente = await this.repository.spCliente(id);
+            if (cliente == null)
+            {
+                return NotFound();
+            }
+
+            ViewData["Saldo"] = await comprobantesRepository.spComprobantes(id);
+            ViewData["Cliente"] = cliente.FirstOrDefault();
+            ViewData["FormasPagosTMP"] = await comprobantesRepository.spComprobantesTmpFormasPagos(id);
+
+            var recibo = new ComprobantesTarjetaDTO();
+            recibo.ClienteId = cliente.FirstOrDefault().Id;
+            recibo.FormaPagoId = fp;
+            return View(recibo);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> TarjetaCredito(ComprobantesTarjetaDTO reciboDTO)
+        {
+            var cliente = await this.repository.spCliente(reciboDTO.ClienteId);
+            if (cliente == null)
+            {
+                return NotFound();
+            }
+
+            var SaldoDto = await comprobantesRepository.spComprobantes(reciboDTO.ClienteId);
+            var SaldoTmp = await comprobantesRepository.spComprobantesTmpFormasPagos(reciboDTO.ClienteId);
+
+            if (SaldoDto.Sum(x => x.Saldo) - SaldoTmp.Sum(x => x.Total) == 0)
+            {
+                ModelState.AddModelError("Importe", "El Saldo de la Cuenta es Cero");
+                
+                ViewData["Saldo"] = SaldoDto;
+                ViewData["Cliente"] = cliente.FirstOrDefault();
+                ViewData["FormasPagosTMP"] = SaldoTmp;
+
+            }
+
+            if (ModelState.IsValid)
+            {
+                if (SaldoDto.Sum(x => x.Saldo) - SaldoTmp.Sum(x => x.Total) < reciboDTO.Importe)
+                {
+                    ModelState.AddModelError("Importe", "El Importe ingresado es mayor al Saldo de la Cuenta");
+
+                    ViewData["Saldo"] = SaldoDto;
+                    ViewData["Cliente"] = cliente.FirstOrDefault();
+                    ViewData["FormasPagosTMP"] = SaldoTmp;
+
+                    return View(reciboDTO);
+                }
+
+                reciboDTO.Usuario = User.Identity.Name;
+                reciboDTO.TarjetaEsDebito = false;                                
+
+                await comprobantesRepository.spTarjeta(reciboDTO);
+
+                return RedirectToAction(nameof(Recibo), new { id = reciboDTO.ClienteId });
+            }
+
+            //ViewData["Saldo"] = SaldoDto;
+            //ViewData["Cliente"] = cliente.FirstOrDefault();
+            //ViewData["FormasPagosTMP"] = SaldoTmp;
+            
+            return View(reciboDTO);
+        }
+
+        public async Task<IActionResult> Cheque(string id, string fp)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            if (fp == null)
+            {
+                return NotFound();
+            }
+
+            var cliente = await this.repository.spCliente(id);
+            if (cliente == null)
+            {
+                return NotFound();
+            }
+
+            ViewData["Saldo"] = await comprobantesRepository.spComprobantes(id);
+            ViewData["Cliente"] = cliente.FirstOrDefault();
+            ViewData["FormasPagosTMP"] = await comprobantesRepository.spComprobantesTmpFormasPagos(id);
+
+            var recibo = new ComprobantesChequeDTO();
+            recibo.ClienteId = cliente.FirstOrDefault().Id;
+            recibo.FormaPagoId = fp;
+            return View(recibo);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Cheque(ComprobantesChequeDTO reciboDTO)
+        {
+            var cliente = await this.repository.spCliente(reciboDTO.ClienteId);
+            if (cliente == null)
+            {
+                return NotFound();
+            }
+
+            var SaldoDto = await comprobantesRepository.spComprobantes(reciboDTO.ClienteId);
+            var SaldoTmp = await comprobantesRepository.spComprobantesTmpFormasPagos(reciboDTO.ClienteId);
+
+            if (SaldoDto.Sum(x => x.Saldo) - SaldoTmp.Sum(x => x.Total) == 0)
+            {
+                ModelState.AddModelError("Importe", "El Saldo de la Cuenta es Cero");
+
+                ViewData["Saldo"] = SaldoDto;
+                ViewData["Cliente"] = cliente.FirstOrDefault();
+                ViewData["FormasPagosTMP"] = SaldoTmp;
+            }
+
+            if (ModelState.IsValid)
+            {
+                if (SaldoDto.Sum(x => x.Saldo) - SaldoTmp.Sum(x => x.Total) < reciboDTO.Importe)
+                {
+                    ModelState.AddModelError("Importe", "El Importe ingresado es mayor al Saldo de la Cuenta");
+
+                    ViewData["Saldo"] = SaldoDto;
+                    ViewData["Cliente"] = cliente.FirstOrDefault();
+                    ViewData["FormasPagosTMP"] = SaldoTmp;
+
+                    return View(reciboDTO);
+                }
+
+                reciboDTO.Usuario = User.Identity.Name;
+                await comprobantesRepository.spCheque(reciboDTO);
+
+                return RedirectToAction(nameof(Recibo), new { id = reciboDTO.ClienteId });
+            }
+
+            //ViewData["Saldo"] = SaldoDto;
+            //ViewData["Cliente"] = cliente.FirstOrDefault();
+
+            return View(reciboDTO);
+        }
+
+        public async Task<IActionResult> DeleteFormaPago(string id,string cli)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            if (cli == null)
+            {
+                return NotFound();
+            }
+
+            await comprobantesRepository.spDeleteFormaPago(id);
+            return RedirectToAction(nameof(Recibo) , new { id = cli });
+        }
+
+        public async Task<IActionResult> ComprobanteDetalle(string id, string comp)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var cliente = await this.repository.spCliente(id);
+            if (cliente == null)
+            {
+                return NotFound();
+            }
+
+            ViewData["CC"] = await comprobantesRepository.spComprobantes(id);
+
+            return View(cliente.FirstOrDefault());
         }
 
     }

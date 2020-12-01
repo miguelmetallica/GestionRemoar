@@ -4,6 +4,7 @@
     [TipoComprobanteId]      NVARCHAR (150)  NULL,
     [FormaPagoId]            NVARCHAR (150)  NULL,
     [FormaPagoCodigo]        NVARCHAR (5)    NULL,
+    [FormaPagoTipo]          CHAR (1)        NULL,
     [FormaPago]              NVARCHAR (150)  NULL,
     [Importe]                NUMERIC (18, 2) NULL,
     [Cuota]                  INT             NULL,
@@ -26,8 +27,11 @@
     [ChequeNombre]           VARCHAR (300)   NULL,
     [ChequeCuenta]           VARCHAR (50)    NULL,
     [Otros]                  NVARCHAR (500)  NULL,
+    [Observaciones]          NVARCHAR (500)  NULL,
     [FechaAlta]              DATETIME        NULL,
     [UsuarioAlta]            NVARCHAR (256)  NULL,
     CONSTRAINT [PK_ComprobantesFormasPagosTmp] PRIMARY KEY CLUSTERED ([Id] ASC)
 );
+
+
 

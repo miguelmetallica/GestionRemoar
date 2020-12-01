@@ -156,5 +156,10 @@
     <Build Include="dbo\Stored Procedures\ComprobantesInsertarRecibo.sql" />
     <Build Include="dbo\Stored Procedures\ClientesGetUno.sql" />
     <Build Include="dbo\Tables\ComprobantesFormasPagosTmp.sql" />
+    <Build Include="dbo\Stored Procedures\ComprobantesTMPReciboGet.sql" />
+    <Build Include="dbo\Stored Procedures\ComprobantesTmpInsertarTarjeta.sql" />
+    <Build Include="dbo\Stored Procedures\ComprobantesTmpInsertarOtro.sql" />
+    <Build Include="dbo\Stored Procedures\ComprobantesTmpInsertarEfectivo.sql" />
+    <Build Include="dbo\Stored Procedures\ComprobantesTmpInsertarCheque.sql" />
   </ItemGroup>
 </Project>

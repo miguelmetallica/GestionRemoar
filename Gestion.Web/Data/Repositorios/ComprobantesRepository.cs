@@ -211,5 +211,333 @@ namespace Gestion.Web.Data
                 factoryConnection.CloseConnection();
             }
         }
+
+        public async Task<int> spEfectivo(ComprobantesEfectivoDTO reciboDTO)
+        {
+            try
+            {
+                using (var oCnn = factoryConnection.GetConnection())
+                {
+                    using (SqlCommand oCmd = new SqlCommand())
+                    {
+                        //asignamos la conexion de trabajo
+                        oCmd.Connection = oCnn;
+
+                        //utilizamos stored procedures
+                        oCmd.CommandType = System.Data.CommandType.StoredProcedure;
+
+                        //el indicamos cual stored procedure utilizar
+                        oCmd.CommandText = "ComprobantesTmpInsertarEfectivo";
+
+                        //le asignamos los parámetros para el stored procedure
+                        //los valores viene en el parámetro item del procedimiento
+                        oCmd.Parameters.AddWithValue("@ClienteId", reciboDTO.ClienteId);
+                        oCmd.Parameters.AddWithValue("@FormaPagoId", reciboDTO.FormaPagoId);
+                        oCmd.Parameters.AddWithValue("@Importe", reciboDTO.Importe);
+                        oCmd.Parameters.AddWithValue("@Observaciones", reciboDTO.Observaciones);
+                        oCmd.Parameters.AddWithValue("@Usuario", reciboDTO.Usuario);
+
+                        //Ejecutamos el comando y retornamos el id generado
+                        await oCmd.ExecuteScalarAsync();
+
+                        return 1;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error al insertar el registro: " + ex.Message);
+            }
+            finally
+            {
+                factoryConnection.CloseConnection();
+            }
+        }
+        
+        public async Task<int> spOtro(ComprobantesOtroDTO reciboDTO)
+        {
+            try
+            {
+                using (var oCnn = factoryConnection.GetConnection())
+                {
+                    using (SqlCommand oCmd = new SqlCommand())
+                    {
+                        //asignamos la conexion de trabajo
+                        oCmd.Connection = oCnn;
+
+                        //utilizamos stored procedures
+                        oCmd.CommandType = System.Data.CommandType.StoredProcedure;
+
+                        //el indicamos cual stored procedure utilizar
+                        oCmd.CommandText = "ComprobantesTmpInsertarOtro";
+
+                        //le asignamos los parámetros para el stored procedure
+                        //los valores viene en el parámetro item del procedimiento
+                        oCmd.Parameters.AddWithValue("@ClienteId", reciboDTO.ClienteId);
+                        oCmd.Parameters.AddWithValue("@FormaPagoId", reciboDTO.FormaPagoId);
+                        oCmd.Parameters.AddWithValue("@Importe", reciboDTO.Importe);
+                        oCmd.Parameters.AddWithValue("@Otros", reciboDTO.FormaPago);
+                        oCmd.Parameters.AddWithValue("@Observaciones", reciboDTO.Observaciones);
+                        oCmd.Parameters.AddWithValue("@Usuario", reciboDTO.Usuario);
+
+                        //Ejecutamos el comando y retornamos el id generado
+                        await oCmd.ExecuteScalarAsync();
+
+                        return 1;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error al insertar el registro: " + ex.Message);
+            }
+            finally
+            {
+                factoryConnection.CloseConnection();
+            }
+        }
+
+        public async Task<int> spTarjeta(ComprobantesTarjetaDTO reciboDTO)
+        {
+            try
+            {
+                using (var oCnn = factoryConnection.GetConnection())
+                {
+                    using (SqlCommand oCmd = new SqlCommand())
+                    {
+                        //asignamos la conexion de trabajo
+                        oCmd.Connection = oCnn;
+
+                        //utilizamos stored procedures
+                        oCmd.CommandType = System.Data.CommandType.StoredProcedure;
+
+                        //el indicamos cual stored procedure utilizar
+                        oCmd.CommandText = "ComprobantesTmpInsertarTarjeta";
+
+                        //le asignamos los parámetros para el stored procedure
+                        //los valores viene en el parámetro item del procedimiento
+                        oCmd.Parameters.AddWithValue("@ClienteId", reciboDTO.ClienteId);
+                        oCmd.Parameters.AddWithValue("@FormaPagoId", reciboDTO.FormaPagoId);
+                        oCmd.Parameters.AddWithValue("@Cuota", reciboDTO.Cuota);
+                        oCmd.Parameters.AddWithValue("@Importe", reciboDTO.Importe);
+                        oCmd.Parameters.AddWithValue("@Interes", reciboDTO.Interes);
+                        oCmd.Parameters.AddWithValue("@Total", reciboDTO.Total);
+                        oCmd.Parameters.AddWithValue("@TarjetaCliente", reciboDTO.TarjetaCliente);
+                        oCmd.Parameters.AddWithValue("@TarjetaNumero", reciboDTO.TarjetaNumero);
+                        oCmd.Parameters.AddWithValue("@TarjetaVenceAño", reciboDTO.TarjetaVenceAño);
+                        oCmd.Parameters.AddWithValue("@TarjetaVenceMes", reciboDTO.TarjetaVenceMes);
+                        oCmd.Parameters.AddWithValue("@TarjetaCodigoSeguridad", reciboDTO.TarjetaCodigoSeguridad);
+                        oCmd.Parameters.AddWithValue("@TarjetaEsDebito", reciboDTO.TarjetaEsDebito);
+                        oCmd.Parameters.AddWithValue("@Observaciones", reciboDTO.Observaciones);
+                        oCmd.Parameters.AddWithValue("@Usuario", reciboDTO.Usuario);
+
+                        //Ejecutamos el comando y retornamos el id generado
+                        await oCmd.ExecuteScalarAsync();
+
+                        return 1;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error al insertar el registro: " + ex.Message);
+            }
+            finally
+            {
+                factoryConnection.CloseConnection();
+            }
+        }
+
+        public async Task<int> spCheque(ComprobantesChequeDTO reciboDTO)
+        {
+            try
+            {
+                using (var oCnn = factoryConnection.GetConnection())
+                {
+                    using (SqlCommand oCmd = new SqlCommand())
+                    {
+                        //asignamos la conexion de trabajo
+                        oCmd.Connection = oCnn;
+
+                        //utilizamos stored procedures
+                        oCmd.CommandType = System.Data.CommandType.StoredProcedure;
+
+                        //el indicamos cual stored procedure utilizar
+                        oCmd.CommandText = "ComprobantesTmpInsertarCheque";
+
+                        //le asignamos los parámetros para el stored procedure
+                        //los valores viene en el parámetro item del procedimiento
+                        oCmd.Parameters.AddWithValue("@ClienteId", reciboDTO.ClienteId);
+                        oCmd.Parameters.AddWithValue("@FormaPagoId", reciboDTO.FormaPagoId);
+                        oCmd.Parameters.AddWithValue("@Importe", reciboDTO.Importe);
+                        oCmd.Parameters.AddWithValue("@ChequeNumero", reciboDTO.ChequeNumero);
+                        oCmd.Parameters.AddWithValue("@ChequeFechaEmision", reciboDTO.ChequeFechaEmision);
+                        oCmd.Parameters.AddWithValue("@ChequeFechaVencimiento", reciboDTO.ChequeFechaVencimiento);
+                        oCmd.Parameters.AddWithValue("@ChequeCuit", reciboDTO.ChequeCuit);
+                        oCmd.Parameters.AddWithValue("@ChequeNombre", reciboDTO.ChequeNombre);
+                        oCmd.Parameters.AddWithValue("@ChequeCuenta", reciboDTO.ChequeCuenta);
+                        oCmd.Parameters.AddWithValue("@Observaciones", reciboDTO.Observaciones);
+                        oCmd.Parameters.AddWithValue("@Usuario", reciboDTO.Usuario);
+
+                        //Ejecutamos el comando y retornamos el id generado
+                        await oCmd.ExecuteScalarAsync();
+
+                        return 1;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error al insertar el registro: " + ex.Message);
+            }
+            finally
+            {
+                factoryConnection.CloseConnection();
+            }
+        }
+
+        public async Task<int> spDeleteFormaPago(string id)
+        {
+            try
+            {
+                using (var oCnn = factoryConnection.GetConnection())
+                {
+                    using (SqlCommand oCmd = new SqlCommand())
+                    {
+                        //asignamos la conexion de trabajo
+                        oCmd.Connection = oCnn;
+
+                        //utilizamos stored procedures
+                        oCmd.CommandType = System.Data.CommandType.StoredProcedure;
+
+                        //el indicamos cual stored procedure utilizar
+                        oCmd.CommandText = "ComprobantesTmpDeleteFormaPago";
+
+                        //le asignamos los parámetros para el stored procedure
+                        //los valores viene en el parámetro item del procedimiento
+                        oCmd.Parameters.AddWithValue("@id", id);
+                        
+                        //Ejecutamos el comando y retornamos el id generado
+                        await oCmd.ExecuteScalarAsync();
+
+                        return 1;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error al insertar el registro: " + ex.Message);
+            }
+            finally
+            {
+                factoryConnection.CloseConnection();
+            }
+        }
+
+        public async Task<List<ComprobantesFormasPagosDTO>> spComprobantesTmpFormasPagos(string clienteId)
+        {
+            //Creamos la conexión a utilizar.
+            //Utilizamos la sentencia Using para asegurarnos de cerrar la conexión
+            //y liberar el objeto al salir de esta sección de manera automática            
+            using (var oCnn = factoryConnection.GetConnection())
+            {
+                using (SqlCommand oCmd = new SqlCommand())
+                {
+                    //asignamos la conexion de trabajo
+                    oCmd.Connection = oCnn;
+
+                    //utilizamos stored procedures
+                    oCmd.CommandType = System.Data.CommandType.StoredProcedure;
+
+                    //el indicamos cual stored procedure utilizar
+                    oCmd.CommandText = "ComprobantesTMPReciboGet";
+
+                    //le asignamos el parámetro para el stored procedure
+                    oCmd.Parameters.AddWithValue("@ClienteId", clienteId);
+
+
+                    //aunque debemos buscar solo un elemento, siempre devolvemos
+                    //una colección. Es más fácil de manipular y controlar 
+                    var objs = new List<ComprobantesFormasPagosDTO>();
+
+                    //No retornamos DataSets, siempre utilizamos objetos para hacernos 
+                    //independientes de la estructura de las tablas en el resto
+                    //de las capas. Para ellos leemos con el DataReader y creamos
+                    //los objetos asociados que se esperan
+                    try
+                    {
+                        //Ejecutamos el comando y retornamos los valores
+                        using (SqlDataReader oReader = await oCmd.ExecuteReaderAsync())
+                        {
+                            while (oReader.Read())
+                            {
+                                //si existe algun valor, creamos el objeto y lo almacenamos
+                                //en la colección
+                                var obj = new ComprobantesFormasPagosDTO();
+                                obj.Id = oReader["Id"] as string;
+                                obj.ClienteId = oReader["ClienteId"] as string;
+                                obj.TipoComprobanteId = oReader["TipoComprobanteId"] as string;
+                                obj.FormaPagoId = oReader["FormaPagoId"] as string;
+                                obj.FormaPagoCodigo = oReader["FormaPagoCodigo"] as string;
+                                obj.FormaPagoTipo = oReader["FormaPagoTipo"] as string;
+                                obj.FormaPago = oReader["FormaPago"] as string;
+                                obj.Importe = (decimal)oReader["Importe"];
+                                obj.Cuota = (int)(oReader["Cuota"] ?? 0);
+                                obj.Interes = (decimal)oReader["Interes"];
+                                obj.Total = (decimal)oReader["Total"];
+                                obj.TarjetaId = oReader["TarjetaId"] as string;
+                                obj.TarjetaNombre = oReader["TarjetaNombre"] as string;
+                                obj.TarjetaCliente = oReader["TarjetaCliente"] as string;
+                                obj.TarjetaNumero = oReader["TarjetaNumero"] as string;
+
+                                if (!DBNull.Value.Equals(oReader["TarjetaVenceMes"]))
+                                    obj.TarjetaVenceMes = (int)(oReader["TarjetaVenceMes"] ?? 0);
+                                if (!DBNull.Value.Equals(oReader["TarjetaVenceAño"]))
+                                    obj.TarjetaVenceAño = (int)(oReader["TarjetaVenceAño"] ?? 0);
+                                if (!DBNull.Value.Equals(oReader["TarjetaCodigoSeguridad"]))
+                                    obj.TarjetaCodigoSeguridad = (int)(oReader["TarjetaCodigoSeguridad"] ?? 0);
+
+                                if (!DBNull.Value.Equals(oReader["TarjetaEsDebito"]))
+                                    obj.TarjetaEsDebito = (bool)(oReader["TarjetaEsDebito"]);
+
+                                obj.ChequeBancoId = oReader["ChequeBancoId"] as string;
+                                obj.ChequeBanco = oReader["ChequeBanco"] as string;
+                                obj.ChequeNumero = oReader["ChequeNumero"] as string;
+
+                                if (!DBNull.Value.Equals(oReader["ChequeFechaEmision"]))
+                                    obj.ChequeFechaEmision = (DateTime)(oReader["ChequeFechaEmision"] ?? DateTime.Now);
+
+                                if (!DBNull.Value.Equals(oReader["ChequeFechaEmision"]))
+                                    obj.ChequeFechaVencimiento = (DateTime)(oReader["ChequeFechaEmision"] ?? DateTime.Now); 
+                                
+                                obj.ChequeCuit = oReader["ChequeCuit"] as string;
+                                obj.ChequeNombre = oReader["ChequeNombre"] as string;
+                                obj.ChequeCuenta = oReader["ChequeCuenta"] as string;
+                                obj.Otros = oReader["Otros"] as string;
+                                obj.Observaciones = oReader["Observaciones"] as string;
+                                obj.FechaAlta = (DateTime)oReader["FechaAlta"];
+                                obj.UsuarioAlta = oReader["UsuarioAlta"] as string;
+
+                                //Agregamos el objeto a la coleccion de resultados
+                                objs.Add(obj);
+                                obj = null;
+                            }
+                        }
+                        //retornamos los valores encontrados
+
+
+                        return objs;
+                    }
+
+                    finally
+                    {
+                        //el Finally nos da siempre la oportunidad de liberar
+                        //la memoria utilizada por los objetos 
+                        objs = null;
+                    }
+                }
+            }
+        }
+
     }
 }
