@@ -99,7 +99,7 @@ namespace Gestion.Web.Controllers
                     productos.FechaAlta = DateTime.Now;
                     productos.UsuarioAlta = User.Identity.Name;
                     await repository.spInsertar(productos);
-                    return RedirectToAction(nameof(Index));
+                    return RedirectToAction(nameof(Details), new { id = productos.Id } );
                 }
             }
 
@@ -175,7 +175,7 @@ namespace Gestion.Web.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Details), new { id = productos.Id });
             }
 
             ViewBag.TiposProductos = this.tiposProductos.GetCombo();

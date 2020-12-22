@@ -21,9 +21,15 @@
             <li class="list-group-item">
                 <b>Fecha Nacimiento</b> <a class="pull-right">@Model.FechaNacimiento</a>
             </li>
+            <li class="list-group-item">
+                <b>Tipo Responsable</b> <a class="pull-right">@Model.TipoResponsable</a>
+            </li>
+            <li class="list-group-item">
+                <b>Categoria</b> <a class="pull-right">@Model.Categoria</a>
+            </li>
         </ul>
-        <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning btn-sm">Editar datos del Cliente</a>
-        <a asp-action="Index" class="btn btn-default pull-right btn-sm">Volver</a>
+        <a asp-controller="Clientes" asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning btn-sm">Editar datos del Cliente</a>
+        @*<a asp-action="Index" class="btn btn-default pull-right btn-sm">Volver</a>*@
     </div>
     <!-- /.box-body -->
 </div>

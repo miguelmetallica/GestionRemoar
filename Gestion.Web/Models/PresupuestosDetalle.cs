@@ -34,4 +34,6 @@ namespace Gestion.Web.Models
         public string NombreProducto { get; set; }
 
     }
+
+
 }

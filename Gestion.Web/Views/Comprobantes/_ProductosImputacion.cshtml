@@ -1,0 +1,273 @@
+﻿@model Gestion.Web.Models.Comprobantes
+
+@{
+    var Detalle = (List<Gestion.Web.Models.ComprobantesDetalleImputaDTO>)ViewData["Detalle"];
+    //var CCImputacion = (List<Gestion.Web.Models.Comprobantes>)ViewData["CCIMPUTACION"];
+    //var CCFormaPagos = (List<Gestion.Web.Models.ComprobantesFormasPagosDTO>)ViewData["CCFORMAPAGOS"];
+}
+<div class="box-body">
+    <ul class="timeline">
+
+        <!-- timeline time label -->
+        <li class="time-label">
+            <span class="bg-red">
+                @(Model.FechaComprobante.ToShortDateString())
+            </span>
+        </li>
+        <!-- /.timeline-label -->
+        <!-- timeline item -->
+        <li>
+            <!-- timeline icon -->
+            <i class="fa bg-blue"></i>
+            <div class="timeline-item">
+                <span class="time"><i class="fa fa-clock-o"></i> @(Model.FechaComprobante.ToShortTimeString())</span>
+
+                <h3 class="timeline-header"><a asp-controller="Comprobantes" asp-action="ImputacionesProductos" asp-route-id="@Model.PresupuestoId">@Model.TipoComprobante @Model.Codigo</a> ...</h3>
+
+                <div class="timeline-body">
+                    <b>Presupuesto: @Model.Codigo</b><br>
+                    <br>
+                    <b>Fecha:</b> @Model.FechaComprobante.ToShortDateString()<br>
+                    <b>Cantidad de Productos:</b> <br>
+                    <b>SubTotal:</b> @Model.TotalSinDescuento<br>
+                    <b>Descuento %:</b> @Model.DescuentoPorcentaje<br>
+                    <b>Descuento $:</b> @Model.DescuentoTotal<br>
+                    <b>Tipo Responsable:</b> @Model.TipoResponsable<br>
+                    <b>Usuario:</b> @Model.UsuarioAlta<br>
+
+                    <h3 class="text-blue">Total: @Model.Total</h3>
+                    <h4 class="text-red">Pendiente: @Model.Saldo</h4>
+                    <h4 class="text-green">Pagado: @(Model.Total - Model.Saldo)</h4>
+                    <h4 class="text-blue">Imputado: @Detalle.Sum(x => x.Imputado)</h4>
+                    <h4 class="text-green">Diferencia: @(Model.Total - Model.Saldo - Detalle.Sum(x => x.Imputado))</h4> 
+                    <br>
+                    <input type="hidden" id="pagado" value="@(Model.Total - Model.Saldo - Detalle.Sum(x => x.Imputado))" />
+
+                    <br>
+                    <table class="table table-bordered" id="tabla">
+                        <tr>
+                            <th>Codigo</th>
+                            <th>Producto</th>
+                            <th>Precio U.</th>
+                            <th>Cantidad</th>
+                            <th>Imputado</th>
+                            <th>Porcentaje %</th>
+                            <th>Entrega</th>
+                            <th>Autorizado</th>
+                            <th>Operaciones</th>
+                        </tr>
+                        @foreach (var item in Detalle)
+                        {
+                            <tr>
+                                <td>@item.ProductoCodigo</td>
+                                <td>@item.ProductoNombre</td>
+                                <td>@item.Precio</td>
+                                <td>@item.Cantidad</td>
+                                <td>@item.Imputado</td>
+                                <td>@item.ImputadoPorcentaje</td>
+
+                                @if (item.EntregaEstado)
+                                {
+                                    <td>SI</td>
+                                }
+                                else
+                                {
+                                    <td>NO</td>
+                                }
+                                @if (item.AutorizaEstado)
+                                {
+                                    <td>SI</td>
+                                }
+                                else
+                                {
+                                    <td>NO</td>
+                                }
+                            <td>
+                                <button id="btnImputa_@item.Id" type="button" class="btn btn-primary btn-sm" data-toggle="modal"
+                                        onclick="cargarDatosImputa('@item.Id',
+                                                                            '@item.ComprobanteId',
+                                                                            '@item.ProductoId',
+                                                                            '@item.ProductoCodigo',
+                                                                            '@item.ProductoNombre',
+                                                                            @item.Precio,
+                                                                            @item.Cantidad,
+                                                                            @item.Imputado,
+                                                                            @item.ImputadoPorcentaje);" data-target="#modal-default">
+                                    Imputar
+                                </button>
+                                @if (@item.Imputado > 0)
+                                {
+                                    <button id="btnBorrar" type="button" class="btn btn-danger btn-sm"
+                                            onclick="cancelarFormularioModal('@item.Id',
+                                                                                    '@item.ComprobanteId',
+                                                                                    '@item.ProductoId',
+                                                                                    '@item.ProductoCodigo',
+                                                                                    '@item.ProductoNombre',
+                                                                                    @item.Precio,
+                                                                                    @item.Cantidad,
+                                                                                    @item.Imputado,
+                                                                                    @item.ImputadoPorcentaje
+                                                                                    );">
+                                        Anular
+                                    </button>
+                                }
+                                else
+                                {
+                                    <button id="btnBorrar" type="button" class="btn btn-danger btn-sm" disabled>Anular</button>
+                                }
+
+                                @if (@item.ImputadoPorcentaje > 50)
+                                {
+                                    <button id="btnBorrar" type="button" class="btn btn-success btn-sm"
+                                            onclick="entregarFormularioModal('@item.Id',
+                                                                            '@item.ComprobanteId',
+                                                                            '@item.ProductoId',
+                                                                            '@item.ProductoCodigo',
+                                                                            '@item.ProductoNombre',
+                                                                            @item.Precio,
+                                                                            @item.Cantidad,
+                                                                            @item.Imputado,
+                                                                            @item.ImputadoPorcentaje
+                                                                            );">
+                                        Entregar
+                                    </button>
+                                }
+                                else
+                                {
+                                    <button id="btnBorrar" type="button" class="btn btn-success btn-sm" disabled>Entregar</button>
+                                }
+
+                                @if (item.EntregaEstado)
+                                {
+                                    <button id="btnBorrar" type="button" class="btn btn-danger btn-sm"
+                                            onclick="entregarAnulaFormularioModal('@item.Id',
+                                                                            '@item.ComprobanteId',
+                                                                            '@item.ProductoId',
+                                                                            '@item.ProductoCodigo',
+                                                                            '@item.ProductoNombre',
+                                                                            @item.Precio,
+                                                                            @item.Cantidad,
+                                                                            @item.Imputado,
+                                                                            @item.ImputadoPorcentaje
+                                                                            );">
+                                        Anular
+                                    </button>
+                                }
+                                else
+                                {
+                                    <button id="btnBorrar" type="button" class="btn btn-danger btn-sm" disabled>Anular</button>
+                                }
+
+                                @if (!item.AutorizaEstado)
+                                {
+                                    <button id="btnBorrar" type="button" class="btn btn-dropbox btn-sm"
+                                            onclick="autorizaFormularioModal('@item.Id');">
+                                        Autorizar
+                                    </button>
+                                }
+                                else 
+                                { 
+                                    <button id="btnBorrar" type="button" class="btn btn-dropbox btn-sm" disabled>Autorizar</button>
+                                }
+
+
+                                @if (item.AutorizaEstado)
+                                {
+                                    <button id="btnBorrar" type="button" class="btn btn-danger btn-sm"
+                                            onclick="autorizaAnulaFormularioModal('@item.Id');">
+                                        Anular
+                                    </button>
+                                }
+                                else
+                                {
+                                    <button id="btnBorrar" type="button" class="btn btn-danger btn-sm" disabled>Anular</button>
+                                }
+                            </td>
+                            </tr>
+                        }
+                        <tfoot>
+                            <tr>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th>@Detalle.Sum(x => x.Imputado) </th>
+                                <th></th>
+                                <th></th>
+                            </tr>
+                        </tfoot>
+                    </table>
+
+                </div>
+            </div>
+        </li>
+    </ul>
+</div>
+
+
+<div class="modal fade" id="modal-default">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">Imputar Producto</h4>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="mdlComprobanteId" />
+                <input type="hidden" id="mdlId" />
+                <input type="hidden" id="mdlProductoId" />
+
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group">
+                    <label class="control-label">Codigo Producto</label>
+                    <input id="mdlProductoCodigo" readonly class="form-control input-sm" />
+                    <span id="mProductoCodigo" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label class="control-label">Producto</label>
+                    <input id="mdlProductoNombre" readonly class="form-control input-sm" />
+                    <span id="mProductoCodigo" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label class="control-label">Precio Unitario</label>
+                    <input id="mdlPrecio" readonly class="form-control input-sm" />
+                    <span id="mPrecio" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label">Imputado</label>
+                    <input id="mdlImputado" readonly class="form-control input-sm" />
+                    <span id="mImputado" class="text-danger"></span>
+                </div>
+
+
+                <div class="form-group">
+                    <label class="control-label">Porcentaje Imputado</label>
+                    <input id="mdlImputadoPorcentaje" readonly class="form-control input-sm" />
+                    <span id="mImputadoPorcentaje" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label">Importe Disponible para Imputar</label>
+                    <input id="mdlDisponible" readonly class="form-control input-sm" />
+                    
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label">Importe a Imputar</label>
+                    <input id="mdlImporte" class="form-control input-sm" onkeypress="return FiltrarDecimal(event,this);" />
+                    <span id="mImporte" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Cerrar</button>
+                <button type="button" id="btnGuardar" class="btn btn-primary" onclick="validarFormularioModal()" >Imputar</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->

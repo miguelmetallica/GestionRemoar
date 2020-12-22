@@ -2,7 +2,7 @@
 
 @{
     ViewData["Title"] = "Detalle del Cliente";
-    var SaldoDTO = (IEnumerable<Comprobantes>)ViewData["Saldo"];
+    var SaldoDTO = (Comprobantes)ViewData["Saldo"];
     var formasPagosTMP = (IEnumerable<ComprobantesFormasPagosDTO>)ViewData["FormasPagosTMP"];
 
 }
@@ -40,13 +40,19 @@
                             <div class="box-body">
                                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
+                                <input type="hidden" asp-for="ComprobanteId" />
                                 <input type="hidden" asp-for="ClienteId" />
                                 <input type="hidden" asp-for="FormaPagoId" />
 
                                 <div class="form-group">
                                     <label class="control-label">Saldo</label>
-                                    <input value=@(SaldoDTO.Sum(x => x.Saldo) - formasPagosTMP.Sum(x => x.Total)) readonly class="form-control input-sm" />
+                                    <input value=@(SaldoDTO.Saldo - formasPagosTMP.Sum(x => x.Total)) readonly class="form-control input-sm" />
 
+                                </div>
+                                <div class="form-group">
+                                    <label asp-for="FormaPago" class="control-label"></label>
+                                    <input asp-for="FormaPago" class="form-control input-sm" />
+                                    <span asp-validation-for="FormaPago" class="text-danger"></span>
                                 </div>
 
                                 <div class="form-group">
@@ -54,11 +60,13 @@
                                     <input asp-for="Importe" class="form-control input-sm" />
                                     <span asp-validation-for="Importe" class="text-danger"></span>
                                 </div>
+
                                 <div class="form-group">
-                                    <label asp-for="FormaPago" class="control-label"></label>
-                                    <input asp-for="FormaPago" class="form-control input-sm" />
-                                    <span asp-validation-for="FormaPago" class="text-danger"></span>
+                                    <label asp-for="CodigoAutorizacion" class="control-label"></label>
+                                    <input asp-for="CodigoAutorizacion" class="form-control input-sm" />
+                                    <span asp-validation-for="CodigoAutorizacion" class="text-danger"></span>
                                 </div>
+
                                 <div class="form-group">
                                     <label asp-for="Observaciones" class="control-label"></label>
                                     <input asp-for="Observaciones" class="form-control input-sm" />
@@ -67,7 +75,7 @@
                             </div>
                             <div class="box-footer">
                                 <input type="submit" value="Guardar" class="btn btn-primary" />
-                                <a asp-action="Recibo" asp-route-id="@Model.ClienteId" class="btn btn-default pull-right">Volver</a>
+                                <a asp-action="Recibo" asp-route-id="@Model.ComprobanteId" class="btn btn-default pull-right">Volver</a>
                             </div>
                         </div>
                     </form>

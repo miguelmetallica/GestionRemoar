@@ -72,6 +72,10 @@ namespace Gestion.Web.Models
         [MaxLength(150, ErrorMessage = "The field {0} only can contain {1} characters length.")]
         [DataType(DataType.EmailAddress, ErrorMessage = "El campo {0} no es valido")]
         public string Email { get; set; }
+        [Display(Name = "Tipo de Responsable")]
+        public string TipoResponsableId { get; set; }
+        [Display(Name = "Categoria")]
+        public string CategoriaId { get; set; }
         public bool Estado { get; set; }
 
         public string UsuarioAlta { get; set; }
@@ -141,6 +145,10 @@ namespace Gestion.Web.Models
         [MaxLength(150, ErrorMessage = "The field {0} only can contain {1} characters length.")]
         [DataType(DataType.EmailAddress, ErrorMessage = "El campo {0} no es valido")]
         public string Email { get; set; }
+        [Display(Name = "Tipo de Responsable")]
+        public string TipoResponsableId { get; set; }
+        [Display(Name = "Categoria")]
+        public string CategoriaId { get; set; }
         public bool Estado { get; set; }
         public string UsuarioAlta { get; set; }
     }

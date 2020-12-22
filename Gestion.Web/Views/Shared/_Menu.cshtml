@@ -33,6 +33,19 @@
         </ul>
     </li>
 
+    <li class="treeview">
+        <a href="#">
+            <i class="fa fa-box-open"></i>
+            <span>Entrega de Productos</span>
+            <span class="pull-right-container">
+                <i class="fa fa-angle-left pull-right"></i>
+            </span>
+        </a>
+        <ul class="treeview-menu">
+            <li><a asp-controller="Comprobantes" asp-action="ImputacionesProductos"><i class="fa fa-circle-o"></i> Imputar Productos</a></li>            
+        </ul>
+    </li>
+
     <li>
         <a asp-controller="Account" asp-action="Index">
             <i class="fas fa-user-alt"></i> <span>Usuarios</span>
@@ -50,6 +63,7 @@
         <ul class="treeview-menu">
             <li><a asp-controller="Alicuotas" asp-action="Index">Alicuotas</a></li>
             <li><a asp-controller="Categorias" asp-action="Index">Categorias</a></li>
+            <li><a asp-controller="ClientesCategorias" asp-action="Index">Categorias de Cliente</a></li>
             <li><a asp-controller="ConceptosIncluidos" asp-action="Index">Conceptos Incluidos</a></li>
             <li><a asp-controller="Configuraciones" asp-action="Index">Configuraciones</a></li>
             <li><a asp-controller="ComprobantesNumeraciones" asp-action="Index">Comp Numeracion</a></li>

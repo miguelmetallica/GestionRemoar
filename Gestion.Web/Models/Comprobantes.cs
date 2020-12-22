@@ -59,6 +59,7 @@ namespace Gestion.Web.Models
         public decimal DescuentoSinImpuesto { get; set; }
         public decimal ImporteTributos { get; set; }
         public string Observaciones { get; set; }
+        public bool Anulado { get; set; }
         public DateTime FechaAnulacion { get; set; }
         public string TipoComprobanteAnulaId { get; set; }
         public string TipoComprobanteAnulaCodigo { get; set; }
@@ -66,16 +67,21 @@ namespace Gestion.Web.Models
         public string LetraAnula { get; set; }
         public int PtoVtaAnula { get; set; }
         public decimal NumeroAnula { get; set; }
+        public string CodigoAnula { get; set; }
+        public string UsuarioAnula { get; set; }
         public DateTime FechaAlta { get; set; }
         public string UsuarioAlta { get; set; }
         public bool Estado { get; set; }
 
         public decimal Saldo { get; set; }
+
+        public string ComprobanteId { get; set; }
     }
 
     public partial class ComprobantesReciboDTO 
     {
         public string ClienteId { get; set; }
+        public string ComprobanteId { get; set; }
         public decimal Importe { get; set; }
         public string Observaciones { get; set; }
         public string Usuario { get; set; }        
@@ -84,6 +90,7 @@ namespace Gestion.Web.Models
 
     public partial class ComprobantesEfectivoDTO
     {
+        public string ComprobanteId { get; set; }
         public string ClienteId { get; set; }
         public string TipoComprobanteId { get; set; }
         public string FormaPagoId { get; set; }
@@ -99,6 +106,7 @@ namespace Gestion.Web.Models
 
     public partial class ComprobantesTarjetaDTO
     {
+        public string ComprobanteId { get; set; }
         public string ClienteId { get; set; }
         public string FormaPagoId { get; set; }
         
@@ -110,35 +118,43 @@ namespace Gestion.Web.Models
         [DisplayFormat(DataFormatString = "{0:N}")]
         [Required(ErrorMessage = "El campo {0} es obligatorio.")]
         //[Range(1, 9999999, ErrorMessage = "El campo {0} puede tomar valores entre {1} y {2}")]
+        [Display(Name ="Nro de Cuota")]
         public int Cuota { get; set; }
 
         [DisplayFormat(DataFormatString = "{0:C2}")]
         [Required(ErrorMessage = "El campo {0} es obligatorio.")]
         [Range(0.00, 9999999, ErrorMessage = "El campo {0} puede tomar valores entre {1} y {2}")]
+        [Display(Name = "Monto de Interes")]
         public decimal Interes { get; set; }
 
         [DisplayFormat(DataFormatString = "{0:C2}")]               
         public decimal Total { get; set; }
         public string TarjetaId { get; set; }
-        
         public string TarjetaNombre { get; set; }
         [Required(ErrorMessage = "El campo {0} es obligatorio.")]
+        [Display(Name = "Nombre del Cliente")]
         public string TarjetaCliente { get; set; }
         [Required(ErrorMessage = "El campo {0} es obligatorio.")]
+        [Display(Name = "Numero de Tarjeta")]
         public string TarjetaNumero { get; set; }
         [Required(ErrorMessage = "El campo {0} es obligatorio.")]
+        [Display(Name = "Mes Vence")]
         public string TarjetaVenceMes { get; set; }
         [Required(ErrorMessage = "El campo {0} es obligatorio.")]
+        [Display(Name = "Año Vence")]
         public string TarjetaVenceAño { get; set; }
-        
+        [Display(Name = "Codigo Seguridad")]
         public string TarjetaCodigoSeguridad { get; set; }
         public bool TarjetaEsDebito { get; set; }
+        [Display(Name = "Codigo de Autorizacion")]
+        public string CodigoAutorizacion { get; set; }
         public string Observaciones { get; set; }
         public string Usuario { get; set; }
     }
 
     public partial class ComprobantesChequeDTO
     {
+        public string ComprobanteId { get; set; }
         public string ClienteId { get; set; }
         public string FormaPagoId { get; set; }
 
@@ -172,6 +188,7 @@ namespace Gestion.Web.Models
 
     public partial class ComprobantesOtroDTO
     {
+        public string ComprobanteId { get; set; }
         public string ClienteId { get; set; }
         public string FormaPagoId { get; set; }
 
@@ -181,7 +198,11 @@ namespace Gestion.Web.Models
         public decimal Importe { get; set; }
 
         [Required(ErrorMessage = "El campo {0} es obligatorio.")]
+        [Display(Name = "Forma de Pago")]
         public string FormaPago{ get; set; }
+
+        [Display(Name = "Codigo de Autorizacion")]
+        public string CodigoAutorizacion { get; set; }
         public string Observaciones { get; set; }
         public string Usuario { get; set; }
 
@@ -191,6 +212,7 @@ namespace Gestion.Web.Models
     {
         public string Id { get; set; }        
         public string ClienteId { get; set; }
+        public string ComprobanteId { get; set; }
         public string TipoComprobanteId { get; set; }
         public string FormaPagoId { get; set; }
         public string FormaPagoCodigo { get; set; }
@@ -218,8 +240,139 @@ namespace Gestion.Web.Models
         public string ChequeCuenta { get; set; }
         public string Otros { get; set; }
         public string Observaciones { get; set; }
+        [Display(Name = "Codigo de Autorizacion")]
+        public string CodigoAutorizacion { get; set; }
         public DateTime FechaAlta { get; set; }
         public string UsuarioAlta { get; set; }
 
+    }
+
+    public partial class ComprobantesDTO : IEntidades
+    {
+        [Key]
+        public string Id { get; set; }
+
+        [Display(Name = "Nro Comprobante")]
+        public string Codigo { get; set; }
+        public string TipoComprobanteId { get; set; }
+
+        [Display(Name = "Tipo Comprobante")]
+        public string TipoComprobante { get; set; }
+        public string TipoComprobanteCodigo { get; set; }
+        public string PresupuestoId { get; set; }
+        public string Letra { get; set; }
+        public int PtoVenta { get; set; }
+        public decimal Numero { get; set; }
+
+        [DataType(DataType.Date, ErrorMessage = "El formato de la fecha no es valido")]
+        [Display(Name = "Fecha")]
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
+        public DateTime FechaComprobante { get; set; }
+        public string ConceptoIncluidoId { get; set; }
+        public string ConceptoIncluidoCodigo { get; set; }
+        public string ConceptoIncluido { get; set; }
+        public DateTime? PeriodoFacturadoDesde { get; set; }
+        public DateTime? PeriodoFacturadoHasta { get; set; }
+        public DateTime? FechaVencimiento { get; set; }
+        public string TipoResponsableId { get; set; }
+        public string TipoResponsableCodigo { get; set; }
+        public string TipoResponsable { get; set; }
+        public string ClienteId { get; set; }
+        public string ClienteCodigo { get; set; }
+        public string TipoDocumentoId { get; set; }
+        public string TipoDocumentoCodigo { get; set; }
+        public string TipoDocumento { get; set; }
+        public string NroDocumento { get; set; }
+        public string CuilCuit { get; set; }
+        public string RazonSocial { get; set; }
+        public string ProvinciaId { get; set; }
+        public string ProvinciaCodigo { get; set; }
+        public string Provincia { get; set; }
+        public string Localidad { get; set; }
+        public string CodigoPostal { get; set; }
+        public string Calle { get; set; }
+        public string CalleNro { get; set; }
+        public string PisoDpto { get; set; }
+        public string OtrasReferencias { get; set; }
+        public string Email { get; set; }
+        public string Telefono { get; set; }
+        public string Celular { get; set; }
+        public decimal Total { get; set; }
+        public decimal TotalSinImpuesto { get; set; }
+        public decimal TotalSinDescuento { get; set; }
+        public decimal TotalSinImpuestoSinDescuento { get; set; }
+        public decimal DescuentoPorcentaje { get; set; }
+        public decimal DescuentoTotal { get; set; }
+        public decimal DescuentoSinImpuesto { get; set; }
+        public decimal ImporteTributos { get; set; }
+        public string Observaciones { get; set; }
+        public DateTime FechaAnulacion { get; set; }
+        public string TipoComprobanteAnulaId { get; set; }
+        public string TipoComprobanteAnulaCodigo { get; set; }
+        public string TipoComprobanteAnula { get; set; }
+        public string LetraAnula { get; set; }
+        public int PtoVtaAnula { get; set; }
+        public decimal NumeroAnula { get; set; }
+        public DateTime FechaAlta { get; set; }
+        public string UsuarioAlta { get; set; }
+        public bool Estado { get; set; }
+        public decimal Saldo { get; set; }
+        public decimal Saldo_Porcentaje { get; set; }
+
+        [Display(Name = "Codigo")]
+        public string CodigoPrespuesto { get; set; }
+    }
+
+    public partial class ComprobantesDetalleDTO : IEntidades
+    {
+        public string Id { get; set; }
+        public string ComprobanteId { get; set; }
+        public string ProductoId { get; set; }
+        public string ProductoCodigo { get; set; }
+        public string ProductoNombre { get; set; }
+        public int Cantidad { get; set; }
+        public decimal PrecioUnitario { get; set; }
+        public decimal Precio { get; set; }
+        public decimal Imputado { get; set; }
+        public decimal ImputadoPorcentaje { get; set; }
+        public decimal Importe { get; set; }
+        public DateTime FechaAlta { get; set; }
+        public string UsuarioAlta { get; set; }
+    }
+
+    public partial class ComprobantesDetalleImputaDTO : IEntidades
+    {
+        public string Id { get; set; }
+        public string ComprobanteId { get; set; }
+        public string DetalleId { get; set; }
+        public string ProductoId { get; set; }
+        public string ProductoCodigo { get; set; }
+        public string ProductoNombre { get; set; }
+        public int Cantidad { get; set; }
+        public decimal PrecioUnitario { get; set; }
+        public decimal Precio { get; set; }
+        public decimal Imputado { get; set; }
+        public decimal ImputadoPorcentaje { get; set; }
+        public decimal Importe { get; set; }
+        public bool Estado { get; set; }
+        public DateTime Fecha { get; set; }
+        public string Usuario { get; set; }
+
+        public bool EntregaEstado { get; set; }
+        public DateTime EntregaFecha { get; set; }
+        public string EntregaUsuario { get; set; }
+
+        public bool AutorizaEstado { get; set; }
+        public DateTime AutorizaFecha { get; set; }
+        public string AutorizaUsuario { get; set; }
+
+        public bool DespachaEstado { get; set; }
+        public DateTime DespachaFecha { get; set; }
+        public string DespachaUsuario { get; set; }
+
+        public bool DevolucionEstado { get; set; }
+        public DateTime DevolucionFecha { get; set; }
+        public string DevolucionUsuario { get; set; }
+        public string DevolucionMotivo { get; set; }
     }
 }

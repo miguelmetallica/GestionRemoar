@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Gestion.Web.Models.PresupuestosIndex>
+﻿@model IEnumerable<Gestion.Web.Models.ComprobantesDTO>
 
 @{
     ViewData["Title"] = "Listado de Presupuestos Aprobados";
@@ -31,28 +31,28 @@ BREADCRUMB
                     <thead>
                         <tr>
                             <th>
+                                @Html.DisplayNameFor(model => model.CodigoPrespuesto)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.TipoComprobante)
+                            </th>
+                            <th>
                                 @Html.DisplayNameFor(model => model.Codigo)
                             </th>
                             <th>
-                                @Html.DisplayNameFor(model => model.Fecha)
-                            </th>
-                            <th>
-                                @Html.DisplayNameFor(model => model.FechaVencimiento)
+                                @Html.DisplayNameFor(model => model.FechaComprobante)
                             </th>
                             <th>
                                 @Html.DisplayNameFor(model => model.RazonSocial)
                             </th>
                             <th>
-                                @Html.DisplayNameFor(model => model.NroDocumento)
-                            </th>
-                            <th>
-                                @Html.DisplayNameFor(model => model.CuilCuit)
-                            </th>
-                            <th>
                                 @Html.DisplayNameFor(model => model.Total)
                             </th>
                             <th>
-                                @Html.DisplayNameFor(model => model.Cantidad)
+                                @Html.DisplayNameFor(model => model.Saldo)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.FechaAlta)
                             </th>
                             <th>
                                 @Html.DisplayNameFor(model => model.UsuarioAlta)
@@ -65,35 +65,35 @@ BREADCRUMB
                         {
                         <tr>
                             <td>
+                                @Html.DisplayFor(modelItem => item.CodigoPrespuesto)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.TipoComprobante)
+                            </td>
+                            <td>
                                 @Html.DisplayFor(modelItem => item.Codigo)
                             </td>
                             <td>
-                                @Html.DisplayFor(modelItem => item.Fecha)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.FechaVencimiento)
+                                @Html.DisplayFor(modelItem => item.FechaComprobante)
                             </td>
                             <td>
                                 @Html.DisplayFor(modelItem => item.RazonSocial)
                             </td>
                             <td>
-                                @Html.DisplayFor(modelItem => item.NroDocumento)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.CuilCuit)
-                            </td>
-                            <td>
                                 @Html.DisplayFor(modelItem => item.Total)
                             </td>
                             <td>
-                                @Html.DisplayFor(modelItem => item.Cantidad)
+                                @Html.DisplayFor(modelItem => item.Saldo)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.FechaAlta)
                             </td>
                             <td>
                                 @Html.DisplayFor(modelItem => item.UsuarioAlta)
                             </td>
                             <td>
                                 <div class="btn-group">
-                                    <a class="btn btn-primary btn-sm" asp-action="Aprobado" asp-route-id="@item.Id"><i class="fa fa-search"></i></a>
+                                    <a class="btn btn-primary btn-sm" asp-action="ComprobanteDetalle" asp-route-id="@item.Id"><i class="fa fa-search"></i></a>
                                 </div>
                             </td>
                         </tr>

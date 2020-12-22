@@ -44,6 +44,7 @@ namespace Gestion.Web
                 cfg.Password.RequiredLength = 6;
             })
                 .AddDefaultTokenProviders()
+                //.AddDefaultUI()
                 .AddEntityFrameworkStores<DataContext>();
 
             services.AddDbContext<DataContext>(cfg =>
@@ -127,6 +128,9 @@ namespace Gestion.Web
             services.AddScoped<IFormasPagosRepository, FormasPagosRepository>();
 
             services.AddScoped<IConfiguracionesRepository, ConfiguracionesRepository>();
+            services.AddScoped<ICombosRepository, CombosRepository>();
+
+            services.AddScoped<IClientesCategoriasRepository, ClientesCategoriasRepository>();
 
             services.AddScoped<IUserHelper, UserHelper>();
             services.AddScoped<IMailHelper, MailHelper>();
@@ -162,6 +166,7 @@ namespace Gestion.Web
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseCookiePolicy();
+            
 
             app.UseMvc(routes =>
             {

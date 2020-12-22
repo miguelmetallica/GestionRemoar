@@ -76,6 +76,8 @@ namespace Gestion.Web.Data
                         oCmd.Parameters.AddWithValue("@Telefono", item.Telefono);
                         oCmd.Parameters.AddWithValue("@Celular", item.Celular);
                         oCmd.Parameters.AddWithValue("@Email", item.Email);
+                        oCmd.Parameters.AddWithValue("@TipoResponsableId", item.TipoResponsableId);
+                        oCmd.Parameters.AddWithValue("@CategoriaId", item.CategoriaId);
                         oCmd.Parameters.AddWithValue("@Estado", true);
                         oCmd.Parameters.AddWithValue("@Usuario", item.UsuarioAlta);
 
@@ -132,6 +134,8 @@ namespace Gestion.Web.Data
                         oCmd.Parameters.AddWithValue("@Telefono", item.Telefono);
                         oCmd.Parameters.AddWithValue("@Celular", item.Celular);
                         oCmd.Parameters.AddWithValue("@Email", item.Email);
+                        oCmd.Parameters.AddWithValue("@TipoResponsableId", item.TipoResponsableId);
+                        oCmd.Parameters.AddWithValue("@CategoriaId", item.CategoriaId);
                         oCmd.Parameters.AddWithValue("@Estado", true);
                         oCmd.Parameters.AddWithValue("@Usuario", item.UsuarioAlta);
 
@@ -216,6 +220,12 @@ namespace Gestion.Web.Data
                                 obj.Celular = oReader["Celular"] as string;
                                 obj.Email = oReader["Email"] as string;
 
+                                obj.TipoResponsableId = oReader["TipoResponsableId"] as string;
+                                obj.TipoResponsable = oReader["TipoResponsable"] as string;
+                                
+                                obj.CategoriaId = oReader["CategoriaId"] as string;
+                                obj.Categoria = oReader["Categoria"] as string;
+                                                                
                                 obj.Estado = (bool)oReader["Estado"];                                
 
                                 //Agregamos el objeto a la coleccion de resultados

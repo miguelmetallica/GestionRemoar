@@ -1,0 +1,55 @@
+﻿@model Gestion.Web.Models.ComprobantesDetalleDTO
+<div class="box box-primary">
+    <div class="box-header with-border">
+        <h3 class="box-title">Imputar</h3>
+    </div>
+    <!-- /.box-header -->
+    <!-- form start -->
+    <form asp-action="ImputaProducto" enctype="multipart/form-data">        
+        <div class="box-body">
+            <input type="hidden" asp-for="ComprobanteId" />
+            <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="ProductoId" />
+
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="ProductoCodigo" class="control-label"></label>
+                <input asp-for="ProductoCodigo" readonly class="form-control input-sm" />
+                <span asp-validation-for="ProductoCodigo" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ProductoNombre" class="control-label"></label>
+                <input asp-for="ProductoNombre" readonly class="form-control input-sm" />
+                <span asp-validation-for="ProductoNombre" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Precio" class="control-label"></label>
+                <input asp-for="Precio" readonly class="form-control input-sm" />
+                <span asp-validation-for="Precio" class="text-danger"></span>
+            </div>
+            @*<div class="form-group">
+                <label asp-for="Imputado" class="control-label"></label>
+                <input asp-for="Imputado" readonly class="form-control input-sm" />
+                <span asp-validation-for="Imputado" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ImputadoPorcentaje" class="control-label"></label>
+                <input asp-for="ImputadoPorcentaje" readonly class="form-control input-sm" />
+                <span asp-validation-for="ImputadoPorcentaje" class="text-danger"></span>
+            </div>*@
+
+            <div class="form-group">
+                <label asp-for="Importe" class="control-label"></label>
+                <input asp-for="Importe" class="form-control input-sm" />
+                <span asp-validation-for="Importe" class="text-danger"></span>
+            </div>
+
+        </div>
+        <!-- /.box-body -->
+        <div class="box-footer">
+            <input type="submit" value="Guardar" class="btn btn-primary" />
+            <a asp-action="Index" class="btn btn-default pull-right">Volver al Listado</a>
+        </div>        
+    </form>
+</div>
+

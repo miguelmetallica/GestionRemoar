@@ -4,6 +4,7 @@ using Gestion.Web.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Metadata;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -23,11 +24,16 @@ namespace Gestion.Web.Controllers
         private readonly IFactoryConnection factoryConnection;
         private readonly IComprobantesRepository comprobantesRepository;
         private readonly IFormasPagosRepository formasPagosRepository;
+        private readonly ITiposResponsablesRepository tiposResponsables;
+        private readonly ICombosRepository combos;
+        private readonly IPresupuestosRepository presupuestos;
+        private readonly IClientesCategoriasRepository clientesCategorias;
 
         public ClientesController(IClientesRepository repository, IUserHelper userHelper, 
                 ITiposDocumentosRepository tiposDocumentos, IProvinciasRepository provincias,
                 IFactoryConnection factoryConnection,IComprobantesRepository comprobantesRepository,
-                IFormasPagosRepository formasPagosRepository)
+                IFormasPagosRepository formasPagosRepository, ITiposResponsablesRepository tiposResponsables,
+                ICombosRepository combos,IPresupuestosRepository presupuestos,IClientesCategoriasRepository clientesCategorias)
         {
             this.repository = repository;
             this.userHelper = userHelper;
@@ -36,6 +42,10 @@ namespace Gestion.Web.Controllers
             this.factoryConnection = factoryConnection;
             this.comprobantesRepository = comprobantesRepository;
             this.formasPagosRepository = formasPagosRepository;
+            this.tiposResponsables = tiposResponsables;
+            this.combos = combos;
+            this.presupuestos = presupuestos;
+            this.clientesCategorias = clientesCategorias;
         }
 
         
@@ -57,7 +67,7 @@ namespace Gestion.Web.Controllers
                 return NotFound();
             }
 
-            ViewData["CC"] = await comprobantesRepository.spComprobantes(id);
+            ViewData["Comprobantes"] = await comprobantesRepository.spComprobantes(id);
 
             return View(cliente.FirstOrDefault());            
         }
@@ -66,6 +76,8 @@ namespace Gestion.Web.Controllers
         {
             ViewBag.TiposDocumentos = this.tiposDocumentos.GetCombo();
             ViewBag.Provincias = this.provincias.GetCombo();
+            ViewBag.TiposResponsables = this.tiposResponsables.GetCombo();
+            ViewBag.Categorias = this.clientesCategorias.GetCombo();
             return View();
         }
 
@@ -96,12 +108,14 @@ namespace Gestion.Web.Controllers
                     clientes.UsuarioAlta =User.Identity.Name;
                     await repository.spInsertar(clientes);
 
-                    return RedirectToAction(nameof(Index));
+                    return RedirectToAction(nameof(Details), new { id = clientes.Id });
                 }
             }
 
             ViewBag.TiposDocumentos = this.tiposDocumentos.GetCombo();
             ViewBag.Provincias = this.provincias.GetCombo();
+            ViewBag.TiposResponsables = this.tiposResponsables.GetCombo();
+            ViewBag.Categorias = this.clientesCategorias.GetCombo();
 
             return View(clientes);
         }
@@ -121,6 +135,8 @@ namespace Gestion.Web.Controllers
 
             ViewBag.TiposDocumentos = this.tiposDocumentos.GetCombo();
             ViewBag.Provincias = this.provincias.GetCombo();
+            ViewBag.TiposResponsables = this.tiposResponsables.GetCombo();
+            ViewBag.Categorias = this.clientesCategorias.GetCombo();
 
             return View(toClienteEdit(cliente));
         }
@@ -148,11 +164,13 @@ namespace Gestion.Web.Controllers
             {
                 await repository.spEditar(clientes);
 
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Details), new { id = clientes.Id });
             }
 
             ViewBag.TiposDocumentos = this.tiposDocumentos.GetCombo();
             ViewBag.Provincias = this.provincias.GetCombo();
+            ViewBag.TiposResponsables = this.tiposResponsables.GetCombo();
+            ViewBag.Categorias = this.clientesCategorias.GetCombo();
 
             return View(clientes);
         }
@@ -195,7 +213,9 @@ namespace Gestion.Web.Controllers
                 OtrasReferencias = clientes.OtrasReferencias,
                 Telefono = clientes.Telefono,
                 Celular = clientes.Celular,
-                Email = clientes.Email
+                Email = clientes.Email,
+                TipoResponsableId = clientes.TipoResponsableId,
+                CategoriaId = clientes.CategoriaId
             };
             return cliente;
         }
@@ -221,7 +241,9 @@ namespace Gestion.Web.Controllers
                 OtrasReferencias = clientes.OtrasReferencias,
                 Telefono = clientes.Telefono,
                 Celular = clientes.Celular,
-                Email = clientes.Email
+                Email = clientes.Email,
+                TipoResponsableId = clientes.TipoResponsableId,
+                CategoriaId = clientes.CategoriaId
             };
             return cliente;
         }
@@ -248,7 +270,9 @@ namespace Gestion.Web.Controllers
                 OtrasReferencias = clientes.OtrasReferencias,
                 Telefono = clientes.Telefono,
                 Celular = clientes.Celular,
-                Email = clientes.Email
+                Email = clientes.Email,
+                TipoResponsableId = clientes.TipoResponsableId,
+                CategoriaId = clientes.CategoriaId
             };
             return cliente;
         }
@@ -290,6 +314,8 @@ namespace Gestion.Web.Controllers
                         oCmd.Parameters.AddWithValue("@Celular", item.Celular);
                         oCmd.Parameters.AddWithValue("@Email", item.Email);
                         oCmd.Parameters.AddWithValue("@Estado", true);
+                        oCmd.Parameters.AddWithValue("@TipoResponsableId", item.TipoResponsableId);
+                        oCmd.Parameters.AddWithValue("@CategoriaId", item.CategoriaId);
                         oCmd.Parameters.AddWithValue("@Usuario", User.Identity.Name);
 
                         //Ejecutamos el comando y retornamos el id generado
@@ -346,6 +372,8 @@ namespace Gestion.Web.Controllers
                         oCmd.Parameters.AddWithValue("@Celular", item.Celular);
                         oCmd.Parameters.AddWithValue("@Email", item.Email);
                         oCmd.Parameters.AddWithValue("@Estado", true);
+                        oCmd.Parameters.AddWithValue("@TipoResponsableId", item.TipoResponsableId);
+                        oCmd.Parameters.AddWithValue("@CategoriaId", item.CategoriaId);
                         oCmd.Parameters.AddWithValue("@Usuario", User.Identity.Name);
 
                         //Ejecutamos el comando y retornamos el id generado
@@ -372,20 +400,27 @@ namespace Gestion.Web.Controllers
                 return NotFound();
             }
 
-            var cliente = await this.repository.spCliente(id);
+            var comprobante = await comprobantesRepository.spComprobante(id);
+            if (comprobante == null)
+            {
+                return NotFound();
+            }
+
+            var cliente = await this.repository.spCliente(comprobante.ClienteId);
             if (cliente == null)
             {
                 return NotFound();
             }
             
-            ViewData["FormasPagosTMP"] = await comprobantesRepository.spComprobantesTmpFormasPagos(id);
-            ViewData["Saldo"] = await comprobantesRepository.spComprobantes(id);
+            ViewData["FormasPagosTMP"] = await comprobantesRepository.spComprobantesTmpFormasPagos(comprobante.Id);
+            ViewData["Saldo"] = comprobante;
             ViewData["Cliente"] = cliente.FirstOrDefault();
-            ViewData["FormasPagos"] = formasPagosRepository.GetAll();
+            ViewData["FormasPagos"] = formasPagosRepository.GetAll().Where(x=> x.Estado == true);
             
             var recibo = new ComprobantesReciboDTO();
-            recibo.ClienteId = cliente.FirstOrDefault().Id;
-            
+            recibo.ClienteId = comprobante.ClienteId;
+            recibo.ComprobanteId = comprobante.Id;
+
             return View(recibo);
         }
 
@@ -399,40 +434,31 @@ namespace Gestion.Web.Controllers
                 return NotFound();
             }
             
-            var formasPagos = await comprobantesRepository.spComprobantesTmpFormasPagos(reciboDTO.ClienteId);
+            var formasPagos = await comprobantesRepository.spComprobantesTmpFormasPagos(reciboDTO.ComprobanteId);
+            var SaldoDto = await comprobantesRepository.spComprobante(reciboDTO.ComprobanteId);
 
-            var SaldoDto = await comprobantesRepository.spComprobantes(reciboDTO.ClienteId);
-
-            if (SaldoDto.Sum(x => x.Saldo) < 0)
+            if (SaldoDto.Saldo < 0)
             {
-                ModelState.AddModelError("Importe", "El Saldo de la Cuenta es Cero");
-
-                ViewData["Saldo"] = SaldoDto;
-                ViewData["Cliente"] = cliente.FirstOrDefault();
-
+                ModelState.AddModelError("Importe", "El Saldo de la Cuenta es Cero");                
+            }
+            
+            if (SaldoDto.Saldo < reciboDTO.Importe)
+            {
+                ModelState.AddModelError("Importe", "El Importe ingresado es mayor al Saldo de la Cuenta");
             }
 
             if (ModelState.IsValid)
             {
-                if (SaldoDto.Sum(x => x.Saldo) < reciboDTO.Importe)
-                {
-                    ModelState.AddModelError("Importe", "El Importe ingresado es mayor al Saldo de la Cuenta");
-
-                    ViewData["Saldo"] = SaldoDto;
-                    ViewData["Cliente"] = cliente.FirstOrDefault();                    
-
-                    return View(reciboDTO);
-                }
-
                 reciboDTO.Usuario = User.Identity.Name; 
                 await comprobantesRepository.spRecibo(reciboDTO);
 
-                return RedirectToAction(nameof(Details),new { id = reciboDTO.ClienteId });
+                return RedirectToAction(nameof(ComprobanteDetalle),new { id = reciboDTO.ComprobanteId });
             }
-            
-            ViewData["Saldo"] = SaldoDto;            
+
+            ViewData["FormasPagosTMP"] = formasPagos;
+            ViewData["Saldo"] = SaldoDto;
             ViewData["Cliente"] = cliente.FirstOrDefault();
-            ViewData["FormasPagos"] = formasPagosRepository.GetAll();
+            ViewData["FormasPagos"] = formasPagosRepository.GetAll().Where(x => x.Estado == true);
 
             return View(reciboDTO);
         }
@@ -444,23 +470,30 @@ namespace Gestion.Web.Controllers
                 return NotFound();
             }
 
+            var comprobante = await comprobantesRepository.spComprobante(id);
+            if (comprobante == null)
+            {
+                return NotFound();
+            }
+
             if (fp == null)
             {
                 return NotFound();
             }
 
-            var cliente = await this.repository.spCliente(id);
+            var cliente = await this.repository.spCliente(comprobante.ClienteId);
             if (cliente == null)
             {
                 return NotFound();
             }
 
-            ViewData["Saldo"] = await comprobantesRepository.spComprobantes(id);
+            ViewData["Saldo"] = comprobante;
             ViewData["Cliente"] = cliente.FirstOrDefault();
-            ViewData["FormasPagosTMP"] = await comprobantesRepository.spComprobantesTmpFormasPagos(id);
+            ViewData["FormasPagosTMP"] = await comprobantesRepository.spComprobantesTmpFormasPagos(comprobante.ClienteId);
 
             var recibo = new ComprobantesEfectivoDTO();
-            recibo.ClienteId = cliente.FirstOrDefault().Id;
+            recibo.ClienteId = comprobante.ClienteId;
+            recibo.ComprobanteId = comprobante.Id;
             recibo.FormaPagoId = fp;
             return View(recibo);
         }
@@ -469,45 +502,40 @@ namespace Gestion.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Efectivo(ComprobantesEfectivoDTO reciboDTO)
         {
-            var cliente = await this.repository.spCliente(reciboDTO.ClienteId);
-            if (cliente == null)
+            var SaldoDto = await comprobantesRepository.spComprobante(reciboDTO.ComprobanteId);
+            if (SaldoDto == null)
             {
                 return NotFound();
             }
-            
-            var SaldoDto = await comprobantesRepository.spComprobantes(reciboDTO.ClienteId);
             var SaldoTmp = await comprobantesRepository.spComprobantesTmpFormasPagos(reciboDTO.ClienteId);
-            if (SaldoDto.Sum(x => x.Saldo) - SaldoTmp.Sum(x => x.Total) == 0)
+            if (SaldoTmp == null)
+            {
+                return NotFound();
+            }
+
+            if (SaldoDto.Saldo - SaldoTmp.Sum(x => x.Total) == 0)
             {
                 ModelState.AddModelError("Importe", "El Saldo de la Cuenta es Cero");
-                
-                ViewData["Saldo"] = SaldoDto;
-                ViewData["Cliente"] = cliente.FirstOrDefault();
-                ViewData["FormasPagosTMP"] = SaldoTmp;
+            }
+
+            if (SaldoDto.Saldo - SaldoTmp.Sum(x => x.Total) < reciboDTO.Importe)
+            {
+                ModelState.AddModelError("Importe", "El Importe ingresado es mayor al Saldo de la Cuenta");
             }
 
             if (ModelState.IsValid)
             {
-                if (SaldoDto.Sum(x => x.Saldo) - SaldoTmp.Sum(x => x.Total) < reciboDTO.Importe)
-                {
-                    ModelState.AddModelError("Importe", "El Importe ingresado es mayor al Saldo de la Cuenta");
-
-                    ViewData["Saldo"] = SaldoDto;
-                    ViewData["Cliente"] = cliente.FirstOrDefault();
-                    ViewData["FormasPagosTMP"] = SaldoTmp;
-
-                    return View(reciboDTO);
-                }
-
                 reciboDTO.Usuario = User.Identity.Name;
                 await comprobantesRepository.spEfectivo(reciboDTO);
 
-                return RedirectToAction(nameof(Recibo), new { id = reciboDTO.ClienteId });
+                return RedirectToAction(nameof(Recibo), new { id = reciboDTO.ComprobanteId });
             }
 
-            //ViewData["Saldo"] = SaldoDto;
-            //ViewData["Cliente"] = cliente.FirstOrDefault();
-            //ViewData["FormasPagosTMP"] = await comprobantesRepository.spComprobantesTmpFormasPagos(reciboDTO.ClienteId);
+            ViewData["Saldo"] = SaldoDto;
+            var cliente = await this.repository.spCliente(reciboDTO.ClienteId);
+            ViewData["Cliente"] = cliente.FirstOrDefault();
+
+            ViewData["FormasPagosTMP"] = SaldoTmp;
 
             return View(reciboDTO);
         }
@@ -519,23 +547,30 @@ namespace Gestion.Web.Controllers
                 return NotFound();
             }
 
+            var comprobante = await comprobantesRepository.spComprobante(id);
+            if (comprobante == null)
+            {
+                return NotFound();
+            }
+
             if (fp == null)
             {
                 return NotFound();
             }
 
-            var cliente = await this.repository.spCliente(id);
+            var cliente = await this.repository.spCliente(comprobante.ClienteId);
             if (cliente == null)
             {
                 return NotFound();
             }
 
-            ViewData["Saldo"] = await comprobantesRepository.spComprobantes(id);
+            ViewData["Saldo"] = comprobante;
             ViewData["Cliente"] = cliente.FirstOrDefault();
-            ViewData["FormasPagosTMP"] = await comprobantesRepository.spComprobantesTmpFormasPagos(id);
+            ViewData["FormasPagosTMP"] = await comprobantesRepository.spComprobantesTmpFormasPagos(comprobante.ClienteId);
 
             var recibo = new ComprobantesOtroDTO();
-            recibo.ClienteId = cliente.FirstOrDefault().Id;
+            recibo.ClienteId = comprobante.ClienteId;
+            recibo.ComprobanteId = comprobante.Id;
             recibo.FormaPagoId = fp;
             return View(recibo);
         }
@@ -544,45 +579,41 @@ namespace Gestion.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Otro(ComprobantesOtroDTO reciboDTO)
         {
-            var cliente = await this.repository.spCliente(reciboDTO.ClienteId);
-            if (cliente == null)
+            var SaldoDto = await comprobantesRepository.spComprobante(reciboDTO.ComprobanteId);
+            if (SaldoDto == null)
+            {
+                return NotFound();
+            }
+            var SaldoTmp = await comprobantesRepository.spComprobantesTmpFormasPagos(reciboDTO.ClienteId);
+            if (SaldoTmp == null)
             {
                 return NotFound();
             }
 
-            var SaldoDto = await comprobantesRepository.spComprobantes(reciboDTO.ClienteId);
-            var SaldoTmp = await comprobantesRepository.spComprobantesTmpFormasPagos(reciboDTO.ClienteId);
-            
-            if (SaldoDto.Sum(x => x.Saldo) - SaldoTmp.Sum(x => x.Total) == 0)
+            if (SaldoDto.Saldo - SaldoTmp.Sum(x => x.Total) == 0)
             {
-                ModelState.AddModelError("Importe", "El Saldo de la Cuenta es Cero");
-                
-                ViewData["Saldo"] = SaldoDto;
-                ViewData["Cliente"] = cliente.FirstOrDefault();
-                ViewData["FormasPagosTMP"] = SaldoTmp;
+                ModelState.AddModelError("Importe", "El Saldo de la Cuenta es Cero");                
+            }
+
+            if (SaldoDto.Saldo - SaldoTmp.Sum(x => x.Total) < reciboDTO.Importe)
+            {
+                ModelState.AddModelError("Importe", "El Importe ingresado es mayor al Saldo de la Cuenta");
             }
 
             if (ModelState.IsValid)
             {
-                if (SaldoDto.Sum(x => x.Saldo) - SaldoTmp.Sum(x => x.Total) < reciboDTO.Importe)
-                {
-                    ModelState.AddModelError("Importe", "El Importe ingresado es mayor al Saldo de la Cuenta");
-
-                    ViewData["Saldo"] = SaldoDto;
-                    ViewData["Cliente"] = cliente.FirstOrDefault();
-                    ViewData["FormasPagosTMP"] = SaldoTmp;
-
-                    return View(reciboDTO);
-                }
-
+            
                 reciboDTO.Usuario = User.Identity.Name;
                 await comprobantesRepository.spOtro(reciboDTO);
 
-                return RedirectToAction(nameof(Recibo), new { id = reciboDTO.ClienteId });
+                return RedirectToAction(nameof(Recibo), new { id = reciboDTO.ComprobanteId });
             }
 
-            //ViewData["Saldo"] = SaldoDto;
-            //ViewData["Cliente"] = cliente.FirstOrDefault();
+            ViewData["Saldo"] = SaldoDto;
+            var cliente = await this.repository.spCliente(reciboDTO.ClienteId);
+            ViewData["Cliente"] = cliente.FirstOrDefault();
+
+            ViewData["FormasPagosTMP"] = SaldoTmp;
 
             return View(reciboDTO);
         }
@@ -594,23 +625,34 @@ namespace Gestion.Web.Controllers
                 return NotFound();
             }
 
+            var comprobante = await comprobantesRepository.spComprobante(id);
+            if (comprobante == null)
+            {
+                return NotFound();
+            }
+
             if (fp == null)
             {
                 return NotFound();
             }
 
-            var cliente = await this.repository.spCliente(id);
+            var cliente = await this.repository.spCliente(comprobante.ClienteId);
             if (cliente == null)
             {
                 return NotFound();
             }
 
-            ViewData["Saldo"] = await comprobantesRepository.spComprobantes(id);
+            ViewData["Saldo"] = comprobante;
             ViewData["Cliente"] = cliente.FirstOrDefault();
-            ViewData["FormasPagosTMP"] = await comprobantesRepository.spComprobantesTmpFormasPagos(id);
+            ViewData["FormasPagosTMP"] = await comprobantesRepository.spComprobantesTmpFormasPagos(comprobante.ClienteId);
+
+            ViewBag.Años = new SelectList(combos.GetAños().OrderBy(x => x.Text), "Value", "Text"); 
+            ViewBag.Meses = new SelectList(combos.GetMeses().OrderBy(x => x.Text), "Value", "Text");
 
             var recibo = new ComprobantesTarjetaDTO();
-            recibo.ClienteId = cliente.FirstOrDefault().Id;
+            recibo.ClienteId = comprobante.ClienteId;
+            recibo.ComprobanteId = comprobante.Id;
+            
             recibo.FormaPagoId = fp;
 
             recibo.Cuota = 1;
@@ -628,40 +670,40 @@ namespace Gestion.Web.Controllers
             reciboDTO.Interes = 0;
             reciboDTO.Total = reciboDTO.Importe;
 
-            
-            var cliente = await this.repository.spCliente(reciboDTO.ClienteId);
-            if (cliente == null)
+
+            var SaldoDto = await comprobantesRepository.spComprobante(reciboDTO.ComprobanteId);
+            if (SaldoDto == null)
+            {
+                return NotFound();
+            }
+            var SaldoTmp = await comprobantesRepository.spComprobantesTmpFormasPagos(reciboDTO.ComprobanteId);
+            if (SaldoTmp == null)
             {
                 return NotFound();
             }
 
-            var SaldoDto = await comprobantesRepository.spComprobantes(reciboDTO.ClienteId);
-            var SaldoTmp = await comprobantesRepository.spComprobantesTmpFormasPagos(reciboDTO.ClienteId);
-
-            if (SaldoDto.Sum(x => x.Saldo) - SaldoTmp.Sum(x => x.Total) == 0)
+            if (SaldoDto.Saldo - SaldoTmp.Sum(x => x.Total) == 0)
             {
-                ModelState.AddModelError("Importe", "El Saldo de la Cuenta es Cero");
-                ViewData["Saldo"] = SaldoDto;
-                ViewData["Cliente"] = cliente.FirstOrDefault();
-                ViewData["FormasPagosTMP"] = SaldoTmp;
-
+                ModelState.AddModelError("Importe", "El Saldo de la Cuenta es Cero");                
             }
-            
-            
+
+            if(Convert.ToInt32(reciboDTO.TarjetaVenceAño) == DateTime.Now.Year && Convert.ToInt32(reciboDTO.TarjetaVenceMes) < DateTime.Now.Month)
+            {
+                ModelState.AddModelError("TarjetaVenceMes", "Tarjeta Vencida");                
+            }
+
+            if (Convert.ToInt32(reciboDTO.TarjetaVenceAño) < DateTime.Now.Year)
+            {
+                ModelState.AddModelError("TarjetaVenceAño", "Tarjeta Vencida");
+                
+            }
+            if (SaldoDto.Saldo - SaldoTmp.Sum(x => x.Total) < reciboDTO.Importe)
+            {
+                ModelState.AddModelError("Importe", "El Importe ingresado es mayor al Saldo de la Cuenta");
+            }
 
             if (ModelState.IsValid)
             {
-                if (SaldoDto.Sum(x => x.Saldo) - SaldoTmp.Sum(x => x.Total) < reciboDTO.Importe)
-                {
-                    ModelState.AddModelError("Importe", "El Importe ingresado es mayor al Saldo de la Cuenta");
-
-                    ViewData["Saldo"] = SaldoDto;
-                    ViewData["Cliente"] = cliente.FirstOrDefault();
-                    ViewData["FormasPagosTMP"] = SaldoTmp;
-
-                    return View(reciboDTO);
-                }
-
                 reciboDTO.Usuario = User.Identity.Name;
                 reciboDTO.TarjetaEsDebito = true;
                 reciboDTO.Cuota = 1;
@@ -670,12 +712,17 @@ namespace Gestion.Web.Controllers
 
                 await comprobantesRepository.spTarjeta(reciboDTO);
 
-                return RedirectToAction(nameof(Recibo), new { id = reciboDTO.ClienteId });
+                return RedirectToAction(nameof(Recibo), new { id = reciboDTO.ComprobanteId });
             }
-
+            
             ViewData["Saldo"] = SaldoDto;
+            var cliente = await this.repository.spCliente(reciboDTO.ClienteId);
             ViewData["Cliente"] = cliente.FirstOrDefault();
+
             ViewData["FormasPagosTMP"] = SaldoTmp;
+
+            ViewBag.Años = new SelectList(combos.GetAños().OrderBy(x => x.Text), "Value", "Text", reciboDTO.TarjetaVenceAño);
+            ViewBag.Meses = new SelectList(combos.GetMeses().OrderBy(x => x.Text), "Value", "Text", reciboDTO.TarjetaVenceMes);
 
             return View(reciboDTO);
         }
@@ -687,24 +734,37 @@ namespace Gestion.Web.Controllers
                 return NotFound();
             }
 
+            var comprobante = await comprobantesRepository.spComprobante(id);
+            if (comprobante == null)
+            {
+                return NotFound();
+            }
+
             if (fp == null)
             {
                 return NotFound();
             }
 
-            var cliente = await this.repository.spCliente(id);
+            var cliente = await this.repository.spCliente(comprobante.ClienteId);
             if (cliente == null)
             {
                 return NotFound();
             }
 
-            ViewData["Saldo"] = await comprobantesRepository.spComprobantes(id);
+            ViewData["Saldo"] = comprobante;
             ViewData["Cliente"] = cliente.FirstOrDefault();
-            ViewData["FormasPagosTMP"] = await comprobantesRepository.spComprobantesTmpFormasPagos(id);
+            ViewData["FormasPagosTMP"] = await comprobantesRepository.spComprobantesTmpFormasPagos(comprobante.ClienteId);
+
 
             var recibo = new ComprobantesTarjetaDTO();
-            recibo.ClienteId = cliente.FirstOrDefault().Id;
+            recibo.ClienteId = comprobante.ClienteId;
+            recibo.ComprobanteId = comprobante.Id;
+
             recibo.FormaPagoId = fp;
+            
+            ViewBag.Años = new SelectList(combos.GetAños().OrderBy(x => x.Text), "Value", "Text", recibo.TarjetaVenceAño);
+            ViewBag.Meses = new SelectList(combos.GetMeses().OrderBy(x => x.Text), "Value", "Text", recibo.TarjetaVenceMes);
+
             return View(recibo);
         }
 
@@ -712,50 +772,57 @@ namespace Gestion.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> TarjetaCredito(ComprobantesTarjetaDTO reciboDTO)
         {
-            var cliente = await this.repository.spCliente(reciboDTO.ClienteId);
-            if (cliente == null)
+            var SaldoDto = await comprobantesRepository.spComprobante(reciboDTO.ComprobanteId);
+            if (SaldoDto == null)
+            {
+                return NotFound();
+            }
+            var SaldoTmp = await comprobantesRepository.spComprobantesTmpFormasPagos(reciboDTO.ClienteId);
+            if (SaldoTmp == null)
             {
                 return NotFound();
             }
 
-            var SaldoDto = await comprobantesRepository.spComprobantes(reciboDTO.ClienteId);
-            var SaldoTmp = await comprobantesRepository.spComprobantesTmpFormasPagos(reciboDTO.ClienteId);
-
-            if (SaldoDto.Sum(x => x.Saldo) - SaldoTmp.Sum(x => x.Total) == 0)
+            if (SaldoDto.Saldo - SaldoTmp.Sum(x => x.Total) == 0)
             {
                 ModelState.AddModelError("Importe", "El Saldo de la Cuenta es Cero");
-                
-                ViewData["Saldo"] = SaldoDto;
-                ViewData["Cliente"] = cliente.FirstOrDefault();
-                ViewData["FormasPagosTMP"] = SaldoTmp;
+            }
+
+            if (SaldoDto.Saldo - SaldoTmp.Sum(x => x.Total) < reciboDTO.Importe)
+            {
+                ModelState.AddModelError("Importe", "El Importe ingresado es mayor al Saldo de la Cuenta");
+            }
+
+            if (Convert.ToInt32(reciboDTO.TarjetaVenceAño) == DateTime.Now.Year && Convert.ToInt32(reciboDTO.TarjetaVenceMes) < DateTime.Now.Month)
+            {
+                ModelState.AddModelError("TarjetaVenceMes", "Tarjeta Vencida");
+            }
+
+            if (Convert.ToInt32(reciboDTO.TarjetaVenceAño) < DateTime.Now.Year)
+            {
+                ModelState.AddModelError("TarjetaVenceAño", "Tarjeta Vencida");
 
             }
 
             if (ModelState.IsValid)
             {
-                if (SaldoDto.Sum(x => x.Saldo) - SaldoTmp.Sum(x => x.Total) < reciboDTO.Importe)
-                {
-                    ModelState.AddModelError("Importe", "El Importe ingresado es mayor al Saldo de la Cuenta");
-
-                    ViewData["Saldo"] = SaldoDto;
-                    ViewData["Cliente"] = cliente.FirstOrDefault();
-                    ViewData["FormasPagosTMP"] = SaldoTmp;
-
-                    return View(reciboDTO);
-                }
-
                 reciboDTO.Usuario = User.Identity.Name;
-                reciboDTO.TarjetaEsDebito = false;                                
+                reciboDTO.TarjetaEsDebito = false;                
 
                 await comprobantesRepository.spTarjeta(reciboDTO);
 
-                return RedirectToAction(nameof(Recibo), new { id = reciboDTO.ClienteId });
+                return RedirectToAction(nameof(Recibo), new { id = reciboDTO.ComprobanteId });
             }
 
-            //ViewData["Saldo"] = SaldoDto;
-            //ViewData["Cliente"] = cliente.FirstOrDefault();
-            //ViewData["FormasPagosTMP"] = SaldoTmp;
-            
+            ViewData["Saldo"] = SaldoDto;
+            var cliente = await this.repository.spCliente(reciboDTO.ClienteId);
+            ViewData["Cliente"] = cliente.FirstOrDefault();
+
+            ViewData["FormasPagosTMP"] = SaldoTmp;
+
+            ViewBag.Años = new SelectList(combos.GetAños().OrderBy(x => x.Text), "Value", "Text", reciboDTO.TarjetaVenceAño);
+            ViewBag.Meses = new SelectList(combos.GetMeses().OrderBy(x => x.Text), "Value", "Text", reciboDTO.TarjetaVenceMes);
+
             return View(reciboDTO);
         }
 
@@ -766,23 +833,31 @@ namespace Gestion.Web.Controllers
                 return NotFound();
             }
 
+            var comprobante = await comprobantesRepository.spComprobante(id);
+            if (comprobante == null)
+            {
+                return NotFound();
+            }
+
             if (fp == null)
             {
                 return NotFound();
             }
 
-            var cliente = await this.repository.spCliente(id);
+            var cliente = await this.repository.spCliente(comprobante.ClienteId);
             if (cliente == null)
             {
                 return NotFound();
             }
 
-            ViewData["Saldo"] = await comprobantesRepository.spComprobantes(id);
+            ViewData["Saldo"] = comprobante;
             ViewData["Cliente"] = cliente.FirstOrDefault();
-            ViewData["FormasPagosTMP"] = await comprobantesRepository.spComprobantesTmpFormasPagos(id);
+            ViewData["FormasPagosTMP"] = await comprobantesRepository.spComprobantesTmpFormasPagos(comprobante.ClienteId);
 
             var recibo = new ComprobantesChequeDTO();
-            recibo.ClienteId = cliente.FirstOrDefault().Id;
+            recibo.ClienteId = comprobante.ClienteId;
+            recibo.ComprobanteId = comprobante.Id;
+
             recibo.FormaPagoId = fp;
             return View(recibo);
         }
@@ -791,81 +866,151 @@ namespace Gestion.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Cheque(ComprobantesChequeDTO reciboDTO)
         {
-            var cliente = await this.repository.spCliente(reciboDTO.ClienteId);
-            if (cliente == null)
+            var SaldoDto = await comprobantesRepository.spComprobante(reciboDTO.ComprobanteId);
+            if (SaldoDto == null)
+            {
+                return NotFound();
+            }
+            var SaldoTmp = await comprobantesRepository.spComprobantesTmpFormasPagos(reciboDTO.ClienteId);
+            if (SaldoTmp == null)
             {
                 return NotFound();
             }
 
-            var SaldoDto = await comprobantesRepository.spComprobantes(reciboDTO.ClienteId);
-            var SaldoTmp = await comprobantesRepository.spComprobantesTmpFormasPagos(reciboDTO.ClienteId);
-
-            if (SaldoDto.Sum(x => x.Saldo) - SaldoTmp.Sum(x => x.Total) == 0)
+            if (SaldoDto.Saldo - SaldoTmp.Sum(x => x.Total) == 0)
             {
                 ModelState.AddModelError("Importe", "El Saldo de la Cuenta es Cero");
+            }
 
-                ViewData["Saldo"] = SaldoDto;
-                ViewData["Cliente"] = cliente.FirstOrDefault();
-                ViewData["FormasPagosTMP"] = SaldoTmp;
+            if (SaldoDto.Saldo - SaldoTmp.Sum(x => x.Total) < reciboDTO.Importe)
+            {
+                ModelState.AddModelError("Importe", "El Importe ingresado es mayor al Saldo de la Cuenta");
             }
 
             if (ModelState.IsValid)
             {
-                if (SaldoDto.Sum(x => x.Saldo) - SaldoTmp.Sum(x => x.Total) < reciboDTO.Importe)
-                {
-                    ModelState.AddModelError("Importe", "El Importe ingresado es mayor al Saldo de la Cuenta");
-
-                    ViewData["Saldo"] = SaldoDto;
-                    ViewData["Cliente"] = cliente.FirstOrDefault();
-                    ViewData["FormasPagosTMP"] = SaldoTmp;
-
-                    return View(reciboDTO);
-                }
-
                 reciboDTO.Usuario = User.Identity.Name;
                 await comprobantesRepository.spCheque(reciboDTO);
 
-                return RedirectToAction(nameof(Recibo), new { id = reciboDTO.ClienteId });
+                return RedirectToAction(nameof(Recibo), new { id = reciboDTO.ComprobanteId });
             }
 
-            //ViewData["Saldo"] = SaldoDto;
-            //ViewData["Cliente"] = cliente.FirstOrDefault();
+            ViewData["Saldo"] = SaldoDto;
+            var cliente = await this.repository.spCliente(reciboDTO.ClienteId);
+            ViewData["Cliente"] = cliente.FirstOrDefault();
+
+            ViewData["FormasPagosTMP"] = SaldoTmp;
 
             return View(reciboDTO);
         }
 
-        public async Task<IActionResult> DeleteFormaPago(string id,string cli)
+        public async Task<IActionResult> DeleteFormaPago(string id,string comp)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            if (cli == null)
+            if (comp == null)
             {
                 return NotFound();
             }
 
             await comprobantesRepository.spDeleteFormaPago(id);
-            return RedirectToAction(nameof(Recibo) , new { id = cli });
+            return RedirectToAction(nameof(Recibo) , new { id = comp });
         }
 
-        public async Task<IActionResult> ComprobanteDetalle(string id, string comp)
+        public async Task<IActionResult> ComprobanteDetalle(string id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var cliente = await this.repository.spCliente(id);
+            var comprobante = await comprobantesRepository.spComprobante(id);
+            if (comprobante == null)
+            {
+                return NotFound();
+            }
+
+            var cliente = await this.repository.spCliente(comprobante.ClienteId);
             if (cliente == null)
             {
                 return NotFound();
             }
 
-            ViewData["CC"] = await comprobantesRepository.spComprobantes(id);
+            ViewData["Comprobantes"] = comprobante;
+            ViewData["Imputaciones"] = await comprobantesRepository.spComprobanteImputacion(id);
+            ViewData["FormasPagos"] = await comprobantesRepository.spComprobantesFormasPagos(id);            
+            ViewData["Detalles"] = await presupuestos.spPresupuestosAprobado(comprobante.PresupuestoId);
 
             return View(cliente.FirstOrDefault());
+        }
+
+        public async Task<IActionResult> ReciboImprimir(string id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var CC = await comprobantesRepository.spComprobante(id);
+            if (CC == null)
+            {
+                return NotFound();
+            }
+
+            //var cliente = await this.repository.spCliente(CC.ClienteId);
+            //if (cliente == null)
+            //{
+            //    return NotFound();
+            //}
+            
+            //ViewData["CCIMPUTACION"] = await comprobantesRepository.spComprobanteImputacion(comp);
+            ViewData["Detalle"] = await comprobantesRepository.spComprobantesFormasPagosImprimir(id);
+            //ViewData["CC"] = CC;
+            //ViewData["CCDETALLE"] = await presupuestos.spPresupuestosAprobado(CC.PresupuestoId);
+
+
+            //ViewData["PRESUPUESTO"] = await comprobantesRepository.spComprobante(comp);
+
+            return View(CC);
+        }
+
+        public async Task<IActionResult> ReciboAnular(string id, string comp)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            if (comp == null)
+            {
+                return NotFound();
+            }
+
+            var recibos = await comprobantesRepository.spComprobante(id);
+
+            var cliente = await this.repository.spCliente(recibos.ClienteId);
+            if (cliente == null)
+            {
+                return NotFound();
+            }
+
+            ViewData["Cliente"] = cliente.FirstOrDefault();
+            recibos.Observaciones = "";
+            recibos.ComprobanteId = comp;
+            return View(recibos);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ReciboAnular(Comprobantes recibo)
+        {
+            recibo.UsuarioAlta = User.Identity.Name;
+            await comprobantesRepository.spComprobantesReciboAnular(recibo.Id,recibo.Observaciones,recibo.UsuarioAlta);
+
+            return RedirectToAction(nameof(ComprobanteDetalle), new { id = recibo.ComprobanteId });            
         }
 
     }

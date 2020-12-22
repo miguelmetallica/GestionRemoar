@@ -57,6 +57,16 @@ namespace Gestion.Web.Models
             }
         }
 
+        [Display(Name = "Fecha Aprobacion")]
+        public DateTime? FechaAprobacion { get; set; }
+
+        [Display(Name = "Fecha Rechazo")]
+        public DateTime? FechaRechazo { get; set; }
+
+        [Display(Name = "Motivo")]
+        public string MotivoAprobacionRechazo { get; set; }
+
+        public string UsuarioAprobacionRechazo { get; set; }
     }
 
     public partial class PresupuestosIndex
@@ -87,6 +97,17 @@ namespace Gestion.Web.Models
 
         [DisplayFormat(DataFormatString = "{0:C2}")]
         public decimal Total { get; set; }
+
+        [Display(Name = "Fecha Aprobacion")]
+        public DateTime? FechaAprobacion { get; set; }
+
+        [Display(Name = "Fecha Rechazo")]
+        public DateTime? FechaRechazo { get; set; }
+
+        [Display(Name = "Motivo")]
+        public string MotivoAprobacionRechazo { get; set; }
+
+        public string UsuarioAprobacionRechazo { get; set; }
     }
 
     public partial class PresupuestosDetalleDTO
@@ -126,23 +147,26 @@ namespace Gestion.Web.Models
         //campos totales
         //cantidad total de productos
         [DisplayFormat(DataFormatString = "{0:N0}")]
+        [Display(Name = "Cantidad de Productos")]
         public int Cantidad { get; set; }
 
         //total de la venta
         [DisplayFormat(DataFormatString = "{0:C2}")]
+        [Display(Name = "SubTotal")]
         public decimal Total { get; set; }
 
         //total de la venta
         [DisplayFormat(DataFormatString = "{0:C2}")]
+        [Display(Name = "Total")]
         public decimal TotalDescuento { get; set; }
 
         //total sin impuestos de la venta
         [DisplayFormat(DataFormatString = "{0:C2}")]
-        [Display(Name = "Total Sin Imp")]
+        [Display(Name = "SubTotal Sin Impuestos")]
         public decimal TotalSinImpuesto { get; set; }
 
         [DisplayFormat(DataFormatString = "{0:C2}")]
-        [Display(Name = "Total Sin Imp")]
+        [Display(Name = "Total Sin Impuestos")]
         public decimal TotalSinImpuestoDescuento { get; set; }
 
         //subtotal por producto
@@ -169,8 +193,27 @@ namespace Gestion.Web.Models
         public decimal ProductoPrecioSinImpuesto { get; set; }
         [Display(Name = "Cantidad")]
         [DisplayFormat(DataFormatString = "{0:N0}")]
-        public int ProductoCantidad { get; set; }    
-       
+        public int ProductoCantidad { get; set; }
 
+
+        [Display(Name = "Fecha Aprobacion")]
+        public DateTime? FechaAprobacion { get; set; }
+
+        [Display(Name = "Fecha Rechazo")]
+        public DateTime? FechaRechazo { get; set; }
+
+        [Display(Name = "Motivo")]
+        public string MotivoAprobacionRechazo { get; set; }
+
+        public string UsuarioAprobacionRechazo { get; set; }
+
+        public string SucursalNombre { get; set; }
+        public string SucursalCalle { get; set; }
+        public string SucursalCalleNro { get; set; }
+        public string SucursalLocalidad { get; set; }
+        public string SucursalCodigoPostal { get; set; }
+        public string SucursalTelefono { get; set; }
+
+        public string VersionImpresion { get; set; }
     }
 }

@@ -2,7 +2,7 @@
 
 @{
     ViewData["Title"] = "Detalle del Cliente";
-    var SaldoDTO = (IEnumerable<Comprobantes>)ViewData["Saldo"];
+    var SaldoDTO = (Comprobantes)ViewData["Saldo"];
     var formasPagosTMP = (IEnumerable<ComprobantesFormasPagosDTO>)ViewData["FormasPagosTMP"];
 
 }
@@ -40,58 +40,66 @@
                             <div class="box-body">
                                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
+                                <input type="hidden" asp-for="ComprobanteId" />
                                 <input type="hidden" asp-for="ClienteId" />
                                 <input type="hidden" asp-for="FormaPagoId" />
 
                                 <div class="form-group col-md-12">
                                     <label class="control-label">Saldo</label>
-                                    <input value=@(SaldoDTO.Sum(x => x.Saldo) - formasPagosTMP.Sum(x => x.Total)) readonly class="form-control input-sm" />
+                                    <input value=@(SaldoDTO.Saldo - formasPagosTMP.Sum(x => x.Total)) readonly class="form-control input-sm" />
 
                                 </div>
-                                <div class="form-group col-md-6">
+                                <div class="form-group col-md-12">
                                     <label asp-for="TarjetaCliente" class="control-label"></label>
                                     <input asp-for="TarjetaCliente" class="form-control input-sm" />
                                     <span asp-validation-for="TarjetaCliente" class="text-danger"></span>
                                 </div>
-                                <div class="form-group col-md-6">
+                                <div class="form-group col-md-12">
                                     <label asp-for="TarjetaNumero" class="control-label"></label>
                                     <input asp-for="TarjetaNumero" class="form-control input-sm" />
                                     <span asp-validation-for="TarjetaNumero" class="text-danger"></span>
                                 </div>
-                                <div class="form-group col-md-4">
+                                <div class="form-group col-md-12">
+
                                     <label asp-for="TarjetaVenceAño" class="control-label"></label>
-                                    <input asp-for="TarjetaVenceAño" class="form-control input-sm" />
+                                    <select asp-for="TarjetaVenceAño" asp-items="@ViewBag.Años" class="form-control input-sm"></select>
                                     <span asp-validation-for="TarjetaVenceAño" class="text-danger"></span>
                                 </div>
-                                <div class="form-group col-md-4">
+                                <div class="form-group col-md-12">
                                     <label asp-for="TarjetaVenceMes" class="control-label"></label>
-                                    <input asp-for="TarjetaVenceMes" class="form-control input-sm" />
+                                    <select asp-for="TarjetaVenceMes" asp-items="@ViewBag.Meses" class="form-control input-sm"></select>
                                     <span asp-validation-for="TarjetaVenceMes" class="text-danger"></span>
                                 </div>
-                                <div class="form-group col-md-4">
+                                <div class="form-group col-md-12">
                                     <label asp-for="TarjetaCodigoSeguridad" class="control-label"></label>
                                     <input asp-for="TarjetaCodigoSeguridad" class="form-control input-sm" />
                                     <span asp-validation-for="TarjetaCodigoSeguridad" class="text-danger"></span>
                                 </div>
-                                <div class="form-group col-md-3">
+                                <div class="form-group col-md-12">
                                     <label asp-for="Importe" class="control-label"></label>
-                                    <input asp-for="Importe" class="form-control input-sm" />
+                                    <input asp-for="Importe" class="form-control input-sm" onkeypress="return filterFloat(event,this);" onkeyup="multiplicar()" />
                                     <span asp-validation-for="Importe" class="text-danger"></span>
                                 </div>
-                                <div class="form-group col-md-3">
-                                    <label asp-for="Cuota" class="control-label"></label>
-                                    <input asp-for="Cuota" class="form-control input-sm" />
-                                    <span asp-validation-for="Cuota" class="text-danger"></span>
-                                </div>
-                                <div class="form-group col-md-3">
+                                <div class="form-group col-md-12">
                                     <label asp-for="Interes" class="control-label"></label>
-                                    <input asp-for="Interes" class="form-control input-sm" />
+                                    <input asp-for="Interes" class="form-control input-sm" onkeypress="return filterFloat(event,this);" onkeyup="multiplicar()" />
                                     <span asp-validation-for="Interes" class="text-danger"></span>
                                 </div>
-                                <div class="form-group col-md-3">
+                                <div class="form-group col-md-12">
+                                    <label asp-for="Cuota" class="control-label"></label>
+                                    <input asp-for="Cuota" class="form-control input-sm" onkeypress="return isNumberKey(this);" onkeyup="multiplicar()" />
+                                    <span asp-validation-for="Cuota" class="text-danger"></span>
+                                </div>
+
+                                <div class="form-group col-md-12">
                                     <label asp-for="Total" class="control-label"></label>
-                                    <input asp-for="Total" class="form-control input-sm" />
+                                    <input asp-for="Total" class="form-control input-sm" readonly />
                                     <span asp-validation-for="Total" class="text-danger"></span>
+                                </div>
+                                <div class="form-group col-md-12">
+                                    <label asp-for="CodigoAutorizacion" class="control-label"></label>
+                                    <input asp-for="CodigoAutorizacion" class="form-control input-sm" />
+                                    <span asp-validation-for="CodigoAutorizacion" class="text-danger"></span>
                                 </div>
                                 <div class="form-group col-md-12">
                                     <label asp-for="Observaciones" class="control-label"></label>
@@ -101,13 +109,13 @@
                             </div>
                             <div class="box-footer">
                                 <input type="submit" value="Guardar" class="btn btn-primary" />
-                                <a asp-action="Recibo" asp-route-id="@Model.ClienteId" class="btn btn-default pull-right">Volver</a>
+                                <a asp-action="Recibo" asp-route-id="@Model.ComprobanteId" class="btn btn-default pull-right">Volver</a>
                             </div>
                         </div>
                     </form>
                 </div>
                 <!-- /.box -->
-                
+
 
             </div>
         </div>
@@ -118,5 +126,69 @@
 
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}    
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+        function multiplicar() {
+            Importe = document.getElementById("Importe").value;
+            Interes = document.getElementById("Interes").value;
+            Cuota = document.getElementById("Cuota").value;
+            r = (Importe + Interes) * Cuota;
+
+            document.getElementById("Total").value = Number((Math.floor(r * 100) / 100).toFixed(2));
+        }
+
+        //Solo Enteros
+        function isNumberKey(evt) {
+            var charCode = (evt.which) ? evt.which : event.keyCode
+            if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+                multiplicar()
+                return false;
+            }
+
+            multiplicar()
+            return true;
+
+        }
+
+        //Solo Enteros
+
+        //Solo Enteros
+        function filterFloat(evt, input) {
+            // Backspace = 8, Enter = 13, ‘0′ = 48, ‘9′ = 57, ‘.’ = 46, ‘-’ = 43
+            var key = window.Event ? evt.which : evt.keyCode;
+            var chark = String.fromCharCode(key);
+            var tempValue = input.value + chark;
+            if (key >= 48 && key <= 57) {
+                if (filter(tempValue) === false) {
+                    multiplicar()
+                    return false;
+                } else {
+                    multiplicar()
+                    return true;
+                }
+            } else {
+                if (key == 8 || key == 13 || key == 46 || key == 0) {
+                    multiplicar()
+                    return true;
+                } else {
+                    multiplicar()
+                    return false;
+                }
+            }
+
+            multiplicar()
+
+        }
+        function filter(__val__) {
+            var preg = /^([0-9]+\.?[0-9]{0,2})$/;
+            if (preg.test(__val__) === true) {
+                return true;
+            } else {
+                return false;
+            }
+
+        }
+    
+    //Solo Enteros
+    </script>
 }

@@ -1,7 +1,9 @@
 ﻿@model Gestion.Web.Models.ClientesDTO
 
 @{
-    ViewData["Title"] = "Detalle del Cliente";    
+    ViewData["Title"] = "Detalle del Cliente";
+    var comprobantes = (IEnumerable<Comprobantes>)ViewData["Comprobantes"];
+    
 }
 
 <div class="content-wrapper">
@@ -39,6 +41,12 @@
                             </li>
                             <li class="list-group-item">
                                 <b>Fecha Nacimiento</b> <a class="pull-right">@Model.FechaNacimiento</a>
+                            </li>
+                            <li class="list-group-item">
+                                <b>Tipo Responsable</b> <a class="pull-right">@Model.TipoResponsable</a>
+                            </li>
+                            <li class="list-group-item">
+                                <b>Categoria</b> <a class="pull-right">@Model.Categoria</a>
                             </li>
                         </ul>
                         <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning btn-sm">Editar datos del Cliente</a>
@@ -110,7 +118,7 @@
             </div>
             <div class="col-md-9">
                 <!-- general form elements -->
-                <partial name="_CuentaCorriente" model='ViewData["CC"]' />
+                <partial name="_CuentaCorriente" model='comprobantes' />
                 <!-- /.box -->
             </div>
         </div>

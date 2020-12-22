@@ -1,4 +1,4 @@
-﻿@model Gestion.Web.Models.PresupuestosDetalle
+﻿@model Gestion.Web.Models.PresupuestosDetalleDTO
 
 @{
     ViewData["Title"] = "Eliminar el Producto";
@@ -33,22 +33,22 @@
                     <div class="box-body">
                         <dl class="dl-horizontal">
                             <dt>
-                                @Html.DisplayNameFor(model => model.Producto.Codigo)
+                                @Html.DisplayNameFor(model => model.ProductoCodigo)
                             </dt>
                             <dd>
-                                @Html.DisplayFor(model => model.Producto.Codigo)
+                                @Html.DisplayFor(model => model.ProductoCodigo)
                             </dd>
                             <dt>
-                                @Html.DisplayNameFor(model => model.Producto.Producto)
+                                @Html.DisplayNameFor(model => model.ProductoNombre)
                             </dt>
                             <dd>
-                                @Html.DisplayFor(model => model.Producto.Producto)
+                                @Html.DisplayFor(model => model.ProductoNombre)
                             </dd>
                             <dt>
-                                @Html.DisplayNameFor(model => model.Precio)
+                                @Html.DisplayNameFor(model => model.ProductoPrecio)
                             </dt>
                             <dd>
-                                @Html.DisplayFor(model => model.Precio)
+                                @Html.DisplayFor(model => model.ProductoPrecio)
                             </dd>
                             <dt>
                                 @Html.DisplayNameFor(model => model.Cantidad)
@@ -64,7 +64,7 @@
                         <form asp-action="ProductoDelete">
                             <input type="hidden" asp-for="Id" />
                             <input type="submit" value="Eliminar" class="btn btn-danger" />
-                            <a asp-controller="Presupuestos" asp-action="Pendiente" asp-route-id="@Model.PresupuestoId" class="btn btn-default pull-right">Volver</a>
+                            <a asp-controller="Presupuestos" asp-action="Pendiente" asp-route-id="@Model.Id" class="btn btn-default pull-right">Volver</a>
                         </form>                        
                     </div>                
                 </div>

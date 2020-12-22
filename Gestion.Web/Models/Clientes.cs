@@ -26,6 +26,8 @@ namespace Gestion.Web.Models
         public string Telefono { get; set; }
         public string Celular { get; set; }
         public string Email { get; set; }
+        public string TipoResponsableId { get; set; }
+        public string CategoriaId { get; set; }
         public bool Estado { get; set; }
     }
 
@@ -53,6 +55,10 @@ namespace Gestion.Web.Models
         public string Telefono { get; set; }
         public string Celular { get; set; }
         public string Email { get; set; }
+        public string TipoResponsableId { get; set; }
+        public string TipoResponsable { get; set; }
+        public string CategoriaId { get; set; }
+        public string Categoria { get; set; }
         public bool Estado { get; set; }
     }
 }

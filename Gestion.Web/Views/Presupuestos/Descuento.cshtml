@@ -47,23 +47,23 @@
                             <input asp-for="@Model.ClienteRazonSocial" readonly class="form-control input-sm" />
                         </div>
 
-                        <div class="form-group col-md-4">
+                        <div class="form-group col-md-12">
                             <label asp-for="@Model.Cantidad" class="control-label"></label>
                             <input asp-for="@Model.Cantidad" readonly class="form-control input-sm" />
                         </div>
 
-                        <div class="form-group col-md-4">
-                            <label asp-for="@Model.Total" class="control-label"></label>
+                        <div class="form-group col-md-12">
+                            <label asp-for="@Model.Total" class="control-label">Subtotal</label>
                             <input asp-for="@Model.Total" readonly class="form-control input-sm" />
                         </div>
 
-                        <div class="form-group col-md-4">
-                            <label asp-for="@Model.TotalSinImpuesto" class="control-label"></label>
-                            <input asp-for="@Model.TotalSinImpuesto" readonly class="form-control input-sm" />
+                        <div class="form-group col-md-12">
+                            <label asp-for="@Model.TotalDescuento" class="control-label">Total a Pagar</label>
+                            <input asp-for="@Model.TotalDescuento" readonly class="form-control input-sm" />
                         </div>
 
                         <div class="box-header with-border">
-                            <h3 class="box-title">Descuentos Disponibles</h3>                            
+                            <h3 class="box-title">Descuentos Disponibles</h3>
                         </div>
                         <div class="box-body">
                             <table id="dTable" class="table dt-responsive table-condensed table-bordered table-striped" width="100%">
@@ -86,27 +86,28 @@
                                     {
                                         var total = (decimal)(Model.Total - (Model.Total * (item.Porcentaje / 100)));
                                         var totalsinimpuesto = (decimal)(Model.TotalSinImpuesto - (Model.TotalSinImpuesto * (item.Porcentaje / 100)));
-                                    <tr>
-                                        <td>
-                                            @Html.DisplayFor(modelItem => item.Descripcion)
-                                        </td>
-                                        <td>
-                                            @Html.DisplayFor(modelItem => total)
-                                        </td>
-                                        <td>
-                                            @Html.DisplayFor(modelItem => totalsinimpuesto)
-                                        </td>
-                                        <td>
-                                            <div class="btn-group">
-                                                @{
-                                                    var param = new Dictionary<string, string> { { "id", item.Id }, { "id2", Model.Id } };
-                                                }
-                                                <a class="btn btn-primary btn-sm" asp-action="DescuentoAplica" asp-all-route-data="@param"><i class="fa fa-check"></i></a>
-                                            </div>
-                                        </td>
-                                    </tr>                                                                                
+                                        <tr>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.Descripcion)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => total)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => totalsinimpuesto)
+                                            </td>
+                                            <td>
+                                                <div class="btn-group">
+                                                    @{
+                                                        var param = new Dictionary<string, string> { { "id", item.Id }, { "id2", Model.Id } };
+                                                    }
+                                                    <a class="btn btn-primary btn-sm" asp-action="DescuentoAplica" asp-all-route-data="@param"><i class="fa fa-check"></i></a>
+                                                </div>
+                                            </td>
+                                        </tr>
+
                                     }
-                                </tbody>                                
+                                </tbody>
                             </table>
                         </div>
                     </div>

@@ -64,6 +64,9 @@ namespace Gestion.Web.Models
         [Range(0, double.MaxValue, ErrorMessage = "The field {0} acepta valores entre {1} y {2}")]
         public decimal? PrecioVenta { get; set; }
 
+        [Display(Name = "Codigo del Proveedor")]
+        public string CodigoProveedor { get; set; }
+
         public bool Estado { get; set; }
 
         public DateTime FechaAlta { get; set; }

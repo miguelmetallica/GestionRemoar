@@ -33,11 +33,12 @@ BREADCRUMB
                                 @Html.DisplayNameFor(model => model.Codigo)
                             </th>
                             <th>
-                                @Html.DisplayNameFor(model => model.Fecha)
+                                @Html.DisplayNameFor(model => model.FechaRechazo)
                             </th>
                             <th>
-                                @Html.DisplayNameFor(model => model.FechaVencimiento)
+                                @Html.DisplayName("Usuario Rechazo")
                             </th>
+
                             <th>
                                 @Html.DisplayNameFor(model => model.RazonSocial)
                             </th>
@@ -48,17 +49,15 @@ BREADCRUMB
                                 @Html.DisplayNameFor(model => model.CuilCuit)
                             </th>
                             <th>
-                                @Html.DisplayNameFor(model => model.Estado)
-                            </th>
-                            <th>
                                 @Html.DisplayNameFor(model => model.Total)
                             </th>
                             <th>
-                                @Html.DisplayNameFor(model => model.Cantidad)
+                                @Html.DisplayName("Fecha Presupuesto")
                             </th>
                             <th>
                                 @Html.DisplayNameFor(model => model.UsuarioAlta)
                             </th>
+
                             <th>Operaciones</th>
                         </tr>
                     </thead>
@@ -69,11 +68,12 @@ BREADCRUMB
                             <td>
                                 @Html.DisplayFor(modelItem => item.Codigo)
                             </td>
+
                             <td>
-                                @Html.DisplayFor(modelItem => item.Fecha)
+                                @Html.DisplayFor(modelItem => item.FechaRechazo)
                             </td>
                             <td>
-                                @Html.DisplayFor(modelItem => item.FechaVencimiento)
+                                @Html.DisplayFor(modelItem => item.UsuarioAprobacionRechazo)
                             </td>
                             <td>
                                 @Html.DisplayFor(modelItem => item.RazonSocial)
@@ -85,13 +85,10 @@ BREADCRUMB
                                 @Html.DisplayFor(modelItem => item.CuilCuit)
                             </td>
                             <td>
-                                @Html.DisplayFor(modelItem => item.Estado)
-                            </td>
-                            <td>
                                 @Html.DisplayFor(modelItem => item.Total)
                             </td>
                             <td>
-                                @Html.DisplayFor(modelItem => item.Cantidad)
+                                @Html.DisplayFor(modelItem => item.Fecha)
                             </td>
                             <td>
                                 @Html.DisplayFor(modelItem => item.UsuarioAlta)

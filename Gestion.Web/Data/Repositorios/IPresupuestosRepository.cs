@@ -37,6 +37,7 @@ namespace Gestion.Web.Data
         Task<List<PresupuestosDetalleDTO>> spPresupuestosVencido(string id);
 
         Task<int> spVencidoCopiar(Presupuestos presupuestos, string id);
+        Task<int> spPresupuestoCopiar(Presupuestos presupuestos, string id);
 
         Task<List<PresupuestosIndex>> spPresupuestosRechazados();
 
@@ -50,5 +51,8 @@ namespace Gestion.Web.Data
 
         Task<int> spTipoResponsableAplica(string presupuestoId, string tipoResponsableId, string usuario);
 
+        Task<List<PresupuestosDetalleDTO>> spPresupuestosImprimir(string id);
+
+        Task<PresupuestosDetalleDTO> spPresupuestosDetalle(string id);
     }
 }

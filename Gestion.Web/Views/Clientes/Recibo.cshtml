@@ -2,7 +2,7 @@
 
 @{
     ViewData["Title"] = "Detalle del Cliente";
-    var SaldoDTO = (IEnumerable<Comprobantes>)ViewData["Saldo"];
+    var SaldoDTO = (Comprobantes)ViewData["Saldo"];
     var formasPagos = (IEnumerable<FormasPagos>)ViewData["FormasPagos"];
     var formasPagosTMP = (IEnumerable<ComprobantesFormasPagosDTO>)ViewData["FormasPagosTMP"];
 
@@ -42,22 +42,31 @@
                                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
                                 <input type="hidden" asp-for="ClienteId" />
+                                <input type="hidden" asp-for="ComprobanteId" />
 
                                 <div class="form-group">
                                     <label class="control-label">Saldo</label>
-                                    <input value="@(SaldoDTO.Sum(x => x.Saldo) - formasPagosTMP.Sum(x => x.Total))" readonly class="form-control input-sm" />
+                                    <input value="@(SaldoDTO.Saldo - formasPagosTMP.Sum(x => x.Total))" readonly class="form-control input-sm" />
 
                                 </div>
 
                                 <div class="form-group">
-                                    <label asp-for="Importe" class="control-label"></label>
-                                    <input value="@formasPagosTMP.Sum(x => x.Total)" asp-for="Importe" readonly class="form-control input-sm"  />
+                                    <label class="control-label">Importe a Pagar</label>
+                                    <input value="@formasPagosTMP.Sum(x => x.Total)" asp-for="Importe" readonly class="form-control input-sm" />
                                     <span asp-validation-for="Importe" class="text-danger"></span>
                                 </div>
                             </div>
                             <div class="box-footer">
-                                <input type="submit" value="Generar Recibo" class="btn btn-primary" />
-                                <a asp-action="Details" asp-route-id="@Model.ClienteId" class="btn btn-default pull-right">Volver</a>
+                                @if (formasPagosTMP.Count() == 0)
+                                {
+                                    <input type="submit" value="Generar Recibo" disabled class="btn btn-primary" />
+                                }
+                                else { 
+                                    <input type="submit" value="Generar Recibo" class="btn btn-primary" />
+                                }
+                                    
+
+                                <a asp-action="ComprobanteDetalle" asp-route-id="@Model.ComprobanteId" class="btn btn-default pull-right">Volver</a>
                             </div>
                         </div>
                     </form>
@@ -77,33 +86,40 @@
                             switch (item.Tipo)
                             {
                                 case "E":
-                                    <a class="btn btn-block btn-social btn-danger " asp-action="Efectivo" asp-route-id="@Model.ClienteId" asp-route-fp="@item.Id">
+                                    <a class="btn btn-block btn-social btn-danger " asp-action="Efectivo" asp-route-id="@Model.ComprobanteId" asp-route-fp="@item.Id">
                                         <i class="fa fa-bitbucket"></i> @item.Descripcion
                                     </a>
                                     break;
                                 case "C":
-                                    <a class="btn btn-block btn-social btn-primary" asp-action="TarjetaCredito" asp-route-id="@Model.ClienteId" asp-route-fp="@item.Id">
+                                    <a class="btn btn-block btn-social btn-primary" asp-action="TarjetaCredito" asp-route-id="@Model.ComprobanteId" asp-route-fp="@item.Id">
                                         <i class="fa fa-bitbucket"></i> @item.Descripcion
                                     </a>
                                     break;
                                 case "D":
-                                    <a class="btn btn-block btn-social btn-success" asp-action="TarjetaDebito" asp-route-id="@Model.ClienteId" asp-route-fp="@item.Id">
+                                    <a class="btn btn-block btn-social btn-success" asp-action="TarjetaDebito" asp-route-id="@Model.ComprobanteId" asp-route-fp="@item.Id">
                                         <i class="fa fa-bitbucket"></i> @item.Descripcion
                                     </a>
                                     break;
                                 case "X":
-                                    <a class="btn btn-block btn-social btn-warning" asp-action="Cheque" asp-route-id="@Model.ClienteId" asp-route-fp="@item.Id">
+                                    <a class="btn btn-block btn-social btn-warning" asp-action="Cheque" asp-route-id="@Model.ComprobanteId" asp-route-fp="@item.Id">
                                         <i class="fa fa-bitbucket"></i> @item.Descripcion
                                     </a>
                                     break;
                                 case "O":
-                                    <a class="btn btn-block btn-social btn-bitbucket" asp-action="Otro" asp-route-id="@Model.ClienteId" asp-route-fp="@item.Id">
+                                    <a class="btn btn-block btn-social btn-bitbucket" asp-action="Otro" asp-route-id="@Model.ComprobanteId" asp-route-fp="@item.Id">
                                         <i class="fa fa-bitbucket"></i> @item.Descripcion
                                     </a>
                                     break;
                                 default:
                                     break;
                             }
+                        }
+
+                        @if (formasPagos.Count() == 0) 
+                        { 
+                            <a class="btn btn-block">
+                                <i class="fa fa-bitbucket"></i> No existen Formas de Pagos
+                            </a>
                         }
                     </div>
                 </div>
@@ -127,7 +143,7 @@
                                     <div class="alert alert-danger alert-dismissible">
                                         <h4>
                                             <i class="icon fa fa-bitbucket"></i> @item.FormaPago
-                                            <a class="btn btn-warning btn-sm pull-right" asp-action="DeleteFormaPago" asp-route-id="@item.Id" asp-route-cli="@Model.ClienteId"><i class="glyphicon glyphicon-remove"></i></a>
+                                            <a class="btn btn-warning btn-sm pull-right" asp-action="DeleteFormaPago" asp-route-id="@item.Id" asp-route-comp="@Model.ComprobanteId"><i class="glyphicon glyphicon-remove"></i></a>
                                         </h4>                                        
                                         <p>Total: @item.Total </p>
                                         <p>Observaciones: @item.Observaciones</p>
@@ -139,12 +155,13 @@
                                     <div class="alert alert-info alert-dismissible">
                                         <h4>
                                             <i class="icon fa fa-bitbucket"></i> @item.FormaPago
-                                            <a class="btn btn-danger btn-sm pull-right" asp-action="DeleteFormaPago" asp-route-id="@item.Id" asp-route-cli="@Model.ClienteId"><i class="glyphicon glyphicon-remove"></i></a>
+                                            <a class="btn btn-danger btn-sm pull-right" asp-action="DeleteFormaPago" asp-route-id="@item.Id" asp-route-comp="@Model.ComprobanteId"><i class="glyphicon glyphicon-remove"></i></a>
                                         </h4>
                                         <p>Nombre: @item.TarjetaCliente </p>
                                         <p>Numero: @item.TarjetaNumero - Vence: @item.TarjetaVenceAño / @item.TarjetaVenceMes </p>
                                         <p>Total: @item.Total </p>
                                         <p>Importe: @item.Importe - Cuota: @item.Cuota - Interes: @item.Interes</p>
+                                        <p>Codigo de Autorizacion: @item.CodigoAutorizacion</p>
                                         <p>Observaciones: @item.Observaciones</p>
                                         <p>Usuario: @item.UsuarioAlta - Fecha: @item.FechaAlta</p>
 
@@ -154,11 +171,12 @@
                                     <div class="alert alert-success alert-dismissible">
                                         <h4>
                                             <i class="icon fa fa-bitbucket"></i> @item.FormaPago
-                                            <a class="btn btn-danger btn-sm pull-right" asp-action="DeleteFormaPago" asp-route-id="@item.Id" asp-route-cli="@Model.ClienteId"><i class="glyphicon glyphicon-remove"></i></a>
+                                            <a class="btn btn-danger btn-sm pull-right" asp-action="DeleteFormaPago" asp-route-id="@item.Id" asp-route-comp="@Model.ComprobanteId"><i class="glyphicon glyphicon-remove"></i></a>
                                         </h4>
                                         <p>Nombre: @item.TarjetaCliente </p>
                                         <p>Numero: @item.TarjetaNumero - Vence: @item.TarjetaVenceAño / @item.TarjetaVenceMes </p>
                                         <p>Total: @item.Total </p>
+                                        <p>Codigo de Autorizacion: @item.CodigoAutorizacion</p>
                                         <p>Observaciones: @item.Observaciones</p>
                                         <p>Usuario: @item.UsuarioAlta - Fecha: @item.FechaAlta</p>
                                     </div>
@@ -167,7 +185,7 @@
                                     <div class="alert alert-warning alert-dismissible">
                                         <h4>
                                             <i class="icon fa fa-bitbucket"></i> @item.FormaPago
-                                            <a class="btn btn-danger btn-sm pull-right" asp-action="DeleteFormaPago" asp-route-id="@item.Id" asp-route-cli="@Model.ClienteId"><i class="glyphicon glyphicon-remove"></i></a>
+                                            <a class="btn btn-danger btn-sm pull-right" asp-action="DeleteFormaPago" asp-route-id="@item.Id" asp-route-comp="@Model.ComprobanteId"><i class="glyphicon glyphicon-remove"></i></a>
                                         </h4>
                                         <p>Numero: @item.ChequeNumero </p>
                                         <p>Nombre: @item.ChequeNombre </p>
@@ -185,10 +203,11 @@
                                     <div class="alert alert-bitbucket alert-dismissible">
                                         <h4>
                                             <i class="icon fa fa-bitbucket"></i> @item.FormaPago
-                                            <a class="btn btn-danger btn-sm pull-right" asp-action="DeleteFormaPago" asp-route-id="@item.Id" asp-route-cli="@Model.ClienteId"><i class="glyphicon glyphicon-remove"></i></a>
+                                            <a class="btn btn-danger btn-sm pull-right" asp-action="DeleteFormaPago" asp-route-id="@item.Id" asp-route-comp="@Model.ComprobanteId"><i class="glyphicon glyphicon-remove"></i></a>
                                         </h4>
                                         <p>Total: @item.Total </p>
                                         <p>Forma Pago: @item.Otros</p>
+                                        <p>Codigo de Autorizacion: @item.CodigoAutorizacion</p>
                                         <p>Observaciones: @item.Observaciones</p>
                                         <p>Usuario: @item.UsuarioAlta - Fecha: @item.FechaAlta</p>
 
@@ -197,6 +216,14 @@
                                 default:
                                     break;
                             }                           
+                        }
+                        @if (formasPagosTMP.Count() == 0) 
+                        { 
+                            <div class="alert alert-bitbucket alert-dismissible">
+                                <h4>
+                                    <i class="icon fa fa-bitbucket"></i> No hay formas de pagos seleccionados
+                                </h4>
+                            </div>
                         }
                     </div>
                 </div>

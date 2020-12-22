@@ -88,6 +88,9 @@ namespace Gestion.Web.Data
                         oCmd.Parameters.AddWithValue("@UnidadMedidaId", productos.UnidadMedidaId);
                         oCmd.Parameters.AddWithValue("@AlicuotaId", productos.AlicuotaId);
                         oCmd.Parameters.AddWithValue("@PrecioVenta", productos.PrecioVenta);
+
+                        oCmd.Parameters.AddWithValue("@CodigoProveedor", productos.CodigoProveedor);
+
                         oCmd.Parameters.AddWithValue("@Estado", true);
                         oCmd.Parameters.AddWithValue("@EsVendedor", productos.EsVendedor);
                         oCmd.Parameters.AddWithValue("@Usuario", productos.UsuarioAlta);
@@ -143,6 +146,9 @@ namespace Gestion.Web.Data
                         oCmd.Parameters.AddWithValue("@UnidadMedidaId", productos.UnidadMedidaId);
                         oCmd.Parameters.AddWithValue("@AlicuotaId", productos.AlicuotaId);
                         oCmd.Parameters.AddWithValue("@PrecioVenta", productos.PrecioVenta);
+
+                        oCmd.Parameters.AddWithValue("@CodigoProveedor", productos.CodigoProveedor);
+
                         oCmd.Parameters.AddWithValue("@Estado", productos.Estado);
                         oCmd.Parameters.AddWithValue("@Usuario", productos.UsuarioAlta);
 

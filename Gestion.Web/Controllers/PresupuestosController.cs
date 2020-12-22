@@ -18,6 +18,7 @@ namespace Gestion.Web.Controllers
         private readonly IProvinciasRepository provinciasRepository;
         private readonly IPresupuestosDescuentosRepository descuentosRepository;
         private readonly ITiposResponsablesRepository tiposResponsablesRepository;
+        private readonly IComprobantesRepository comprobantesRepository;
 
         public PresupuestosController(IPresupuestosRepository repository,
             IProductosRepository productosRepository, 
@@ -25,7 +26,8 @@ namespace Gestion.Web.Controllers
             ITiposDocumentosRepository tiposDocumentosRepository,
             IProvinciasRepository provinciasRepository,
             IPresupuestosDescuentosRepository descuentosRepository,
-            ITiposResponsablesRepository tiposResponsablesRepository
+            ITiposResponsablesRepository tiposResponsablesRepository,
+            IComprobantesRepository comprobantesRepository
             )
         {
             this.repository = repository;
@@ -35,6 +37,7 @@ namespace Gestion.Web.Controllers
             this.provinciasRepository = provinciasRepository;
             this.descuentosRepository = descuentosRepository;
             this.tiposResponsablesRepository = tiposResponsablesRepository;
+            this.comprobantesRepository = comprobantesRepository;
         }
 
         public async Task<IActionResult> Pendientes()
@@ -263,31 +266,32 @@ namespace Gestion.Web.Controllers
             
             return View(presupuestos);
         }
-        public IActionResult ProductoDelete(string id)
+        public async Task<IActionResult> ProductoDelete(string id)
         {
+
             if (id == null)
             {
                 return NotFound();
             }
             
-            return View(this.repository.GetDetalle(id));
+            return View(await this.repository.spPresupuestosDetalle(id));
         }
 
         [HttpPost, ActionName("ProductoDelete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(string id)
         {
-            var presupuestos = await repository.GetDetalle(id);
+            var presupuestos = await repository.spPresupuestosDetalle(id);
 
-            var presup = await this.repository.spPresupuestosPendiente(presupuestos.PresupuestoId);
+            var presup = await this.repository.spPresupuestosPendiente(presupuestos.Id);
 
             if (presup == null || presup.Count == 0)
             {
                 return RedirectToAction("Pendientes", "Presupuestos");
             }
 
-            await repository.DeleteDetailAsync(id);
-            return RedirectToAction("Pendiente", new { id = presupuestos.PresupuestoId });
+            await repository.DeleteDetailAsync(presupuestos.DetalleId);
+            return RedirectToAction("Pendiente", new { id = presupuestos.Id });
         }        
 
         public async Task<IActionResult> Incrementar(string id,string id2)
@@ -330,7 +334,16 @@ namespace Gestion.Web.Controllers
                 return RedirectToAction("Pendientes", "Presupuestos");
             }
 
-            await this.repository.ModifyCantidadesAsync(id, -1);
+            var prod = presup.Where(x => x.DetalleId == id).FirstOrDefault();
+            if (prod.ProductoCantidad != 1)
+            {
+                await this.repository.ModifyCantidadesAsync(id, -1);
+            }
+            else
+            {
+                await this.repository.DeleteDetailAsync(id);
+            }
+            
             return RedirectToAction("Pendiente", new { id = id2 });
         }
 
@@ -436,7 +449,8 @@ namespace Gestion.Web.Controllers
 
         public async Task<IActionResult> Aprobados()
         {
-            var model = await repository.spPresupuestosAprobados();
+            //var model = await repository.spPresupuestosAprobados();
+            var model = await comprobantesRepository.spPresupuestosComprobantes();
             return View(model);
         }
 
@@ -472,7 +486,7 @@ namespace Gestion.Web.Controllers
 
         public async Task<IActionResult> PresupuestoImprimir(string id)
         {
-            var presupuesto = await this.repository.spPresupuestosPendiente(id);
+            var presupuesto = await this.repository.spPresupuestosImprimir(id);
 
             if (presupuesto == null || presupuesto.Count == 0)
             {
@@ -488,6 +502,43 @@ namespace Gestion.Web.Controllers
             ViewData["Cliente"] = cliente.FirstOrDefault();
             ViewData["Detalle"] = presupuesto;
             return View(presupuesto.FirstOrDefault());
+        }
+
+        public async Task<IActionResult> ComprobanteDetalle(string id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var comprobante = await comprobantesRepository.spComprobante(id);
+            if (comprobante == null)
+            {
+                return NotFound();
+            }
+
+            var cliente = await this.clientesRepository.spCliente(comprobante.ClienteId);
+            if (cliente == null)
+            {
+                return NotFound();
+            }
+
+            ViewData["Comprobantes"] = comprobante;
+            ViewData["Imputaciones"] = await comprobantesRepository.spComprobanteImputacion(id);
+            ViewData["FormasPagos"] = await comprobantesRepository.spComprobantesFormasPagos(id);
+            ViewData["Detalles"] = await repository.spPresupuestosAprobado(comprobante.PresupuestoId);
+
+            return View(cliente.FirstOrDefault());
+        }
+
+        public async Task<IActionResult> PresupuestoCopia(string id)
+        {
+            var presupuesto = await this.repository.GetByIdAsync(id);
+            presupuesto.UsuarioAlta = User.Identity.Name;
+            var nuevoId = Guid.NewGuid().ToString();
+            await repository.spPresupuestoCopiar(presupuesto, nuevoId);
+
+            return RedirectToAction("Pendiente", "Presupuestos", new { id = nuevoId });
         }
 
     }

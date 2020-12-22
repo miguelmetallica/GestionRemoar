@@ -98,6 +98,7 @@ namespace Gestion.Web.Data
             }
             else
             {
+                presupuestoDetalle.Precio = model.Precio;
                 presupuestoDetalle.Cantidad += model.Cantidad;
                 await spEditarProducto(presupuestoDetalle);
                 //this.context.PresupuestosDetalle.Update(presupuestoDetalle);
@@ -442,6 +443,7 @@ namespace Gestion.Web.Data
                         //los valores viene en el parámetro item del procedimiento
                         oCmd.Parameters.AddWithValue("@Id", presupuestos.Id);
                         oCmd.Parameters.AddWithValue("@Cantidad", presupuestos.Cantidad);
+                        oCmd.Parameters.AddWithValue("@Precio", presupuestos.Precio);
                         oCmd.Parameters.AddWithValue("@Usuario", presupuestos.UsuarioAlta);
 
                         //Ejecutamos el comando y retornamos el id generado
@@ -834,6 +836,46 @@ namespace Gestion.Web.Data
             }
         }
 
+        public async Task<int> spPresupuestoCopiar(Presupuestos presupuestos, string id)
+        {
+            try
+            {
+                using (var oCnn = factoryConnection.GetConnection())
+                {
+                    using (SqlCommand oCmd = new SqlCommand())
+                    {
+                        //asignamos la conexion de trabajo
+                        oCmd.Connection = oCnn;
+
+                        //utilizamos stored procedures
+                        oCmd.CommandType = System.Data.CommandType.StoredProcedure;
+
+                        //el indicamos cual stored procedure utilizar
+                        oCmd.CommandText = "PresupuestosCopia";
+
+                        //le asignamos los parámetros para el stored procedure
+                        //los valores viene en el parámetro item del procedimiento
+                        oCmd.Parameters.AddWithValue("@OldId", presupuestos.Id);
+                        oCmd.Parameters.AddWithValue("@Id", id);
+                        oCmd.Parameters.AddWithValue("@Usuario", presupuestos.UsuarioAlta);
+
+                        //Ejecutamos el comando y retornamos el id generado
+                        await oCmd.ExecuteScalarAsync();
+
+                        return 1;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error al insertar el registro: " + ex.Message);
+            }
+            finally
+            {
+                factoryConnection.CloseConnection();
+            }
+        }
+
         public async Task<List<PresupuestosIndex>> spPresupuestosRechazados()
         {
             //Creamos la conexión a utilizar.
@@ -885,6 +927,12 @@ namespace Gestion.Web.Data
                                 obj.Total = (decimal)oReader["Precio"];
                                 obj.Cantidad = (int)oReader["Cantidad"];
                                 obj.UsuarioAlta = oReader["UsuarioAlta"].ToString();
+
+                                if (!DBNull.Value.Equals(oReader["FechaRechazo"]))
+                                    obj.FechaRechazo = (DateTime)oReader["FechaRechazo"];
+
+                                obj.UsuarioAprobacionRechazo = oReader["UsuarioAprobacionRechazo"] as string;
+                                obj.MotivoAprobacionRechazo = oReader["MotivoAprobacionRechazo"] as string;
 
                                 //Agregamos el objeto a la coleccion de resultados
                                 objs.Add(obj);
@@ -979,6 +1027,11 @@ namespace Gestion.Web.Data
                                 obj.TotalSinImpuestoDescuento = (decimal)oReader["PrecioTotalSinImpuestoDescuento"];
                                 obj.Descuento = (decimal)oReader["DescuentoPorcentaje"];
 
+                                if (!DBNull.Value.Equals(oReader["FechaRechazo"]))
+                                    obj.FechaRechazo = (DateTime)oReader["FechaRechazo"];
+                                
+                                obj.UsuarioAprobacionRechazo = oReader["UsuarioAprobacionRechazo"] as string;
+                                obj.MotivoAprobacionRechazo = oReader["MotivoAprobacionRechazo"] as string;
 
                                 //Agregamos el objeto a la coleccion de resultados
                                 objs.Add(obj);
@@ -1245,6 +1298,206 @@ namespace Gestion.Web.Data
             finally
             {
                 factoryConnection.CloseConnection();
+            }
+        }
+
+        public async Task<List<PresupuestosDetalleDTO>> spPresupuestosImprimir(string id)
+        {
+            //Creamos la conexión a utilizar.
+            //Utilizamos la sentencia Using para asegurarnos de cerrar la conexión
+            //y liberar el objeto al salir de esta sección de manera automática            
+            using (var oCnn = factoryConnection.GetConnection())
+            {
+                using (SqlCommand oCmd = new SqlCommand())
+                {
+                    //asignamos la conexion de trabajo
+                    oCmd.Connection = oCnn;
+
+                    //utilizamos stored procedures
+                    oCmd.CommandType = System.Data.CommandType.StoredProcedure;
+
+                    //el indicamos cual stored procedure utilizar
+                    oCmd.CommandText = "PresupuestosGetImprimir";
+
+                    //le asignamos el parámetro para el stored procedure
+                    oCmd.Parameters.AddWithValue("@Id", id);
+
+
+                    //aunque debemos buscar solo un elemento, siempre devolvemos
+                    //una colección. Es más fácil de manipular y controlar 
+                    var objs = new List<PresupuestosDetalleDTO>();
+
+                    //No retornamos DataSets, siempre utilizamos objetos para hacernos 
+                    //independientes de la estructura de las tablas en el resto
+                    //de las capas. Para ellos leemos con el DataReader y creamos
+                    //los objetos asociados que se esperan
+                    try
+                    {
+                        //Ejecutamos el comando y retornamos los valores
+                        using (SqlDataReader oReader = await oCmd.ExecuteReaderAsync())
+                        {
+                            while (oReader.Read())
+                            {
+                                //si existe algun valor, creamos el objeto y lo almacenamos
+                                //en la colección
+                                var obj = new PresupuestosDetalleDTO();
+                                obj.Id = oReader["Id"].ToString();
+                                obj.Codigo = oReader["Codigo"].ToString();
+                                obj.Fecha = (DateTime)oReader["Fecha"];
+                                obj.FechaVencimiento = (DateTime)oReader["FechaVencimiento"];
+                                obj.Estado = oReader["Estado"].ToString();
+                                obj.UsuarioAlta = (string)oReader["UsuarioAlta"];
+
+                                obj.ClienteId = (string)oReader["ClienteId"];
+                                obj.ClienteCodigo = (string)oReader["ClienteCodigo"];
+                                obj.ClienteRazonSocial = (string)oReader["RazonSocial"];
+                                obj.ClienteNroDocumento = (string)oReader["NroDocumento"];
+                                obj.ClienteCuilCuit = (string)oReader["CuilCuit"];
+
+                                obj.TipoResponsableId = oReader["TipoResponsableId"] as string;
+                                obj.TipoResponsable = oReader["TipoResponsable"] as string;
+
+                                obj.ProductoId = (string)oReader["ProductoId"];
+                                obj.ProductoCodigo = (string)oReader["ProductoCodigo"];
+                                obj.ProductoNombre = (string)oReader["Producto"];
+                                obj.ProductoPrecio = (decimal)oReader["Precio"];
+                                obj.ProductoPrecioSinImpuesto = (decimal)oReader["PrecioSinImpuesto"];
+                                obj.ProductoCantidad = (int)oReader["Cantidad"];
+
+                                obj.SubTotal = (decimal)oReader["SubTotal"];
+                                obj.SubTotalSinImpuesto = (decimal)oReader["SubTotalSinImpuesto"];
+                                obj.DetalleId = (string)oReader["DetalleId"];
+
+                                obj.Cantidad = (int)oReader["CantidadTotal"];
+                                obj.Total = (decimal)oReader["PrecioTotal"];
+                                obj.TotalSinImpuesto = (decimal)oReader["PrecioTotalSinImpuesto"];
+                                obj.TotalDescuento = (decimal)oReader["PrecioTotalDescuento"];
+                                obj.TotalSinImpuestoDescuento = (decimal)oReader["PrecioTotalSinImpuestoDescuento"];
+                                obj.Descuento = (decimal)oReader["DescuentoPorcentaje"];
+
+                                obj.SucursalNombre = oReader["SucursalNombre"] as string;
+                                obj.SucursalCalle = oReader["SucursalCalle"] as string;
+                                obj.SucursalCalleNro = oReader["SucursalCalleNro"] as string;
+                                obj.SucursalLocalidad = oReader["SucursalLocalidad"] as string;
+                                obj.SucursalCodigoPostal = oReader["SucursalCodigoPostal"] as string;
+                                obj.SucursalTelefono = oReader["SucursalTelefono"] as string;
+                                
+                                obj.VersionImpresion = oReader["VersionImpresion"] as string;
+                                
+                                //Agregamos el objeto a la coleccion de resultados
+                                objs.Add(obj);
+                                obj = null;
+                            }
+                        }
+                        //retornamos los valores encontrados
+
+
+                        return objs;
+                    }
+
+                    finally
+                    {
+                        //el Finally nos da siempre la oportunidad de liberar
+                        //la memoria utilizada por los objetos 
+                        objs = null;
+                    }
+                }
+            }
+        }
+
+        public async Task<PresupuestosDetalleDTO> spPresupuestosDetalle(string id)
+        {
+            //Creamos la conexión a utilizar.
+            //Utilizamos la sentencia Using para asegurarnos de cerrar la conexión
+            //y liberar el objeto al salir de esta sección de manera automática            
+            using (var oCnn = factoryConnection.GetConnection())
+            {
+                using (SqlCommand oCmd = new SqlCommand())
+                {
+                    //asignamos la conexion de trabajo
+                    oCmd.Connection = oCnn;
+
+                    //utilizamos stored procedures
+                    oCmd.CommandType = System.Data.CommandType.StoredProcedure;
+
+                    //el indicamos cual stored procedure utilizar
+                    oCmd.CommandText = "PresupuestosDetalleGet";
+
+                    //le asignamos el parámetro para el stored procedure
+                    oCmd.Parameters.AddWithValue("@Id", id);
+
+
+                    //aunque debemos buscar solo un elemento, siempre devolvemos
+                    //una colección. Es más fácil de manipular y controlar 
+                    var objs = new List<PresupuestosDetalleDTO>();
+
+                    //No retornamos DataSets, siempre utilizamos objetos para hacernos 
+                    //independientes de la estructura de las tablas en el resto
+                    //de las capas. Para ellos leemos con el DataReader y creamos
+                    //los objetos asociados que se esperan
+                    try
+                    {
+                        //Ejecutamos el comando y retornamos los valores
+                        using (SqlDataReader oReader = await oCmd.ExecuteReaderAsync())
+                        {
+                            while (oReader.Read())
+                            {
+                                //si existe algun valor, creamos el objeto y lo almacenamos
+                                //en la colección
+                                var obj = new PresupuestosDetalleDTO();
+                                obj.Id = oReader["Id"].ToString();
+                                obj.Codigo = oReader["Codigo"].ToString();
+                                obj.Fecha = (DateTime)oReader["Fecha"];
+                                obj.FechaVencimiento = (DateTime)oReader["FechaVencimiento"];
+                                obj.Estado = oReader["Estado"].ToString();
+                                obj.UsuarioAlta = (string)oReader["UsuarioAlta"];
+
+                                obj.ClienteId = (string)oReader["ClienteId"];
+                                obj.ClienteCodigo = (string)oReader["ClienteCodigo"];
+                                obj.ClienteRazonSocial = (string)oReader["RazonSocial"];
+                                obj.ClienteNroDocumento = (string)oReader["NroDocumento"];
+                                obj.ClienteCuilCuit = (string)oReader["CuilCuit"];
+
+                                obj.TipoResponsableId = oReader["TipoResponsableId"] as string;
+                                obj.TipoResponsable = oReader["TipoResponsable"] as string;
+
+                                obj.ProductoId = (string)oReader["ProductoId"];
+                                obj.ProductoCodigo = (string)oReader["ProductoCodigo"];
+                                obj.ProductoNombre = (string)oReader["Producto"];
+                                obj.ProductoPrecio = (decimal)oReader["Precio"];
+                                obj.ProductoPrecioSinImpuesto = (decimal)oReader["PrecioSinImpuesto"];
+                                obj.ProductoCantidad = (int)oReader["Cantidad"];
+
+                                obj.SubTotal = (decimal)oReader["SubTotal"];
+                                obj.SubTotalSinImpuesto = (decimal)oReader["SubTotalSinImpuesto"];
+                                obj.DetalleId = (string)oReader["DetalleId"];
+
+                                obj.Cantidad = (int)oReader["CantidadTotal"];
+                                obj.Total = (decimal)oReader["PrecioTotal"];
+                                obj.TotalSinImpuesto = (decimal)oReader["PrecioTotalSinImpuesto"];
+                                obj.TotalDescuento = (decimal)oReader["PrecioTotalDescuento"];
+                                obj.TotalSinImpuestoDescuento = (decimal)oReader["PrecioTotalSinImpuestoDescuento"];
+                                obj.Descuento = (decimal)oReader["DescuentoPorcentaje"];
+
+
+                                //Agregamos el objeto a la coleccion de resultados
+                                objs.Add(obj);
+                                obj = null;
+                            }
+                        }
+                        //retornamos los valores encontrados
+
+
+                        return objs.FirstOrDefault();
+                    }
+
+                    finally
+                    {
+                        //el Finally nos da siempre la oportunidad de liberar
+                        //la memoria utilizada por los objetos 
+                        objs = null;
+                    }
+                }
             }
         }
     }

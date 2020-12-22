@@ -4,6 +4,7 @@ using Gestion.Web.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Threading.Tasks;
 
 namespace Gestion.Web.Controllers
@@ -13,117 +14,126 @@ namespace Gestion.Web.Controllers
     {
         private readonly IComprobantesRepository repository; 
         private readonly IUserHelper userHelper;
+        private readonly IClientesRepository clientesRepository;
 
-        public ComprobantesController(IComprobantesRepository repository, IUserHelper userHelper)
+        public ComprobantesController(IComprobantesRepository repository, 
+                                        IUserHelper userHelper,
+                                        IClientesRepository clientesRepository)
         {
             this.repository = repository;
             this.userHelper = userHelper;
+            this.clientesRepository = clientesRepository;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> ImputacionesProductos()
         {
-            return null;
-            //return View(repository.sp ());
+            var model = await repository.spPresupuestosComprobantes();
+            return View(model);
         }
 
-        public async Task<IActionResult> Details(string id)
+        public async Task<IActionResult> ImputacionProducto(string id)
         {
             if (id == null)
             {
-                return new NotFoundViewResult("NoExiste");
+                return NotFound();
             }
-
-            var Comprobantes = await this.repository.GetByIdAsync(id);
-            if (Comprobantes == null)
+            var CC = await repository.spComprobante(id);
+            if (CC == null)
             {
-                return new NotFoundViewResult("NoExiste");
+                return NotFound();
             }
 
-            return this.View(Comprobantes);
-        }
+            var cliente = await this.clientesRepository.spCliente(CC.ClienteId);
+            if (cliente == null)
+            {
+                return NotFound();
+            }
+            
+            ViewData["Detalle"] = await repository.spComprobanteDetalleImputacion(CC.Id);
+            ViewData["Clientes"] = cliente;
 
-        public IActionResult Create()
-        {
-            return View();
+            return View(CC);
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Comprobantes Comprobantes)
+        public JsonResult ImputaProducto(ComprobantesDetalleDTO detalleDTO)
         {
-            if (ModelState.IsValid)
+            try
             {
-                Comprobantes.Estado = true;
-                await repository.CreateAsync(Comprobantes);
-                return RedirectToAction(nameof(Index));
+                detalleDTO.UsuarioAlta = User.Identity.Name;
+                var i = repository.spComprobanteDetalleInsertImputacion(detalleDTO);
+                return Json(1);
             }
-            return View(Comprobantes);
+            catch (Exception e)
+            {
+                ModelState.AddModelError("", e.Message);
+                return Json(0);
+            }
         }
 
-        public async Task<IActionResult> Edit(string id)
+
+        [HttpPost]
+        public JsonResult EntregaProducto(ComprobantesDetalleDTO detalleDTO)
         {
-            if (id == null)
+            try
             {
-                return new NotFoundViewResult("NoExiste");
+                detalleDTO.UsuarioAlta = User.Identity.Name;
+                var i = repository.spComprobanteDetalleInsertEntrega(detalleDTO);
+                return Json(1);
             }
-
-            var Comprobantes = await this.repository.GetByIdAsync(id);
-            if (Comprobantes == null)
+            catch (Exception e)
             {
-                return new NotFoundViewResult("NoExiste");
+                ModelState.AddModelError("", e.Message);
+                return Json(0);
             }
-
-            return this.View(Comprobantes);
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(string id, Comprobantes Comprobantes)
+        public JsonResult EntregaAnulaProducto(ComprobantesDetalleDTO detalleDTO)
         {
-            if (id != Comprobantes.Id)
+            try
             {
-                return new NotFoundViewResult("NoExiste");
+                detalleDTO.UsuarioAlta = User.Identity.Name;
+                var i = repository.spComprobanteDetalleInsertEntregaAnula(detalleDTO);
+                return Json(1);
             }
-
-            if (ModelState.IsValid)
+            catch (Exception e)
             {
-                try
-                {
-                    await repository.UpdateAsync(Comprobantes);
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!await repository.ExistAsync(Comprobantes.Id))
-                    {
-                        return new NotFoundViewResult("NoExiste");
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
+                ModelState.AddModelError("", e.Message);
+                return Json(0);
             }
-            return View(Comprobantes);
         }
 
-        public async Task<IActionResult> Delete(string id)
+        [HttpPost]
+        public JsonResult AutorizaProducto(ComprobantesDetalleDTO detalleDTO)
         {
-            if (id == null)
+            try
             {
-                return new NotFoundViewResult("NoExiste");
+                detalleDTO.UsuarioAlta = User.Identity.Name;
+                var i = repository.spComprobanteDetalleInsertAutoriza(detalleDTO);
+                return Json(1);
             }
-
-            var Comprobantes = await this.repository.GetByIdAsync(id);
-            if (Comprobantes == null)
+            catch (Exception e)
             {
-                return new NotFoundViewResult("NoExiste");
+                ModelState.AddModelError("", e.Message);
+                return Json(0);
             }
+        }
 
-            Comprobantes.Estado = !Comprobantes.Estado;
-            await repository.DeleteAsync(Comprobantes);
-            return RedirectToAction(nameof(Index));
-        }        
-
+        [HttpPost]
+        public JsonResult AutorizaAnulaProducto(ComprobantesDetalleDTO detalleDTO)
+        {
+            try
+            {
+                detalleDTO.UsuarioAlta = User.Identity.Name;
+                var i = repository.spComprobanteDetalleInsertAutorizaAnula(detalleDTO);
+                return Json(1);
+            }
+            catch (Exception e)
+            {
+                ModelState.AddModelError("", e.Message);
+                return Json(0);
+            }
+        }
     }
 }

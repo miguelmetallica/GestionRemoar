@@ -10,23 +10,19 @@
     <Compile Remove="Views\Etiquetas\**" />
     <Compile Remove="Views\Localidades\**" />
     <Compile Remove="wwwroot\admin\bower_components\fullcalendar\**" />
-    <Compile Remove="wwwroot\catalogo\woocommerce\assets\js\**" />
-    <Compile Remove="wwwroot\catalogo\woocommerce\packages\woocommerce-blocks\**" />
+    <Compile Remove="wwwroot\catalogo\**" />
     <Content Remove="Views\Etiquetas\**" />
     <Content Remove="Views\Localidades\**" />
     <Content Remove="wwwroot\admin\bower_components\fullcalendar\**" />
-    <Content Remove="wwwroot\catalogo\woocommerce\assets\js\**" />
-    <Content Remove="wwwroot\catalogo\woocommerce\packages\woocommerce-blocks\**" />
+    <Content Remove="wwwroot\catalogo\**" />
     <EmbeddedResource Remove="Views\Etiquetas\**" />
     <EmbeddedResource Remove="Views\Localidades\**" />
     <EmbeddedResource Remove="wwwroot\admin\bower_components\fullcalendar\**" />
-    <EmbeddedResource Remove="wwwroot\catalogo\woocommerce\assets\js\**" />
-    <EmbeddedResource Remove="wwwroot\catalogo\woocommerce\packages\woocommerce-blocks\**" />
+    <EmbeddedResource Remove="wwwroot\catalogo\**" />
     <None Remove="Views\Etiquetas\**" />
     <None Remove="Views\Localidades\**" />
     <None Remove="wwwroot\admin\bower_components\fullcalendar\**" />
-    <None Remove="wwwroot\catalogo\woocommerce\assets\js\**" />
-    <None Remove="wwwroot\catalogo\woocommerce\packages\woocommerce-blocks\**" />
+    <None Remove="wwwroot\catalogo\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -35,6 +31,9 @@
 
   <ItemGroup>
     <Content Remove="Views\Clientes\Delete.cshtml" />
+    <Content Remove="Views\Clientes\_CuentaCorrienteHistoria.cshtml" />
+    <Content Remove="Views\Comprobantes\ImputaProducto.cshtml" />
+    <Content Remove="Views\Comprobantes\_ProductosImputa.cshtml" />
     <Content Remove="Views\PresupuestosEstados\Delete.cshtml" />
   </ItemGroup>
 
@@ -7128,7 +7127,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="wwwroot\catalogo\" />
     <Folder Include="wwwroot\images\Products\" />
   </ItemGroup>
 

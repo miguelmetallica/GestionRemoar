@@ -13,7 +13,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>AdminLTE 2 | Invoice</title>
+    <title>Remoar | Gestión</title>
     <!-- Tell the browser to be responsive to screen width -->
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <!-- Bootstrap 3.3.7 -->
@@ -39,12 +39,22 @@
         <!-- Main content -->
         <section class="invoice">
             <!-- title row -->
-            <div class="row">
-                <div class="col-xs-12">
-                    <h2 class="page-header">
+            <div class="row page-header">
+                <div class="col-xs-4">
+                    <h2>
                         <img src="~/images/logo.jpg" class="img-fluid" alt="Responsive image" width="100" height="112">
-                        <small class="pull-right">Fecha: @Model.Fecha</small>
+                        @*<small class="pull-right">Fecha: @Model.Fecha</small>*@
                     </h2>
+                </div>
+                <div class="col-xs-4">
+                    <h4>
+                        Presupuesto - @Model.Codigo
+                    </h4>                        
+                </div>
+                <div class="col-xs-4">
+                    <h6>
+                        <small class="pull-right">Version: @Model.VersionImpresion</small>
+                    </h6>                    
                 </div>
                 <!-- /.col -->
             </div>
@@ -52,15 +62,14 @@
             <div class="row invoice-info">
                 <div class="col-sm-4 invoice-col">
                     <address>
-                        <strong>REMOAR -Tu Espacio Interior</strong><br>
-                        Av. Manuel Belgrano 1953<br>
-                        San Miguel de Tucumán - 4000<br>
-                        0381 602-2704<br>                        
+                        <strong>@Model.SucursalNombre</strong><br>
+                        @Model.SucursalCalle @Model.SucursalCalleNro<br>
+                        @Model.SucursalLocalidad - @Model.SucursalCodigoPostal<br>
+                        @Model.SucursalTelefono<br>
                     </address>                    
                 </div>
                 <!-- /.col -->
                 <div class="col-sm-4 invoice-col">
-                    To
                     <address>
                         <strong>@Cliente.RazonSocial</strong><br>
                         @Cliente.Calle @Cliente.CalleNro<br>
@@ -71,14 +80,9 @@
                 </div>
                 <!-- /.col -->
                 <div class="col-sm-4 invoice-col">
-                    <b>Presupuesto: @Model.Codigo</b><br>
-                    <br>
                     <b>Fecha:</b> @Model.Fecha.Date.ToShortDateString()<br>
                     <b>Vencimiento:</b> @Model.FechaVencimiento.ToShortDateString()<br>
-                    <b>Total sin Descuento:</b> @Model.Total<br>
-                    <b>Total sin Impuesto:</b> @Model.TotalSinImpuesto<br>
-                    <b>Descuento:</b> @Model.Descuento<br>
-                    <b>Descuento:</b> @Model.Descuento<br>
+                    <b>Usuario:</b> @Model.UsuarioAlta<br>
                 </div>
                 <!-- /.col -->
             </div>
@@ -101,7 +105,7 @@
                             { 
                             <tr>
                                 <td>@item.ProductoCantidad</td>
-                                <td>@item.Codigo</td>
+                                <td>@item.ProductoCodigo</td>
                                 <td>@item.ProductoNombre</td>
                                 <td>@item.ProductoPrecio</td>
                                 <td>@(item.ProductoPrecio * item.ProductoCantidad)</td>
@@ -121,7 +125,7 @@
                 </div>
                 <!-- /.col -->
                 <div class="col-xs-6">
-                    <p class="lead">Total</p>
+                    <p class="lead">Detalle</p>
 
                     <div class="table-responsive">
                         <table class="table">
