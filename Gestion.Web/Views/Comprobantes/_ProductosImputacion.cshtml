@@ -44,7 +44,7 @@
                     <input type="hidden" id="pagado" value="@(Model.Total - Model.Saldo - Detalle.Sum(x => x.Imputado))" />
 
                     <br>
-                    <table class="table table-bordered" id="tabla">
+                    <table id="dTableP" class="table dt-responsive table-condensed table-bordered table-striped" width="100%">
                         <tr>
                             <th>Codigo</th>
                             <th>Producto</th>
@@ -54,6 +54,7 @@
                             <th>Porcentaje %</th>
                             <th>Entrega</th>
                             <th>Autorizado</th>
+                            <th>Entregado</th>
                             <th>Operaciones</th>
                         </tr>
                         @foreach (var item in Detalle)
@@ -82,23 +83,52 @@
                                 {
                                     <td>NO</td>
                                 }
-                            <td>
-                                <button id="btnImputa_@item.Id" type="button" class="btn btn-primary btn-sm" data-toggle="modal"
-                                        onclick="cargarDatosImputa('@item.Id',
-                                                                            '@item.ComprobanteId',
-                                                                            '@item.ProductoId',
-                                                                            '@item.ProductoCodigo',
-                                                                            '@item.ProductoNombre',
-                                                                            @item.Precio,
-                                                                            @item.Cantidad,
-                                                                            @item.Imputado,
-                                                                            @item.ImputadoPorcentaje);" data-target="#modal-default">
-                                    Imputar
-                                </button>
-                                @if (@item.Imputado > 0)
+                                @if (item.DespachaEstado)
                                 {
-                                    <button id="btnBorrar" type="button" class="btn btn-danger btn-sm"
-                                            onclick="cancelarFormularioModal('@item.Id',
+                                    <td>SI</td>
+                                }
+                                else
+                                {
+                                    <td>NO</td>
+                                }
+                                <td>
+                                    <button id="btnImputa_@item.Id" type="button" class="btn btn-primary btn-sm" data-toggle="modal"
+                                            onclick="cargarDatosImputa('@item.Id',
+                                                                                    '@item.ComprobanteId',
+                                                                                    '@item.ProductoId',
+                                                                                    '@item.ProductoCodigo',
+                                                                                    '@item.ProductoNombre',
+                                                                                    @item.Precio,
+                                                                                    @item.Cantidad,
+                                                                                    @item.Imputado,
+                                                                                    @item.ImputadoPorcentaje);" data-target="#modal-default">
+                                        Imputar
+                                    </button>
+                                    @if (@item.Imputado > 0)
+                                    {
+                                        <button id="btnBorrar" type="button" class="btn btn-danger btn-sm"
+                                                onclick="cancelarFormularioModal('@item.Id',
+                                                                                            '@item.ComprobanteId',
+                                                                                            '@item.ProductoId',
+                                                                                            '@item.ProductoCodigo',
+                                                                                            '@item.ProductoNombre',
+                                                                                            @item.Precio,
+                                                                                            @item.Cantidad,
+                                                                                            @item.Imputado,
+                                                                                            @item.ImputadoPorcentaje
+                                                                                            );">
+                                            Anular
+                                        </button>
+                                    }
+                                    else
+                                    {
+                                        <button id="btnBorrar" type="button" class="btn btn-danger btn-sm" disabled>Anular</button>
+                                    }
+
+                                    @if (@item.ImputadoPorcentaje > 50 && !item.DespachaEstado)
+                                    {
+                                        <button id="btnBorrar" type="button" class="btn btn-success btn-sm"
+                                                onclick="entregarFormularioModal('@item.Id',
                                                                                     '@item.ComprobanteId',
                                                                                     '@item.ProductoId',
                                                                                     '@item.ProductoCodigo',
@@ -108,84 +138,63 @@
                                                                                     @item.Imputado,
                                                                                     @item.ImputadoPorcentaje
                                                                                     );">
-                                        Anular
-                                    </button>
-                                }
-                                else
-                                {
-                                    <button id="btnBorrar" type="button" class="btn btn-danger btn-sm" disabled>Anular</button>
-                                }
+                                            Entregar
+                                        </button>
+                                    }
+                                    else
+                                    {
+                                        <button id="btnBorrar" type="button" class="btn btn-success btn-sm" disabled>Entregar</button>
+                                    }
 
-                                @if (@item.ImputadoPorcentaje > 50)
-                                {
-                                    <button id="btnBorrar" type="button" class="btn btn-success btn-sm"
-                                            onclick="entregarFormularioModal('@item.Id',
-                                                                            '@item.ComprobanteId',
-                                                                            '@item.ProductoId',
-                                                                            '@item.ProductoCodigo',
-                                                                            '@item.ProductoNombre',
-                                                                            @item.Precio,
-                                                                            @item.Cantidad,
-                                                                            @item.Imputado,
-                                                                            @item.ImputadoPorcentaje
-                                                                            );">
-                                        Entregar
-                                    </button>
-                                }
-                                else
-                                {
-                                    <button id="btnBorrar" type="button" class="btn btn-success btn-sm" disabled>Entregar</button>
-                                }
+                                    @if (item.EntregaEstado && !item.DespachaEstado)
+                                    {
+                                        <button id="btnBorrar" type="button" class="btn btn-danger btn-sm"
+                                                onclick="entregarAnulaFormularioModal('@item.Id',
+                                                                                    '@item.ComprobanteId',
+                                                                                    '@item.ProductoId',
+                                                                                    '@item.ProductoCodigo',
+                                                                                    '@item.ProductoNombre',
+                                                                                    @item.Precio,
+                                                                                    @item.Cantidad,
+                                                                                    @item.Imputado,
+                                                                                    @item.ImputadoPorcentaje
+                                                                                    );">
+                                            Anular
+                                        </button>
+                                    }
+                                    else
+                                    {
+                                        <button id="btnBorrar" type="button" class="btn btn-danger btn-sm" disabled>Anular</button>
+                                    }
 
-                                @if (item.EntregaEstado)
-                                {
-                                    <button id="btnBorrar" type="button" class="btn btn-danger btn-sm"
-                                            onclick="entregarAnulaFormularioModal('@item.Id',
-                                                                            '@item.ComprobanteId',
-                                                                            '@item.ProductoId',
-                                                                            '@item.ProductoCodigo',
-                                                                            '@item.ProductoNombre',
-                                                                            @item.Precio,
-                                                                            @item.Cantidad,
-                                                                            @item.Imputado,
-                                                                            @item.ImputadoPorcentaje
-                                                                            );">
-                                        Anular
-                                    </button>
-                                }
-                                else
-                                {
-                                    <button id="btnBorrar" type="button" class="btn btn-danger btn-sm" disabled>Anular</button>
-                                }
-
-                                @if (!item.AutorizaEstado)
-                                {
-                                    <button id="btnBorrar" type="button" class="btn btn-dropbox btn-sm"
-                                            onclick="autorizaFormularioModal('@item.Id');">
-                                        Autorizar
-                                    </button>
-                                }
-                                else 
-                                { 
-                                    <button id="btnBorrar" type="button" class="btn btn-dropbox btn-sm" disabled>Autorizar</button>
-                                }
+                                    @if (!item.AutorizaEstado)
+                                    {
+                                        <button id="btnBorrar" type="button" class="btn btn-dropbox btn-sm"
+                                                onclick="autorizaFormularioModal('@item.Id');">
+                                            Autorizar
+                                        </button>
+                                    }
+                                    else
+                                    {
+                                        <button id="btnBorrar" type="button" class="btn btn-dropbox btn-sm" disabled>Autorizar</button>
+                                    }
 
 
-                                @if (item.AutorizaEstado)
-                                {
-                                    <button id="btnBorrar" type="button" class="btn btn-danger btn-sm"
-                                            onclick="autorizaAnulaFormularioModal('@item.Id');">
-                                        Anular
-                                    </button>
-                                }
-                                else
-                                {
-                                    <button id="btnBorrar" type="button" class="btn btn-danger btn-sm" disabled>Anular</button>
-                                }
-                            </td>
+                                    @if (item.AutorizaEstado)
+                                    {
+                                        <button id="btnBorrar" type="button" class="btn btn-danger btn-sm"
+                                                onclick="autorizaAnulaFormularioModal('@item.Id');">
+                                            Anular
+                                        </button>
+                                    }
+                                    else
+                                    {
+                                        <button id="btnBorrar" type="button" class="btn btn-danger btn-sm" disabled>Anular</button>
+                                    }
+                                </td>
                             </tr>
                         }
-                        <tfoot>
+                        @*<tfoot>
                             <tr>
                                 <th></th>
                                 <th></th>
@@ -194,8 +203,9 @@
                                 <th>@Detalle.Sum(x => x.Imputado) </th>
                                 <th></th>
                                 <th></th>
+                                <th></th>
                             </tr>
-                        </tfoot>
+                        </tfoot>*@
                     </table>
 
                 </div>

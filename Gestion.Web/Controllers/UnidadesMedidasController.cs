@@ -7,8 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
 
 namespace Gestion.Web.Controllers
-{
-    [Authorize]
+{    
     public class UnidadesMedidasController : Controller
     {
         private readonly IUnidadesMedidasRepository repository; 
@@ -20,6 +19,7 @@ namespace Gestion.Web.Controllers
             this.userHelper = userHelper;
         }
 
+        [Authorize(Roles = "admin")]
         public IActionResult Index()
         {
             return View(repository.GetAll());

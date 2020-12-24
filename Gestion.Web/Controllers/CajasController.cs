@@ -22,124 +22,126 @@ namespace Gestion.Web.Controllers
             this.sucursales = sucursales;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View(repository.GetAll().Include(x => x.Sucursal));
+            //return View(repository.GetAll().Include(x => x.Sucursal));
+            var model = await repository.spCajasEstadoImportesGet();
+            return View(model);
         }
 
-        public async Task<IActionResult> Details(string id)
-        {
-            if (id == null)
-            {
-                return new NotFoundViewResult("NoExiste");
-            }
+        //public async Task<IActionResult> Details(string id)
+        //{
+        //    if (id == null)
+        //    {
+        //        return new NotFoundViewResult("NoExiste");
+        //    }
 
-            var Cajas = await this.repository.GetByIdAsync(id);
-            if (Cajas == null)
-            {
-                return new NotFoundViewResult("NoExiste");
-            }
+        //    var Cajas = await this.repository.GetByIdAsync(id);
+        //    if (Cajas == null)
+        //    {
+        //        return new NotFoundViewResult("NoExiste");
+        //    }
 
-            return this.View(Cajas);
-        }
+        //    return this.View(Cajas);
+        //}
 
-        public IActionResult Create()
-        {
-            ViewBag.Sucursales = this.sucursales.GetCombo();
-            return View();
-        }
+        //public IActionResult Create()
+        //{
+        //    ViewBag.Sucursales = this.sucursales.GetCombo();
+        //    return View();
+        //}
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Cajas Cajas)
-        {
-            if (ModelState.IsValid)
-            {
-                Cajas.Estado = true;
-                await repository.CreateAsync(Cajas);
-                return RedirectToAction(nameof(Index));
-            }
-            ViewBag.Sucursales = this.sucursales.GetCombo();
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public async Task<IActionResult> Create(Cajas Cajas)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        Cajas.Estado = true;
+        //        await repository.CreateAsync(Cajas);
+        //        return RedirectToAction(nameof(Index));
+        //    }
+        //    ViewBag.Sucursales = this.sucursales.GetCombo();
 
-            return View(Cajas);
-        }
+        //    return View(Cajas);
+        //}
 
-        public async Task<IActionResult> Edit(string id)
-        {
-            if (id == null)
-            {
-                return new NotFoundViewResult("NoExiste");
-            }
+        //public async Task<IActionResult> Edit(string id)
+        //{
+        //    if (id == null)
+        //    {
+        //        return new NotFoundViewResult("NoExiste");
+        //    }
 
-            var Cajas = await this.repository.GetByIdAsync(id);
-            if (Cajas == null)
-            {
-                return new NotFoundViewResult("NoExiste");
-            }
+        //    var Cajas = await this.repository.GetByIdAsync(id);
+        //    if (Cajas == null)
+        //    {
+        //        return new NotFoundViewResult("NoExiste");
+        //    }
 
-            ViewBag.Sucursales = this.sucursales.GetCombo();
+        //    ViewBag.Sucursales = this.sucursales.GetCombo();
 
-            return this.View(Cajas);
-        }
+        //    return this.View(Cajas);
+        //}
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(string id, Cajas Cajas)
-        {
-            if (id != Cajas.Id)
-            {
-                return new NotFoundViewResult("NoExiste");
-            }
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public async Task<IActionResult> Edit(string id, Cajas Cajas)
+        //{
+        //    if (id != Cajas.Id)
+        //    {
+        //        return new NotFoundViewResult("NoExiste");
+        //    }
 
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    Cajas.Estado = true;
-                    await repository.UpdateAsync(Cajas);
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!await repository.ExistAsync(Cajas.Id))
-                    {
-                        return new NotFoundViewResult("NoExiste");
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
+        //    if (ModelState.IsValid)
+        //    {
+        //        try
+        //        {
+        //            Cajas.Estado = true;
+        //            await repository.UpdateAsync(Cajas);
+        //        }
+        //        catch (DbUpdateConcurrencyException)
+        //        {
+        //            if (!await repository.ExistAsync(Cajas.Id))
+        //            {
+        //                return new NotFoundViewResult("NoExiste");
+        //            }
+        //            else
+        //            {
+        //                throw;
+        //            }
+        //        }
+        //        return RedirectToAction(nameof(Index));
+        //    }
 
-            ViewBag.Sucursales = this.sucursales.GetCombo();
-            return View(Cajas);
-        }
+        //    ViewBag.Sucursales = this.sucursales.GetCombo();
+        //    return View(Cajas);
+        //}
 
-        public async Task<IActionResult> Delete(string id)
-        {
-            if (id == null)
-            {
-                return new NotFoundViewResult("NoExiste");
-            }
+        //public async Task<IActionResult> Delete(string id)
+        //{
+        //    if (id == null)
+        //    {
+        //        return new NotFoundViewResult("NoExiste");
+        //    }
 
-            var Cajas = await this.repository.GetByIdAsync(id);
-            if (Cajas == null)
-            {
-                return new NotFoundViewResult("NoExiste");
-            }
+        //    var Cajas = await this.repository.GetByIdAsync(id);
+        //    if (Cajas == null)
+        //    {
+        //        return new NotFoundViewResult("NoExiste");
+        //    }
 
-            return this.View(Cajas);
-        }
+        //    return this.View(Cajas);
+        //}
 
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(string id)
-        {
-            var Cajas = await repository.GetByIdAsync(id);
-            await repository.DeleteAsync(Cajas);
-            return RedirectToAction(nameof(Index));
-        }
+        //[HttpPost, ActionName("Delete")]
+        //[ValidateAntiForgeryToken]
+        //public async Task<IActionResult> DeleteConfirmed(string id)
+        //{
+        //    var Cajas = await repository.GetByIdAsync(id);
+        //    await repository.DeleteAsync(Cajas);
+        //    return RedirectToAction(nameof(Index));
+        //}
 
     }
 }

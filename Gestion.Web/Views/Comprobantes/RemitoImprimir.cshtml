@@ -1,10 +1,9 @@
-﻿@model Gestion.Web.Models.PresupuestosDetalleDTO
+﻿@model Gestion.Web.Models.Comprobantes
 
 @{
     Layout = null;
-    var Detalle = (IEnumerable<PresupuestosDetalleDTO>)ViewData["Detalle"];
-    var Cliente = (ClientesDTO)ViewData["Cliente"];
-    
+    var Remitos = (List<Gestion.Web.Models.ComprobantesDetalleDTO>)ViewData["Remitos"];
+
 }
 
 
@@ -42,19 +41,13 @@
             <div class="row page-header">
                 <div class="col-xs-4">
                     <h2>
-                        <img src="~/images/logo.jpg" class="img-fluid" alt="Responsive image" width="100" height="112">
-                        @*<small class="pull-right">Fecha: @Model.Fecha</small>*@
+                        <img src="~/images/logo.jpg" class="img-fluid" alt="Responsive image" width="100" height="112">                       
                     </h2>
                 </div>
                 <div class="col-xs-4">
-                    <h4>
-                        Presupuesto - @Model.Codigo
-                    </h4>                        
+                    <h4>@Model.TipoComprobante - @Model.Codigo</h4>
                 </div>
-                <div class="col-xs-4">
-                    <h6>
-                        <small class="pull-right">Version: @Model.VersionImpresion</small>
-                    </h6>                    
+                <div class="col-xs-4">                    
                 </div>
                 <!-- /.col -->
             </div>
@@ -71,17 +64,17 @@
                 <!-- /.col -->
                 <div class="col-sm-4 invoice-col">
                     <address>
-                        <strong>@Cliente.RazonSocial</strong><br>
-                        @Cliente.Calle @Cliente.CalleNro<br>
-                        @Cliente.Provincia @Cliente.Localidad<br>
-                        @Cliente.Celular<br>
-                        @Cliente.Email
+                        <strong>@Model.RazonSocial</strong><br>
+                        @Model.Calle @Model.CalleNro<br>
+                        @Model.Provincia @Model.Localidad<br>
+                        @Model.Celular<br>
+                        @Model.Email
                     </address>
                 </div>
                 <!-- /.col -->
                 <div class="col-sm-4 invoice-col">
-                    <b>Fecha:</b> @Model.Fecha.Date.ToShortDateString()<br>
-                    <b>Vencimiento:</b> @Model.FechaVencimiento.ToShortDateString()<br>
+                    <b>@Model.TipoComprobante: @Model.Codigo</b><br>                    
+                    <b>Fecha:</b> @Model.FechaComprobante.ToShortDateString()<br>
                     <b>Usuario:</b> @Model.UsuarioAlta<br>
                 </div>
                 <!-- /.col -->
@@ -96,65 +89,23 @@
                                 <th>Cantidad</th>
                                 <th>Codigo</th>
                                 <th>Producto</th>
-                                <th>Precio Unitario</th>
-                                <th>Subtotal</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach (var item in Detalle) 
-                            { 
-                            <tr>
-                                <td>@item.ProductoCantidad</td>
-                                <td>@item.ProductoCodigo</td>
-                                <td>@item.ProductoNombre</td>
-                                <td>@item.ProductoPrecio</td>
-                                <td>@(item.ProductoPrecio * item.ProductoCantidad)</td>
-                            </tr>
+                            @foreach (var item in Remitos)
+                            {
+                                <tr>
+                                    <td>@item.Cantidad</td>
+                                    <td>@item.ProductoCodigo</td>
+                                    <td>@item.ProductoNombre</td>
+                                </tr>
                             }
 
                         </tbody>
                     </table>
                 </div>
-                <!-- /.col -->
             </div>
-            <!-- /.row -->
-
-            <div class="row">
-                <!-- accepted payments column -->
-                <div class="col-xs-6">                    
-                </div>
-                <!-- /.col -->
-                <div class="col-xs-6">
-                    <p class="lead">Detalle</p>
-
-                    <div class="table-responsive">
-                        <table class="table">
-                            <tr>
-                                <th style="width:50%">Subtotal</th>
-                                <td>@Model.Total</td>
-                            </tr>
-                            <tr>
-                                <th>Impuestos</th>
-                                <td>@(Model.Total - Model.TotalSinImpuesto)</td>
-                            </tr>
-                            <tr>
-                                <th>Descuento</th>
-                                <td>@(Model.Total - Model.TotalDescuento)</td>
-                            </tr>
-                            <tr>
-                                <th>Total</th>
-                                <td>@Model.TotalDescuento</td>
-                            </tr>
-                            <tr>
-                                <th>Total sin Impuestos</th>
-                                <td>@Model.TotalSinImpuestoDescuento</td>
-                            </tr>
-                        </table>
-                    </div>
-                </div>
-                <!-- /.col -->
-            </div>
-            <!-- /.row -->
+            <!-- /.row -->            
         </section>
         <!-- /.content -->
     </div>

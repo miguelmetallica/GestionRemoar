@@ -22,12 +22,22 @@ namespace Gestion.Web.Data
         Task<List<ComprobantesFormasPagosDTO>> spComprobantesFormasPagosImprimir(string Id);
         Task<int> spComprobantesReciboAnular(string Id,string Motivo,string Usuario);
         Task<List<ComprobantesDetalleImputaDTO>> spComprobanteDetalleImputacion(string Id);
+        Task<List<ComprobantesDetalleImputaDTO>> spComprobanteDetalleEntrega(string Id);
         Task<List<ComprobantesDetalleDTO>> spComprobanteDetalleImputa(string ProductoId);
         Task<int> spComprobanteDetalleInsertImputacion(ComprobantesDetalleDTO detalleDTO);
         Task<int> spComprobanteDetalleInsertEntrega(ComprobantesDetalleDTO detalleDTO);
         Task<int> spComprobanteDetalleInsertEntregaAnula(ComprobantesDetalleDTO detalleDTO);
-
         Task<int> spComprobanteDetalleInsertAutoriza(ComprobantesDetalleDTO detalleDTO);
         Task<int> spComprobanteDetalleInsertAutorizaAnula(ComprobantesDetalleDTO detalleDTO);
+        Task<List<ComprobantesDTO>> spPresupuestosComprobantesEntrega();
+        Task<int> spComprobanteDetalleInsertEntregaTMP(ComprobantesDetalleDTO detalleDTO);
+        Task<List<ComprobantesDetalleDTO>> spComprobanteDetalleTMP(string ComprobanteId);
+        Task<int> spComprobanteDetalleEliminarEntregaTMP(ComprobantesDetalleDTO detalleDTO);
+
+        Task<int> spRemito(ComprobantesDetalleDTO detalleDTO);
+        Task<List<ComprobantesDetalleDTO>> spComprobanteDetalleGet(string ComprobanteId);
+        Task<List<ComprobantesDetalleDTO>> spComprobanteDetalleImprimirGet(string ComprobanteId);
+
+        Task<int> spComprobanteInsertaDatosFiscales(ComprobantesDTO comprobantesDTO);
     }
 }

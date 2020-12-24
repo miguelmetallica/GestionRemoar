@@ -135,5 +135,125 @@ namespace Gestion.Web.Controllers
                 return Json(0);
             }
         }
+
+        public async Task<IActionResult> EntregaProductos()
+        {
+            var model = await repository.spPresupuestosComprobantesEntrega();
+            return View(model);
+        }
+
+        public async Task<IActionResult> EntregarProducto(string id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+            var CC = await repository.spComprobante(id);
+            if (CC == null)
+            {
+                return NotFound();
+            }
+
+            var cliente = await this.clientesRepository.spCliente(CC.ClienteId);
+            if (cliente == null)
+            {
+                return NotFound();
+            }
+
+            ViewData["Detalle"] = await repository.spComprobanteDetalleEntrega(CC.Id);
+            ViewData["DetalleTmp"] = await repository.spComprobanteDetalleTMP(CC.Id);
+            ViewData["Clientes"] = cliente;
+
+            return View(CC);
+        }
+
+        public async Task<IActionResult> EntregarTMPProducto(string id, string comp)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+            
+            if (comp == null)
+            {
+                return NotFound();
+            }
+
+            var remito = new ComprobantesDetalleDTO();
+            remito.Id = id;
+            remito.UsuarioAlta = User.Identity.Name;
+            await repository.spComprobanteDetalleInsertEntregaTMP(remito);
+
+            return RedirectToAction(nameof(EntregarProducto), new { Id = comp });
+        }
+
+        public async Task<IActionResult> EliminarTMPProducto(string id, string comp)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            if (comp == null)
+            {
+                return NotFound();
+            }
+
+            var remito = new ComprobantesDetalleDTO();
+            remito.Id = id;
+            remito.UsuarioAlta = User.Identity.Name;
+            await repository.spComprobanteDetalleEliminarEntregaTMP(remito);
+
+            return RedirectToAction(nameof(EntregarProducto), new { Id = comp });
+        }
+
+        public async Task<IActionResult> GenerarRemito(string id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var remito = new ComprobantesDetalleDTO();
+            remito.ComprobanteId = id;
+            remito.UsuarioAlta = User.Identity.Name;
+            await repository.spRemito(remito);
+
+            return RedirectToAction(nameof(EntregarProducto), new { Id = id });
+        }
+
+        public async Task<IActionResult> RemitoImprimir(string id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var comprobante = await repository.spComprobante(id);
+            if (comprobante == null)
+            {
+                return NotFound();
+            }
+
+            ViewData["Remitos"] = await repository.spComprobanteDetalleImprimirGet(id);
+
+            return View(comprobante);
+        }
+
+        [HttpPost]
+        public JsonResult InsertaDatosFiscales(ComprobantesDTO comprobantesDTO)
+        {
+            try
+            {
+                comprobantesDTO.UsuarioAlta = User.Identity.Name;
+                var i = repository.spComprobanteInsertaDatosFiscales(comprobantesDTO);
+                return Json(1);
+            }
+            catch (Exception e)
+            {
+                ModelState.AddModelError("", e.Message);
+                return Json(0);
+            }
+        }
     }
 }

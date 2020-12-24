@@ -76,6 +76,18 @@ namespace Gestion.Web.Models
         public decimal Saldo { get; set; }
 
         public string ComprobanteId { get; set; }
+
+        public string SucursalNombre { get; set; }
+        public string SucursalCalle { get; set; }
+        public string SucursalCalleNro { get; set; }
+        public string SucursalLocalidad { get; set; }
+        public string SucursalCodigoPostal { get; set; }
+        public string SucursalTelefono { get; set; }
+
+        public string TipoComprobanteFiscal { get; set; }
+        public string LetraFiscal { get; set; }
+        public int PtoVentaFiscal { get; set; }
+        public decimal NumeroFiscal { get; set; }
     }
 
     public partial class ComprobantesReciboDTO 
@@ -321,6 +333,11 @@ namespace Gestion.Web.Models
 
         [Display(Name = "Codigo")]
         public string CodigoPrespuesto { get; set; }
+
+        public string TipoComprobanteFiscal { get; set; }
+        public string LetraFiscal { get; set; }
+        public int PtoVentaFiscal { get; set; }
+        public decimal NumeroFiscal { get; set; }
     }
 
     public partial class ComprobantesDetalleDTO : IEntidades

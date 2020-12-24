@@ -943,6 +943,7 @@ namespace Gestion.Web.Controllers
             ViewData["Imputaciones"] = await comprobantesRepository.spComprobanteImputacion(id);
             ViewData["FormasPagos"] = await comprobantesRepository.spComprobantesFormasPagos(id);            
             ViewData["Detalles"] = await presupuestos.spPresupuestosAprobado(comprobante.PresupuestoId);
+            ViewData["Remitos"] = await comprobantesRepository.spComprobanteDetalleGet(id);
 
             return View(cliente.FirstOrDefault());
         }
@@ -960,20 +961,8 @@ namespace Gestion.Web.Controllers
                 return NotFound();
             }
 
-            //var cliente = await this.repository.spCliente(CC.ClienteId);
-            //if (cliente == null)
-            //{
-            //    return NotFound();
-            //}
-            
-            //ViewData["CCIMPUTACION"] = await comprobantesRepository.spComprobanteImputacion(comp);
             ViewData["Detalle"] = await comprobantesRepository.spComprobantesFormasPagosImprimir(id);
-            //ViewData["CC"] = CC;
-            //ViewData["CCDETALLE"] = await presupuestos.spPresupuestosAprobado(CC.PresupuestoId);
-
-
-            //ViewData["PRESUPUESTO"] = await comprobantesRepository.spComprobante(comp);
-
+            
             return View(CC);
         }
 

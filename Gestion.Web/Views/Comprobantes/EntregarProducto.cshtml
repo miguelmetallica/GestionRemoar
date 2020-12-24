@@ -1,0 +1,84 @@
+﻿@model Gestion.Web.Models.Comprobantes
+
+@{
+    ViewData["Title"] = "Detalle del Cliente";
+    var cliente = (IEnumerable<ClientesDTO>)ViewData["Clientes"];
+    var Detalle = (List<Gestion.Web.Models.ComprobantesDetalleDTO>)ViewData["DetalleTMP"];
+}
+
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <h1>
+            Sistema de gestíon
+            <small>Gestion de Clientes</small>
+        </h1>
+        <ol class="breadcrumb">
+            <li><a asp-controller="Home" asp-action="Index"><i class="fas fa-tachometer-alt"></i> Inicio</a></li>
+            <li><a asp-controller="Clientes" asp-action="Index">Listado de Clientes</a></li>
+            <li class="active">@ViewData["Title"]</li>
+        </ol>
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+        <div class="row">
+            <div class="col-md-3">
+                <partial name="_ClienteDetalle" model='@cliente.FirstOrDefault()' />
+            </div>
+            <div class="col-md-9">
+                <!-- general form elements -->
+                <div class="box box-primary">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">Entrega del @Model.TipoComprobante @Model.Codigo</h3>
+
+                        <a asp-controller="Comprobantes" asp-action="EntregaProductos" class="btn btn-default btn-sm pull-right" aria-hidden="true">Volver</a>
+
+                    </div>
+                    <form>
+                        <partial name="_ProductosEntrega" model='@Model' />
+                    </form>
+
+                    <!-- /.box -->
+                    <div class="box-footer">
+                        <a asp-controller="Comprobantes" asp-action="EntregaProductos" class="btn btn-default btn-sm pull-right" aria-hidden="true">Volver</a>
+                    </div>
+
+                </div>
+
+                <div class="box box-primary">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">Generacion del Remito</h3>
+                    </div>
+                    <form>
+                        <partial name="_ProductosEntregaTMP" model='@Model' />
+                    </form>
+
+                    <!-- /.box -->
+                    <div class="box-footer">
+                        <a asp-controller="Comprobantes" asp-action="EntregaProductos" class="btn btn-default btn-sm pull-right" aria-hidden="true">Volver</a>
+                        @if (Detalle.Count() == 0)
+                        {
+                            <a class="btn btn-primary btn-sm" disabled aria-hidden="true">Generar Remito</a>
+                        }
+                        else
+                        {
+                            <a asp-controller="Comprobantes" asp-action="GenerarRemito" asp-route-id="@Model.Id" class="btn btn-primary btn-sm" aria-hidden="true">Generar Remito</a>
+                        }
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <!-- /.row -->
+    </section>
+    <!-- /.content -->
+</div>
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");};
+
+
+}

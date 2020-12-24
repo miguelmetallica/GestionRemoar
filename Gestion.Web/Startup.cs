@@ -44,7 +44,7 @@ namespace Gestion.Web
                 cfg.Password.RequiredLength = 6;
             })
                 .AddDefaultTokenProviders()
-                //.AddDefaultUI()
+                .AddDefaultUI()
                 .AddEntityFrameworkStores<DataContext>();
 
             services.AddDbContext<DataContext>(cfg =>

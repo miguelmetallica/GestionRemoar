@@ -527,6 +527,7 @@ namespace Gestion.Web.Controllers
             ViewData["Imputaciones"] = await comprobantesRepository.spComprobanteImputacion(id);
             ViewData["FormasPagos"] = await comprobantesRepository.spComprobantesFormasPagos(id);
             ViewData["Detalles"] = await repository.spPresupuestosAprobado(comprobante.PresupuestoId);
+            ViewData["Remitos"] = await comprobantesRepository.spComprobanteDetalleGet(id);
 
             return View(cliente.FirstOrDefault());
         }

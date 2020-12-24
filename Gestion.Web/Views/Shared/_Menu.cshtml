@@ -42,7 +42,21 @@
             </span>
         </a>
         <ul class="treeview-menu">
-            <li><a asp-controller="Comprobantes" asp-action="ImputacionesProductos"><i class="fa fa-circle-o"></i> Imputar Productos</a></li>            
+            <li><a asp-controller="Comprobantes" asp-action="ImputacionesProductos"><i class="fa fa-circle-o"></i> Imputar Productos</a></li>
+            <li><a asp-controller="Comprobantes" asp-action="EntregaProductos"><i class="fa fa-circle-o"></i> Entrega Productos</a></li>
+        </ul>
+    </li>
+
+    <li class="treeview">
+        <a href="#">
+            <i class="fa fa-box-open"></i>
+            <span>Cajas</span>
+            <span class="pull-right-container">
+                <i class="fa fa-angle-left pull-right"></i>
+            </span>
+        </a>
+        <ul class="treeview-menu">
+            <li><a asp-controller="Cajas" asp-action="Index"><i class="fa fa-circle-o"></i> Estado</a></li>            
         </ul>
     </li>
 

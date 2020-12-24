@@ -321,8 +321,170 @@ function filter(__val__) {
 
 };
 
+function FiltrarEnteros(evt) {
+    var charCode = (evt.which) ? evt.which : event.keyCode
+    if (charCode > 31 && (charCode < 48 || charCode > 57))
+        return false;
+
+    return true;
+};
+
 function CierraModal() {
     $("#modal-default").modal('hide');//ocultamos el modal
     $('body').removeClass('modal-open');//eliminamos la clase del body para poder hacer scroll
     $('.modal-backdrop').remove();//eliminamos el backdrop del modal;
+}
+
+
+$(document).ready(function () {
+
+    $('#dTableP').DataTable({
+        "processing": "true",
+        "retrieve": "true",
+        "pageLength": 50,
+        "language": {
+            "processing": "Procesando... Espere por favor",
+            "lengthMenu": "Mostrar _MENU_ registros por pagina",
+            "zeroRecords": "Nada encontrado",
+            "info": "Mostrando página _PAGE_ de _PAGES_",
+            "infoEmpty": "No hay registros disponibles",
+            "sInfoFiltered": "(filtrado de un total de _MAX_ registros)",
+            "sSearch": "Buscar:",
+            "oPaginate": {
+                "sFirst": "Primero",
+                "sLast": "Último",
+                "sNext": "Siguiente",
+                "sPrevious": "Anterior"
+            }
+        }
+    });
+});
+        
+
+
+function cargarDatosFiscales(Id, TipoComprobanteFiscal,LetraFiscal,PtoVentaFiscal,NumeroFiscal) 
+{
+    var mId = document.getElementById('mdlId');
+    var mTipoComprobanteFiscal = document.getElementById('mdlTipoComprobanteFiscal');
+    var mLetraFiscal = document.getElementById('mdlLetraFiscal');
+    var mPtoVentaFiscal = document.getElementById('mdlPtoVentaFiscal');
+    var mNumeroFiscal = document.getElementById('mdlNumeroFiscal');
+    
+    $("#mId").text('');
+    $("#mTipoComprobanteFiscal").text('');
+    $("#mLetraFiscal").text('');
+    $("#mPtoVentaFiscal").text('');
+    $("#mNumeroFiscal").text('');
+    
+    mId.value = Id;
+    mTipoComprobanteFiscal.value = TipoComprobanteFiscal;
+    mLetraFiscal.value = LetraFiscal;
+    mPtoVentaFiscal.value = PtoVentaFiscal;
+    mNumeroFiscal.value = NumeroFiscal;    
+}; 
+
+function validarFiscalModal() {
+
+    //var btn = document.getElementById('btnGuardar');
+    var mId = document.getElementById('mdlId').value;
+    var mTipoComprobanteFiscal = document.getElementById('mdlTipoComprobanteFiscal').value;
+    var mLetraFiscal = document.getElementById('mdlLetraFiscal').value;
+    var mPtoVentaFiscal = document.getElementById('mdlPtoVentaFiscal').value;
+    var mNumeroFiscal = document.getElementById('mdlNumeroFiscal').value;
+
+    //btn.disabled = true;
+
+    var esOk = true;
+    $("#mId").text('');
+    $("#mTipoComprobanteFiscal").text('');
+    $("#mLetraFiscal").text('');
+    $("#mPtoVentaFiscal").text('');
+    $("#mNumeroFiscal").text('');
+
+
+    //campo obligatorio
+    if (mTipoComprobanteFiscal == null || mTipoComprobanteFiscal.length == 0 || /^\s+$/.test(mTipoComprobanteFiscal)) {
+        $("#mTipoComprobanteFiscal").text('Debes ingresar un Tipo de Comprobante valido');
+        //return false;
+        esOk = false;
+    }
+
+    if (mTipoComprobanteFiscal.toUpperCase() != "FA" && mTipoComprobanteFiscal.toUpperCase() != "ND" && mTipoComprobanteFiscal.toUpperCase() != "NC" && mTipoComprobanteFiscal.toUpperCase() != "RE") {
+        $("#mTipoComprobanteFiscal").text('Debes ingresar un Tipo de Comprobante valido');
+        //return false;
+        esOk = false;
+    }
+
+    //campo obligatorio
+    if (mLetraFiscal == null || mLetraFiscal.length == 0 || /^\s+$/.test(mLetraFiscal)) {
+        $("#mLetraFiscal").text('Debes ingresar una Letra valida');
+        //return false;
+        esOk = false;
+    }
+
+    if (mLetraFiscal.toUpperCase() != "X" && mLetraFiscal.toUpperCase() != "A" && mLetraFiscal.toUpperCase() != "B" && mLetraFiscal.toUpperCase()  != "C") {
+        $("#mLetraFiscal").text('Debes ingresar una Letra valida');
+        //return false;
+        esOk = false;
+    }
+
+    //campo obligatorio
+    if (mPtoVentaFiscal == null || mPtoVentaFiscal.length == 0 || /^\s+$/.test(mPtoVentaFiscal)) {
+        $("#mPtoVentaFiscal").text('Debes ingresar un Pto de Venta valido');
+        //return false;
+        esOk = false;
+    }
+
+    if (Number(mPtoVentaFiscal) <= 0) {
+        $("#mPtoVentaFiscal").text('El Pto de Venta debe ser mayor a Cero');
+        //return false;
+        esOk = false;
+    }
+
+    //campo obligatorio
+    if (mNumeroFiscal == null || mNumeroFiscal.length == 0 || /^\s+$/.test(mNumeroFiscal)) {
+        $("#mNumeroFiscal").text('Debes ingresar un Numero valido');
+        //return false;
+        esOk = false;
+    }
+
+    if (Number(mNumeroFiscal) <= 0) {
+        $("#mNumeroFiscal").text('El Numero debe ser mayor a Cero');
+        //return false;
+        esOk = false;
+    }
+    //---------------------------------
+
+    
+    //---------------------------------
+    if (esOk == false) {
+        //btn.disabled = false;
+        return false;
+    }
+    //---------------------------------
+
+    guardarFiscalModal(mId, mTipoComprobanteFiscal.toUpperCase(), mLetraFiscal.toUpperCase(), mPtoVentaFiscal, mNumeroFiscal);
+
+};
+
+function guardarFiscalModal(mId, mTipoComprobanteFiscal, mLetraFiscal, mPtoVentaFiscal, mNumeroFiscal) {
+    $.ajax({
+        async: false,
+        type: 'POST',
+        url: '/Comprobantes/InsertaDatosFiscales',
+        dataType: 'json',
+        data: {
+            Id: mId,
+            TipoComprobanteFiscal: mTipoComprobanteFiscal,
+            LetraFiscal: mLetraFiscal,
+            PtoVentaFiscal: mPtoVentaFiscal,
+            NumeroFiscal: mNumeroFiscal
+        },
+        success: function (data) {
+            document.getElementById("CCForm").submit();
+        },
+        error: function (ex) {
+            alert('Fallo');
+        }
+    });
 }

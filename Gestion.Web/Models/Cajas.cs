@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace Gestion.Web.Models
 {
@@ -17,5 +18,15 @@ namespace Gestion.Web.Models
 
         public bool Estado { get; set; }
 
+    }
+
+    public partial class CajasEstadoDTO 
+    {
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
+        public DateTime Fecha { get; set; }
+        [Display(Name = "Tipos de Pagos")]
+        public string FormaPagoTipo { get; set; }
+        public decimal Total { get; set; }
+        public string Sucursal { get; set; }
     }
 }
