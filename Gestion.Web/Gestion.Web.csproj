@@ -4,21 +4,26 @@
     <TargetFramework>netcoreapp2.1</TargetFramework>
     <TypeScriptToolsVersion>Latest</TypeScriptToolsVersion>
     <UserSecretsId>e935711f-9370-43ec-9840-ef611d5d3d40</UserSecretsId>
+    <ApplicationIcon>logoapp.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Views\CajasAperturasCierres\**" />
     <Compile Remove="Views\Etiquetas\**" />
     <Compile Remove="Views\Localidades\**" />
     <Compile Remove="wwwroot\admin\bower_components\fullcalendar\**" />
     <Compile Remove="wwwroot\catalogo\**" />
+    <Content Remove="Views\CajasAperturasCierres\**" />
     <Content Remove="Views\Etiquetas\**" />
     <Content Remove="Views\Localidades\**" />
     <Content Remove="wwwroot\admin\bower_components\fullcalendar\**" />
     <Content Remove="wwwroot\catalogo\**" />
+    <EmbeddedResource Remove="Views\CajasAperturasCierres\**" />
     <EmbeddedResource Remove="Views\Etiquetas\**" />
     <EmbeddedResource Remove="Views\Localidades\**" />
     <EmbeddedResource Remove="wwwroot\admin\bower_components\fullcalendar\**" />
     <EmbeddedResource Remove="wwwroot\catalogo\**" />
+    <None Remove="Views\CajasAperturasCierres\**" />
     <None Remove="Views\Etiquetas\**" />
     <None Remove="Views\Localidades\**" />
     <None Remove="wwwroot\admin\bower_components\fullcalendar\**" />
@@ -26,10 +31,17 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Remove="Controllers\CajasAperturasCierresController.cs" />
+    <Compile Remove="Data\Repositorios\CajasAperturasCierresRepository.cs" />
+    <Compile Remove="Data\Repositorios\ICajasAperturasCierresRepository.cs" />
+    <Compile Remove="Models\CajasAperturasCierres.cs" />
     <Compile Remove="Models\Provincias.cs" />
   </ItemGroup>
 
   <ItemGroup>
+    <Content Remove="Views\Cajas\DetailsImportes.cshtml" />
+    <Content Remove="Views\Cajas\DetailsUsuarios.cshtml" />
+    <Content Remove="Views\Cajas\Estado.cshtml" />
     <Content Remove="Views\Clientes\Delete.cshtml" />
     <Content Remove="Views\Clientes\_CuentaCorrienteHistoria.cshtml" />
     <Content Remove="Views\Comprobantes\ImputaProducto.cshtml" />
@@ -2135,6 +2147,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="Views\Cajas\DetailsImportes.cshtml" />
+    <None Include="Views\Cajas\DetailsUsuarios.cshtml" />
+    <None Include="Views\Cajas\Estado.cshtml" />
     <None Include="wwwroot\admin\bower_components\bootstrap-colorpicker\.editorconfig" />
     <None Include="wwwroot\admin\bower_components\bootstrap-colorpicker\.github\CODE_OF_CONDUCT.md" />
     <None Include="wwwroot\admin\bower_components\bootstrap-colorpicker\.github\CONTRIBUTING.md" />

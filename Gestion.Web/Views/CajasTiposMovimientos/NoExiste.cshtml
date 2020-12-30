@@ -3,4 +3,37 @@
     ViewData["Title"] = "El Tipo de Movimiento no Existe";
 }
 
-    <h2>@ViewData["Title"]</h2>
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <h1>
+            404 @ViewData["Title"]
+        </h1>
+        <ol class="breadcrumb">
+            <li><a asp-controller="Home" asp-action="Index"><i class="fa fa-dashboard"></i> Inicio</a></li>
+            <li><a asp-controller="CajasTiposMovimientos" asp-action="Index">Tipos de Movimientos</a></li>
+            <li class="active">404 Error</li>
+        </ol>
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+        <div class="error-page">
+            <h2 class="headline text-yellow"> 404</h2>
+
+            <div class="error-content">
+                <p><i class="fa fa-warning text-yellow"></i></p>
+
+                <p>
+                    @ViewData["Title"]
+                </p>
+
+            </div>
+            <!-- /.error-content -->
+        </div>
+        <!-- /.error-page -->
+    </section>
+    <!-- /.content -->
+</div>
+<!-- /.content-wrapper -->

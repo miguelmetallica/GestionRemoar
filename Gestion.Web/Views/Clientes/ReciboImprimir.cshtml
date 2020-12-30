@@ -90,83 +90,49 @@
                         switch (formas.FormaPagoTipo)
                         {
                             case "E":
-                                <div class="col-xs-6">
-                                    <div class="alert alert-dismissible">
-                                        <b>@formas.FormaPago</b><br>
-                                        <b>Total:</b> @formas.Total <br>
-                                        <b>Observaciones:</b> @formas.Observaciones<br>
-
-                                    </div>
+                                <div class="col-xs-12">
+                                    <b>@formas.FormaPago</b>
+                                    <b> - TOTAL:</b> @formas.Total
+                                    
                                 </div>
                                 break;
                             case "C":
-                                <div class="col-xs-6">
-                                    <div class="alert alert-dismissible">
-                                        <b>@formas.FormaPago</b><br>
-                                        <b>Nombre:</b> @formas.TarjetaCliente <br>
-                                        <b>Numero:</b> @formas.TarjetaNumero - <b>Vence:</b> @formas.TarjetaVenceAño / @formas.TarjetaVenceMes<br>
-                                        <b>Total:</b> @formas.Total<br>
-                                        <b>Importe:</b> @formas.Importe - <b>Cuota:</b> @formas.Cuota - <b>Interes:</b> @formas.Interes<br>
-                                        <b>Cod de Autorizacion:</b> @formas.CodigoAutorizacion<br>
-                                        <b>Observaciones:</b> @formas.Observaciones<br>
-                                        
-
-                                    </div>
+                                <div class="col-xs-12">
+                                        <b>@formas.FormaPago</b>
+                                        <b> - TOTAL:</b> @formas.Total
+                                        <b> - IMPORTE:</b> @formas.Importe - <b>CUOTA:</b> @formas.Cuota - <b>INTERES:</b> @formas.Interes                                   
                                 </div>
-                                    break;
+                                break;
                             case "D":
-                                <div class="col-xs-6">
-                                    <div class="alert alert-dismissible">
-                                        <b>@formas.FormaPago</b><br>
-                                        <b>Nombre:</b> @formas.TarjetaCliente<br>
-                                        <b>Numero:</b> @formas.TarjetaNumero - <b>Vence:</b> @formas.TarjetaVenceAño / @formas.TarjetaVenceMes<br>
-                                        <b>Total:</b> @formas.Total<br>
-                                        <b>Cod de Autorizacion:</b> @formas.CodigoAutorizacion<br>
-                                        <b>Observaciones:</b> @formas.Observaciones<br>
-                                        
-                                    </div>
+                                <div class="col-xs-12">
+                                        <b>@formas.FormaPago</b>
+                                        <b> - TOTAL:</b> @formas.Total                                    
                                 </div>
-                            break;
+                                break;
                             case "X":
-                                <div class="col-xs-6">
-                                    <div class="alert alert-dismissible">
-                                        <b>@formas.FormaPago</b><br>
-                                        <b>Numero:</b> @formas.ChequeNumero <br>
-                                        <b>Nombre:</b> @formas.ChequeNombre <br>
-                                        <b>Cuit:</b> @formas.ChequeCuit <br>
-                                        <b>Fecha:</b> @formas.ChequeFechaEmision <br>
-                                        <b>Vence:</b> @formas.ChequeFechaVencimiento<br>
-                                        <b>Cuit:</b> @formas.ChequeCuenta<br>
-                                        <b>Total:</b> @formas.Total<br>
-                                        <b>Observaciones:</b> @formas.Observaciones<br>
-                                        @*<b>Usuario:</b> @formas.UsuarioAlta<br>
-                                        <b>Fecha:</b> @formas.FechaAlta<br>*@
-
-                                    </div>
+                                <div class="col-xs-12">
+                                        <b>@formas.FormaPago</b>
+                                        <b> - NUMERO:</b> @formas.ChequeNumero 
+                                        <b> - TOTAL:</b> @formas.Total                                     
+                                    
                                 </div>
-                            break;
+                                break;
                             case "O":
-                                <div class="col-xs-6">
-                                    <div class="alert alert-dismissible">
-                                        <b>@formas.FormaPago</b><br>
-                                        <b>Total:</b> @formas.Total<br>
-                                        <b>Forma Pago:</b> @formas.Otros<br>
-                                        @if (formas.CodigoAutorizacion != null)
-                                        {
-                                            <b>Cod de Autorizacion:</b> @formas.CodigoAutorizacion<br>
-                                        }
-                                        <b>Observaciones:</b> @formas.Observaciones<br>
-                                        
-                                    </div>
+                                <div class="col-xs-12">
+                                        <b>@formas.FormaPago</b>
+                                        <b> - FORMA PAGO:</b> @formas.Otros
+                                        <b> - TOTAL:</b> @formas.Total
+
+                                    
                                 </div>
                                 break;
                             default:
-                            break;
+                                break;
                         }
 
                     }
 
-                    </div>
+                </div>
                     <!-- /.col -->
                 </div>
             <!-- /.row -->

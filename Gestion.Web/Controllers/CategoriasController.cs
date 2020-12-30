@@ -9,7 +9,8 @@ using System.Threading.Tasks;
 
 namespace Gestion.Web.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "Admin,Categorias")]
+    
     public class CategoriasController : Controller
     {
         private readonly ICategoriasRepository repository; 

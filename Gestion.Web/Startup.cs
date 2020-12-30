@@ -42,9 +42,8 @@ namespace Gestion.Web
                 cfg.Password.RequireNonAlphanumeric = false;
                 cfg.Password.RequireUppercase = false;
                 cfg.Password.RequiredLength = 6;
-            })
+            })                
                 .AddDefaultTokenProviders()
-                .AddDefaultUI()
                 .AddEntityFrameworkStores<DataContext>();
 
             services.AddDbContext<DataContext>(cfg =>
@@ -107,7 +106,7 @@ namespace Gestion.Web
             services.AddScoped<IMarcasRepository, MarcasRepository>();
 
             services.AddScoped<ICajasRepository, CajasRepository>();
-            services.AddScoped<ICajasAperturasCierresRepository, CajasAperturasCierresRepository>();
+            //services.AddScoped<ICajasAperturasCierresRepository, CajasAperturasCierresRepository>();
             services.AddScoped<ICajasMovimientosRepository, CajasMovimientosRepository>();            
             services.AddScoped<ICajasTiposMovimientosRepository, CajasTiposMovimientosRepository>();
 

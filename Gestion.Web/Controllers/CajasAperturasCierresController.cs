@@ -10,7 +10,8 @@ using System.Threading.Tasks;
 
 namespace Gestion.Web.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "Admin,CajasAperturasCierres")]
+    
     public class CajasAperturasCierresController : Controller
     {
         private readonly ICajasAperturasCierresRepository repository; 

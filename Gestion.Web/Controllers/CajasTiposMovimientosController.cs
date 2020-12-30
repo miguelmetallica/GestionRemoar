@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Gestion.Web.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "Admin,CajasTiposMovimientos")]
     public class CajasTiposMovimientosController : Controller
     {
         private readonly ICajasTiposMovimientosRepository repository; 
@@ -53,6 +53,7 @@ namespace Gestion.Web.Controllers
             if (ModelState.IsValid)
             {
                 CajasTiposMovimientos.Estado = true;
+                CajasTiposMovimientos.Descripcion = CajasTiposMovimientos.Descripcion.ToUpper();
                 await repository.CreateAsync(CajasTiposMovimientos);
                 return RedirectToAction(nameof(Index));
             }
@@ -89,6 +90,7 @@ namespace Gestion.Web.Controllers
                 try
                 {
                     CajasTiposMovimientos.Estado = true;
+                    CajasTiposMovimientos.Descripcion = CajasTiposMovimientos.Descripcion.ToUpper();
                     await repository.UpdateAsync(CajasTiposMovimientos);
                 }
                 catch (DbUpdateConcurrencyException)
@@ -114,23 +116,12 @@ namespace Gestion.Web.Controllers
                 return new NotFoundViewResult("NoExiste");
             }
 
-            var CajasTiposMovimientos = await this.repository.GetByIdAsync(id);
-            if (CajasTiposMovimientos == null)
-            {
-                return new NotFoundViewResult("NoExiste");
-            }
-
-            return this.View(CajasTiposMovimientos);
-        }
-
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(string id)
-        {
             var CajasTiposMovimientos = await repository.GetByIdAsync(id);
+            CajasTiposMovimientos.Estado = !CajasTiposMovimientos.Estado;
             await repository.DeleteAsync(CajasTiposMovimientos);
             return RedirectToAction(nameof(Index));
         }
 
+        
     }
 }

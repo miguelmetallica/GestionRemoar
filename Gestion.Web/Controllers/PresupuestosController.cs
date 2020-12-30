@@ -8,7 +8,8 @@ using System.Threading.Tasks;
 
 namespace Gestion.Web.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "Admin,Presupuestos")]
+    
     public class PresupuestosController : Controller
     {
         private readonly IPresupuestosRepository repository;

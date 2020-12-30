@@ -1,36 +1,82 @@
-﻿@model Gestion.Web.Models.Cajas
+﻿@model Gestion.Web.Models.ParamCajas
 
 @{
-    ViewData["Title"] = "Detalle";
+    ViewData["Title"] = "Detalle del Tipo de Movimiento";
 }
 
-<h2>Detalle</h2>
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <h1>
+            Sistema de gestíon
+            <small>Gestion de Clientes</small>
+        </h1>
+        <ol class="breadcrumb">
+            <li><a asp-controller="Home" asp-action="Index"><i class="fas fa-tachometer-alt"></i> Inicio</a></li>
+            <li><a asp-controller="CajasTiposMovimientos" asp-action="Index">Listado de Tipos de Movimientos</a></li>
+            <li class="active">@ViewData["Title"]</li>
+        </ol>
+    </section>
 
-<div>
-    <h4>Caja</h4>
-    <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.Codigo)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Codigo)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Sucursal.Nombre)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Sucursal.Nombre)
-        </dd>        
-    </dl>
-</div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">Edit</a>
-    <a asp-action="Index" class="btn btn-success">Volver a la lista</a>
-</div>
+    <!-- Main content -->
+    <section class="content">
+        <div class="row">
+            <!-- left column -->
+            <div class="col-md-6">
+                <!-- general form elements -->
+                <div class="box box-primary">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">Datos del Tipo de Movimiento</h3>
+                    </div>
+                    <!-- /.box-header -->
+                    <!-- form start -->
+                    <form asp-action="Create" enctype="multipart/form-data">
+                        <div class="box-body">
+                            <dl class="dl-horizontal">
+                                <dt>
+                                    @Html.DisplayNameFor(model => model.Codigo)
+                                </dt>
+                                <dd>
+                                    @Html.DisplayFor(model => model.Codigo)
+                                </dd>
+                                
+                                <dt>
+                                    @Html.DisplayNameFor(model => model.Estado)
+                                </dt>
+                                <dd>
+                                    @{
+                                        if (Model.Estado)
+                                        {
+                                            <span class="label label-success">Activo</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="label label-danger">Inactivo</span>
+                                        }
 
+                                    }
+                                </dd>
+                            </dl>
+                        </div>
+                        <!-- /.box-body -->
+
+                        <div class="box-footer">
+                            <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">Editar datos del Unidad Medida</a>
+                            <a asp-action="Index" class="btn btn-default pull-right">Volver al Listado</a>
+                        </div>
+                    </form>
+                </div>
+                <!-- /.box -->
+            </div>
+            <!--/.col-->
+        </div>
+        <!-- /.row -->
+    </section>
+    <!-- /.content -->
+</div>
+<!-- /.content-wrapper -->
 
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}    
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }

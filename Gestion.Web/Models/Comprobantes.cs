@@ -391,5 +391,52 @@ namespace Gestion.Web.Models
         public DateTime DevolucionFecha { get; set; }
         public string DevolucionUsuario { get; set; }
         public string DevolucionMotivo { get; set; }
+
+        public decimal Porcentaje_Config { get; set; }
+        
+    }
+
+    public partial class ComprobantesDetalleIndicador : IEntidades
+    {
+        public string Id { get; set; }
+        public string ComprobanteId { get; set; }
+        public string DetalleId { get; set; }
+        public string ProductoId { get; set; }
+        public string ProductoCodigo { get; set; }
+        public string ProductoNombre { get; set; }
+        public int Cantidad { get; set; }
+        public decimal PrecioUnitario { get; set; }
+        public decimal Precio { get; set; }
+        public decimal Imputado { get; set; }
+        public decimal ImputadoPorcentaje { get; set; }
+        public decimal Importe { get; set; }
+        public bool Estado { get; set; }
+        public DateTime Fecha { get; set; }
+        public string Usuario { get; set; }
+
+        public bool EntregaEstado { get; set; }
+        public DateTime EntregaFecha { get; set; }
+        public string EntregaUsuario { get; set; }
+
+        public bool AutorizaEstado { get; set; }
+        public DateTime AutorizaFecha { get; set; }
+        public string AutorizaUsuario { get; set; }
+
+        public bool DespachaEstado { get; set; }
+        public DateTime DespachaFecha { get; set; }
+        public string DespachaUsuario { get; set; }
+
+        public bool DevolucionEstado { get; set; }
+        public DateTime DevolucionFecha { get; set; }
+        public string DevolucionUsuario { get; set; }
+        public string DevolucionMotivo { get; set; }
+
+        public string CodigoComprobante { get; set; }
+        public DateTime FechaComprobante { get; set; }
+        public string UsuarioComprobante { get; set; }
+        public string ClienteCodigo { get; set; }
+        public string RazonSocial { get; set; }
+        public string CodigoPrespuesto { get; set; }
+
     }
 }

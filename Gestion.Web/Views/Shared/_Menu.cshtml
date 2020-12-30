@@ -43,54 +43,79 @@
         </a>
         <ul class="treeview-menu">
             <li><a asp-controller="Comprobantes" asp-action="ImputacionesProductos"><i class="fa fa-circle-o"></i> Imputar Productos</a></li>
-            <li><a asp-controller="Comprobantes" asp-action="EntregaProductos"><i class="fa fa-circle-o"></i> Entrega Productos</a></li>
+            <li><a asp-controller="Comprobantes" asp-action="EntregaProductos"><i class="fa fa-circle-o"></i> Remitos Entrega</a></li>
         </ul>
     </li>
 
     <li class="treeview">
         <a href="#">
-            <i class="fa fa-box-open"></i>
+            <i class="glyphicon glyphicon-usd"></i>
             <span>Cajas</span>
             <span class="pull-right-container">
                 <i class="fa fa-angle-left pull-right"></i>
             </span>
         </a>
         <ul class="treeview-menu">
-            <li><a asp-controller="Cajas" asp-action="Index"><i class="fa fa-circle-o"></i> Estado</a></li>            
-        </ul>
-    </li>
+            <li><a asp-controller="Cajas" asp-action="Estado"><i class="fa fa-circle-o"></i> Informe de Caja</a></li>
+            <li><a asp-controller="CajasMovimientos" asp-action="Index"><i class="fa fa-circle-o"></i> Movimientos de Caja</a></li>
 
-    <li>
-        <a asp-controller="Account" asp-action="Index">
-            <i class="fas fa-user-alt"></i> <span>Usuarios</span>
-        </a>
+        </ul>
     </li>
 
     <li class="treeview">
         <a href="#">
-            <i class="fa fa-cog"></i>
-            <span>Ajustes</span>
+            <i class="glyphicon glyphicon-stats"></i>
+            <span>Indicadores - Informes</span>
             <span class="pull-right-container">
                 <i class="fa fa-angle-left pull-right"></i>
             </span>
         </a>
         <ul class="treeview-menu">
-            <li><a asp-controller="Alicuotas" asp-action="Index">Alicuotas</a></li>
-            <li><a asp-controller="Categorias" asp-action="Index">Categorias</a></li>
-            <li><a asp-controller="ClientesCategorias" asp-action="Index">Categorias de Cliente</a></li>
-            <li><a asp-controller="ConceptosIncluidos" asp-action="Index">Conceptos Incluidos</a></li>
-            <li><a asp-controller="Configuraciones" asp-action="Index">Configuraciones</a></li>
-            <li><a asp-controller="ComprobantesNumeraciones" asp-action="Index">Comp Numeracion</a></li>
-            <li><a asp-controller="CuentasCompras" asp-action="Index">Cuentas Compras</a></li>
-            <li><a asp-controller="CuentasVentas" asp-action="Index">Cuentas Ventas</a></li>
-            <li><a asp-controller="PresupuestosDescuentos" asp-action="Index">Descuentos Presupuesto</a></li>
-            <li><a asp-controller="PresupuestosEstados" asp-action="Index">Estados Presupuesto</a></li>
-            <li><a asp-controller="Provincias" asp-action="Index">Provincias</a></li>
-            <li><a asp-controller="TiposComprobantes" asp-action="Index">Tipos Comprobantes</a></li>
-            <li><a asp-controller="TiposDocumentos" asp-action="Index">Tipos Documentos</a></li>
-            <li><a asp-controller="TiposProductos" asp-action="Index">Tipos Productos</a></li>
-            <li><a asp-controller="TiposResponsables" asp-action="Index">Tipos Responsables</a></li>
-            <li><a asp-controller="UnidadesMedidas" asp-action="Index">Unidades de Medidas</a></li>
+            <li><a asp-controller="Indicadores" asp-action="EntregasPendientes"><i class="fa fa-circle-o"></i> Entregas Pendientes</a></li>
         </ul>
     </li>
+    @if (User.IsInRole("Admin"))
+    {
+        <li>
+            <a asp-controller="Account" asp-action="Index">
+                <i class="fas fa-user-alt"></i> <span>Usuarios</span>
+            </a>
+        </li>
+    }
+
+
+    @if (User.IsInRole("Admin"))
+    {
+        <li class="treeview">
+            <a href="#">
+                <i class="fa fa-cog"></i>
+                <span>Ajustes</span>
+                <span class="pull-right-container">
+                    <i class="fa fa-angle-left pull-right"></i>
+                </span>
+            </a>
+            <ul class="treeview-menu">
+                <li><a asp-controller="Alicuotas" asp-action="Index">Alicuotas</a></li>
+                <li><a asp-controller="Cajas" asp-action="Index">Cajas</a></li>
+                <li><a asp-controller="Categorias" asp-action="Index">Categorias</a></li>
+                <li><a asp-controller="ClientesCategorias" asp-action="Index">Categorias de Cliente</a></li>
+                <li><a asp-controller="ConceptosIncluidos" asp-action="Index">Conceptos Incluidos</a></li>
+                <li><a asp-controller="Configuraciones" asp-action="Index">Configuraciones</a></li>
+                <li><a asp-controller="ComprobantesNumeraciones" asp-action="Index">Comp Numeracion</a></li>
+                <li><a asp-controller="CuentasCompras" asp-action="Index">Cuentas Compras</a></li>
+                <li><a asp-controller="CuentasVentas" asp-action="Index">Cuentas Ventas</a></li>
+                <li><a asp-controller="PresupuestosDescuentos" asp-action="Index">Descuentos Presupuesto</a></li>
+                <li><a asp-controller="PresupuestosEstados" asp-action="Index">Estados Presupuesto</a></li>
+                <li><a asp-controller="Provincias" asp-action="Index">Provincias</a></li>
+                <li><a asp-controller="Roles" asp-action="Index">Roles</a></li>
+                <li><a asp-controller="TiposComprobantes" asp-action="Index">Tipos Comprobantes</a></li>
+                <li><a asp-controller="TiposDocumentos" asp-action="Index">Tipos Documentos</a></li>
+                <li><a asp-controller="CajasTiposMovimientos" asp-action="Index">Tipos Mov de Cajas</a></li>
+                <li><a asp-controller="TiposProductos" asp-action="Index">Tipos Productos</a></li>
+                <li><a asp-controller="TiposResponsables" asp-action="Index">Tipos Responsables</a></li>
+                <li><a asp-controller="UnidadesMedidas" asp-action="Index">Unidades de Medidas</a></li>
+            </ul>
+        </li>
+    }
+
 </ul>

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Gestion.Web.Controllers
 {
-    [Authorize(Roles = "ADMIN")]
+    [Authorize(Roles = "Admin,TiposResponsables")]
     public class TiposResponsablesController : Controller
     {
         private readonly ITiposResponsablesRepository repository; 

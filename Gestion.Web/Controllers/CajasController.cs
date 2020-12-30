@@ -4,11 +4,13 @@ using Gestion.Web.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Threading.Tasks;
 
 namespace Gestion.Web.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "Admin,Cajas")]
+    
     public class CajasController : Controller
     {
         private readonly ICajasRepository repository;
@@ -22,126 +24,141 @@ namespace Gestion.Web.Controllers
             this.sucursales = sucursales;
         }
 
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            //return View(repository.GetAll().Include(x => x.Sucursal));
-            var model = await repository.spCajasEstadoImportesGet();
+            var model = repository.GetAll().Include(x => x.Sucursal);
+            return View(model);
+        }
+        public async Task<IActionResult> Estado()
+        {
+            try
+            {
+                var model = await repository.spCajasEstadoFechaGet();
+                return View(model);
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+            
+        }
+
+        public async Task<IActionResult> DetailsImportes(string fecha,string sucid)
+        {
+            var model = await repository.spCajasEstadoImportesGet(fecha,sucid);
             return View(model);
         }
 
-        //public async Task<IActionResult> Details(string id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return new NotFoundViewResult("NoExiste");
-        //    }
+        public async Task<IActionResult> DetailsUsuarios(string fecha, string sucid)
+        {
+            var model = await repository.spCajasEstadoUsuariosGet(fecha, sucid);
+            return View(model);
+        }
 
-        //    var Cajas = await this.repository.GetByIdAsync(id);
-        //    if (Cajas == null)
-        //    {
-        //        return new NotFoundViewResult("NoExiste");
-        //    }
+        public async Task<IActionResult> Details(string id)
+        {
+            if (id == null)
+            {
+                return new NotFoundViewResult("NoExiste");
+            }
 
-        //    return this.View(Cajas);
-        //}
+            var Cajas = await this.repository.GetByIdAsync(id);
+            if (Cajas == null)
+            {
+                return new NotFoundViewResult("NoExiste");
+            }
 
-        //public IActionResult Create()
-        //{
-        //    ViewBag.Sucursales = this.sucursales.GetCombo();
-        //    return View();
-        //}
+            return this.View(Cajas);
+        }
 
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> Create(Cajas Cajas)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        Cajas.Estado = true;
-        //        await repository.CreateAsync(Cajas);
-        //        return RedirectToAction(nameof(Index));
-        //    }
-        //    ViewBag.Sucursales = this.sucursales.GetCombo();
+        public IActionResult Create()
+        {
+            ViewBag.Sucursales = this.sucursales.GetCombo();
+            return View();
+        }
 
-        //    return View(Cajas);
-        //}
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create(ParamCajas Cajas)
+        {
+            if (ModelState.IsValid)
+            {
+                Cajas.Estado = true;
+                Cajas.FechaAlta = DateTime.Now;
+                Cajas.UsuarioAlta = User.Identity.Name;
 
-        //public async Task<IActionResult> Edit(string id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return new NotFoundViewResult("NoExiste");
-        //    }
+                await repository.CreateAsync(Cajas);
+                return RedirectToAction(nameof(Index));
+            }
+            ViewBag.Sucursales = this.sucursales.GetCombo();
 
-        //    var Cajas = await this.repository.GetByIdAsync(id);
-        //    if (Cajas == null)
-        //    {
-        //        return new NotFoundViewResult("NoExiste");
-        //    }
+            return View(Cajas);
+        }
 
-        //    ViewBag.Sucursales = this.sucursales.GetCombo();
+        public async Task<IActionResult> Edit(string id)
+        {
+            if (id == null)
+            {
+                return new NotFoundViewResult("NoExiste");
+            }
 
-        //    return this.View(Cajas);
-        //}
+            var Cajas = await this.repository.GetByIdAsync(id);
+            if (Cajas == null)
+            {
+                return new NotFoundViewResult("NoExiste");
+            }
 
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> Edit(string id, Cajas Cajas)
-        //{
-        //    if (id != Cajas.Id)
-        //    {
-        //        return new NotFoundViewResult("NoExiste");
-        //    }
+            ViewBag.Sucursales = this.sucursales.GetCombo();
 
-        //    if (ModelState.IsValid)
-        //    {
-        //        try
-        //        {
-        //            Cajas.Estado = true;
-        //            await repository.UpdateAsync(Cajas);
-        //        }
-        //        catch (DbUpdateConcurrencyException)
-        //        {
-        //            if (!await repository.ExistAsync(Cajas.Id))
-        //            {
-        //                return new NotFoundViewResult("NoExiste");
-        //            }
-        //            else
-        //            {
-        //                throw;
-        //            }
-        //        }
-        //        return RedirectToAction(nameof(Index));
-        //    }
+            return this.View(Cajas);
+        }
 
-        //    ViewBag.Sucursales = this.sucursales.GetCombo();
-        //    return View(Cajas);
-        //}
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(string id, ParamCajas Cajas)
+        {
+            if (id != Cajas.Id)
+            {
+                return new NotFoundViewResult("NoExiste");
+            }
 
-        //public async Task<IActionResult> Delete(string id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return new NotFoundViewResult("NoExiste");
-        //    }
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    Cajas.Estado = true;
+                    await repository.UpdateAsync(Cajas);
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!await repository.ExistAsync(Cajas.Id))
+                    {
+                        return new NotFoundViewResult("NoExiste");
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToAction(nameof(Index));
+            }
 
-        //    var Cajas = await this.repository.GetByIdAsync(id);
-        //    if (Cajas == null)
-        //    {
-        //        return new NotFoundViewResult("NoExiste");
-        //    }
+            ViewBag.Sucursales = this.sucursales.GetCombo();
+            return View(Cajas);
+        }
 
-        //    return this.View(Cajas);
-        //}
+        public async Task<IActionResult> Delete(string id)
+        {
+            if (id == null)
+            {
+                return new NotFoundViewResult("NoExiste");
+            }
 
-        //[HttpPost, ActionName("Delete")]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> DeleteConfirmed(string id)
-        //{
-        //    var Cajas = await repository.GetByIdAsync(id);
-        //    await repository.DeleteAsync(Cajas);
-        //    return RedirectToAction(nameof(Index));
-        //}
+            var Cajas = await repository.GetByIdAsync(id);
+            Cajas.Estado = !Cajas.Estado;
+            await repository.UpdateAsync(Cajas);
+            return RedirectToAction(nameof(Index));
+        }        
 
     }
 }

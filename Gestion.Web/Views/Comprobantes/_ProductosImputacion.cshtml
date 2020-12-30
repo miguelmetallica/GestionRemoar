@@ -39,7 +39,7 @@
                     <h4 class="text-red">Pendiente: @Model.Saldo</h4>
                     <h4 class="text-green">Pagado: @(Model.Total - Model.Saldo)</h4>
                     <h4 class="text-blue">Imputado: @Detalle.Sum(x => x.Imputado)</h4>
-                    <h4 class="text-green">Diferencia: @(Model.Total - Model.Saldo - Detalle.Sum(x => x.Imputado))</h4> 
+                    <h4 class="text-green">Disponible para Imputar: @(Model.Total - Model.Saldo - Detalle.Sum(x => x.Imputado))</h4> 
                     <br>
                     <input type="hidden" id="pagado" value="@(Model.Total - Model.Saldo - Detalle.Sum(x => x.Imputado))" />
 
@@ -125,7 +125,7 @@
                                         <button id="btnBorrar" type="button" class="btn btn-danger btn-sm" disabled>Anular</button>
                                     }
 
-                                    @if (@item.ImputadoPorcentaje > 50 && !item.DespachaEstado)
+                                    @if (item.ImputadoPorcentaje >= item.Porcentaje_Config && !item.DespachaEstado && !item.EntregaEstado)
                                     {
                                         <button id="btnBorrar" type="button" class="btn btn-success btn-sm"
                                                 onclick="entregarFormularioModal('@item.Id',
@@ -140,7 +140,7 @@
                                                                                     );">
                                             Entregar
                                         </button>
-                                    }
+                                        }
                                     else
                                     {
                                         <button id="btnBorrar" type="button" class="btn btn-success btn-sm" disabled>Entregar</button>
@@ -167,7 +167,7 @@
                                         <button id="btnBorrar" type="button" class="btn btn-danger btn-sm" disabled>Anular</button>
                                     }
 
-                                    @if (!item.AutorizaEstado)
+                                    @if (!item.AutorizaEstado && !item.EntregaEstado)
                                     {
                                         <button id="btnBorrar" type="button" class="btn btn-dropbox btn-sm"
                                                 onclick="autorizaFormularioModal('@item.Id');">
@@ -180,7 +180,7 @@
                                     }
 
 
-                                    @if (item.AutorizaEstado)
+                                    @if (item.AutorizaEstado && !item.DespachaEstado)
                                     {
                                         <button id="btnBorrar" type="button" class="btn btn-danger btn-sm"
                                                 onclick="autorizaAnulaFormularioModal('@item.Id');">

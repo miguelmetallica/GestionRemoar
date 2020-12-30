@@ -1349,7 +1349,8 @@ namespace Gestion.Web.Data
                                 
                                 obj.DevolucionUsuario = oReader["UsuarioDevolucion"] as string;
                                 obj.DevolucionMotivo = oReader["MotivoDevolucion"] as string;
-                                                                
+
+                                obj.Porcentaje_Config = (decimal)oReader["Porcentaje_Config"];
                                 //Agregamos el objeto a la coleccion de resultados
                                 objs.Add(obj);
                                 obj = null;
@@ -2406,6 +2407,131 @@ namespace Gestion.Web.Data
             finally
             {
                 factoryConnection.CloseConnection();
+            }
+        }
+
+        public async Task<List<ComprobantesDetalleIndicador>> spComprobanteDetalleEntregaIndicador()
+        {
+            //Creamos la conexión a utilizar.
+            //Utilizamos la sentencia Using para asegurarnos de cerrar la conexión
+            //y liberar el objeto al salir de esta sección de manera automática            
+            using (var oCnn = factoryConnection.GetConnection())
+            {
+                using (SqlCommand oCmd = new SqlCommand())
+                {
+                    //asignamos la conexion de trabajo
+                    oCmd.Connection = oCnn;
+
+                    //utilizamos stored procedures
+                    oCmd.CommandType = System.Data.CommandType.StoredProcedure;
+
+                    //el indicamos cual stored procedure utilizar
+                    oCmd.CommandText = "ComprobantesDetalleEntregarPendienteIndicador";
+
+                    //le asignamos el parámetro para el stored procedure
+                    //oCmd.Parameters.AddWithValue("@ComprobanteId", Id);
+
+
+                    //aunque debemos buscar solo un elemento, siempre devolvemos
+                    //una colección. Es más fácil de manipular y controlar 
+                    var objs = new List<ComprobantesDetalleIndicador>();
+
+                    //No retornamos DataSets, siempre utilizamos objetos para hacernos 
+                    //independientes de la estructura de las tablas en el resto
+                    //de las capas. Para ellos leemos con el DataReader y creamos
+                    //los objetos asociados que se esperan
+                    try
+                    {
+                        //Ejecutamos el comando y retornamos los valores
+                        using (SqlDataReader oReader = await oCmd.ExecuteReaderAsync())
+                        {
+                            while (oReader.Read())
+                            {
+                                //si existe algun valor, creamos el objeto y lo almacenamos
+                                //en la colección
+                                var obj = new ComprobantesDetalleIndicador();
+                                obj.Id = oReader["Id"] as string;
+                                obj.ComprobanteId = oReader["ComprobanteId"] as string;
+                                obj.DetalleId = oReader["ComprobanteId"] as string;
+                                obj.ProductoId = oReader["ProductoId"] as string;
+                                obj.ProductoNombre = oReader["ProductoNombre"] as string;
+                                obj.ProductoCodigo = oReader["ProductoCodigo"] as string;
+
+                                obj.Cantidad = (int)(oReader["Cantidad"] ?? 0);
+
+                                //obj.PrecioUnitario = (decimal)(oReader["PrecioUnitario"] ?? 0);
+                                obj.Precio = (decimal)(oReader["Precio"] ?? 0);
+
+                                obj.Imputado = (decimal)(oReader["ImporteImputado"] ?? 0);
+                                obj.ImputadoPorcentaje = (decimal)(oReader["PorcentajeImputado"] ?? 0);
+
+                                obj.Estado = (bool)oReader["Estado"];
+                                obj.Fecha = (DateTime)oReader["Fecha"];
+                                obj.Usuario = oReader["Usuario"] as string;
+
+                                if (!DBNull.Value.Equals(oReader["Entrega"]))
+                                    obj.EntregaEstado = (bool)(oReader["Entrega"] ?? false);
+
+                                if (!DBNull.Value.Equals(oReader["FechaEntrega"]))
+                                    obj.EntregaFecha = (DateTime)(oReader["FechaEntrega"] ?? DateTime.Now);
+
+                                obj.EntregaUsuario = oReader["UsuarioEntrega"] as string;
+
+                                if (!DBNull.Value.Equals(oReader["AutorizaEntrega"]))
+                                    obj.AutorizaEstado = (bool)(oReader["AutorizaEntrega"] ?? false);
+
+                                if (!DBNull.Value.Equals(oReader["FechaAutoriza"]))
+                                    obj.AutorizaFecha = (DateTime)(oReader["FechaAutoriza"] ?? DateTime.Now);
+
+                                obj.AutorizaUsuario = oReader["UsuarioDespacha"] as string;
+
+
+                                if (!DBNull.Value.Equals(oReader["Despacha"]))
+                                    obj.DespachaEstado = (bool)oReader["Despacha"];
+
+                                if (!DBNull.Value.Equals(oReader["FechaDespacha"]))
+                                    obj.DespachaFecha = (DateTime)oReader["FechaDespacha"];
+
+                                obj.DespachaUsuario = oReader["UsuarioDespacha"] as string;
+
+                                if (!DBNull.Value.Equals(oReader["Devolucion"]))
+                                    obj.DevolucionEstado = (bool)oReader["Devolucion"];
+
+                                if (!DBNull.Value.Equals(oReader["FechaDevolucion"]))
+                                    obj.DevolucionFecha = (DateTime)oReader["FechaDevolucion"];
+
+                                obj.DevolucionUsuario = oReader["UsuarioDevolucion"] as string;
+                                obj.DevolucionMotivo = oReader["MotivoDevolucion"] as string;
+
+
+                                if (!DBNull.Value.Equals(oReader["FechaComprobante"]))
+                                    obj.FechaComprobante = (DateTime)oReader["FechaComprobante"];
+
+                                obj.CodigoComprobante = oReader["CodigoComprobante"] as string;
+                                obj.UsuarioComprobante = oReader["UsuarioComprobante"] as string;
+                                obj.ClienteCodigo = oReader["ClienteCodigo"] as string;
+                                obj.RazonSocial = oReader["RazonSocial"] as string;
+                                obj.CodigoPrespuesto = oReader["CodigoPrespuesto"] as string;
+
+
+                                //Agregamos el objeto a la coleccion de resultados
+                                objs.Add(obj);
+                                obj = null;
+                            }
+                        }
+                        //retornamos los valores encontrados
+
+
+                        return objs;
+                    }
+
+                    finally
+                    {
+                        //el Finally nos da siempre la oportunidad de liberar
+                        //la memoria utilizada por los objetos 
+                        objs = null;
+                    }
+                }
             }
         }
     }

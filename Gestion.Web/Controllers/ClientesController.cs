@@ -14,7 +14,8 @@ using System.Threading.Tasks;
 
 namespace Gestion.Web.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "Admin,Clientes")]
+    
     public class ClientesController : Controller
     {
         private readonly IClientesRepository repository;

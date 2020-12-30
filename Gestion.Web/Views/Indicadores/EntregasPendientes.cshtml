@@ -1,0 +1,135 @@
+﻿@model IEnumerable<Gestion.Web.Models.ComprobantesDetalleIndicador>
+
+@{
+    ViewData["Title"] = "Indicadores - Entregas Pendientes";
+}
+
+<!--================================
+BREADCRUMB
+=================================-->
+<div class="content-wrapper">
+    <section class="content-header">
+        <h1>
+            Sistema de gestíon <small>Indicadores / Informes</small>
+        </h1>
+        <ol class="breadcrumb">
+            <li><a asp-controller="Home" asp-action="Index"><i class="fas fa-tachometer-alt"></i> Inicio</a></li>
+            <li class="active">@ViewData["Title"]</li>
+        </ol>
+    </section>
+    <!--================================
+        CONTENIDO
+    =================================-->
+    <section class="content">
+        <div class="box box-primary">
+            <div class="box-header with-border">
+                <h3 class="box-title">@ViewData["Title"]</h3>                
+            </div>
+            <div class="box-body">
+                <p>
+
+                </p>
+                <table id="dTable" class="table dt-responsive table-condensed table-bordered table-striped" width="100%">
+                    <thead>
+                        <tr>
+                            <th>
+                                @Html.DisplayName("Prespuesto")
+                            </th>
+                            <th>
+                                @Html.DisplayName("Comprobante")
+                            </th>
+                            <th>
+                                @Html.DisplayName("Fecha")
+                            </th>
+                            <th>
+                                @Html.DisplayName("Razon Social")
+                            </th>
+                            <th>
+                                @Html.DisplayName("Codigo")
+                            </th>
+                            <th>
+                                @Html.DisplayName("Producto")
+                            </th>
+                            <th>
+                                @Html.DisplayName("% de Imputacion")
+                            </th>
+                            <th>
+                                @Html.DisplayName("Usuario")
+                            </th>                            
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.CodigoPrespuesto)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.CodigoComprobante)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.FechaComprobante)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.RazonSocial)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.ProductoCodigo)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.ProductoNombre)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.ImputadoPorcentaje)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Usuario)
+                            </td>
+                        </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+</div>
+
+
+@section Scripts {
+
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            $('#dTable').DataTable({
+                "processing": "true",
+                "retrieve": "true",
+                "order": [[0, 'desc'], [1, 'asc']],
+                dom: 'Bfrtip',
+                buttons: [
+                    'copyHtml5',
+                    'excelHtml5',
+                    'csvHtml5'
+                    //'pdfHtml5'
+                ],
+                "language": {
+                    "processing": "Procesando... Espere por favor",
+                    "lengthMenu": "Mostrar _MENU_ registros por pagina",
+                    "zeroRecords": "Nada encontrado",
+                    "info": "Mostrando página _PAGE_ de _PAGES_",
+                    "infoEmpty": "No hay registros disponibles",
+                    "sInfoFiltered": "(filtrado de un total de _MAX_ registros)",
+                    "sSearch": "Buscar:",
+                    "oPaginate": {
+                        "sFirst": "Primero",
+                        "sLast": "Último",
+                        "sNext": "Siguiente",
+                        "sPrevious": "Anterior"
+                    }
+                }
+            });
+        });
+
+    </script>
+}

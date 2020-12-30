@@ -39,5 +39,7 @@ namespace Gestion.Web.Data
         Task<List<ComprobantesDetalleDTO>> spComprobanteDetalleImprimirGet(string ComprobanteId);
 
         Task<int> spComprobanteInsertaDatosFiscales(ComprobantesDTO comprobantesDTO);
+
+        Task<List<ComprobantesDetalleIndicador>> spComprobanteDetalleEntregaIndicador();
     }
 }

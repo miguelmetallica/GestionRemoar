@@ -16,7 +16,7 @@ namespace Gestion.Web.Data
 
         public IEnumerable<SelectListItem> GetCombo()
         {
-            var list = this.context.ParamCajasMovimientosTipos.Select(c => new SelectListItem
+            var list = this.context.ParamCajasMovimientosTipos.Where(c => c.Estado == true).Select(c => new SelectListItem
             {
                 Text = c.Descripcion,
                 Value = c.Id.ToString()

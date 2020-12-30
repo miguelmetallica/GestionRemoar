@@ -40,8 +40,8 @@ namespace Gestion.Web.Data
 
         public virtual DbSet<FormasPagos> FormasPagos { get; set; }
 
-        public DbSet<Cajas> Cajas  { get; set; }
-        public DbSet<CajasAperturasCierres> CajasAperturasCierres { get; set; }
+        public DbSet<ParamCajas> ParamCajas{ get; set; }
+        //public DbSet<CajasAperturasCierres> CajasAperturasCierres { get; set; }
         public DbSet<CajasMovimientos> CajasMovimientos { get; set; }
         public DbSet<ParamCajasMovimientosTipos> ParamCajasMovimientosTipos { get; set; }
 

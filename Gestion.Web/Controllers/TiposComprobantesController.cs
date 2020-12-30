@@ -8,9 +8,7 @@ using System.Threading.Tasks;
 
 namespace Gestion.Web.Controllers
 {
-    //[Authorize(Policy = "admin")]
-    //[Authorize(Roles = "admin")]
-    //[Authorize(Roles = "TiposComprobantes")]
+    [Authorize(Roles = "Admin,TiposComprobantes")]
     public class TiposComprobantesController : Controller
     {
         private readonly ITiposComprobantesRepository repository; 

@@ -31,7 +31,7 @@ namespace Gestion.Web.Helpers
 
             using (var client = new SmtpClient())
             {
-                client.Connect(smtp, int.Parse(port), false);
+                client.Connect(smtp, int.Parse(port), true);
                 client.Authenticate(from, password);
                 client.Send(message);
                 client.Disconnect(true);

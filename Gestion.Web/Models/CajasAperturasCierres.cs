@@ -10,7 +10,7 @@ namespace Gestion.Web.Models
         [Required(ErrorMessage = "Debes seleccionar un {0}")]
         [Display(Name = "Caja")]
         public string CajaId { get; set; }
-        public Cajas Caja { get; set; }
+        public ParamCajas Caja { get; set; }
 
         [DataType(DataType.Date, ErrorMessage = "El formato de la fecha no es valido")]
         [Display(Name = "Fecha de Apertura")]

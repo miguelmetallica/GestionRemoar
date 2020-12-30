@@ -1,99 +1,119 @@
-﻿@model IEnumerable<Gestion.Web.Models.Clientes>
+﻿@model IEnumerable<Gestion.Web.Models.CajasMovimientos>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Listado de Movimientos Caja";
 }
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" />
 
-<h1>Index</h1>
+<!--================================
+BREADCRUMB
+=================================-->
+<div class="content-wrapper">
+    <section class="content-header">
+        <h1>
+            Sistema de gestíon <small>Gestion de Caja</small>
+        </h1>
+        <ol class="breadcrumb">
+            <li><a asp-controller="Home" asp-action="Index"><i class="fas fa-tachometer-alt"></i> Inicio</a></li>
+            <li class="active">@ViewData["Title"]</li>
+        </ol>
+    </section>
+    <!--================================
+        CONTENIDO
+    =================================-->
+    <section class="content">
+        <div class="box box-primary">
+            <div class="box-header with-border">
+                <h3 class="box-title">@ViewData["Title"]</h3>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table id="dTable" class="table table-hover table-responsive table-striped" width="100%">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Codigo)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.RazonSocial)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.NroDocumento)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CuilCuit)
-            </th>
-            <th>Operaciones</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Codigo)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.RazonSocial)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.NroDocumento)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.CuilCuit)
-                </td>
-                <td>
-                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                    <button data-id="@item.Id" class="btn btn-danger deleteItem" data-toggle="modal" data-target="#deleteDialog">Delete</button>
+                @if (User.IsInRole("CajasMovimientosAdministra") || User.IsInRole("Admin"))
+                {
+                    <p><a asp-action="CreateAdministra" class="btn btn-primary btn-sm pull-right" aria-hidden="true">Nuevo Movimiento</a></p>
+                }                
+                else
+                {
+                    <p><a asp-action="Create" class="btn btn-primary btn-sm pull-right" aria-hidden="true">Nuevo Movimiento</a></p><p><a asp-action="Create" class="btn btn-primary btn-sm pull-right" aria-hidden="true">Nuevo Movimiento</a></p>
+                }                
 
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
-
-
-<div id="deleteDialog" class="modal fade">
-    <div class="modal-dialog modal-sm">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title">Delete</h4>
-                <button type="button" class="close" data-dismiss="modal"><i class="fa fa-window-close"></i></button>
             </div>
-            <div class="modal-body">
-                <p>Do you want to delete the country?</p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-danger" id="btnYesDelete">Delete</button>
-                <button type="button" class="btn btn-success" id="btnNoDelete">No</button>
-            </div>
+            <div class="box-body">
+                <p>
+
+                </p>
+                <table id="dTable" class="table dt-responsive table-condensed table-bordered table-striped" width="100%">
+                    <thead>
+                        <tr>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Fecha)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Caja.Sucursal.Nombre)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Caja.Codigo)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.TipoMovimiento.Descripcion)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Importe)
+                            </th>                            
+                            <th>Operaciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Fecha)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Caja.Sucursal.Nombre)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Caja.Codigo)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.TipoMovimiento.Descripcion)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Importe)
+                            </td>
+                            <td>
+                                <div class="btn-group">
+                                    @if (User.IsInRole("CajasMovimientosAdministra") || User.IsInRole("Admin"))
+                                    {
+                                        <a class="btn btn-warning" asp-action="EditAdministra" asp-route-id="@item.Id"><i class="fa fa-pen"></i></a>
+                                    }
+                                    else
+                                    {
+                                        <a class="btn btn-warning" asp-action="Edit" asp-route-id="@item.Id"><i class="fa fa-pen"></i></a>
+                                    }
+                                    
+                                    <a class="btn btn-info" asp-action="Details" asp-route-id="@item.Id"><i class="fa fa-search-plus"></i></a>
+                                    <a class="btn btn-danger" asp-action="Delete" asp-route-id="@item.Id"><i class="glyphicon glyphicon-remove"></i></a>
+                                </div>
+                            </td>
+                        </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>            
         </div>
-    </div>
+    </section>
 </div>
+
 
 @section Scripts {
 
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-    <script src="//cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
     <script type="text/javascript">
         $(document).ready(function () {
 
-            var item_to_delete;
-
-            $('.deleteItem').click((e) => {
-                item_to_delete = e.currentTarget.dataset.id;
-            });
-
-            $("#btnYesDelete").click(function () {
-                window.location.href = '/Clientes/Delete/' + item_to_delete;
-            });
- 
-
             $('#dTable').DataTable({
                 "processing": "true",
+                "retrieve": "true",
+                "order": [[0, 'desc'], [1, 'asc']],
                 "language": {
                     "processing": "Procesando... Espere por favor",
                     "lengthMenu": "Mostrar _MENU_ registros por pagina",
