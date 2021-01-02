@@ -8,14 +8,14 @@ using System.Threading.Tasks;
 
 namespace Gestion.Web.Controllers
 {
-    [Authorize(Roles = "Admin,PresupuestosDescuentos")]
+    [Authorize(Roles = "Admin,Proveedores")]
     
-    public class PresupuestosDescuentosController : Controller
+    public class ProveedoresController : Controller
     {
-        private readonly IPresupuestosDescuentosRepository repository; 
+        private readonly IProveedoresRepository repository; 
         private readonly IUserHelper userHelper;
 
-        public PresupuestosDescuentosController(IPresupuestosDescuentosRepository repository, IUserHelper userHelper)
+        public ProveedoresController(IProveedoresRepository repository, IUserHelper userHelper)
         {
             this.repository = repository;
             this.userHelper = userHelper;
@@ -23,8 +23,7 @@ namespace Gestion.Web.Controllers
 
         public IActionResult Index()
         {
-            var model = repository.GetAll().Include(x => x.Usuario);
-            return View(model);
+            return View(repository.GetAll());
         }
 
         public async Task<IActionResult> Details(string id)
@@ -34,37 +33,31 @@ namespace Gestion.Web.Controllers
                 return new NotFoundViewResult("NoExiste");
             }
 
-            var PresupuestosDescuentos = await this.repository.GetByIdAsync(id);
-            if (PresupuestosDescuentos == null)
+            var Proveedores = await this.repository.GetByIdAsync(id);
+            if (Proveedores == null)
             {
                 return new NotFoundViewResult("NoExiste");
             }
 
-            var usuario = await userHelper.GetUserByIdAsync(PresupuestosDescuentos.UsuarioId);
-
-            ViewBag.User = usuario.UserName;
-            return this.View(PresupuestosDescuentos);
+            return this.View(Proveedores);
         }
 
         public IActionResult Create()
         {
-            ViewBag.Usuarios = this.userHelper.GetCombo();
             return View();
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(ParamPresupuestosDescuentos PresupuestosDescuentos)
+        public async Task<IActionResult> Create(Proveedores Proveedores)
         {
             if (ModelState.IsValid)
             {
-                PresupuestosDescuentos.Estado = true;
-                await repository.CreateAsync(PresupuestosDescuentos);
+                Proveedores.Estado = true;
+                await repository.CreateAsync(Proveedores);
                 return RedirectToAction(nameof(Index));
             }
-            ViewBag.Usuarios = this.userHelper.GetCombo();
-
-            return View(PresupuestosDescuentos);
+            return View(Proveedores);
         }
 
         public async Task<IActionResult> Edit(string id)
@@ -74,22 +67,20 @@ namespace Gestion.Web.Controllers
                 return new NotFoundViewResult("NoExiste");
             }
 
-            var PresupuestosDescuentos = await this.repository.GetByIdAsync(id);
-            if (PresupuestosDescuentos == null)
+            var Proveedores = await this.repository.GetByIdAsync(id);
+            if (Proveedores == null)
             {
                 return new NotFoundViewResult("NoExiste");
             }
 
-            ViewBag.Usuarios = this.userHelper.GetCombo();
-
-            return this.View(PresupuestosDescuentos);
+            return this.View(Proveedores);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(string id, ParamPresupuestosDescuentos PresupuestosDescuentos)
+        public async Task<IActionResult> Edit(string id, Proveedores Proveedores)
         {
-            if (id != PresupuestosDescuentos.Id)
+            if (id != Proveedores.Id)
             {
                 return new NotFoundViewResult("NoExiste");
             }
@@ -98,11 +89,11 @@ namespace Gestion.Web.Controllers
             {
                 try
                 {
-                    await repository.UpdateAsync(PresupuestosDescuentos);
+                    await repository.UpdateAsync(Proveedores);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!await repository.ExistAsync(PresupuestosDescuentos.Id))
+                    if (!await repository.ExistAsync(Proveedores.Id))
                     {
                         return new NotFoundViewResult("NoExiste");
                     }
@@ -113,9 +104,7 @@ namespace Gestion.Web.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-
-            ViewBag.Usuarios = this.userHelper.GetCombo();
-            return View(PresupuestosDescuentos);
+            return View(Proveedores);
         }
 
         public async Task<IActionResult> Delete(string id)
@@ -125,16 +114,27 @@ namespace Gestion.Web.Controllers
                 return new NotFoundViewResult("NoExiste");
             }
 
-            var PresupuestosDescuentos = await this.repository.GetByIdAsync(id);
-            if (PresupuestosDescuentos == null)
+            var Proveedores = await this.repository.GetByIdAsync(id);
+            if (Proveedores == null)
             {
                 return new NotFoundViewResult("NoExiste");
             }
 
-            PresupuestosDescuentos.Estado = !PresupuestosDescuentos.Estado;
-            await repository.DeleteAsync(PresupuestosDescuentos);
+            //return this.View(Proveedores);
+            Proveedores.Estado = !Proveedores.Estado;
+            await repository.DeleteAsync(Proveedores);
             return RedirectToAction(nameof(Index));
-        }        
+        }
+
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(string id)
+        {
+            var Proveedores = await repository.GetByIdAsync(id);
+            Proveedores.Estado = !Proveedores.Estado;
+            await repository.DeleteAsync(Proveedores);
+            return RedirectToAction(nameof(Index));
+        }
 
     }
 }

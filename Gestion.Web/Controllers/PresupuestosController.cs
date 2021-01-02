@@ -1,4 +1,5 @@
 ﻿using Gestion.Web.Data;
+using Gestion.Web.Helpers;
 using Gestion.Web.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -20,6 +21,7 @@ namespace Gestion.Web.Controllers
         private readonly IPresupuestosDescuentosRepository descuentosRepository;
         private readonly ITiposResponsablesRepository tiposResponsablesRepository;
         private readonly IComprobantesRepository comprobantesRepository;
+        private readonly IUserHelper userHelper;
 
         public PresupuestosController(IPresupuestosRepository repository,
             IProductosRepository productosRepository, 
@@ -28,7 +30,8 @@ namespace Gestion.Web.Controllers
             IProvinciasRepository provinciasRepository,
             IPresupuestosDescuentosRepository descuentosRepository,
             ITiposResponsablesRepository tiposResponsablesRepository,
-            IComprobantesRepository comprobantesRepository
+            IComprobantesRepository comprobantesRepository,
+            IUserHelper userHelper
             )
         {
             this.repository = repository;
@@ -39,6 +42,7 @@ namespace Gestion.Web.Controllers
             this.descuentosRepository = descuentosRepository;
             this.tiposResponsablesRepository = tiposResponsablesRepository;
             this.comprobantesRepository = comprobantesRepository;
+            this.userHelper = userHelper;
         }
 
         public async Task<IActionResult> Pendientes()
@@ -204,7 +208,10 @@ namespace Gestion.Web.Controllers
             {
                 return RedirectToAction("Pendientes", "Presupuestos");
             }
-            ViewData["Descuentos"] = descuentosRepository.GetAll().Where(x => x.Estado == true).OrderBy(x => x.Porcentaje);
+            var user = await userHelper.GetUserByEmailAsync(User.Identity.Name);
+            ViewData["Descuentos"] = descuentosRepository.GetAll()
+                    .Where(x => x.Estado == true && x.UsuarioId == user.Id)
+                    .OrderBy(x => x.Porcentaje);
             return View(presupuesto.FirstOrDefault());
         }
 

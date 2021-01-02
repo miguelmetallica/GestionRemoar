@@ -121,20 +121,27 @@
                                     @Html.DisplayFor(model => model.Alicuota.Descripcion)
                                 </dd>
                                 <dt>
-                                    @Html.DisplayNameFor(model => model.CodigoProveedor)
+                                    @Html.DisplayNameFor(model => model.ProveedorId)
                                 </dt>
                                 <dd>
-                                    @Html.DisplayFor(model => model.CodigoProveedor)
+                                    @Html.DisplayFor(model => model.ProveedorId)
                                 </dd>
+                                <dt>
+                                    @Html.DisplayNameFor(model => model.CategoriaId)
+                                </dt>
+                                <dd>
+                                    @Html.DisplayFor(model => model.CategoriaId)
+                                </dd>
+
                                 <dd>
                                     @{
                                         if (Model.Estado)
                                         {
-                                        <span class="label label-success">Activo</span>
+                                            <span class="label label-success">Activo</span>
                                         }
                                         else
                                         {
-                                        <span class="label label-danger">Inactivo</span>
+                                            <span class="label label-danger">Inactivo</span>
                                         }
 
                                     }

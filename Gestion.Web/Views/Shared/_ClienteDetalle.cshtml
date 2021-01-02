@@ -45,14 +45,22 @@
         @if (Model.Celular != "" && Model.Celular != null)
         {
             <p class="text-muted">
+                @{
+                    var url = "https://wa.me/54" + Model.Celular;
+                }
+                <a href="@url" target="_blank">
+                    <img src="~/images/Whatsapp_37229.png" />
+                </a>
+
                 @Model.Celular
             </p>
+            
         }
-        else 
-        { 
-            <p class="text-muted"></p>
-        }
-                            
+            else
+            {
+                <p class="text-muted"></p>
+            }
+
 
         <strong><i class="fa fa-phone margin-r-5"></i> Telefono</strong>
         @if (Model.Telefono != "" && Model.Telefono != null)

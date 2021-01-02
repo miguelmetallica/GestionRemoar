@@ -49,6 +49,8 @@ namespace Gestion.Web.Data
 
         public virtual DbSet<ParamClientesCategorias> ParamClientesCategorias { get; set; }
 
+        public virtual DbSet<Proveedores> Proveedores { get; set; }
+
         public DataContext(DbContextOptions<DataContext> options) : base(options)
         {
         }

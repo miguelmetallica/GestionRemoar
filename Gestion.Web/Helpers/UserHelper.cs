@@ -1,5 +1,6 @@
 ﻿using Gestion.Web.Models;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
@@ -119,6 +120,23 @@ namespace Gestion.Web.Helpers
                 .OrderBy(u => u.FirstName)
                 .ThenBy(u => u.LastName)
                 .ToListAsync();
+        }
+
+        public IEnumerable<SelectListItem> GetCombo()
+        {
+            var list = this.userManager.Users.Select(c => new SelectListItem
+            {
+                Text = c.UserName,
+                Value = c.Id.ToString()
+            }).OrderBy(l => l.Text).ToList();
+
+            list.Insert(0, new SelectListItem
+            {
+                Text = "(Selecciona un Usuario...)",
+                Value = ""
+            });
+
+            return list;
         }
 
         public async Task RemoveUserFromRoleAsync(Usuarios user, string roleName)

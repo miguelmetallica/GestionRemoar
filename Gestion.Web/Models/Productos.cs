@@ -65,7 +65,13 @@ namespace Gestion.Web.Models
         public decimal? PrecioVenta { get; set; }
 
         [Display(Name = "Codigo del Proveedor")]
-        public string CodigoProveedor { get; set; }
+        public string ProveedorId { get; set; }
+        public Proveedores Proveedor { get; set; }
+
+        [Display(Name = "Categoria")]
+        [Required(ErrorMessage = "El campo {0} es obligatorio.")]
+        public string CategoriaId { get; set; }
+        public ParamCategorias Categoria { get; set; }
 
         public bool Estado { get; set; }
 

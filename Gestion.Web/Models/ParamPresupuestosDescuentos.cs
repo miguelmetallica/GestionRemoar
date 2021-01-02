@@ -5,7 +5,12 @@ namespace Gestion.Web.Models
     public partial class ParamPresupuestosDescuentos : IEntidades
     {
         public string Id { get; set; }
-        
+
+        [Required(ErrorMessage = "El campo {0} es obligatorio.")]
+        [Display(Name = "Usuario")]
+        public string UsuarioId { get; set; }
+        public Usuarios Usuario { get; set; }
+
         [Required(ErrorMessage = "El campo {0} es obligatorio.")]
         [MaxLength(150)]
         [Display(Name = "Descuento")]

@@ -24,6 +24,7 @@ namespace Gestion.Web.Controllers
         private readonly ICategoriasRepository categorias;
         private readonly IProductosCategoriasRepository productosCategorias;
         private readonly IProductosImagenesRepository productosImagenes;
+        private readonly IProveedoresRepository proveedores;
 
         public ProductosController(IProductosRepository repository, 
                                 IUserHelper userHelper, 
@@ -34,7 +35,8 @@ namespace Gestion.Web.Controllers
                                 IAlicuotasRepository alicuotas,
                                 ICategoriasRepository categorias,
                                 IProductosCategoriasRepository productosCategorias,
-                                IProductosImagenesRepository productosImagenes
+                                IProductosImagenesRepository productosImagenes,
+                                IProveedoresRepository proveedores
                                 )
         {
             this.repository = repository;
@@ -47,6 +49,7 @@ namespace Gestion.Web.Controllers
             this.categorias = categorias;
             this.productosCategorias = productosCategorias;
             this.productosImagenes = productosImagenes;
+            this.proveedores = proveedores;
         }
 
         public async Task<IActionResult> Index()
@@ -83,6 +86,8 @@ namespace Gestion.Web.Controllers
             ViewBag.CuentasVentas = this.cuentasVentas.GetCombo();
             ViewBag.UnidadesMedidas = this.unidadesMedidas.GetCombo();
             ViewBag.Alicuotas = this.alicuotas.GetCombo();
+            ViewBag.Proveedores = this.proveedores.GetCombo();
+            ViewBag.Categorias = this.categorias.GetCombo();
 
             return View();
         }
@@ -109,7 +114,8 @@ namespace Gestion.Web.Controllers
             ViewBag.CuentasVentas = this.cuentasVentas.GetCombo();
             ViewBag.UnidadesMedidas = this.unidadesMedidas.GetCombo();
             ViewBag.Alicuotas = this.alicuotas.GetCombo();
-
+            ViewBag.Proveedores = this.proveedores.GetCombo();
+            ViewBag.Categorias = this.categorias.GetCombo();
 
             return View(productos);
         }
@@ -132,6 +138,8 @@ namespace Gestion.Web.Controllers
             ViewBag.CuentasVentas = this.cuentasVentas.GetCombo();
             ViewBag.UnidadesMedidas = this.unidadesMedidas.GetCombo();
             ViewBag.Alicuotas = this.alicuotas.GetCombo();
+            ViewBag.Proveedores = this.proveedores.GetCombo();
+            ViewBag.Categorias = this.categorias.GetCombo();
 
             return this.View(productos);
         }
@@ -184,6 +192,8 @@ namespace Gestion.Web.Controllers
             ViewBag.CuentasVentas = this.cuentasVentas.GetCombo();
             ViewBag.UnidadesMedidas = this.unidadesMedidas.GetCombo();
             ViewBag.Alicuotas = this.alicuotas.GetCombo();
+            ViewBag.Proveedores = this.proveedores.GetCombo();
+            ViewBag.Categorias = this.categorias.GetCombo();
 
             return View(productos);
         }

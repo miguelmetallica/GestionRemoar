@@ -1,7 +1,7 @@
-﻿@model Gestion.Web.Models.ParamPresupuestosDescuentos
+﻿@model Gestion.Web.Models.Proveedores
 
 @{
-    ViewData["Title"] = "Detalle del Descuento";
+    ViewData["Title"] = "Detalle del Proveedor";
 }
 
 <div class="content-wrapper">
@@ -9,11 +9,11 @@
     <section class="content-header">
         <h1>
             Sistema de gestíon
-            <small>Gestion de Presupuestos</small>
+            <small>Gestion de Proveedores</small>
         </h1>
         <ol class="breadcrumb">
             <li><a asp-controller="Home" asp-action="Index"><i class="fas fa-tachometer-alt"></i> Inicio</a></li>
-            <li><a asp-controller="PresupuestosDescuentos" asp-action="Index">Listado de Descuentos</a></li>
+            <li><a asp-controller="Proveedores" asp-action="Index">Listado de Proveedores</a></li>
             <li class="active">@ViewData["Title"]</li>
         </ol>
     </section>
@@ -26,7 +26,7 @@
                 <!-- general form elements -->
                 <div class="box box-primary">
                     <div class="box-header with-border">
-                        <h3 class="box-title">Datos del Descuento</h3>
+                        <h3 class="box-title">Datos del Proveedor</h3>
                     </div>
                     <!-- /.box-header -->
                     <!-- form start -->
@@ -34,22 +34,22 @@
                         <div class="box-body">
                             <dl class="dl-horizontal">
                                 <dt>
-                                    @Html.DisplayNameFor(model => model.UsuarioId)
+                                    @Html.DisplayNameFor(model => model.Codigo)
                                 </dt>
                                 <dd>
-                                    @ViewBag.User
+                                    @Html.DisplayFor(model => model.Codigo)
                                 </dd>
                                 <dt>
-                                    @Html.DisplayNameFor(model => model.Descripcion)
+                                    @Html.DisplayNameFor(model => model.RazonSocial)
                                 </dt>
                                 <dd>
-                                    @Html.DisplayFor(model => model.Descripcion)
+                                    @Html.DisplayFor(model => model.RazonSocial)
                                 </dd>
                                 <dt>
-                                    @Html.DisplayNameFor(model => model.Porcentaje)
+                                    @Html.DisplayNameFor(model => model.Cuit)
                                 </dt>
                                 <dd>
-                                    @Html.DisplayFor(model => model.Porcentaje)
+                                    @Html.DisplayFor(model => model.Cuit)
                                 </dd>
                                 <dt>
                                     @Html.DisplayNameFor(model => model.Estado)
@@ -72,8 +72,8 @@
                         <!-- /.box-body -->
 
                         <div class="box-footer">
-                            <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">Editar datos del Alicuota</a>
-                            <a asp-action="Index" class="btn btn-default pull-right">Volver al Listado</a>
+                            <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">Editar datos del Proveedor</a>
+                            <a asp-action="Index" class="btn btn-default pull-right">Volver</a>
                         </div>
                     </form>
                 </div>

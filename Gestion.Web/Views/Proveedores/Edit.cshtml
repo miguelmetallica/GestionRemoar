@@ -1,7 +1,7 @@
-﻿@model Gestion.Web.Models.ParamPresupuestosDescuentos
+﻿@model Gestion.Web.Models.Proveedores
 
 @{
-    ViewData["Title"] = "Editar Descuento";
+    ViewData["Title"] = "Editar Proveedores";
 }
 
 <div class="content-wrapper">
@@ -9,11 +9,11 @@
     <section class="content-header">
         <h1>
             Sistema de gestíon
-            <small>Gestion de Presupuestos</small>
+            <small>Gestion de Proveedores</small>
         </h1>
         <ol class="breadcrumb">
             <li><a asp-controller="Home" asp-action="Index"><i class="fas fa-tachometer-alt"></i> Inicio</a></li>
-            <li><a asp-controller="PresupuestosDescuentos" asp-action="Index">Listado de Descuento</a></li>
+            <li><a asp-controller="Proveedores" asp-action="Index">Listado de Proveedores</a></li>
             <li class="active">@ViewData["Title"]</li>
         </ol>
     </section>
@@ -26,7 +26,7 @@
                 <!-- general form elements -->
                 <div class="box box-primary">
                     <div class="box-header with-border">
-                        <h3 class="box-title">Ficha del Descuento</h3>
+                        <h3 class="box-title">Ficha del Proveedor</h3>
                     </div>
                     <!-- /.box-header -->
                     <!-- form start -->
@@ -37,26 +37,28 @@
                             <input type="hidden" asp-for="Estado" />
 
                             <div class="form-group">
-                                <label asp-for="UsuarioId" class="control-label"></label>
-                                <select asp-for="UsuarioId" asp-items="@ViewBag.Usuarios" class="form-control input-sm"></select>
-                                <span asp-validation-for="UsuarioId" class="text-danger"></span>
+                                <label asp-for="Codigo" class="control-label"></label>
+                                <input asp-for="Codigo" class="form-control" />
+                                <span asp-validation-for="Codigo" class="text-danger"></span>
                             </div>
+
                             <div class="form-group">
-                                <label asp-for="Descripcion" class="control-label"></label>
-                                <input asp-for="Descripcion" class="form-control input-sm" />
-                                <span asp-validation-for="Descripcion" class="text-danger"></span>
+                                <label asp-for="RazonSocial" class="control-label"></label>
+                                <input asp-for="RazonSocial" class="form-control input-sm" />
+                                <span asp-validation-for="RazonSocial" class="text-danger"></span>
                             </div>
+
                             <div class="form-group">
-                                <label asp-for="Porcentaje" class="control-label"></label>
-                                <input asp-for="Porcentaje" class="form-control input-sm" />
-                                <span asp-validation-for="Porcentaje" class="text-danger"></span>
+                                <label asp-for="Cuit" class="control-label"></label>
+                                <input asp-for="Cuit" class="form-control input-sm" />
+                                <span asp-validation-for="Cuit" class="text-danger"></span>
                             </div>
                         </div>
                         <!-- /.box-body -->
 
                         <div class="box-footer">
                             <input type="submit" value="Guardar" class="btn btn-primary" />
-                            <a asp-action="Index" class="btn btn-default pull-right">Volver al Listado</a>
+                            <a asp-action="Index" class="btn btn-default pull-right">Volver</a>
                         </div>
                     </form>
                 </div>

@@ -131,6 +131,8 @@ namespace Gestion.Web
 
             services.AddScoped<IClientesCategoriasRepository, ClientesCategoriasRepository>();
 
+            services.AddScoped<IProveedoresRepository, ProveedoresRepository>();
+
             services.AddScoped<IUserHelper, UserHelper>();
             services.AddScoped<IMailHelper, MailHelper>();
 

@@ -1,7 +1,7 @@
-﻿@model IEnumerable<Gestion.Web.Models.ParamPresupuestosDescuentos>
+﻿@model IEnumerable<Gestion.Web.Models.Proveedores>
 
 @{
-    ViewData["Title"] = "Listado de Descuentos";
+    ViewData["Title"] = "Listado de Proveedores";
 }
 
 <!--================================
@@ -10,7 +10,7 @@ BREADCRUMB
 <div class="content-wrapper">
     <section class="content-header">
         <h1>
-            Sistema de gestíon <small>Gestion de Ajustes</small>
+            Sistema de gestíon <small>Gestion de Proveedores</small>
         </h1>
         <ol class="breadcrumb">
             <li><a asp-controller="Home" asp-action="Index"><i class="fas fa-tachometer-alt"></i> Inicio</a></li>
@@ -24,7 +24,7 @@ BREADCRUMB
         <div class="box box-primary">
             <div class="box-header with-border">
                 <h3 class="box-title">@ViewData["Title"]</h3>
-                <p><a asp-action="Create" class="btn btn-primary btn-sm pull-right" aria-hidden="true">Nuevo Descuentos</a></p>
+                <p><a asp-action="Create" class="btn btn-primary btn-sm pull-right" aria-hidden="true">Nuevo Proveedor</a></p>
             </div>
             <div class="box-body">
                 <p>
@@ -34,13 +34,13 @@ BREADCRUMB
                     <thead>
                         <tr>
                             <th>
-                                @Html.DisplayNameFor(model => model.UsuarioId)
+                                @Html.DisplayNameFor(model => model.Codigo)
                             </th>
                             <th>
-                                @Html.DisplayNameFor(model => model.Descripcion)
+                                @Html.DisplayNameFor(model => model.RazonSocial)
                             </th>
                             <th>
-                                @Html.DisplayNameFor(model => model.Porcentaje)
+                                @Html.DisplayNameFor(model => model.Cuit)
                             </th>
                             <th>
                                 @Html.DisplayNameFor(model => model.Estado)
@@ -53,13 +53,13 @@ BREADCRUMB
                         {
                         <tr>
                             <td>
-                                @Html.DisplayFor(modelItem => item.Usuario.UserName)
+                                @Html.DisplayFor(modelItem => item.Codigo)
                             </td>
                             <td>
-                                @Html.DisplayFor(modelItem => item.Descripcion)
+                                @Html.DisplayFor(modelItem => item.RazonSocial)
                             </td>
                             <td>
-                                @Html.DisplayFor(modelItem => item.Porcentaje)
+                                @Html.DisplayFor(modelItem => item.Cuit)
                             </td>
                             <td>
                                 @{
@@ -103,11 +103,40 @@ BREADCRUMB
 </div>
 
 
+<div id="deleteDialog" class="modal fade">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Delete</h4>
+                <button type="button" class="close" data-dismiss="modal"><i class="fa fa-window-close"></i></button>
+            </div>
+            <div class="modal-body">
+                <p>¿Quieres borrar el Proveedor?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" id="btnYesDelete">Delete</button>
+                <button type="button" class="btn btn-success" id="btnNoDelete">No</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 @section Scripts {
 
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
     <script type="text/javascript">
         $(document).ready(function () {
+
+            var item_to_delete;
+
+            $('.deleteItem').click((e) => {
+                item_to_delete = e.currentTarget.dataset.id;
+            });
+
+            $("#btnYesDelete").click(function () {
+                window.location.href = '/PresupuestosEstados/Delete/' + item_to_delete;
+            });
+
 
             $('#dTable').DataTable({
                 "processing": "true",

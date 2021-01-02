@@ -109,9 +109,15 @@
                                 <span asp-validation-for="UnidadMedidaId" class="text-danger"></span>
                             </div>
                             <div class="form-group">
-                                <label asp-for="CodigoProveedor" class="control-label"></label>
-                                <input asp-for="CodigoProveedor" class="form-control input-sm" />
-                                <span asp-validation-for="CodigoProveedor" class="text-danger"></span>
+                                <label asp-for="ProveedorId" class="control-label"></label>
+                                <select asp-for="ProveedorId" asp-items="@ViewBag.Proveedores" class="form-control input-sm"></select>
+                                <span asp-validation-for="ProveedorId" class="text-danger"></span>
+                            </div>
+
+                            <div class="form-group">
+                                <label asp-for="CategoriaId" class="control-label"></label>
+                                <select asp-for="CategoriaId" asp-items="@ViewBag.Categorias" class="form-control input-sm"></select>
+                                <span asp-validation-for="CategoriaId" class="text-danger"></span>
                             </div>
 
                         </div>

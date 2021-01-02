@@ -5,30 +5,30 @@ using System.Linq;
 
 namespace Gestion.Web.Data
 {
-    public class PresupuestosDescuentosRepository : GenericRepository<ParamPresupuestosDescuentos>, IPresupuestosDescuentosRepository
+    public class ProveedoresRepository : GenericRepository<Proveedores>, IProveedoresRepository
     {
         private readonly DataContext context;
 
-        public PresupuestosDescuentosRepository(DataContext context) : base(context)
+        public ProveedoresRepository(DataContext context) : base(context)
         {
             this.context = context;
         }
 
         public IEnumerable<SelectListItem> GetCombo()
         {
-            var list = this.context.ParamPresupuestosDescuentos.Where( x => x.Estado == true ).Select(c => new SelectListItem
+            var list = this.context.Proveedores.Where( x => x.Estado == true ).Select(c => new SelectListItem
             {
-                Text = c.Descripcion,
+                Text = c.RazonSocial,
                 Value = c.Id.ToString()
             }).OrderBy(l => l.Text).ToList();
 
             list.Insert(0, new SelectListItem
             {
-                Text = "(Selecciona el Descuento...)",
+                Text = "(Selecciona un Proveedor...)",
                 Value = ""
             });
 
             return list;
-        }        
+        }
     }
 }

@@ -33,6 +33,12 @@
                     <form asp-action="Create" enctype="multipart/form-data">
                         <div class="box-body">
                             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                            
+                            <div class="form-group">
+                                <label asp-for="UsuarioId" class="control-label"></label>
+                                <select asp-for="UsuarioId" asp-items="@ViewBag.Usuarios" class="form-control input-sm"></select>
+                                <span asp-validation-for="UsuarioId" class="text-danger"></span>
+                            </div>
                             <div class="form-group">
                                 <label asp-for="Descripcion" class="control-label"></label>
                                 <input asp-for="Descripcion" class="form-control input-sm" />
@@ -42,7 +48,7 @@
                                 <label asp-for="Porcentaje" class="control-label"></label>
                                 <input asp-for="Porcentaje" class="form-control input-sm" />
                                 <span asp-validation-for="Porcentaje" class="text-danger"></span>
-                            </div>                            
+                            </div>
                         </div>
                         <!-- /.box-body -->
 

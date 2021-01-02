@@ -1,5 +1,6 @@
 ﻿using Gestion.Web.Models;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -38,7 +39,7 @@ namespace Gestion.Web.Helpers
         Task<IdentityResult> ResetPasswordAsync(Usuarios user, string token, string password);
 
         Task<List<Usuarios>> GetAllUsersAsync();
-
+        IEnumerable<SelectListItem> GetCombo();
         Task RemoveUserFromRoleAsync(Usuarios user, string roleName);
 
         Task DeleteUserAsync(Usuarios user);
