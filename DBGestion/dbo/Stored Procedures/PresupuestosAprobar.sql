@@ -14,7 +14,9 @@ BEGIN TRY
 
 	BEGIN TRAN
 		UPDATE Presupuestos
-		SET EstadoId = @EstadoId							
+		SET EstadoId = @EstadoId,
+		FechaAprobacion = DATEADD(HH,4,GETDATE()),
+		UsuarioAprobacionRechazo = upper(@Usuario)		
 		WHERE Id = @Id
 
 		EXEC ComprobantesInsertarPresupuesto @Id,@Usuario

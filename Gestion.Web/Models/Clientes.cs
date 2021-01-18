@@ -43,7 +43,11 @@ namespace Gestion.Web.Models
         public string NroDocumento { get; set; }
         public string CuilCuit { get; set; }
         public bool esPersonaJuridica { get; set; }
-        public DateTime? FechaNacimiento { get; set; }
+
+        [DataType(DataType.Date, ErrorMessage = "El formato de la fecha no es valido")]
+        [Display(Name = "Fecha Nacimiento")]
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
+        public DateTime FechaNacimiento { get; set; }
         public string ProvinciaId { get; set; }
         public string Provincia { get; set; }
         public string Localidad { get; set; }

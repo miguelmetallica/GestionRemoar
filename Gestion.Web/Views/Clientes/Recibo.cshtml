@@ -2,7 +2,7 @@
 
 @{
     ViewData["Title"] = "Detalle del Cliente";
-    var SaldoDTO = (Comprobantes)ViewData["Saldo"];
+    var SaldoDTO = (ComprobantesDTO)ViewData["Saldo"];
     var formasPagos = (IEnumerable<FormasPagos>)ViewData["FormasPagos"];
     var formasPagosTMP = (IEnumerable<ComprobantesFormasPagosDTO>)ViewData["FormasPagosTMP"];
 
@@ -43,7 +43,7 @@
 
                                 <input type="hidden" asp-for="ClienteId" />
                                 <input type="hidden" asp-for="ComprobanteId" />
-
+                                
                                 <div class="form-group">
                                     <label class="control-label">Saldo</label>
                                     <input value="@(SaldoDTO.Saldo - formasPagosTMP.Sum(x => x.Total))" readonly class="form-control input-sm" />
@@ -52,7 +52,7 @@
 
                                 <div class="form-group">
                                     <label class="control-label">Importe a Pagar</label>
-                                    <input value="@formasPagosTMP.Sum(x => x.Total)" asp-for="Importe" readonly class="form-control input-sm" />
+                                    <input value="@formasPagosTMP.Sum(x => x.TotalLista)" asp-for="Importe" readonly class="form-control input-sm" />
                                     <span asp-validation-for="Importe" class="text-danger"></span>
                                 </div>
                             </div>
@@ -145,8 +145,12 @@
                                             <i class="icon fa fa-bitbucket"></i> @item.FormaPago
                                             <a class="btn btn-warning btn-sm pull-right" asp-action="DeleteFormaPago" asp-route-id="@item.Id" asp-route-comp="@Model.ComprobanteId"><i class="glyphicon glyphicon-remove"></i></a>
                                         </h4>                                        
-                                        <p>Total: @item.Total </p>
-                                        <p>Observaciones: @item.Observaciones</p>
+                                        <p>Total: @item.TotalLista </p>
+                                        @if (item.Observaciones != null) 
+                                        { 
+                                            <p>Observaciones: @item.Observaciones</p>
+                                        }
+                                        
                                         <p>Usuario: @item.UsuarioAlta - Fecha: @item.FechaAlta</p>
                             
                                     </div>
@@ -159,10 +163,13 @@
                                         </h4>
                                         <p>Nombre: @item.TarjetaCliente </p>
                                         <p>Numero: @item.TarjetaNumero - Vence: @item.TarjetaVenceAño / @item.TarjetaVenceMes </p>
-                                        <p>Total: @item.Total </p>
-                                        <p>Importe: @item.Importe - Cuota: @item.Cuota - Interes: @item.Interes</p>
+                                        <p>Total: @item.TotalLista </p>
+                                        <p>Importe: @item.ImporteLista - Cuota: @item.Cuota - Interes: @item.InteresLista</p>
                                         <p>Codigo de Autorizacion: @item.CodigoAutorizacion</p>
-                                        <p>Observaciones: @item.Observaciones</p>
+                                        @if (item.Observaciones != null)
+                                        {
+                                            <p>Observaciones: @item.Observaciones</p>
+                                        }
                                         <p>Usuario: @item.UsuarioAlta - Fecha: @item.FechaAlta</p>
 
                                     </div>                                    
@@ -175,9 +182,12 @@
                                         </h4>
                                         <p>Nombre: @item.TarjetaCliente </p>
                                         <p>Numero: @item.TarjetaNumero - Vence: @item.TarjetaVenceAño / @item.TarjetaVenceMes </p>
-                                        <p>Total: @item.Total </p>
+                                        <p>Total: @item.TotalLista </p>
                                         <p>Codigo de Autorizacion: @item.CodigoAutorizacion</p>
-                                        <p>Observaciones: @item.Observaciones</p>
+                                        @if (item.Observaciones != null)
+                                        {
+                                            <p>Observaciones: @item.Observaciones</p>
+                                        }
                                         <p>Usuario: @item.UsuarioAlta - Fecha: @item.FechaAlta</p>
                                     </div>
                                     break;
@@ -193,8 +203,11 @@
                                         <p>Fecha: @item.ChequeFechaEmision </p>
                                         <p>Vence: @item.ChequeFechaVencimiento </p>
                                         <p>Cuit: @item.ChequeCuenta</p>
-                                        <p>Total: @item.Total </p>
-                                        <p>Observaciones: @item.Observaciones</p>
+                                        <p>Total: @item.TotalLista </p>
+                                        @if (item.Observaciones != null)
+                                        {
+                                            <p>Observaciones: @item.Observaciones</p>
+                                        }
                                         <p>Usuario: @item.UsuarioAlta - Fecha: @item.FechaAlta</p>
 
                                     </div>
@@ -205,10 +218,17 @@
                                             <i class="icon fa fa-bitbucket"></i> @item.FormaPago
                                             <a class="btn btn-danger btn-sm pull-right" asp-action="DeleteFormaPago" asp-route-id="@item.Id" asp-route-comp="@Model.ComprobanteId"><i class="glyphicon glyphicon-remove"></i></a>
                                         </h4>
-                                        <p>Total: @item.Total </p>
+                                        <p>Total: @item.TotalLista </p>
                                         <p>Forma Pago: @item.Otros</p>
-                                        <p>Codigo de Autorizacion: @item.CodigoAutorizacion</p>
-                                        <p>Observaciones: @item.Observaciones</p>
+                                        @if (item.CodigoAutorizacion != null)
+                                        {
+                                            <p>Codigo de Autorizacion: @item.CodigoAutorizacion</p>
+                                        }
+                        
+                                        @if (item.Observaciones != null)
+                                        {
+                                            <p>Observaciones: @item.Observaciones</p>
+                                        }
                                         <p>Usuario: @item.UsuarioAlta - Fecha: @item.FechaAlta</p>
 
                                     </div>

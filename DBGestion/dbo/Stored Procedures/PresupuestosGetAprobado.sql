@@ -50,8 +50,8 @@ BEGIN
 
 				E.Descripcion Estado,
 				ISNULL(D.ProductoId,'')ProductoId,
-				ISNULL(PR.Codigo,'')ProductoCodigo,
-				ISNULL(PR.Producto,'')Producto,
+				ISNULL(D.ProductoCodigo,'')ProductoCodigo,
+				ISNULL(D.ProductoNombre,'')Producto,
 				ISNULL(D.Cantidad,0)Cantidad,
 				ISNULL(D.Precio,0)Precio,
 				ISNULL(D.PrecioSinImpuesto,0)PrecioSinImpuesto,
@@ -65,7 +65,7 @@ BEGIN
 	INNER JOIN Clientes C ON C.Id = P.ClienteId
 	INNER JOIN ParamPresupuestosEstados E ON E.Id = P.EstadoId
 	LEFT JOIN PresupuestosDetalle D ON D.PresupuestoId = P.Id
-	LEFT JOIN Productos PR ON PR.Id = D.ProductoId
+	--LEFT JOIN Productos PR ON PR.Id = D.ProductoId
 	LEFT JOIN ParamTiposResponsables TR ON TR.Id = P.TipoResponsableId
 	WHERE P.Id = @Id
 	AND P.Estado = 1

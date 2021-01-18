@@ -1,110 +1,29 @@
-﻿@model Gestion.Web.Models.Comprobantes
+﻿@model IEnumerable<Gestion.Web.Models.ComprobantesDTO>
 
 @{
-    var CCDetalle = (List<Gestion.Web.Models.PresupuestosDetalleDTO>)ViewData["Detalles"];
-    var CCImputacion = (List<Gestion.Web.Models.Comprobantes>)ViewData["Imputaciones"];
+    var comprobante = (ComprobantesDTO)ViewData["Comprobante"];
+    var CCDetalle = (List<Gestion.Web.Models.ComprobantesDetalleDTO>)ViewData["Detalles"];
     var CCFormaPagos = (List<Gestion.Web.Models.ComprobantesFormasPagosDTO>)ViewData["FormasPagos"];
-    var Remitos = (List<Gestion.Web.Models.ComprobantesDetalleDTO>)ViewData["Remitos"];
 }
 <form id="CCForm">
     <div class="box-body">
         <ul class="timeline">
-
-            <!-- timeline time label -->
-            <li class="time-label">
-                <span class="bg-red">
-                    @(Model.FechaComprobante.ToShortDateString())
-                </span>
-            </li>
-            <!-- /.timeline-label -->
-            <!-- timeline item -->
-            <li>
-                <!-- timeline icon -->
-                <i class="fa bg-blue"></i>
-                <div class="timeline-item">
-                    <span class="time"><i class="fa fa-clock-o"></i> @(Model.FechaComprobante.ToShortTimeString())</span>
-
-                    <h3 class="timeline-header"><a asp-controller="Presupuestos" asp-action="Aprobado" asp-route-id="@Model.PresupuestoId">@Model.TipoComprobante @Model.Codigo</a> ...</h3>
-
-                    <div class="timeline-body">
-                        <b>Presupuesto: @Model.Codigo</b><br>
-
-                        @if (@Model.TipoComprobanteFiscal != null)
-                        {
-                            <b>Comprobante Fiscal</b><br>
-                            <b>Tipo: @Model.TipoComprobanteFiscal - Letra: @Model.LetraFiscal - Pto Venta: @Model.PtoVentaFiscal.ToString("D4") - Numero: @Model.NumeroFiscal.ToString("00000000")</b><br>
-                        }
-
-
-                        <br>
-                        <b>Fecha:</b> @Model.FechaComprobante.ToShortDateString()<br>
-                        <b>Cantidad de Productos:</b> @CCDetalle.Sum(x => x.ProductoCantidad)<br>
-                        <b>SubTotal:</b> @Model.TotalSinDescuento<br>
-                        <b>Descuento %:</b> @Model.DescuentoPorcentaje<br>
-                        <b>Descuento $:</b> @Model.DescuentoTotal<br>
-                        <b>Tipo Responsable:</b> @Model.TipoResponsable<br>
-                        <b>Usuario:</b> @Model.UsuarioAlta<br>
-                        <br>
-                        <b>Total:</b> @Model.Total<br>
-                        <b>Saldo:</b> @Model.Saldo<br>
-
-                        <br>
-                        <table class="table table-bordered">
-                            <tr>
-                                <th>Codigo</th>
-                                <th>Producto</th>
-                                <th>Precio U.</th>
-                                <th>Cantidad</th>
-                                <th>SubTotal</th>
-                            </tr>
-                            @foreach (var item in CCDetalle)
-                            {
-                                <tr>
-                                    <td>@item.ProductoCodigo</td>
-                                    <td>@item.ProductoNombre</td>
-                                    <td>@item.ProductoPrecio</td>
-                                    <td>@item.ProductoCantidad</td>
-                                    <td>@item.SubTotal</td>
-                                </tr>
-
-                            }
-                        </table>
-
-                    </div>
-
-                    <div class="timeline-footer">
-                        <a asp-controller="Presupuestos" asp-action="PresupuestoImprimir" asp-route-id="@Model.PresupuestoId" class="btn btn-primary btn-sm" aria-hidden="true" target="_blank"><i class="fa fa-print"></i> Imprimir</a>
-
-                        <button type="button" class="btn btn-success btn-sm" data-toggle="modal"
-                                onclick="cargarDatosFiscales('@Model.Id','@Model.TipoComprobanteFiscal','@Model.LetraFiscal',@Model.PtoVentaFiscal,@Model.NumeroFiscal);"
-                                data-target="#modal-fiscales">
-                            Cargar Datos Fiscales
-                        </button>
-                    </div>
-                </div>
-            </li>
-            <!-- END timeline item -->
-            <!-- timeline time label -->
-            @foreach (var item in CCImputacion)
+            @foreach (var item in Model)
             {
                 <li class="time-label">
                     <span class="bg-red">
                         @(item.FechaComprobante.ToShortDateString())
                     </span>
                 </li>
-                <!-- /.timeline-label -->
-                <!-- timeline item -->
                 <li>
                     <!-- timeline icon -->
                     <i class="fa bg-blue"></i>
                     <div class="timeline-item">
                         <span class="time"><i class="fa fa-clock-o"></i> @(item.FechaComprobante.ToShortTimeString())</span>
-
+                        
                         <h3 class="timeline-header"><a>@item.TipoComprobante @item.Codigo</a> ...</h3>
 
                         <div class="timeline-body">
-                            <b>@item.TipoComprobante: @item.Codigo</b><br>
-
                             @if (item.TipoComprobanteFiscal != null)
                             {
                                 <b>Comprobante Fiscal</b><br>
@@ -112,11 +31,29 @@
                             }
                             <br>
                             <b>Fecha:</b> @item.FechaComprobante.ToShortDateString()<br>
-                            <b>Total sin Descuento:</b> @item.Total<br>
-                            <b>Total sin Impuesto:</b> @item.TotalSinImpuesto<br>
-                            <b>Descuento:</b> @item.DescuentoTotal<br>
+                            @if (item.TipoComprobanteCodigo == "000")
+                            {
+                                <b>Cantidad de Productos:</b> @CCDetalle.Where(x => x.ComprobanteId == item.Id).Sum(x => x.Cantidad)<br>
+                                <b>SubTotal:</b> @item.TotalSinDescuento<br>
+                                <b>Descuento %:</b> @item.DescuentoPorcentaje<br>
+                                <b>Descuento $:</b> @item.DescuentoTotal<br>
+                                <b>Tipo Responsable:</b> @item.TipoResponsable<br>
+                            }
+
+                            <b>Observaciones:</b> @item.Observaciones<br>
                             <b>Usuario:</b> @item.UsuarioAlta<br>
                             <br>
+                            @if (item.TipoComprobanteCodigo != "018" && item.TipoComprobanteCodigo != "019")
+                            {
+                                <b>Total:</b> @item.Total<br>
+                            }
+
+                            
+                            @if (item.TipoComprobanteCodigo == "000")
+                            {
+                                <b>Saldo:</b> @item.Saldo<br>
+                            }
+
                             @if (item.Anulado == true)
                             {
                                 <div class="callout callout-danger">
@@ -131,137 +68,218 @@
 
                             }
 
-                            <h4>Detalle</h4>
-                            @foreach (var formas in CCFormaPagos.Where(x => x.ComprobanteId == item.Id))
-                            {
-                                switch (formas.FormaPagoTipo)
-                                {
-                                    case "E":
-                                        <div class="alert alert-danger alert-dismissible">
-                                            <h4>
-                                                <i class="icon fa fa-bitbucket"></i> @formas.FormaPago
-                                            </h4>
-                                            <p>Total: @formas.Total </p>
-                                            <p>Observaciones: @formas.Observaciones</p>
-                                            <p>Usuario: @formas.UsuarioAlta - Fecha: @formas.FechaAlta</p>
-
-                                        </div>
-                                        break;
-                                    case "C":
-                                        <div class="alert alert-info alert-dismissible">
-                                            <h4>
-                                                <i class="icon fa fa-bitbucket"></i> @formas.FormaPago
-                                            </h4>
-                                            <p>Nombre: @formas.TarjetaCliente </p>
-                                            <p>Numero: @formas.TarjetaNumero - Vence: @formas.TarjetaVenceAño / @formas.TarjetaVenceMes </p>
-                                            <p>Total: @formas.Total </p>
-                                            <p>Importe: @formas.Importe - Cuota: @formas.Cuota - Interes: @formas.Interes</p>
-                                            <p>Observaciones: @formas.Observaciones</p>
-                                            <p>Usuario: @formas.UsuarioAlta - Fecha: @formas.FechaAlta</p>
-
-                                        </div>
-                                        break;
-                                    case "D":
-                                        <div class="alert alert-success alert-dismissible">
-                                            <h4>
-                                                <i class="icon fa fa-bitbucket"></i> @formas.FormaPago
-                                            </h4>
-                                            <p>Nombre: @formas.TarjetaCliente </p>
-                                            <p>Numero: @formas.TarjetaNumero - Vence: @formas.TarjetaVenceAño / @formas.TarjetaVenceMes </p>
-                                            <p>Total: @formas.Total </p>
-                                            <p>Observaciones: @formas.Observaciones</p>
-                                            <p>Usuario: @formas.UsuarioAlta - Fecha: @formas.FechaAlta</p>
-                                        </div>
-                                        break;
-                                    case "X":
-                                        <div class="alert alert-warning alert-dismissible">
-                                            <h4>
-                                                <i class="icon fa fa-bitbucket"></i> @formas.FormaPago
-                                            </h4>
-                                            <p>Numero: @formas.ChequeNumero </p>
-                                            <p>Nombre: @formas.ChequeNombre </p>
-                                            <p>Cuit: @formas.ChequeCuit </p>
-                                            <p>Fecha: @formas.ChequeFechaEmision </p>
-                                            <p>Vence: @formas.ChequeFechaVencimiento </p>
-                                            <p>Cuit: @formas.ChequeCuenta</p>
-                                            <p>Total: @formas.Total </p>
-                                            <p>Observaciones: @formas.Observaciones</p>
-                                            <p>Usuario: @formas.UsuarioAlta - Fecha: @formas.FechaAlta</p>
-
-                                        </div>
-                                        break;
-                                    case "O":
-                                        <div class="alert alert-bitbucket alert-dismissible">
-                                            <h4>
-                                                <i class="icon fa fa-bitbucket"></i> @formas.FormaPago
-                                            </h4>
-                                            <p>Total: @formas.Total </p>
-                                            <p>Forma Pago: @formas.Otros</p>
-                                            <p>Observaciones: @formas.Observaciones</p>
-                                            <p>Usuario: @formas.UsuarioAlta - Fecha: @formas.FechaAlta</p>
-
-                                        </div>
-                                        break;
-                                    default:
-                                        break;
-                                }
-
-                            }
-                            
-                            @if (item.Total == 0)
+                            <br>
+                            @if (CCDetalle.Where(x => x.ComprobanteId == item.Id).Count() != 0)
                             {
                                 <table class="table table-bordered">
                                     <tr>
                                         <th>Codigo</th>
                                         <th>Producto</th>
-                                        <th>Cantidad</th>
-                                    </tr>
-                                    @foreach (var remitos in Remitos.Where(x => x.ComprobanteId == item.Id))
-                                    {
+                                        @if (item.TipoComprobanteCodigo != "018")
+                                        {
+                                            <th>Precio U.</th>
+                                        }
 
+                                        <th>Cantidad</th>
+                                        @if (item.TipoComprobanteCodigo != "018")
+                                        {
+                                            <th>SubTotal</th>
+                                        }
+
+                                    </tr>
+                                    @foreach (var det in CCDetalle.Where(x => x.ComprobanteId == item.Id))
+                                    {
                                         <tr>
-                                            <td>@remitos.ProductoCodigo</td>
-                                            <td>@remitos.ProductoNombre</td>
-                                            <td>@remitos.Cantidad</td>
+                                            <td>@det.ProductoCodigo</td>
+                                            <td>@det.ProductoNombre</td>
+                                            @if (item.TipoComprobanteCodigo != "018")
+                                            {
+                                                <td>@det.Precio</td>
+                                            }
+
+                                            <td>@det.Cantidad</td>
+                                            @if (item.TipoComprobanteCodigo != "018")
+                                            {
+                                                <td>@decimal.Round(det.Cantidad * det.Precio, 2)</td>
+                                            }
+
                                         </tr>
 
                                     }
                                 </table>
-
                             }
 
+                            @if (CCFormaPagos.Where(x => x.ComprobanteId == item.Id).Count() != 0)
+                            {
+                                @foreach (var formas in CCFormaPagos.Where(x => x.ComprobanteId == item.Id))
+                                {
+                                    <div class="box-group" id="accordion">
+                                        @switch (formas.FormaPagoTipo)
+                                        {
+                                            case "E":
+                                                <div class="panel box box-solid box-primary">
+                                                    <div class="box-header with-border">
+                                                        <h4 class="box-title">
+                                                            <a data-toggle="collapse" data-parent="#accordion" href="#@formas.Id">
+                                                                @formas.FormaPago - Total: @formas.Total
+                                                            </a>
+                                                        </h4>
+                                                    </div>
+                                                    <div id="@formas.Id" class="panel-collapse collapse">
+                                                        <div class="box-body">
+                                                            <p>Total: @formas.Total </p>
+                                                            <p>Observaciones: @formas.Observaciones</p>
+                                                            <p>Usuario: @formas.UsuarioAlta - Fecha: @formas.FechaAlta</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
 
+                                                break;
+                                            case "C":
+                                                <div class="panel box box-solid box-primary">
+                                                    <div class="box-header with-border">
+                                                        <h4 class="box-title">
+                                                            <a data-toggle="collapse" data-parent="#accordion" href="#@formas.Id">
+                                                                @formas.FormaPago - Total: @formas.Total
+                                                            </a>
+                                                        </h4>
+                                                    </div>
+                                                    <div id="@formas.Id" class="panel-collapse collapse">
+                                                        <div class="box-body">
+                                                            <p>Nombre: @formas.TarjetaCliente </p>
+                                                            <p>Numero: @formas.TarjetaNumero - Vence: @formas.TarjetaVenceAño / @formas.TarjetaVenceMes </p>
+                                                            <p>Total: @formas.Total </p>
+                                                            <p>Importe: @formas.Importe - Cuota: @formas.Cuota - Interes: @formas.Interes</p>
+                                                            <p>Observaciones: @formas.Observaciones</p>
+                                                            <p>Usuario: @formas.UsuarioAlta - Fecha: @formas.FechaAlta</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                break;
+                                            case "D":
+                                                <div class="panel box box-solid box-primary">
+                                                    <div class="box-header with-border">
+                                                        <h4 class="box-title">
+                                                            <a data-toggle="collapse" data-parent="#accordion" href="#@formas.Id">
+                                                                @formas.FormaPago - Total: @formas.Total
+                                                            </a>
+                                                        </h4>
+                                                    </div>
+                                                    <div id="@formas.Id" class="panel-collapse collapse">
+                                                        <div class="box-body">
+                                                            <p>Nombre: @formas.TarjetaCliente </p>
+                                                            <p>Numero: @formas.TarjetaNumero - Vence: @formas.TarjetaVenceAño / @formas.TarjetaVenceMes </p>
+                                                            <p>Total: @formas.Total </p>
+                                                            <p>Observaciones: @formas.Observaciones</p>
+                                                            <p>Usuario: @formas.UsuarioAlta - Fecha: @formas.FechaAlta</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                break;
+                                            case "X":
+                                                <div class="panel box box-solid box-primary">
+                                                    <div class="box-header with-border">
+                                                        <h4 class="box-title">
+                                                            <a data-toggle="collapse" data-parent="#accordion" href="#@formas.Id">
+                                                                @formas.FormaPago - Total: @formas.Total
+                                                            </a>
+                                                        </h4>
+                                                    </div>
+                                                    <div id="@formas.Id" class="panel-collapse collapse">
+                                                        <div class="box-body">
+                                                            <p>Numero: @formas.ChequeNumero </p>
+                                                            <p>Nombre: @formas.ChequeNombre </p>
+                                                            <p>Cuit: @formas.ChequeCuit </p>
+                                                            <p>Fecha: @formas.ChequeFechaEmision </p>
+                                                            <p>Vence: @formas.ChequeFechaVencimiento </p>
+                                                            <p>Cuit: @formas.ChequeCuenta</p>
+                                                            <p>Total: @formas.Total </p>
+                                                            <p>Observaciones: @formas.Observaciones</p>
+                                                            <p>Usuario: @formas.UsuarioAlta - Fecha: @formas.FechaAlta</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                break;
+                                            case "O":
+                                                <div class="panel box box-solid box-primary">
+                                                    <div class="box-header  with-border">
+                                                        <h4 class="box-title">
+                                                            <a data-toggle="collapse" data-parent="#accordion" href="#@formas.Id">
+                                                                @formas.FormaPago - Total: @formas.Total
+                                                            </a>
+                                                        </h4>
+                                                    </div>
+                                                    <div id="@formas.Id" class="panel-collapse collapse">
+                                                        <div class="box-body">
+                                                            <p>Total: @formas.Total </p>
+                                                            <p>Forma Pago: @formas.Otros</p>
+                                                            <p>Observaciones: @formas.Observaciones</p>
+                                                            <p>Usuario: @formas.UsuarioAlta - Fecha: @formas.FechaAlta</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                break;
+                                            default:
+                                                break;
+                                        }
+                                    </div>
+                                }
+                            }
                         </div>
-                        @if (item.Anulado != true)
-                        {
-                            @if (item.Total > 0)
+
+
+                        <div class="timeline-footer">
+                            @if (item.TipoComprobanteCodigo == "000")
                             {
-
-                                <div class="timeline-footer">
-                                    <a asp-controller="Clientes" asp-action="ReciboImprimir" asp-route-id="@item.Id" class="btn btn-primary btn-sm" aria-hidden="true" target="_blank"><i class="fa fa-print"></i> Imprimir</a>
-                                    <button type="button" class="btn btn-success btn-sm" data-toggle="modal"
-                                            onclick="cargarDatosFiscales('@item.Id','@item.TipoComprobanteFiscal','@item.LetraFiscal',@item.PtoVentaFiscal,@item.NumeroFiscal);"
-                                            data-target="#modal-fiscales">
-                                        Cargar Datos Fiscales
-                                    </button>
-
-                                    <a asp-controller="Clientes" asp-action="ReciboAnular" asp-route-id="@item.Id" asp-route-comp="@Model.Id" class="btn btn-warning btn-sm pull-right" aria-hidden="true"><i class="glyphicon glyphicon-remove"></i> Anular</a>
-                                </div>
+                                <a asp-controller="Presupuestos" asp-action="PresupuestoImprimir" asp-route-id="@item.PresupuestoId" class="btn btn-primary btn-sm" aria-hidden="true" target="_blank"><i class="fa fa-print"></i> Imprimir</a>
                             }
-                            @if (item.Total == 0)
+
+                            @if (item.TipoComprobanteCodigo == "004")
                             {
-
-                    <div class="timeline-footer">
-                        <a asp-controller="Comprobantes" asp-action="RemitoImprimir" asp-route-id="@item.Id" class="btn btn-primary btn-sm" aria-hidden="true" target="_blank"><i class="fa fa-print"></i> Imprimir</a>
-                        
-
-                    </div>
+                                <a asp-controller="Clientes" asp-action="ReciboImprimir" asp-route-id="@item.Id" class="btn btn-primary btn-sm" aria-hidden="true" target="_blank"><i class="fa fa-print"></i> Imprimir</a>
                             }
-                        }
 
+                            @if (item.TipoComprobanteCodigo == "018")
+                            {
+                                <a asp-controller="Comprobantes" asp-action="RemitoImprimir" asp-route-id="@item.Id" class="btn btn-primary btn-sm" aria-hidden="true" target="_blank"><i class="fa fa-print"></i> Imprimir</a>
+                            }
+
+                            @if (item.TipoComprobanteCodigo == "019")
+                            {
+                                <a asp-controller="Comprobantes" asp-action="RemitoImprimir" asp-route-id="@item.Id" class="btn btn-primary btn-sm" aria-hidden="true" target="_blank"><i class="fa fa-print"></i> Imprimir</a>
+                            }
+
+                            @if (!item.Anulado)
+                            {
+                                @if (item.TipoComprobanteCodigo == "004")
+                                {
+                                    <a asp-controller="Clientes" asp-action="ReciboAnular" asp-route-id="@item.Id" asp-route-comp="@comprobante.Id" class="btn btn-warning btn-sm pull-right" aria-hidden="true"><i class="glyphicon glyphicon-remove"></i> Anular</a>
+                                }
+
+                            }
+
+
+                            <button type="button" class="btn btn-success btn-sm" data-toggle="modal"
+                                    onclick="cargarDatosFiscales('@item.Id','@item.TipoComprobanteFiscal','@item.LetraFiscal',@item.PtoVentaFiscal,@item.NumeroFiscal);"
+                                    data-target="#modal-fiscales">
+                                Cargar Datos Fiscales
+                            </button>
+
+
+
+                            <a class="btn btn-danger btn-sm" asp-controller="Presupuestos" asp-action="DatosFiscalesBorrar" asp-route-id="@item.Id"><i class="fa fa-trash"></i> Borrar Datos Fiscales</a>
+                        </div>
                     </div>
                 </li>
+
             }
+
+
+            
             <!-- END timeline item -->
             ...
         </ul>

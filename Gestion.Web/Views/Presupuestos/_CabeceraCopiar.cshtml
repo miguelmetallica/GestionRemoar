@@ -1,0 +1,95 @@
+﻿@model Gestion.Web.Models.PresupuestosDTO
+
+<!-- general form elements -->
+<div class="box box-primary">
+    <div class="box-header with-border">
+        <h3 class="box-title">Datos del Presupuesto</h3>
+        <a asp-action="PresupuestoCopia" asp-route-id="@Model.Id" class="btn btn-success btn-sm pull-right" aria-hidden="true">Copiar</a>
+    </div>
+    <!-- /.box-header -->
+    <!-- form start -->
+
+    <form>
+        <div class="box-body">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="@Model.Id" />
+            <input type="hidden" asp-for="@Model.ClienteId" />
+
+            <div class="form-group col-md-6">
+                <label asp-for="@Model.Codigo" class="control-label"></label>
+                <input asp-for="@Model.Codigo" readonly class="form-control input-sm" />
+                <span asp-validation-for="@Model.Codigo" class="text-danger"></span>
+            </div>
+
+            <div class="form-group col-md-6">
+                <label asp-for="@Model.Estado" class="control-label"></label>
+                <input asp-for="@Model.Estado" readonly class="form-control input-sm" />
+                <span asp-validation-for="@Model.Estado" class="text-danger"></span>
+            </div>
+
+            <div class="form-group col-md-6">
+                <label asp-for="@Model.Fecha" class="control-label"></label>
+                <input asp-for="@Model.Fecha" type="date" readonly class="form-control input-sm" />
+                <span asp-validation-for="@Model.Fecha" class="text-danger"></span>
+            </div>
+
+            <div class="form-group col-md-6">
+                <label asp-for="@Model.FechaVencimiento" class="control-label"></label>
+                <input asp-for="@Model.FechaVencimiento" type="date" readonly class="form-control input-sm" />
+                <span asp-validation-for="@Model.FechaVencimiento" class="text-danger"></span>
+            </div>
+
+            <div class="form-group col-md-6">
+                <label asp-for="@Model.ClienteCodigo" class="control-label"></label>
+                <input asp-for="@Model.ClienteCodigo" readonly class="form-control input-sm" />
+                <span asp-validation-for="@Model.ClienteCodigo" class="text-danger"></span>
+            </div>
+
+            <div class="form-group col-md-6">
+                <label asp-for="@Model.ClienteRazonSocial" class="control-label"></label>
+                <input asp-for="@Model.ClienteRazonSocial" readonly class="form-control input-sm" />
+                <span asp-validation-for="@Model.ClienteRazonSocial" class="text-danger"></span>
+            </div>
+
+            <div class="form-group col-md-6">
+                <label asp-for="@Model.ClienteNroDocumento" class="control-label"></label>
+                <input asp-for="@Model.ClienteNroDocumento" readonly class="form-control input-sm" />
+                <span asp-validation-for="@Model.ClienteNroDocumento" class="text-danger"></span>
+            </div>
+
+            <div class="form-group col-md-6">
+                <label asp-for="@Model.ClienteCuitCuil" class="control-label"></label>
+                <input asp-for="@Model.ClienteCuitCuil" readonly class="form-control input-sm" />
+                <span asp-validation-for="@Model.ClienteCuitCuil" class="text-danger"></span>
+            </div>
+
+            <div class="form-group col-md-6">
+                <label asp-for="@Model.TipoResponsable" class="control-label"></label>
+                <input asp-for="@Model.TipoResponsable" readonly type="text" class="form-control">            
+            </div>
+
+            <div class="form-group col-md-6">
+                <label asp-for="@Model.UsuarioAlta" class="control-label"></label>
+                <input asp-for="@Model.UsuarioAlta" readonly class="form-control input-sm" />
+                <span asp-validation-for="@Model.UsuarioAlta" class="text-danger"></span>
+            </div>
+
+
+        </div>
+        <!-- /.box-body -->
+
+        <div class="box-footer">
+            @if (Model.Estado.Contains("RECH"))
+            {
+                <a asp-controller="Presupuestos" asp-action="Rechazados" class="btn btn-sm btn-default pull-right">Volver</a>
+            }
+            else
+            {
+                <a asp-controller="Presupuestos" asp-action="Vencidos" class="btn btn-sm btn-default pull-right">Volver</a>
+            }
+
+
+        </div>
+    </form>
+</div>
+<!-- /.box -->

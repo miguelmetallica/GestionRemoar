@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 namespace Gestion.Web.Data
 {
     public interface IComprobantesRepository : IGenericRepository<Comprobantes>
-    {
+    { 
         Task<List<Comprobantes>> spComprobantes(string clienteId);
-        Task<Comprobantes> spComprobante(string Id);
+        Task<ComprobantesDTO> spComprobante(string Id);
         Task<List<Comprobantes>> spComprobanteImputacion(string Id);
         Task<int> spRecibo(ComprobantesReciboDTO reciboDTO);
         Task<int> spEfectivo(ComprobantesEfectivoDTO reciboDTO);
@@ -18,7 +18,7 @@ namespace Gestion.Web.Data
         Task<int> spDeleteFormaPago(string id);
         Task<List<ComprobantesFormasPagosDTO>> spComprobantesTmpFormasPagos(string clienteId);
         Task<List<ComprobantesFormasPagosDTO>> spComprobantesFormasPagos(string Id);
-        Task<List<ComprobantesDTO>> spPresupuestosComprobantes(); 
+        Task<List<ComprobantesDTO>> spComprobantesPresupuestos(); 
         Task<List<ComprobantesFormasPagosDTO>> spComprobantesFormasPagosImprimir(string Id);
         Task<int> spComprobantesReciboAnular(string Id,string Motivo,string Usuario);
         Task<List<ComprobantesDetalleImputaDTO>> spComprobanteDetalleImputacion(string Id);
@@ -36,10 +36,20 @@ namespace Gestion.Web.Data
 
         Task<int> spRemito(ComprobantesDetalleDTO detalleDTO);
         Task<List<ComprobantesDetalleDTO>> spComprobanteDetalleGet(string ComprobanteId);
+        Task<List<ComprobantesDetalleDTO>> spComprobanteDetallePresupuestoGet(string presupuestoId);
         Task<List<ComprobantesDetalleDTO>> spComprobanteDetalleImprimirGet(string ComprobanteId);
 
         Task<int> spComprobanteInsertaDatosFiscales(ComprobantesDTO comprobantesDTO);
 
         Task<List<ComprobantesDetalleIndicador>> spComprobanteDetalleEntregaIndicador();
+        Task<List<ComprobantesDTO>> spComprobantesPresupuesto(string PresupuestoId);
+        Task<List<ComprobantesDetalleDTO>> spComprobantesDetalleGet(string ComprobanteId);
+
+        Task<List<ComprobantesDTO>> spComprobantesPresupuestosCliente(string clienteId);
+        Task<List<ComprobantesFormasPagosDTO>> spComprobantesFormasPagosPresupuesto(string presupuestoId);
+        Task<List<ComprobantesDTO>> spPresupuestosComprobantesDevolucion();
+        Task<int> spComprobanteDetalleInsertDevolucionTMP(ComprobantesDetalleDTO detalleDTO);
+        Task<int> spDevolucion(ComprobantesDetalleDTO detalleDTO);
+        Task<List<ComprobantesDetalleDTO>> spComprobanteDetalleDevolucion(string Id);
     }
 }

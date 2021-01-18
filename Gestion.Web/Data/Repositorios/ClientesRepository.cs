@@ -156,7 +156,7 @@ namespace Gestion.Web.Data
             }
         }
 
-        public async Task<List<ClientesDTO>> spCliente(string id)
+        public async Task<ClientesDTO> spCliente(string id)
         {
             //Creamos la conexión a utilizar.
             //Utilizamos la sentencia Using para asegurarnos de cerrar la conexión
@@ -180,7 +180,7 @@ namespace Gestion.Web.Data
 
                     //aunque debemos buscar solo un elemento, siempre devolvemos
                     //una colección. Es más fácil de manipular y controlar 
-                    var objs = new List<ClientesDTO>();
+                    var obj = new ClientesDTO();
 
                     //No retornamos DataSets, siempre utilizamos objetos para hacernos 
                     //independientes de la estructura de las tablas en el resto
@@ -191,11 +191,10 @@ namespace Gestion.Web.Data
                         //Ejecutamos el comando y retornamos los valores
                         using (SqlDataReader oReader = await oCmd.ExecuteReaderAsync())
                         {
-                            while (oReader.Read())
+                            if(oReader.Read())
                             {
                                 //si existe algun valor, creamos el objeto y lo almacenamos
                                 //en la colección
-                                var obj = new ClientesDTO();
                                 obj.Id = oReader["Id"] as string;
                                 obj.Codigo = oReader["Codigo"] as string;
                                 obj.Apellido = oReader["Apellido"] as string;
@@ -207,6 +206,8 @@ namespace Gestion.Web.Data
                                 obj.NroDocumento = oReader["NroDocumento"] as string;
                                 obj.CuilCuit = oReader["CuilCuit"] as string;
 
+                                if (!DBNull.Value.Equals(oReader["FechaNacimiento"]))
+                                    obj.FechaNacimiento = (DateTime)oReader["FechaNacimiento"];
                                 obj.esPersonaJuridica = (bool)oReader["esPersonaJuridica"];
                                 obj.ProvinciaId = oReader["ProvinciaId"] as string;
                                 obj.Provincia = oReader["Provincia"] as string;
@@ -226,24 +227,20 @@ namespace Gestion.Web.Data
                                 obj.CategoriaId = oReader["CategoriaId"] as string;
                                 obj.Categoria = oReader["Categoria"] as string;
                                                                 
-                                obj.Estado = (bool)oReader["Estado"];                                
-
-                                //Agregamos el objeto a la coleccion de resultados
-                                objs.Add(obj);
-                                obj = null;
+                                obj.Estado = (bool)oReader["Estado"];                                                               
                             }
                         }
                         //retornamos los valores encontrados
 
 
-                        return objs;
+                        return obj;
                     }
 
                     finally
                     {
                         //el Finally nos da siempre la oportunidad de liberar
                         //la memoria utilizada por los objetos 
-                        objs = null;
+                        obj = null;
                     }
                 }
             }

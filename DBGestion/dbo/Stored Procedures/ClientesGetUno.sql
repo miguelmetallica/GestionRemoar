@@ -24,11 +24,19 @@ BEGIN
 		C.Telefono,
 		C.Celular,
 		C.Email,
+		ISNULL(C.TipoResponsableId,R1.Id)TipoResponsableId,
+		ISNULL(R.Descripcion,R1.Descripcion) TipoResponsable,
+		ISNULL(C.CategoriaId,CA1.Id)CategoriaId,
+		ISNULL(CA.Descripcion,CA1.Descripcion) Categoria,
 		C.Estado,
 		C.FechaAlta,
 		C.UsuarioAlta
 	FROM Clientes C
 	LEFT JOIN ParamTiposDocumentos T ON T.Id = C.TipoDocumentoId
 	LEFT JOIN ParamProvincias P ON P.Id = C.ProvinciaId
+	LEFT JOIN ParamTiposResponsables R ON R.Id = C.TipoResponsableId
+	LEFT JOIN ParamTiposResponsables R1 ON R1.Defecto = 1
+	LEFT JOIN ParamClientesCategorias CA ON CA.Id = C.CategoriaId
+	LEFT JOIN ParamClientesCategorias CA1 ON CA1.Defecto = 1
 	WHERE C.Id = @Id
 END

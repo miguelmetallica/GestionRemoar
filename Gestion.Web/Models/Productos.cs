@@ -73,8 +73,18 @@ namespace Gestion.Web.Models
         public string CategoriaId { get; set; }
         public ParamCategorias Categoria { get; set; }
 
+        public bool ControlaStock { get; set; }
+        public bool AceptaDescuento { get; set; }
+        public decimal PrecioRebaja { get; set; }
+        
+        [Display(Name = "Fecha Desde")]
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
+        public DateTime RebajaDesde { get; set; }
+        [Display(Name = "Fecha Hasta")]
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
+        public DateTime RebajaHasta { get; set; }
+        
         public bool Estado { get; set; }
-
         public DateTime FechaAlta { get; set; }
         public string UsuarioAlta { get; set; }
 
@@ -105,6 +115,9 @@ namespace Gestion.Web.Models
         [Display(Name = "Precio")]
         [Range(0, double.MaxValue, ErrorMessage = "The field {0} acepta valores entre {1} y {2}")]
         public decimal PrecioVenta { get; set; }
+        [Display(Name = "Precio en Efctivo")]
+        [Range(0, double.MaxValue, ErrorMessage = "The field {0} acepta valores entre {1} y {2}")]
+        public decimal PrecioContado { get; set; }
 
         public bool Estado { get; set; }        
     }
@@ -118,5 +131,86 @@ namespace Gestion.Web.Models
         public int Cantidad { get; set; }
         public decimal Precio { get; set; }
         public bool Estado { get; set; }
+    }
+
+    public partial class ProductosDTO
+    {
+        public string Id { get; set; }
+
+        [MaxLength(20, ErrorMessage = "The field {0} only can contain {1} characters length.")]
+        public string Codigo { get; set; }
+
+        [Required(ErrorMessage = "El campo {0} es obligatorio.")]
+        [MaxLength(150, ErrorMessage = "The field {0} only can contain {1} characters length.")]
+        public string Producto { get; set; }
+
+        [Display(Name = "Tipo de Producto")]
+        public string TipoProductoId { get; set; }
+        public string TipoProducto { get; set; }
+
+        [Display(Name = "Descripcion")]
+        [MaxLength(500, ErrorMessage = "The field {0} only can contain {1} characters length.")]
+        public string DescripcionCorta { get; set; }
+
+        [Display(Name = "Resumen")]
+        [MaxLength(4000, ErrorMessage = "The field {0} only can contain {1} characters length.")]
+        public string DescripcionLarga { get; set; }
+        public string CodigoBarra { get; set; }
+        public decimal? Peso { get; set; }
+
+        [Display(Name = "Longitud")]
+        [Range(0, double.MaxValue, ErrorMessage = "The field {0} acepta valores entre {1} y {2}")]
+        public decimal? DimencionesLongitud { get; set; }
+
+        [Display(Name = "Ancho")]
+        [Range(0, double.MaxValue, ErrorMessage = "The field {0} acepta valores entre {1} y {2}")]
+        public decimal? DimencionesAncho { get; set; }
+
+        [Display(Name = "Alto")]
+        [Range(0, double.MaxValue, ErrorMessage = "The field {0} acepta valores entre {1} y {2}")]
+        public decimal? DimencionesAltura { get; set; }
+
+        [Display(Name = "Cuenta de Venta")]
+        public string CuentaVentaId { get; set; }
+        public string CuentaVenta { get; set; }
+
+        [Display(Name = "Cuenta de Compra")]
+        public string CuentaCompraId { get; set; }
+        public string CuentaCompra { get; set; }
+
+        [Display(Name = "Unid. Medida")]
+        public string UnidadMedidaId { get; set; }
+        public string UnidadMedida { get; set; }
+
+        [Display(Name = "Alicuota")]
+        public string AlicuotaId { get; set; }
+        public string Alicuota { get; set; }
+
+        [Display(Name = "Precio")]
+        [Range(0, double.MaxValue, ErrorMessage = "The field {0} acepta valores entre {1} y {2}")]
+        public decimal? PrecioVenta { get; set; }
+
+        [Display(Name = "Codigo del Proveedor")]
+        public string ProveedorId { get; set; }
+        public string Proveedor { get; set; }
+        [Display(Name = "Categoria")]
+        [Required(ErrorMessage = "El campo {0} es obligatorio.")]
+        public string CategoriaId { get; set; }
+        public string Categoria { get; set; }
+        public bool ControlaStock { get; set; }
+        public bool AceptaDescuento { get; set; }
+        public decimal? PrecioRebaja { get; set; }
+
+        [Display(Name = "Fecha Desde")]
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
+        public DateTime RebajaDesde { get; set; }
+        [Display(Name = "Fecha Hasta")]
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
+        public DateTime RebajaHasta { get; set; }
+        public bool Estado { get; set; }
+        public DateTime FechaAlta { get; set; }
+        public string UsuarioAlta { get; set; }
+        public string ExternalId { get; set; }
+        public bool EsVendedor { get; set; }        
     }
 }

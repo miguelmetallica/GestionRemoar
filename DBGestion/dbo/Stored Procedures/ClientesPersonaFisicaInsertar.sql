@@ -16,6 +16,8 @@
 	@Telefono nvarchar(50) = NULL,
 	@Celular nvarchar(50) = NULL,
 	@Email nvarchar(150) = NULL,
+	@TipoResponsableId nvarchar(150) = NULL,
+	@CategoriaId nvarchar(150) = NULL,
 	@Estado bit = 0,
 	@Usuario nvarchar(256) = NULL
 AS
@@ -36,6 +38,20 @@ BEGIN TRY
 
 	SET @RazonSocial = CONVERT(VARCHAR(140),@Apellido) + ' ' + @Nombre
 
+	IF @TipoResponsableId IS NULL
+	BEGIN
+		SELECT TOP 1 @TipoResponsableId = Id
+		FROM ParamTiposResponsables
+		WHERE Defecto = 1
+	END
+
+	IF @CategoriaId IS NULL
+	BEGIN
+		SELECT TOP 1 @CategoriaId = Id
+		FROM ParamClientesCategorias
+		WHERE Defecto = 1
+	END
+
 	BEGIN TRAN
 		EXEC @Numero = NextNumber 'CLIENTES'
 		SET @CodigoCliente = RIGHT('000' + RTRIM(LTRIM(CONVERT(VARCHAR(3),@SucursalId))),3) + RIGHT('0000000000' + RTRIM(LTRIM(CONVERT(VARCHAR(10),@Numero))) ,8)
@@ -44,7 +60,7 @@ BEGIN TRY
 							TipoDocumentoId,NroDocumento,CuilCuit,
 							esPersonaJuridica,FechaNacimiento,ProvinciaId,
 							Localidad,CodigoPostal,Calle,CalleNro,PisoDpto,
-							OtrasReferencias,Telefono,Celular,Email,
+							OtrasReferencias,Telefono,Celular,Email,TipoResponsableId,CategoriaId,
 							Estado,FechaAlta,UsuarioAlta)
 					VALUES(@Id,UPPER(@CodigoCliente),UPPER(@Apellido),UPPER(@Nombre),UPPER(@RazonSocial),
 							@TipoDocumentoId,UPPER(@NroDocumento),@CuilCuit,
@@ -52,7 +68,7 @@ BEGIN TRY
 							UPPER(@Localidad),UPPER(@CodigoPostal),
 							UPPER(@Calle),UPPER(@CalleNro),UPPER(@PisoDpto),
 							UPPER(@OtrasReferencias),UPPER(@Telefono),UPPER(@Celular),
-							UPPER(@Email),@Estado,DATEADD(HH,4,GETDATE()),UPPER(@Usuario))
+							UPPER(@Email),@TipoResponsableId,@CategoriaId,@Estado,DATEADD(HH,4,GETDATE()),UPPER(@Usuario))
 		
 
 	COMMIT;

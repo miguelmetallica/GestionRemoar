@@ -74,12 +74,22 @@ namespace Gestion.Web.Controllers
         public async Task<IActionResult> Create(CajasMovimientos CajasMovimientos)
         {
             CajasMovimientos.Fecha = DateTime.Today;
-
+            
             if (ModelState.IsValid)
             {
+                var tipoMov = await cajasTiposMovimientosRepository.GetByIdAsync(CajasMovimientos.TipoMovimientoId);
+
                 CajasMovimientos.FechaAlta = DateTime.Now;
                 CajasMovimientos.UsuarioAlta = User.Identity.Name;
-
+                if (tipoMov.EsDebe)
+                {
+                    CajasMovimientos.Importe = -1 * Math.Abs(CajasMovimientos.Importe);
+                }
+                else 
+                {
+                    CajasMovimientos.Importe = Math.Abs(CajasMovimientos.Importe);
+                }
+                
                 await repository.CreateAsync(CajasMovimientos);
                 return RedirectToAction(nameof(Index));
             }
@@ -196,6 +206,15 @@ namespace Gestion.Web.Controllers
         {
             if (ModelState.IsValid)
             {
+                var tipoMov = await cajasTiposMovimientosRepository.GetByIdAsync(CajasMovimientos.TipoMovimientoId);
+                if (tipoMov.EsDebe)
+                {
+                    CajasMovimientos.Importe = -1 * Math.Abs(CajasMovimientos.Importe);
+                }
+                else
+                {
+                    CajasMovimientos.Importe = Math.Abs(CajasMovimientos.Importe);
+                }
 
                 var CajaAdmin = new CajasMovimientos();
 
@@ -236,6 +255,7 @@ namespace Gestion.Web.Controllers
             ViewBag.Cajas = this.cajasRepository.GetCombo(user.SucursalId);
             ViewBag.TiposMovimientos = this.cajasTiposMovimientosRepository.GetCombo();
 
+
             var CajaAdmin = new CajasMovimientosAdministra();
             
             CajaAdmin.CajaId = CajasMovimientos.CajaId;
@@ -263,6 +283,16 @@ namespace Gestion.Web.Controllers
             {
                 try
                 {
+                    var tipoMov = await cajasTiposMovimientosRepository.GetByIdAsync(CajasMovimientos.TipoMovimientoId);
+                    if (tipoMov.EsDebe)
+                    {
+                        CajasMovimientos.Importe = -1 * Math.Abs(CajasMovimientos.Importe);
+                    }
+                    else
+                    {
+                        CajasMovimientos.Importe = Math.Abs(CajasMovimientos.Importe);
+                    }
+
                     var CajaAdmin = new CajasMovimientos();
 
                     CajaAdmin.CajaId = CajasMovimientos.CajaId;

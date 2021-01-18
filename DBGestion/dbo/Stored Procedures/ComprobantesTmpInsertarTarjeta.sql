@@ -1,7 +1,7 @@
 ﻿
 
 CREATE PROCEDURE [dbo].[ComprobantesTmpInsertarTarjeta]
-	@ClienteId nvarchar(150),
+	@ComprobanteId nvarchar(150),
 	@FormaPagoId nvarchar(150),
 	@Cuota int,
 	@Importe numeric(18,2),
@@ -14,6 +14,7 @@ CREATE PROCEDURE [dbo].[ComprobantesTmpInsertarTarjeta]
 	@TarjetaCodigoSeguridad int = 0,
 	@TarjetaEsDebito bit,	
 	@Observaciones nvarchar(150) = NULL,
+	@CodigoAutorizacion nvarchar(50) = NULL,
 	@Usuario nvarchar(256) = NULL
 AS
 BEGIN TRY
@@ -33,26 +34,29 @@ BEGIN TRY
 	FROM SistemaConfiguraciones C
 	INNER JOIN ParamTiposComprobantes T ON T.Codigo = C.Valor
 	INNER JOIN ComprobantesNumeraciones N ON N.TipoComprobanteId = T.Id
-	WHERE C.Configuracion = 'COMPROBANTES_RECIBO_A'
+	WHERE C.Configuracion = 'COMPROBANTES_RECIBO'
 	AND N.Estado = 1
 	
 	BEGIN TRAN
-		INSERT INTO ComprobantesFormasPagosTmp(Id,ClienteId,TipoComprobanteId,
+		INSERT INTO ComprobantesFormasPagosTmp(Id,ComprobanteId,TipoComprobanteId,
 												FormaPagoId,FormaPagoCodigo,
 												FormaPagoTipo,FormaPago,
 												Importe,Cuota,Interes,Total,
 												TarjetaCliente,TarjetaNumero,
 												TarjetaVenceAño,TarjetaVenceMes,
 												TarjetaCodigoSeguridad,TarjetaEsDebito,
-												Observaciones,FechaAlta,UsuarioAlta)
-										VALUES(@Id,@ClienteId,@TipoComprobanteId,
+												Observaciones,CodigoAutorizacion,FechaAlta,UsuarioAlta)
+										VALUES(@Id,@ComprobanteId,@TipoComprobanteId,
 												@FormaPagoId,@FormaPagoCodigo,
-												@FormaPagoTipo,@FormaPago,
+												@FormaPagoTipo,upper(@FormaPago),
 												@Importe,@Cuota,@Interes,@Total,
-												@TarjetaCliente,@TarjetaNumero,
+												upper(@TarjetaCliente),
+												upper(@TarjetaNumero),
 												@TarjetaVenceAño,@TarjetaVenceMes,
-												@TarjetaCodigoSeguridad,@TarjetaEsDebito,
-												@Observaciones,DATEADD(HH,4,GETDATE()),UPPER(@Usuario))
+												upper(@TarjetaCodigoSeguridad),
+												@TarjetaEsDebito,
+												upper(@Observaciones),upper(@CodigoAutorizacion),
+												DATEADD(HH,4,GETDATE()),UPPER(@Usuario))
 		
 
 	COMMIT;

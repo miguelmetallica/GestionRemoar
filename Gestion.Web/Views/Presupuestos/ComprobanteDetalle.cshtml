@@ -2,7 +2,8 @@
 
 @{
     ViewData["Title"] = "Detalle del Cliente";
-    var prespuesto = (Comprobantes)ViewData["Comprobantes"];
+    var prespuesto = (ComprobantesDTO)ViewData["Comprobante"];
+    var comprobantes = (List<ComprobantesDTO>)ViewData["Comprobantes"];
 }
 
 <div class="content-wrapper">
@@ -36,7 +37,7 @@
                         <a asp-controller="Clientes" asp-action="Recibo" asp-route-id="@prespuesto.Id" class="btn btn-primary btn-sm pull-right" aria-hidden="true" style="margin-right: 5px;">Generar Recibo</a>
                     </div>
 
-                    <partial name="_CuentaCorrienteHistoria" model='@prespuesto' />
+                    <partial name="_CuentaCorrienteHistoria" model='@comprobantes' />
                     <!-- /.box -->
                     <div class="box-footer">
                         <a asp-action="Aprobados" class="btn btn-default btn-sm pull-right" aria-hidden="true">Volver</a>

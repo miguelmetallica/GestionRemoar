@@ -1,4 +1,4 @@
-﻿@model Gestion.Web.Models.PresupuestosDetalleDTO
+﻿@model Gestion.Web.Models.PresupuestosDTO
 
 @{
     ViewData["Title"] = "Cambiar Tipo de Responsable";
@@ -80,9 +80,9 @@
                         </div>
 
                         <div class="form-group col-md-6">
-                            <label asp-for="@Model.ClienteCuilCuit" class="control-label"></label>
-                            <input asp-for="@Model.ClienteCuilCuit" readonly class="form-control input-sm" />
-                            <span asp-validation-for="@Model.ClienteCuilCuit" class="text-danger"></span>
+                            <label asp-for="@Model.ClienteCuitCuil" class="control-label"></label>
+                            <input asp-for="@Model.ClienteCuitCuil" readonly class="form-control input-sm" />
+                            <span asp-validation-for="@Model.ClienteCuitCuil" class="text-danger"></span>
                         </div>
 
                         <div class="form-group col-md-6">

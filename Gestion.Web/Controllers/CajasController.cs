@@ -43,6 +43,20 @@ namespace Gestion.Web.Controllers
             
         }
 
+        public async Task<IActionResult> InformeCaja()
+        {
+            try
+            {
+                var model = await repository.spCajasEstadoFechaGet();
+                return View(model);
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+
+        }
+
         public async Task<IActionResult> DetailsImportes(string fecha,string sucid)
         {
             var model = await repository.spCajasEstadoImportesGet(fecha,sucid);

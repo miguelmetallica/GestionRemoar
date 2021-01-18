@@ -2,7 +2,8 @@
 
 @{
     ViewData["Title"] = "Detalle del Cliente";
-    var prespuesto = (Comprobantes)ViewData["Comprobantes"];    
+    var comprobantes = (List<ComprobantesDTO>)ViewData["Comprobantes"];
+    var presupuesto = (ComprobantesDTO)ViewData["Comprobante"];
 }
 
 <div class="content-wrapper">
@@ -29,20 +30,20 @@
                 <!-- general form elements -->
                 <div class="box box-primary">
                     <div class="box-header with-border">
-                        <h3 class="box-title">Detalle del @prespuesto.TipoComprobante @prespuesto.Codigo</h3>
+                        <h3 class="box-title">Detalle del @presupuesto.TipoComprobante @presupuesto.Codigo</h3>
 
-                        <a asp-action="Details" asp-route-id="@prespuesto.ClienteId" class="btn btn-default btn-sm pull-right" aria-hidden="true">Volver</a>
+                        <a asp-action="Details" asp-route-id="@presupuesto.ClienteId" class="btn btn-default btn-sm pull-right" aria-hidden="true">Volver</a>
                         
-                        <a asp-controller="Clientes" asp-action="Recibo" asp-route-id="@prespuesto.Id" class="btn btn-primary btn-sm pull-right" aria-hidden="true" style="margin-right: 5px;">Generar Recibo</a>
+                        <a asp-controller="Clientes" asp-action="Recibo" asp-route-id="@presupuesto.Id" class="btn btn-primary btn-sm pull-right" aria-hidden="true" style="margin-right: 5px;">Generar Recibo</a>
 
                     </div>
 
-                    <partial name="_CuentaCorrienteHistoria" model='@prespuesto' />
+                    <partial name="_CuentaCorrienteHistoria" model='@comprobantes' />
                     <!-- /.box -->
                     <div class="box-footer">
-                        <a asp-action="Details" asp-route-id="@prespuesto.ClienteId" class="btn btn-default btn-sm pull-right" aria-hidden="true">Volver</a>
+                        <a asp-action="Details" asp-route-id="@presupuesto.ClienteId" class="btn btn-default btn-sm pull-right" aria-hidden="true">Volver</a>
 
-                        <a asp-controller="Clientes" asp-action="Recibo" asp-route-id="@prespuesto.Id" class="btn btn-primary btn-sm pull-right" aria-hidden="true" style="margin-right: 5px;">Generar Recibo</a>
+                        <a asp-controller="Clientes" asp-action="Recibo" asp-route-id="@presupuesto.Id" class="btn btn-primary btn-sm pull-right" aria-hidden="true" style="margin-right: 5px;">Generar Recibo</a>
                     </div>
 
                 </div>

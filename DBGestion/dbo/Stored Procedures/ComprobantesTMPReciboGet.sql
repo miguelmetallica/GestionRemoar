@@ -1,10 +1,10 @@
-﻿CREATE PROCEDURE ComprobantesTMPReciboGet
-	@ClienteId nvarchar(150)
+﻿CREATE PROCEDURE [dbo].[ComprobantesTMPReciboGet]
+	@ComprobanteId nvarchar(150)
 
 AS
 BEGIN
 	SELECT Id,
-			ClienteId,
+			ComprobanteId,
 			TipoComprobanteId,
 			FormaPagoId,
 			FormaPagoCodigo,
@@ -32,16 +32,17 @@ BEGIN
 			ChequeCuenta,
 			Otros,
 			Observaciones,
+			CodigoAutorizacion,
 			FechaAlta,
 			UsuarioAlta
 	FROM ComprobantesFormasPagosTmp P
-	WHERE P.ClienteId = @ClienteId
+	WHERE P.ComprobanteId = @ComprobanteId
 	AND P.TipoComprobanteId IN (
 								SELECT T.Id 
 								FROM SistemaConfiguraciones C
 								INNER JOIN ParamTiposComprobantes T ON T.Codigo = C.Valor
 								INNER JOIN ComprobantesNumeraciones N ON N.TipoComprobanteId = T.Id
-								WHERE C.Configuracion = 'COMPROBANTES_RECIBO_A'
+								WHERE C.Configuracion = 'COMPROBANTES_RECIBO'
 								AND N.Estado = 1
 								)
 END;

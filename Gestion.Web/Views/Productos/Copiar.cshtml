@@ -1,0 +1,169 @@
+﻿@model Gestion.Web.Models.ProductosDTO
+
+@{
+    ViewData["Title"] = "Nuevo Producto";
+}
+
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <h1>
+            Sistema de gestíon
+            <small>Gestion de Productos</small>
+        </h1>
+        <ol class="breadcrumb">
+            <li><a asp-controller="Home" asp-action="Index"><i class="fas fa-tachometer-alt"></i> Inicio</a></li>
+            <li><a asp-controller="Productos" asp-action="Index">Listado de Productos</a></li>
+            <li class="active">@ViewData["Title"]</li>
+        </ol>
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+        <div class="row">
+            <!-- left column -->
+            <div class="col-md-6">
+                <!-- general form elements -->
+                <div class="box box-primary">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">Ficha del Producto</h3>
+                    </div>
+                    <!-- /.box-header -->
+                    <!-- form start -->
+                    <form asp-action="Copiar" enctype="multipart/form-data">
+                        <div class="box-body">
+                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                            <div class="form-group">
+                                <label asp-for="TipoProductoId" class="control-label"></label>
+                                <select asp-for="TipoProductoId" asp-items="@ViewBag.TiposProductos" class="form-control input-sm"></select>
+                                <span asp-validation-for="TipoProductoId" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="Producto" class="control-label"></label>
+                                <input asp-for="Producto" class="form-control input-sm" />
+                                <span asp-validation-for="Producto" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="DescripcionCorta" class="control-label"></label>
+                                <input asp-for="DescripcionCorta" class="form-control input-sm" />
+                                <span asp-validation-for="DescripcionCorta" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="DescripcionLarga" class="control-label"></label>
+                                <input asp-for="DescripcionLarga" class="form-control input-sm" />
+                                <span asp-validation-for="DescripcionLarga" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="PrecioVenta" class="control-label"></label>
+                                <input asp-for="PrecioVenta" class="form-control input-sm" />
+                                <span asp-validation-for="PrecioVenta" class="text-danger"></span>
+                            </div>
+
+                            <div class="form-group">
+                                <label asp-for="PrecioRebaja" class="control-label"></label>
+                                <input asp-for="PrecioRebaja" class="form-control input-sm" />
+                                <span asp-validation-for="PrecioRebaja" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="RebajaDesde" class="control-label"></label>
+                                <input asp-for="RebajaDesde" type="date"class="form-control input-sm" />
+                                <span asp-validation-for="RebajaDesde" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="RebajaHasta" class="control-label"></label>
+                                <input asp-for="RebajaHasta" type="date"class="form-control input-sm"/>
+                                <span asp-validation-for="RebajaHasta" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="CodigoBarra" class="control-label"></label>
+                                <input asp-for="CodigoBarra" class="form-control input-sm" />
+                                <span asp-validation-for="CodigoBarra" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="Peso" class="control-label"></label>
+                                <input asp-for="Peso" class="form-control input-sm" />
+                                <span asp-validation-for="Peso" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="DimencionesLongitud" class="control-label"></label>
+                                <input asp-for="DimencionesLongitud" class="form-control input-sm" />
+                                <span asp-validation-for="DimencionesLongitud" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="DimencionesAncho" class="control-label"></label>
+                                <input asp-for="DimencionesAncho" class="form-control input-sm" />
+                                <span asp-validation-for="DimencionesAncho" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="DimencionesAltura" class="control-label"></label>
+                                <input asp-for="DimencionesAltura" class="form-control input-sm" />
+                                <span asp-validation-for="DimencionesAltura" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="CuentaCompraId" class="control-label"></label>
+                                <select asp-for="CuentaCompraId" asp-items="@ViewBag.CuentasCompras" class="form-control input-sm"></select>
+                                <span asp-validation-for="CuentaCompraId" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="CuentaVentaId" class="control-label"></label>
+                                <select asp-for="CuentaVentaId" asp-items="@ViewBag.CuentasVentas" class="form-control input-sm"></select>
+                                <span asp-validation-for="CuentaVentaId" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="AlicuotaId" class="control-label"></label>
+                                <select asp-for="AlicuotaId" asp-items="@ViewBag.Alicuotas" class="form-control input-sm"></select>
+                                <span asp-validation-for="AlicuotaId" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="UnidadMedidaId" class="control-label"></label>
+                                <select asp-for="UnidadMedidaId" asp-items="@ViewBag.UnidadesMedidas" class="form-control input-sm"></select>
+                                <span asp-validation-for="UnidadMedidaId" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="ProveedorId" class="control-label"></label>
+                                <select asp-for="ProveedorId" asp-items="@ViewBag.Proveedores" class="form-control input-sm"></select>
+                                <span asp-validation-for="ProveedorId" class="text-danger"></span>
+                            </div>
+
+                            <div class="form-group">
+                                <label asp-for="CategoriaId" class="control-label"></label>
+                                <select asp-for="CategoriaId" asp-items="@ViewBag.Categorias" class="form-control input-sm"></select>
+                                <span asp-validation-for="CategoriaId" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label>
+                                    <input asp-for="ControlaStock" type="checkbox" class="minimal">
+                                    <label asp-for="ControlaStock" class="control-label"></label>
+                                </label>
+                            </div>
+                            <div class="form-group">
+                                <label>
+                                    <input asp-for="AceptaDescuento" type="checkbox" class="minimal">
+                                    <label asp-for="AceptaDescuento" class="control-label"></label>
+                                </label>
+                            </div>
+
+                        </div>
+                        <!-- /.box-body -->
+
+                        <div class="box-footer">
+                            <input type="submit" value="Guardar" class="btn btn-primary" />
+                            <a asp-action="Index" class="btn btn-default pull-right">Volver</a>
+                        </div>
+                    </form>
+                </div>
+                <!-- /.box -->
+            </div>
+            <!--/.col-->
+        </div>
+        <!-- /.row -->
+    </section>
+    <!-- /.content -->
+</div>
+<!-- /.content-wrapper -->
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

@@ -18,7 +18,7 @@ namespace Gestion.Web.Data
         {
             var list = this.context.Proveedores.Where( x => x.Estado == true ).Select(c => new SelectListItem
             {
-                Text = c.RazonSocial,
+                Text = c.Codigo.ToString() + " - " + c.RazonSocial,
                 Value = c.Id.ToString()
             }).OrderBy(l => l.Text).ToList();
 

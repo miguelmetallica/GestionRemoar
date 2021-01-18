@@ -64,7 +64,7 @@ namespace Gestion.Web.Controllers
                 return new NotFoundViewResult("NoExiste");
             }
 
-            var Productos = await this.repository.GetProducto(id);
+            var Productos = await this.repository.spProductosOne(id);
             if (Productos == null)
             {
                 return new NotFoundViewResult("NoExiste");
@@ -75,6 +75,54 @@ namespace Gestion.Web.Controllers
             ViewBag.ProductosImagenes = await productosImagenes.GetImagenes(id);
 
             return this.View(Productos);
+        }
+
+        public async Task<IActionResult> Copiar(string id)
+        {
+            if (id == null)
+            {
+                return new NotFoundViewResult("NoExiste");
+            }
+
+            var Productos = await this.repository.spProductosOne(id);
+            if (Productos == null)
+            {
+                return new NotFoundViewResult("NoExiste");
+            }
+
+            ViewBag.TiposProductos = this.tiposProductos.GetCombo();
+            ViewBag.CuentasCompras = this.cuentasCompras.GetCombo();
+            ViewBag.CuentasVentas = this.cuentasVentas.GetCombo();
+            ViewBag.UnidadesMedidas = this.unidadesMedidas.GetCombo();
+            ViewBag.Alicuotas = this.alicuotas.GetCombo();
+            ViewBag.Proveedores = this.proveedores.GetCombo();
+            ViewBag.Categorias = this.categorias.GetCombo();
+            return this.View(Productos);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Copiar(ProductosDTO productos)
+        {
+            if (ModelState.IsValid)
+            {
+                productos.Id = Guid.NewGuid().ToString();
+                productos.Estado = true;
+                productos.FechaAlta = DateTime.Now;
+                productos.UsuarioAlta = User.Identity.Name;
+                await repository.spInsertar(productos);
+                return RedirectToAction(nameof(Details), new { id = productos.Id });
+            }
+            
+            ViewBag.TiposProductos = this.tiposProductos.GetCombo();
+            ViewBag.CuentasCompras = this.cuentasCompras.GetCombo();
+            ViewBag.CuentasVentas = this.cuentasVentas.GetCombo();
+            ViewBag.UnidadesMedidas = this.unidadesMedidas.GetCombo();
+            ViewBag.Alicuotas = this.alicuotas.GetCombo();
+            ViewBag.Proveedores = this.proveedores.GetCombo();
+            ViewBag.Categorias = this.categorias.GetCombo();
+            
+            return View(productos);
         }
 
 
@@ -89,12 +137,15 @@ namespace Gestion.Web.Controllers
             ViewBag.Proveedores = this.proveedores.GetCombo();
             ViewBag.Categorias = this.categorias.GetCombo();
 
-            return View();
+            var producto = new ProductosDTO();
+            producto.RebajaDesde = DateTime.Parse("01/01/2000");
+            producto.RebajaHasta = DateTime.Parse("01/01/2100");
+            return View(producto);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Productos productos)
+        public async Task<IActionResult> Create(ProductosDTO productos)
         {
             if (ModelState.IsValid)
             {
@@ -127,7 +178,7 @@ namespace Gestion.Web.Controllers
                 return new NotFoundViewResult("NoExiste");
             }
 
-            var productos = await this.repository.GetByIdAsync(id);
+            var productos = await this.repository.spProductosOne(id);
             if (productos == null)
             {
                 return new NotFoundViewResult("NoExiste");
@@ -147,7 +198,7 @@ namespace Gestion.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(string id, Productos productos)
+        public async Task<IActionResult> Edit(string id, ProductosDTO productos)
         {
             if (id != productos.Id)
             {
@@ -158,12 +209,6 @@ namespace Gestion.Web.Controllers
             {
                 try
                 {
-                    //var codigo = await repository.ExistCodigoAsync(id, productos.Codigo);
-                    //if (codigo)
-                    //{
-                    //    ModelState.AddModelError("Codigo", "El Codigo ya existe en la base de datos");
-                    //}
-
                     if (ModelState.IsValid)
                     {
                         productos.Estado = true;
@@ -205,13 +250,10 @@ namespace Gestion.Web.Controllers
                 return new NotFoundViewResult("NoExiste");
             }
 
-            var Productos = await this.repository.GetByIdAsync(id);
-            if (Productos == null)
-            {
-                return new NotFoundViewResult("NoExiste");
-            }
-
-            return this.View(Productos);
+            var Productos = await repository.GetByIdAsync(id);
+            Productos.Estado = !Productos.Estado;
+            await repository.UpdateAsync(Productos);
+            return RedirectToAction(nameof(Index));
         }
 
         [HttpPost, ActionName("Delete")]
@@ -262,7 +304,7 @@ namespace Gestion.Web.Controllers
                 return new NotFoundViewResult("NoExiste");
             }
 
-            var Productos = await this.repository.GetProducto(id);
+            var Productos = await this.repository.spProductosOne(id);
             if (Productos == null)
             {
                 return new NotFoundViewResult("NoExiste");

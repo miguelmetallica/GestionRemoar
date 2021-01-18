@@ -14,6 +14,7 @@ namespace Gestion.Web.Models
         [MaxLength(150)]
         public string Descripcion { get; set; }
         public bool Defecto { get; set; }
+        public bool esDebe { get; set; }
         public bool Estado { get; set; }
 
     }

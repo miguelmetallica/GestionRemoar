@@ -22,7 +22,7 @@ namespace Gestion.Web.Data
                 .Where(x => x.Estado == true)
                 .Select(c => new SelectListItem
                 {
-                    Text = c.Descripcion,
+                    Text = c.Codigo.ToString() + " - " + c.Descripcion.ToString(),
                     Value = c.Id.ToString()
                 }).OrderBy(l => l.Text).ToList();
 

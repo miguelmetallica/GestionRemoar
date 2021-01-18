@@ -1,0 +1,35 @@
+﻿@model Gestion.Web.Models.ComprobantesDTO
+
+@{
+    var Detalle = (List<Gestion.Web.Models.ComprobantesDetalleDTO>)ViewData["DetalleTMP"];
+}
+
+<div class="box-body">
+    <table id="dTable" class="table dt-responsive table-condensed table-bordered table-striped" width="100%">
+        <thead>
+            <tr>
+                <th>Codigo</th>
+                <th>Producto</th>                
+                <th>Cantidad</th>
+                <th>Operaciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Detalle)
+            {
+            <tr>
+                <td>@item.ProductoCodigo</td>
+                <td>@item.ProductoNombre</td>                
+                <td>@item.Cantidad</td>
+                <td>
+                    <div class="btn-group">
+                        <a class="btn btn-danger btn-sm" asp-action="EliminarDevolucionTMPProducto" asp-route-id="@item.Id" asp-route-comp="@item.ComprobanteId">Eliminar</a>
+                    </div>
+                </td>
+            </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+

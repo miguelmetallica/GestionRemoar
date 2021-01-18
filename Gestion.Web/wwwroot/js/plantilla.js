@@ -135,7 +135,7 @@ function guardarFormularioModal(mId, mComprobanteId, mProductoId, mProductoCodig
             ProductoId: mProductoId,
             ProductoCodigo: mProductoCodigo,
             ProductoNombre: mProductoNombre,
-            Precio: mPrecio,
+            Precio: mImporte,
             Imputado: mImputado,
             ImputadoPorcentaje: mImputadoPorcentaje,
             Importe: mImporte
@@ -169,7 +169,7 @@ function cancelarFormularioModal(mId,mComprobanteId,mProductoId,mProductoCodigo,
             ProductoId: mProductoId,
             ProductoCodigo: mProductoCodigo,
             ProductoNombre: mProductoNombre,
-            Precio: mPrecio,
+            Precio: -mImputado,
             Imputado: mImputado,
             ImputadoPorcentaje: mImputadoPorcentaje,
             Importe: mImporte

@@ -30,7 +30,10 @@ BEGIN
 	PrecioTotalSinImpuesto,
 	ISNULL((PrecioTotal),0) - (ISNULL((PrecioTotal),0) * (ISNULL(DescuentoPorcentaje,0) / 100 ))PrecioTotalDescuento,
 	ISNULL((PrecioTotalSinImpuesto),0) - (ISNULL((PrecioTotalSinImpuesto),0) * (ISNULL(DescuentoPorcentaje,0) / 100 ))PrecioTotalSinImpuestoDescuento,
-	UsuarioAlta
+	UsuarioAlta,
+	FechaRechazo,
+	UsuarioAprobacionRechazo,
+	MotivoAprobacionRechazo
 	FROM (
 		SELECT P.Id,
 				ISNULL(D.Id,'') DetalleId,
@@ -48,8 +51,8 @@ BEGIN
 
 				E.Descripcion Estado,
 				ISNULL(D.ProductoId,'')ProductoId,
-				ISNULL(PR.Codigo,'')ProductoCodigo,
-				ISNULL(PR.Producto,'')Producto,
+				ISNULL(D.ProductoCodigo,'')ProductoCodigo,
+				ISNULL(D.ProductoNombre,'')Producto,
 				ISNULL(D.Cantidad,0)Cantidad,
 				ISNULL(D.Precio,0)Precio,
 				ISNULL(D.PrecioSinImpuesto,0)PrecioSinImpuesto,
@@ -58,7 +61,10 @@ BEGIN
 				ISNULL((SELECT SUM(Cantidad) FROM PresupuestosDetalle PD WHERE PD.PresupuestoId = P.Id),0) CantidadTotal,
 				ISNULL((SELECT SUM(Cantidad * Precio) FROM PresupuestosDetalle PD WHERE PD.PresupuestoId = P.Id),0) PrecioTotal,
 				ISNULL((SELECT SUM(Cantidad * PrecioSinImpuesto) FROM PresupuestosDetalle PD WHERE PD.PresupuestoId = P.Id),0) PrecioTotalSinImpuesto,
-				P.UsuarioAlta
+				P.UsuarioAlta,
+				P.FechaRechazo,
+				P.UsuarioAprobacionRechazo,
+				P.MotivoAprobacionRechazo
 	FROM Presupuestos P
 	INNER JOIN Clientes C ON C.Id = P.ClienteId
 	INNER JOIN ParamPresupuestosEstados E ON E.Id = P.EstadoId

@@ -85,6 +85,7 @@ BEGIN TRY
 	INNER JOIN ParamTiposComprobantes T ON T.Codigo = C.Valor
 	INNER JOIN ComprobantesNumeraciones N ON N.TipoComprobanteId = T.Id
 	WHERE C.Configuracion = 'COMPROBANTES_PRESUPUESTO'
+	AND N.SucursalId = @SucursalId
 	AND N.Estado = 1
 
 

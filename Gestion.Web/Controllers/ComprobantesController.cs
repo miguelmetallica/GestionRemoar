@@ -28,7 +28,7 @@ namespace Gestion.Web.Controllers
 
         public async Task<IActionResult> ImputacionesProductos()
         {
-            var model = await repository.spPresupuestosComprobantes();
+            var model = await repository.spComprobantesPresupuestos();
             return View(model);
         }
 
@@ -112,7 +112,7 @@ namespace Gestion.Web.Controllers
             {
                 detalleDTO.UsuarioAlta = User.Identity.Name;
                 var i = repository.spComprobanteDetalleInsertAutoriza(detalleDTO);
-                return Json(1);
+                return Json(1);                
             }
             catch (Exception e)
             {
@@ -223,6 +223,21 @@ namespace Gestion.Web.Controllers
             return RedirectToAction(nameof(EntregarProducto), new { Id = id });
         }
 
+        public async Task<IActionResult> GenerarDevolucion(string id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var remito = new ComprobantesDetalleDTO();
+            remito.ComprobanteId = id;
+            remito.UsuarioAlta = User.Identity.Name;
+            await repository.spDevolucion(remito);
+
+            return RedirectToAction(nameof(DevolucionProductos));
+        }
+
         public async Task<IActionResult> RemitoImprimir(string id)
         {
             if (id == null)
@@ -255,6 +270,77 @@ namespace Gestion.Web.Controllers
                 ModelState.AddModelError("", e.Message);
                 return Json(0);
             }
+        }
+
+        public async Task<IActionResult> DevolucionProductos()
+        {
+            var model = await repository.spPresupuestosComprobantesDevolucion();
+            return View(model);
+        }
+
+        public async Task<IActionResult> DevolucionProducto(string id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+            var CC = await repository.spComprobante(id);
+            if (CC == null)
+            {
+                return NotFound();
+            }
+
+            var cliente = await this.clientesRepository.spCliente(CC.ClienteId);
+            if (cliente == null)
+            {
+                return NotFound();
+            }
+
+            ViewData["Detalle"] = await repository.spComprobanteDetalleDevolucion(CC.Id);
+            ViewData["DetalleTmp"] = await repository.spComprobanteDetalleTMP(CC.Id);
+            ViewData["Clientes"] = cliente;
+
+            return View(CC);
+        }
+
+        public async Task<IActionResult> DevolucionTMPProducto(string id, string comp)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            if (comp == null)
+            {
+                return NotFound();
+            }
+
+            var remito = new ComprobantesDetalleDTO();
+            remito.Id = id;
+            remito.UsuarioAlta = User.Identity.Name;
+            await repository.spComprobanteDetalleInsertDevolucionTMP(remito);
+
+            return RedirectToAction(nameof(DevolucionProducto), new { Id = comp });
+        }
+
+        public async Task<IActionResult> EliminarDevolucionTMPProducto(string id, string comp)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            if (comp == null)
+            {
+                return NotFound();
+            }
+
+            var remito = new ComprobantesDetalleDTO();
+            remito.Id = id;
+            remito.UsuarioAlta = User.Identity.Name;
+            await repository.spComprobanteDetalleEliminarEntregaTMP(remito);
+
+            return RedirectToAction(nameof(DevolucionProducto), new { Id = comp });
         }
     }
 }

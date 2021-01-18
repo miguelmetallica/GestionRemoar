@@ -1,5 +1,5 @@
 ﻿CREATE PROCEDURE [dbo].[ComprobantesInsertarRecibo]	
-	@ClienteId nvarchar(150),
+	@ComprobanteId nvarchar(150),
 	@ImporteCancela NUMERIC(18,2),
 	@Observaciones NVARCHAR(500) = '',
 	@Usuario nvarchar(256)
@@ -7,7 +7,6 @@ AS
 BEGIN TRY
 	SET NOCOUNT ON;
 	DECLARE @TotalPagado NUMERIC(18,2) = 0
-	DECLARE @ComprobanteId NVARCHAR(150) = NULL
 	DECLARE @Saldo NUMERIC(18,2) = 0
 	DECLARE @TotalSaldo NUMERIC(18,2) = 0
 
@@ -30,6 +29,7 @@ BEGIN TRY
 	DECLARE @TipoResponsableCodigo nvarchar(5);
 	DECLARE @TipoResponsable nvarchar(150);
 	DECLARE @PresupuestoId nvarchar(150);
+	DECLARE @ClienteId nvarchar(150);
 	DECLARE @ClienteCodigo nvarchar(50);
 	DECLARE @TipoDocumentoId nvarchar(150);
 	DECLARE @TipoDocumentoCodigo nvarchar(5);
@@ -90,7 +90,8 @@ BEGIN TRY
 	FROM SistemaConfiguraciones C
 	INNER JOIN ParamTiposComprobantes T ON T.Codigo = C.Valor
 	INNER JOIN ComprobantesNumeraciones N ON N.TipoComprobanteId = T.Id
-	WHERE C.Configuracion = 'COMPROBANTES_RECIBO_A'
+	WHERE C.Configuracion = 'COMPROBANTES_RECIBO'
+	AND N.SucursalId = @SucursalId
 	AND N.Estado = 1
 
 	SELECT TOP 1 @ConceptoIncluidoId = P.Id,
@@ -99,7 +100,36 @@ BEGIN TRY
 	FROM ParamConceptosIncluidos P
 	WHERE P.Defecto = 1
 
+	SELECT @ClienteId = ClienteId
+	FROM Comprobantes P
+	WHERE P.Id = @ComprobanteId
+
 	SET @FechaComprobante = DATEADD(HH,4,GETDATE());
+
+	SELECT @ClienteCodigo = C.Codigo,
+		@TipoDocumentoId = C.TipoDocumentoId,
+		@TipoDocumentoCodigo = D.Codigo,
+		@TipoDocumento = D.Descripcion,
+		@NroDocumento = C.NroDocumento,
+		@CuilCuit = C.CuilCuit,
+		@RazonSocial = C.RazonSocial,
+		@ProvinciaId = C.ProvinciaId,
+		@ProvinciaCodigo = PR.Codigo,
+		@Provincia = PR.Descripcion,
+		@Localidad = C.Localidad,
+		@CodigoPostal = C.CodigoPostal,
+		@Calle = C.Calle,
+		@CalleNro = C.CalleNro,
+		@PisoDpto = C.PisoDpto,
+		@OtrasReferencias = C.OtrasReferencias,
+		@Email = C.Email,
+		@Telefono = C.Telefono,
+		@Celular = C.Celular,
+		@TipoResponsableId = TipoResponsableId
+	FROM Clientes C
+	LEFT JOIN ParamTiposDocumentos D ON D.Id = C.TipoDocumentoId
+	LEFT JOIN ParamProvincias PR ON PR.Id = C.ProvinciaId
+	WHERE C.Id = @ClienteId
 
 	IF ISNULL(@TipoResponsableId,'') = ''
 	BEGIN
@@ -120,36 +150,11 @@ BEGIN TRY
 		WHERE P.Id = @TipoResponsableId
 	END
 
-	SELECT @ClienteCodigo = C.Codigo,
-		@TipoDocumentoId = C.TipoDocumentoId,
-		@TipoDocumentoCodigo = D.Codigo,
-		@TipoDocumento = D.Descripcion,
-		@NroDocumento = C.NroDocumento,
-		@CuilCuit = C.CuilCuit,
-		@RazonSocial = C.RazonSocial,
-		@ProvinciaId = C.ProvinciaId,
-		@ProvinciaCodigo = PR.Codigo,
-		@Provincia = PR.Descripcion,
-		@Localidad = C.Localidad,
-		@CodigoPostal = C.CodigoPostal,
-		@Calle = C.Calle,
-		@CalleNro = C.CalleNro,
-		@PisoDpto = C.PisoDpto,
-		@OtrasReferencias = C.OtrasReferencias,
-		@Email = C.Email,
-		@Telefono = C.Telefono,
-		@Celular = C.Celular
-	FROM Clientes C
-	LEFT JOIN ParamTiposDocumentos D ON D.Id = C.TipoDocumentoId
-	LEFT JOIN ParamProvincias PR ON PR.Id = C.ProvinciaId
-	WHERE C.Id = @ClienteId
-
 	SELECT @TotalSaldo = SUM(Saldo)	
 	FROM (
-	SELECT P.Codigo, P.Id,P.FechaComprobante,P.Total,P.Total - ISNULL((SELECT SUM(ISNULL(I.ImporteCancela,0)) FROM ComprobantesImputacion I WHERE I.ComprobanteId = P.Id),0)Saldo
-	FROM Comprobantes P
-	WHERE P.ClienteId = @ClienteId AND 
-		P.Codigo IS NOT NULL
+		SELECT P.Total - ISNULL((SELECT SUM(ISNULL(I.ImporteCancela,0)) FROM ComprobantesImputacion I WHERE I.ComprobanteId = P.Id),0)Saldo
+		FROM Comprobantes P
+		WHERE P.Id = @ComprobanteId AND P.Codigo IS NOT NULL
 	)P
 	WHERE P.Saldo <> 0
 
@@ -159,13 +164,13 @@ BEGIN TRY
 			WHILE @ImporteCancela >= 0
 			BEGIN
 				SET @Saldo = 0
-				SET @ComprobanteId = NULL
+				--SET @ComprobanteId = NULL
 	
-				SELECT TOP 1 @ComprobanteId = Id, @Saldo = Saldo	
+				SELECT TOP 1 @Saldo = Saldo	
 				FROM (
 				SELECT P.Codigo, P.Id,P.FechaComprobante,P.Total,P.Total - ISNULL((SELECT SUM(ISNULL(I.ImporteCancela,0)) FROM ComprobantesImputacion I WHERE I.ComprobanteId = P.Id),0)Saldo
 				FROM Comprobantes P
-				WHERE P.ClienteId = @ClienteId AND 
+				WHERE P.Id = @ComprobanteId AND 
 					P.Codigo IS NOT NULL
 				)P
 				WHERE P.Saldo <> 0
@@ -177,14 +182,14 @@ BEGIN TRY
 				BEGIN
 					IF @ImporteCancela > 0 
 					BEGIN
-						INSERT INTO ComprobantesImputacion
+						INSERT INTO ComprobantesImputacion(Id,ComprobanteId,ComprobanteCancelaId,ImporteCancela,FechaCancela,Estado,Observaciones,FechaAlta,UsuarioAlta		)
 						SELECT NEWID() Id,@ComprobanteId ComprobanteId,@Id ComprobanteCancelaId,@Saldo ImporteCancela,@FechaComprobante FechaCancela,1 Estado,@Observaciones Observaciones,DATEADD(HH,4,GETDATE()) FechaAlta,UPPER(@Usuario) UsuarioAlta
 
 						SET @TotalPagado = @TotalPagado + @Saldo
 					END
 					ELSE
 					BEGIN
-						INSERT INTO ComprobantesImputacion
+						INSERT INTO ComprobantesImputacion(Id,ComprobanteId,ComprobanteCancelaId,ImporteCancela,FechaCancela,Estado,Observaciones,FechaAlta,UsuarioAlta		)
 						SELECT NEWID() Id,@ComprobanteId ComprobanteId,@Id ComprobanteCancelaId,@Saldo - ABS(@ImporteCancela) ImporteCancela,@FechaComprobante FechaCancela,1 Estado,@Observaciones Observaciones,DATEADD(HH,4,GETDATE()) FechaAlta,UPPER(@Usuario) UsuarioAlta				
 
 						SET @TotalPagado = @TotalPagado + @Saldo - ABS(@ImporteCancela)
@@ -220,7 +225,17 @@ BEGIN TRY
 			EXEC @Numero = NextNumberComprobante @SucursalId,@TipoComprobanteId
 			SET @Codigo = @Letra + RIGHT('0000' + RTRIM(LTRIM(CONVERT(VARCHAR(4),@PtoVenta))),3) + RIGHT('00000000' + RTRIM(LTRIM(CONVERT(VARCHAR(8),@Numero))),8)
 
-			INSERT INTO Comprobantes
+			INSERT INTO Comprobantes(Id,Codigo,TipoComprobanteId,TipoComprobante,TipoComprobanteCodigo,PresupuestoId,
+								Letra,PtoVenta,Numero,FechaComprobante,ConceptoIncluidoId,ConceptoIncluidoCodigo,
+								ConceptoIncluido,PeriodoFacturadoDesde,PeriodoFacturadoHasta,FechaVencimiento,
+								TipoResponsableId,TipoResponsableCodigo,TipoResponsable,ClienteId,ClienteCodigo,
+								TipoDocumentoId,TipoDocumentoCodigo,TipoDocumento,NroDocumento,CuilCuit,RazonSocial,
+								ProvinciaId,ProvinciaCodigo,Provincia,Localidad,CodigoPostal,Calle,CalleNro,PisoDpto,
+								OtrasReferencias,Email,Telefono,Celular,Total,TotalSinImpuesto,TotalSinDescuento,
+								TotalSinImpuestoSinDescuento,DescuentoPorcentaje,DescuentoTotal,DescuentoSinImpuesto,
+								ImporteTributos,Observaciones,Confirmado,Cobrado,Anulado,FechaAnulacion,TipoComprobanteAnulaId,
+								TipoComprobanteAnulaCodigo,TipoComprobanteAnula,LetraAnula,PtoVtaAnula,NumeroAnula,Estado,
+								FechaAlta,UsuarioAlta)
 			SELECT @Id,@Codigo,@TipoComprobanteId,@TipoComprobante,@TipoComprobanteCodigo,@PresupuestoId,@Letra,@PtoVenta,@Numero,
 					@FechaComprobante,@ConceptoIncluidoId,@ConceptoIncluidoCodigo,@ConceptoIncluido,@PeriodoFacturadoDesde,@PeriodoFacturadoHasta,
 					@FechaVencimiento,@TipoResponsableId,@TipoResponsableCodigo,@TipoResponsable,@ClienteId,@ClienteCodigo,@TipoDocumentoId,@TipoDocumentoCodigo,
@@ -229,6 +244,22 @@ BEGIN TRY
 					@DescuentoTotal,@DescuentoSinImpuesto,@ImporteTributos,@Observaciones,@Confirmado,@Cobrado,@Anulado,@FechaAnulacion,@TipoComprobanteAnulaId,
 					@TipoComprobanteAnulaCodigo,@TipoComprobanteAnula,@LetraAnula,@PtoVtaAnula,@NumeroAnula,@Estado,DATEADD(HH,4,GETDATE()),UPPER(@Usuario)
 
+			INSERT INTO ComprobantesFormasPagos(ComprobanteId,Id,FormaPagoId,FormaPagoCodigo,FormaPagoTipo,FormaPago,Importe,Cuota,Interes,Total,TarjetaId,
+											TarjetaNombre,TarjetaCliente,TarjetaNumero,TarjetaVenceMes,TarjetaVenceAño,TarjetaCodigoSeguridad,
+											TarjetaEsDebito,ChequeBancoId,ChequeBanco,ChequeNumero,ChequeFechaEmision,ChequeFechaVencimiento,
+											ChequeCuit,ChequeNombre,ChequeCuenta,Otros,Observaciones,CodigoAutorizacion,FechaAlta,UsuarioAlta)
+			SELECT @Id,Id,FormaPagoId,FormaPagoCodigo,FormaPagoTipo,FormaPago,Importe,Cuota,Interes,Total,TarjetaId,
+				TarjetaNombre,TarjetaCliente,TarjetaNumero,TarjetaVenceMes,TarjetaVenceAño,TarjetaCodigoSeguridad,
+				TarjetaEsDebito,ChequeBancoId,ChequeBanco,ChequeNumero,ChequeFechaEmision,ChequeFechaVencimiento,
+				ChequeCuit,ChequeNombre,ChequeCuenta,Otros,Observaciones,CodigoAutorizacion,FechaAlta,UsuarioAlta
+			FROM ComprobantesFormasPagosTmp
+			WHERE ComprobanteId = @ComprobanteId
+			AND TipoComprobanteId = @TipoComprobanteId
+
+			DELETE
+			FROM ComprobantesFormasPagosTmp
+			WHERE ComprobanteId = @ComprobanteId
+			AND TipoComprobanteId = @TipoComprobanteId
 	
 		COMMIT;
 	END;

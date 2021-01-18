@@ -1,4 +1,4 @@
-﻿@model Gestion.Web.Models.PresupuestosDetalleDTO
+﻿@model Gestion.Web.Models.PresupuestosDTO
 
 @{
     ViewData["Title"] = "Presupuesto Vencido";
@@ -24,132 +24,12 @@
         <div class="row">
             <!-- left column -->
             <div class="col-md-6">
-                <!-- general form elements -->
-                <div class="box box-primary">
-                    <div class="box-header with-border">
-                        <h3 class="box-title">Datos del Presupuesto (Vencido)</h3>    
-                        
-                        <a asp-action="PresupuestoCopia" asp-route-id="@Model.Id" class="btn btn-success btn-sm pull-right" aria-hidden="true">Copiar</a>
-                    </div>
-                    <!-- /.box-header -->
-                    <!-- form start -->
-                    <form>
-                        <div class="box-body">
-                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                            <input type="hidden" asp-for="@Model.Id" />
-                            <input type="hidden" asp-for="@Model.ClienteId" />
-
-                            <div class="form-group col-md-6">
-                                <label asp-for="@Model.Codigo" class="control-label"></label>
-                                <input asp-for="@Model.Codigo" readonly class="form-control input-sm" />
-                                <span asp-validation-for="@Model.Codigo" class="text-danger"></span>
-                            </div>
-
-                            <div class="form-group col-md-6">
-                                <label asp-for="@Model.Estado" class="control-label"></label>
-                                <input asp-for="@Model.Estado" readonly class="form-control input-sm" />
-                                <span asp-validation-for="@Model.Estado" class="text-danger"></span>
-                            </div>
-
-                            <div class="form-group col-md-6">
-                                <label asp-for="@Model.Fecha" class="control-label"></label>
-                                <input asp-for="@Model.Fecha" type="date" readonly class="form-control input-sm" />
-                                <span asp-validation-for="@Model.Fecha" class="text-danger"></span>
-                            </div>
-
-                            <div class="form-group col-md-6">
-                                <label asp-for="@Model.FechaVencimiento" class="control-label"></label>
-                                <input asp-for="@Model.FechaVencimiento" type="date" readonly class="form-control input-sm" />
-                                <span asp-validation-for="@Model.FechaVencimiento" class="text-danger"></span>
-                            </div>
-
-                            <div class="form-group col-md-6">
-                                <label asp-for="@Model.ClienteCodigo" class="control-label"></label>
-                                <input asp-for="@Model.ClienteCodigo" readonly class="form-control input-sm" />
-                                <span asp-validation-for="@Model.ClienteCodigo" class="text-danger"></span>
-                            </div>
-
-                            <div class="form-group col-md-6">
-                                <label asp-for="@Model.ClienteRazonSocial" class="control-label"></label>
-                                <input asp-for="@Model.ClienteRazonSocial" readonly class="form-control input-sm" />
-                                <span asp-validation-for="@Model.ClienteRazonSocial" class="text-danger"></span>
-                            </div>
-
-                            <div class="form-group col-md-6">
-                                <label asp-for="@Model.ClienteNroDocumento" class="control-label"></label>
-                                <input asp-for="@Model.ClienteNroDocumento" readonly class="form-control input-sm" />
-                                <span asp-validation-for="@Model.ClienteNroDocumento" class="text-danger"></span>
-                            </div>
-
-                            <div class="form-group col-md-6">
-                                <label asp-for="@Model.ClienteCuilCuit" class="control-label"></label>
-                                <input asp-for="@Model.ClienteCuilCuit" readonly class="form-control input-sm" />
-                                <span asp-validation-for="@Model.ClienteCuilCuit" class="text-danger"></span>
-                            </div>
-
-                            <div class="form-group col-md-6">
-                                <label asp-for="@Model.TipoResponsable" class="control-label"></label>
-                                <input asp-for="@Model.TipoResponsable" readonly class="form-control input-sm" />
-                            </div>
-
-                            <div class="form-group col-md-6">
-                                <label asp-for="@Model.UsuarioAlta" class="control-label"></label>
-                                <input asp-for="@Model.UsuarioAlta" readonly class="form-control input-sm" />
-                                <span asp-validation-for="@Model.UsuarioAlta" class="text-danger"></span>
-                            </div>
-
-
-                        </div>
-                        <!-- /.box-body -->
-
-                        <div class="box-footer">
-                            <a asp-action="Vencidos" class="btn btn-default pull-right">Volver</a>
-                        </div>
-                    </form>
-                </div>                
-                <!-- /.box -->
+                <partial name="_CabeceraCopiar" model='Model' />
             </div>
             <!--/.col-->
             <!-- left column -->
             <div class="col-md-6">
-                <!-- general form elements -->
-                <div class="box box-primary">
-                    <div class="box-header with-border">
-                        <h3 class="box-title">Resumen</h3>
-                    </div>
-                    <!-- /.box-header -->
-                    <!-- form start -->
-                    <div class="box-body">
-                        <div class="form-group col-md-12">
-                            <label asp-for="@Model.Cantidad" class="control-label"></label>
-                            <input asp-for="@Model.Cantidad" readonly class="form-control input-sm" />
-                        </div>
-
-                        <div class="form-group col-md-12">
-                            <label asp-for="@Model.Total" class="control-label">Subtotal</label>
-                            <input asp-for="@Model.Total" readonly class="form-control input-sm" />
-                        </div>
-
-
-                        <div class="form-group col-md-6">
-                            <label asp-for="@Model.Descuento" class="control-label">Descuento %</label>
-                            <input asp-for="@Model.Descuento" readonly type="text" class="form-control">
-                        </div>
-
-                        <div class="form-group col-md-6">
-                            <label asp-for="@Model.Descuento" class="control-label">Descuento $</label>
-                            <input readonly class="form-control input-sm" value="@(Model.Total - Model.TotalDescuento)" />
-                        </div>
-
-                        <div class="form-group col-md-12">
-                            <label asp-for="@Model.TotalDescuento" class="control-label">Total a Pagar</label>
-                            <input asp-for="@Model.TotalDescuento" readonly class="form-control input-sm" />
-                        </div>
-                    </div>
-                    <!-- /.box-body -->
-
-                </div>
-                <!-- /.box -->
+                <partial name="_ResumenView" model='Model' />
 
                 <!-- general form elements -->
                 <div class="box box-primary">
@@ -167,15 +47,14 @@
                                         Producto
                                     </th>
                                     <th>
-                                        Precio U.
+                                        Precio Lista
+                                    </th>
+                                    <th>
+                                        Precio Contado
                                     </th>
                                     <th>
                                         Cantidad
                                     </th>
-                                    <th>
-                                        SubTotal
-                                    </th>
-
                                 </tr>
                             </thead>
                             <tbody>
@@ -193,14 +72,15 @@
                                                     @Html.DisplayFor(modelItem => item.ProductoNombre)
                                                 </td>
                                                 <td>
-                                                    @Html.DisplayFor(modelItem => item.ProductoPrecio)
+                                                    @Html.DisplayFor(modelItem => item.Precio)
                                                 </td>
                                                 <td>
-                                                    @Html.DisplayFor(modelItem => item.ProductoCantidad)
+                                                    @Html.DisplayFor(modelItem => item.PrecioContado)
                                                 </td>
                                                 <td>
-                                                    @Html.DisplayFor(modelItem => item.SubTotal)
+                                                    @Html.DisplayFor(modelItem => item.Cantidad)
                                                 </td>
+
                                             </tr>
                                         }
 
@@ -210,13 +90,16 @@
                             </tbody>
                             <tfoot>
                                 <tr>
-                                    <th colspan="3">
+                                    <th colspan="2">
                                     </th>
                                     <th>
-                                        Cantidad : @Html.DisplayFor(x => x.Cantidad)
+                                        @Html.DisplayFor(model => Model.Precio)
                                     </th>
                                     <th>
-                                        SubTotal : @Html.DisplayFor(x => x.Total)
+                                        @Html.DisplayFor(model => Model.PrecioContado)
+                                    </th>
+                                    <th>
+                                        @decimal.Round(Model.CantidadProductos, 0)
                                     </th>
 
                                 </tr>

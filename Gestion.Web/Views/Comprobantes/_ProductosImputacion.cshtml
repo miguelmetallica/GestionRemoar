@@ -1,4 +1,4 @@
-﻿@model Gestion.Web.Models.Comprobantes
+﻿@model Gestion.Web.Models.ComprobantesDTO
 
 @{
     var Detalle = (List<Gestion.Web.Models.ComprobantesDetalleImputaDTO>)ViewData["Detalle"];
@@ -35,10 +35,10 @@
                     <b>Tipo Responsable:</b> @Model.TipoResponsable<br>
                     <b>Usuario:</b> @Model.UsuarioAlta<br>
 
-                    <h3 class="text-blue">Total: @Model.Total</h3>
-                    <h4 class="text-red">Pendiente: @Model.Saldo</h4>
-                    <h4 class="text-green">Pagado: @(Model.Total - Model.Saldo)</h4>
-                    <h4 class="text-blue">Imputado: @Detalle.Sum(x => x.Imputado)</h4>
+                    <h3 class="text-blue">Total Presupuesto: @Model.Total</h3>
+                    <h4 class="text-red">Saldo Pendiente a Pagar: @Model.Saldo</h4>
+                    <h4 class="text-green">Monto Pagado: @(Model.Total - Model.Saldo)</h4>
+                    <h4 class="text-blue">Monto Imputado: @Detalle.Sum(x => x.Imputado)</h4>
                     <h4 class="text-green">Disponible para Imputar: @(Model.Total - Model.Saldo - Detalle.Sum(x => x.Imputado))</h4> 
                     <br>
                     <input type="hidden" id="pagado" value="@(Model.Total - Model.Saldo - Detalle.Sum(x => x.Imputado))" />
@@ -52,9 +52,9 @@
                             <th>Cantidad</th>
                             <th>Imputado</th>
                             <th>Porcentaje %</th>
-                            <th>Entrega</th>
-                            <th>Autorizado</th>
-                            <th>Entregado</th>
+                            <th>Entrega ?</th>
+                            <th>Autoriza ?</th>
+                            <th>Remito</th>
                             <th>Operaciones</th>
                         </tr>
                         @foreach (var item in Detalle)

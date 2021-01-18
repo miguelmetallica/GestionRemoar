@@ -1,4 +1,4 @@
-﻿@model Gestion.Web.Models.Productos
+﻿@model Gestion.Web.Models.ProductosDTO
 
 @{
     ViewData["Title"] = "Nuevo Producto";
@@ -33,11 +33,7 @@
                     <form asp-action="Create" enctype="multipart/form-data">
                         <div class="box-body">
                             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                            @*<div class="form-group">
-            <label asp-for="Codigo" class="control-label"></label>
-            <input asp-for="Codigo" class="form-control input-sm" />
-            <span asp-validation-for="Codigo" class="text-danger"></span>
-        </div>*@
+
                             <div class="form-group">
                                 <label asp-for="TipoProductoId" class="control-label"></label>
                                 <select asp-for="TipoProductoId" asp-items="@ViewBag.TiposProductos" class="form-control input-sm"></select>
@@ -62,6 +58,22 @@
                                 <label asp-for="PrecioVenta" class="control-label"></label>
                                 <input asp-for="PrecioVenta" class="form-control input-sm" />
                                 <span asp-validation-for="PrecioVenta" class="text-danger"></span>
+                            </div>
+
+                            <div class="form-group">
+                                <label asp-for="PrecioRebaja" class="control-label"></label>
+                                <input asp-for="PrecioRebaja" class="form-control input-sm" />
+                                <span asp-validation-for="PrecioRebaja" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="RebajaDesde" class="control-label"></label>
+                                <input asp-for="RebajaDesde" type="date"class="form-control input-sm" />
+                                <span asp-validation-for="RebajaDesde" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="RebajaHasta" class="control-label"></label>
+                                <input asp-for="RebajaHasta" type="date"class="form-control input-sm"/>
+                                <span asp-validation-for="RebajaHasta" class="text-danger"></span>
                             </div>
                             <div class="form-group">
                                 <label asp-for="CodigoBarra" class="control-label"></label>
@@ -118,6 +130,18 @@
                                 <label asp-for="CategoriaId" class="control-label"></label>
                                 <select asp-for="CategoriaId" asp-items="@ViewBag.Categorias" class="form-control input-sm"></select>
                                 <span asp-validation-for="CategoriaId" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label>
+                                    <input asp-for="ControlaStock" type="checkbox" class="minimal">
+                                    <label asp-for="ControlaStock" class="control-label"></label>
+                                </label>
+                            </div>
+                            <div class="form-group">
+                                <label>
+                                    <input asp-for="AceptaDescuento" type="checkbox" class="minimal">
+                                    <label asp-for="AceptaDescuento" class="control-label"></label>
+                                </label>
                             </div>
 
                         </div>

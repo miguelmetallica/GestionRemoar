@@ -16,6 +16,8 @@
 	@Telefono nvarchar(50) = NULL,
 	@Celular nvarchar(50) = NULL,
 	@Email nvarchar(150) = NULL,
+	@TipoResponsableId nvarchar(150) = NULL,
+	@CategoriaId nvarchar(150) = NULL,
 	@Estado bit = 0,
 	@Usuario nvarchar(256) = NULL
 AS
@@ -24,6 +26,20 @@ BEGIN TRY
 	DECLARE @RazonSocial nvarchar(300);
 	
 	SET @RazonSocial = CONVERT(VARCHAR(140),@Apellido) + ' ' + @Nombre
+
+	IF @TipoResponsableId IS NULL
+	BEGIN
+		SELECT TOP 1 @TipoResponsableId = Id
+		FROM ParamTiposResponsables
+		WHERE Defecto = 1
+	END
+
+	IF @CategoriaId IS NULL
+	BEGIN
+		SELECT TOP 1 @CategoriaId = Id
+		FROM ParamClientesCategorias
+		WHERE Defecto = 1
+	END
 
 	BEGIN TRAN
 		UPDATE Clientes
@@ -45,6 +61,8 @@ BEGIN TRY
 		Telefono = UPPER(@Telefono),
 		Celular = UPPER(@Celular),
 		Email = UPPER(@Email),
+		TipoResponsableId = @TipoResponsableId,
+		CategoriaId = @CategoriaId,
 		Estado = @Estado
 		WHERE Id = @Id
 

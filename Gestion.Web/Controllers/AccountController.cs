@@ -299,7 +299,7 @@ namespace Gestion.Web.Controllers
                     "ResetPassword",
                     "Account",
                     new { token = myToken }, protocol: HttpContext.Request.Scheme);
-                this.mailHelper.SendMail(model.Email, "Gestion Reset Password", $"<h1>Gestion Reset Password</h1>" +
+                this.mailHelper.SendMail(model.Email, "Gestion - REMOAR Reset Password", $"<h1>Gestion - REMOAR Reset Password</h1>" +
                     $"Para restablecer la contraseña, haga clic en este enlace: </br></br>" +
                     $"<a href = \"{link}\">Reset Password</a>");
                 this.ViewBag.Message = "Las instrucciones para recuperar su contraseña han sido enviadas por correo electrónico.";

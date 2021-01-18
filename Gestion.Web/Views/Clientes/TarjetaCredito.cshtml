@@ -2,7 +2,7 @@
 
 @{
     ViewData["Title"] = "Detalle del Cliente";
-    var SaldoDTO = (Comprobantes)ViewData["Saldo"];
+    var SaldoDTO = (ComprobantesDTO)ViewData["Saldo"];
     var formasPagosTMP = (IEnumerable<ComprobantesFormasPagosDTO>)ViewData["FormasPagosTMP"];
 
 }
@@ -132,9 +132,9 @@
             Importe = document.getElementById("Importe").value;
             Interes = document.getElementById("Interes").value;
             Cuota = document.getElementById("Cuota").value;
-            r = (Importe + Interes) * Cuota;
+            r = (Number(Importe) + Number(Interes)) * Number(Cuota);
 
-            document.getElementById("Total").value = Number((Math.floor(r * 100) / 100).toFixed(2));
+            document.getElementById("Total").value = Number(r).toFixed(2);
         }
 
         //Solo Enteros

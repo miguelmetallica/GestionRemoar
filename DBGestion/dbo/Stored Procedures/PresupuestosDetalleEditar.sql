@@ -1,13 +1,17 @@
-﻿CReATE PROCEDURE [dbo].[PresupuestosDetalleEditar]
+﻿CREATE PROCEDURE [dbo].[PresupuestosDetalleEditar]
 	@Id nvarchar(150),
 	@Cantidad int,
+	@Precio numeric(18,2),
 	@Usuario nvarchar(256) = NULL
 AS
 BEGIN TRY
 	SET NOCOUNT ON;
 	BEGIN TRAN
 		UPDATE PresupuestosDetalle
-		SET Cantidad = @Cantidad
+		SET Cantidad = @Cantidad,
+		Precio = @Precio,
+		UsuarioEdit = @Usuario,
+		FechaEdit = DATEADD(HH,4,GETDATE())
 		WHERE Id = @Id		
 
 	COMMIT;

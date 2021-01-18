@@ -3,11 +3,37 @@
 	@ClienteId nvarchar(150),
 	@Usuario nvarchar(256) = NULL
 AS
-BEGIN TRY
+BEGIN TRY	
 	SET NOCOUNT ON;
+	DECLARE @TipoResponsableId nvarchar(150);	
+	DECLARE @CategoriaId nvarchar(150);
+
+	SELECT TOP 1 @TipoResponsableId = TipoResponsableId,
+				@CategoriaId = CategoriaId
+	FROM Clientes
+	WHERE Id = @ClienteId
+
+	IF @TipoResponsableId IS NULL
+	BEGIN
+		SELECT TOP 1 @TipoResponsableId = Id
+		FROM ParamTiposResponsables
+		WHERE Defecto = 1
+	END
+
+	IF @CategoriaId IS NULL
+	BEGIN
+		SELECT TOP 1 @CategoriaId = Id
+		FROM ParamClientesCategorias
+		WHERE Defecto = 1
+	END
+
 	BEGIN TRAN
 		UPDATE Presupuestos
-		SET ClienteId = @ClienteId							
+		SET ClienteId = @ClienteId,
+			TipoResponsableId = @TipoResponsableId,
+			ClienteCategoriaId = @CategoriaId,
+			UsuarioEdit = @Usuario,
+			FechaEdit = DATEADD(HH,4,GETDATE())
 		WHERE Id = @Id
 	COMMIT;
 

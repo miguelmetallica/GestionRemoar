@@ -1,4 +1,4 @@
-﻿create PROCEDURE [dbo].[PresupuestosDescuentoAplica]
+﻿CREATE PROCEDURE [dbo].[PresupuestosDescuentoAplica]
 	@Id nvarchar(150),
 	@DescuentoId nvarchar(150),
 	@Usuario nvarchar(256) = NULL
@@ -14,7 +14,9 @@ BEGIN TRY
 	BEGIN TRAN
 		UPDATE Presupuestos
 		SET DescuentoId = @DescuentoId,
-			DescuentoPorcentaje = ISNULL(@Porcentaje,0)
+			DescuentoPorcentaje = ISNULL(@Porcentaje,0),
+			UsuarioEdit = @Usuario,
+			FechaEdit = DATEADD(HH,4,GETDATE())
 		WHERE Id = @Id
 	COMMIT;
 

@@ -18,6 +18,11 @@ namespace Gestion.Web.Models
         [Range(1, 9999999, ErrorMessage = "El campo {0} puede tomar valores entre {1} y {2}")]
         public decimal Precio { get; set; }
 
+        [DisplayFormat(DataFormatString = "{0:C2}")]
+        [Required(ErrorMessage = "El campo {0} es obligatorio.")]
+        [Range(1, 9999999, ErrorMessage = "El campo {0} puede tomar valores entre {1} y {2}")]
+        public decimal PrecioContado { get; set; }
+
         [DisplayFormat(DataFormatString = "{0:N2}")]
         [Required(ErrorMessage = "El campo {0} es obligatorio.")]
         [Range(1,50,ErrorMessage = "El campo {0} puede tomar valores entre {1} y {2}")]
@@ -28,10 +33,15 @@ namespace Gestion.Web.Models
         [DisplayFormat(DataFormatString = "{0:C2}")]
         public decimal SubTotal { get { return this.Precio * (decimal)this.Cantidad; } }
 
+        [DisplayFormat(DataFormatString = "{0:C2}")]
+        public decimal SubTotalContado { get { return this.PrecioContado * (decimal)this.Cantidad; } }
+
         [NotMapped]
         [Required(ErrorMessage = "El campo {0} es obligatorio.")]
         [Display( Name = "Producto")]
-        public string NombreProducto { get; set; }
+        public string ProductoNombre { get; set; }
+        [Display(Name = "Codigo")]
+        public string ProductoCodigo { get; set; }
 
     }
 

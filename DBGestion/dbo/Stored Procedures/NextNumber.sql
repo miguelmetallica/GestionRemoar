@@ -1,4 +1,4 @@
-﻿create PROCEDURE [NextNumber]
+﻿create PROCEDURE [dbo].[NextNumber]
 	@Tabla [varchar](50)
 WITH EXECUTE AS CALLER
 AS

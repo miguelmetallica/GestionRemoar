@@ -1,4 +1,4 @@
-﻿@model Gestion.Web.Models.Comprobantes
+﻿@model Gestion.Web.Models.ComprobantesDTO
 
 @{
     ViewData["Title"] = "Detalle del Cliente";
@@ -42,8 +42,8 @@
                                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
                                 <input type="hidden" asp-for="ClienteId" />
-                                <input type="hidden" asp-for="ComprobanteId" />
                                 <input type="hidden" asp-for="Id" />
+                                <input type="hidden" asp-for="PresupuestoId" />
 
                                 <div class="form-group">
                                     <label class="control-label">Nro de Recibo</label>

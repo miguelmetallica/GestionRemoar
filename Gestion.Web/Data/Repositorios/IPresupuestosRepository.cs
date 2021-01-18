@@ -12,6 +12,7 @@ namespace Gestion.Web.Data
         Task<PresupuestosDetalle> GetDetalle(string id);
 
         Task AddItemAsync(PresupuestosDetalle model, string userName);
+        Task AddItemComodinAsync(PresupuestosDetalle model, string userName);
 
         Task ModifyCantidadesAsync(string id, int cantidad);
 
@@ -28,20 +29,20 @@ namespace Gestion.Web.Data
 
         Task<int> spEditar(Presupuestos presupuestos);
 
-        Task<int> spAprobar(Presupuestos presupuestos);
-        Task<int> spRechazar(Presupuestos presupuestos);
+        Task<int> spAprobar(PresupuestosDTO presupuestos);
+        Task<int> spRechazar(PresupuestosDTO presupuestos);
 
         Task<List<PresupuestosIndex>> spPresupuestosPendientes();
-        Task<List<PresupuestosDetalleDTO>> spPresupuestosPendiente(string id);
+        Task<PresupuestosDTO> spPresupuestosPendiente(string id);
         Task<List<PresupuestosIndex>> spPresupuestosVencidos();
-        Task<List<PresupuestosDetalleDTO>> spPresupuestosVencido(string id);
+        Task<PresupuestosDTO> spPresupuestosVencido(string id);
 
         Task<int> spVencidoCopiar(Presupuestos presupuestos, string id);
-        Task<int> spPresupuestoCopiar(Presupuestos presupuestos, string id);
+        Task<int> spPresupuestoCopiar(PresupuestosDTO presupuestos, string id);
 
         Task<List<PresupuestosIndex>> spPresupuestosRechazados();
 
-        Task<List<PresupuestosDetalleDTO>> spPresupuestosRechazado(string id);
+        Task<PresupuestosDTO> spPresupuestosRechazado(string id);
 
         Task<List<PresupuestosIndex>> spPresupuestosAprobados();
 
@@ -51,8 +52,15 @@ namespace Gestion.Web.Data
 
         Task<int> spTipoResponsableAplica(string presupuestoId, string tipoResponsableId, string usuario);
 
-        Task<List<PresupuestosDetalleDTO>> spPresupuestosImprimir(string id);
+        Task<PresupuestosImprimirDTO> spPresupuestosImprimir(string id);
 
         Task<PresupuestosDetalleDTO> spPresupuestosDetalle(string id);
+
+        Task<List<PresupuestosDetalleDTO>> spPresupuestosDetallePresupuesto(string presupuestoId);
+        Task<PresupuestosDetalleDTO> spPresupuestosDetalleId(string Id);
+        Task<int> spDescuentoBorrar(string Id, string usuario);
+        Task<int> spDatosFiscalesBorrar(string Id, string usuario);
+
+        Task<PresupuestosDTO> spPresupuesto(string id);
     }
 }

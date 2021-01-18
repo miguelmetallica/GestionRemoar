@@ -1,4 +1,4 @@
-﻿@model Gestion.Web.Models.PresupuestosDetalleDTO
+﻿@model Gestion.Web.Models.PresupuestosImprimirDTO
 
 @{
     Layout = null;
@@ -104,11 +104,11 @@
                             @foreach (var item in Detalle) 
                             { 
                             <tr>
-                                <td>@item.ProductoCantidad</td>
+                                <td>@item.Cantidad</td>
                                 <td>@item.ProductoCodigo</td>
                                 <td>@item.ProductoNombre</td>
-                                <td>@item.ProductoPrecio</td>
-                                <td>@(item.ProductoPrecio * item.ProductoCantidad)</td>
+                                <td>@item.PrecioContado</td>
+                                <td>@(item.PrecioContado * item.Cantidad)</td>
                             </tr>
                             }
 
@@ -131,24 +131,17 @@
                         <table class="table">
                             <tr>
                                 <th style="width:50%">Subtotal</th>
-                                <td>@Model.Total</td>
-                            </tr>
-                            <tr>
-                                <th>Impuestos</th>
-                                <td>@(Model.Total - Model.TotalSinImpuesto)</td>
+                                <td>@Model.PrecioContado</td>
                             </tr>
                             <tr>
                                 <th>Descuento</th>
-                                <td>@(Model.Total - Model.TotalDescuento)</td>
+                                <td>@(decimal.Round(Model.PrecioContado * Model.DescuentoPorcentaje /100,2) )</td>
                             </tr>
                             <tr>
                                 <th>Total</th>
-                                <td>@Model.TotalDescuento</td>
+                                <td>@(decimal.Round(Model.PrecioContado - (Model.PrecioContado * Model.DescuentoPorcentaje /100 ),2))</td>
                             </tr>
-                            <tr>
-                                <th>Total sin Impuestos</th>
-                                <td>@Model.TotalSinImpuestoDescuento</td>
-                            </tr>
+                            
                         </table>
                     </div>
                 </div>

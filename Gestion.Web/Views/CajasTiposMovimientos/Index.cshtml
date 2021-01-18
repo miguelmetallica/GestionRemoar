@@ -40,6 +40,9 @@ BREADCRUMB
                                 @Html.DisplayNameFor(model => model.Descripcion)
                             </th>
                             <th>
+                                @Html.DisplayNameFor(model => model.EsDebe)
+                            </th>
+                            <th>
                                 @Html.DisplayNameFor(model => model.Estado)
                             </th>
                             <th>Operaciones</th>
@@ -54,6 +57,9 @@ BREADCRUMB
                             </td>
                             <td>
                                 @Html.DisplayFor(modelItem => item.Descripcion)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.EsDebe)
                             </td>
                             <td>
                                 @{

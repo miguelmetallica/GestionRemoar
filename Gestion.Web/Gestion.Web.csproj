@@ -47,6 +47,10 @@
     <Content Remove="Views\Comprobantes\ImputaProducto.cshtml" />
     <Content Remove="Views\Comprobantes\_ProductosImputa.cshtml" />
     <Content Remove="Views\PresupuestosEstados\Delete.cshtml" />
+    <Content Remove="Views\Presupuestos\Aprobado.cshtml" />
+    <Content Remove="Views\Presupuestos\Create.cshtml" />
+    <Content Remove="Views\Presupuestos\Details.cshtml" />
+    <Content Remove="Views\Presupuestos\Edit.cshtml" />
   </ItemGroup>
 
   <ItemGroup>
@@ -2149,7 +2153,6 @@
   <ItemGroup>
     <None Include="Views\Cajas\DetailsImportes.cshtml" />
     <None Include="Views\Cajas\DetailsUsuarios.cshtml" />
-    <None Include="Views\Cajas\Estado.cshtml" />
     <None Include="wwwroot\admin\bower_components\bootstrap-colorpicker\.editorconfig" />
     <None Include="wwwroot\admin\bower_components\bootstrap-colorpicker\.github\CODE_OF_CONDUCT.md" />
     <None Include="wwwroot\admin\bower_components\bootstrap-colorpicker\.github\CONTRIBUTING.md" />

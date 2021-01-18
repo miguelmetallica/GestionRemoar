@@ -1,0 +1,28 @@
+﻿CREATE TABLE [dbo].[PedidosFormasPagosTarjeta] (
+    [PedidoTarjetaId]    INT             NOT NULL,
+    [PedidoId]           INT             NOT NULL,
+    [FormaPagoId]        INT             NOT NULL,
+    [FormaPago]          VARCHAR (150)   NOT NULL,
+    [FormaPagoTipo]      INT             NOT NULL,
+    [FormaPagoCuotaId]   INT             NOT NULL,
+    [Cuota]              INT             NOT NULL,
+    [Porcentaje]         NUMERIC (18, 4) NULL,
+    [Descuento]          NUMERIC (18, 4) NULL,
+    [TarjetaId]          INT             NULL,
+    [EsDebito]           BIT             NULL,
+    [Tarjeta]            VARCHAR (150)   NULL,
+    [NombreTarjeta]      VARCHAR (300)   NULL,
+    [NumeroTarjeta]      VARCHAR (20)    NULL,
+    [MesVence]           VARCHAR (1)     NULL,
+    [AñoVence]           VARCHAR (1)     NULL,
+    [CodigoVerificacion] VARCHAR (5)     NULL,
+    [BancoId]            INT             NULL,
+    [Banco]              VARCHAR (150)   NULL,
+    [Estado]             BIT             NULL,
+    [FechaAlta]          DATETIME        NULL,
+    [UsuarioAlta]        NVARCHAR (256)  NULL,
+    [FechaEdit]          DATETIME        NULL,
+    [UsuarioEdit]        NVARCHAR (256)  NULL,
+    CONSTRAINT [PK_PedidosFormasPagosTarjeta] PRIMARY KEY CLUSTERED ([PedidoTarjetaId] ASC)
+);
+

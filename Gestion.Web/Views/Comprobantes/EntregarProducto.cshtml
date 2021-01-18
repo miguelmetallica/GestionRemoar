@@ -1,8 +1,8 @@
-﻿@model Gestion.Web.Models.Comprobantes
+﻿@model Gestion.Web.Models.ComprobantesDTO
 
 @{
     ViewData["Title"] = "Detalle del Cliente";
-    var cliente = (IEnumerable<ClientesDTO>)ViewData["Clientes"];
+    var cliente = (ClientesDTO)ViewData["Clientes"];
     var Detalle = (List<Gestion.Web.Models.ComprobantesDetalleDTO>)ViewData["DetalleTMP"];
 }
 
@@ -24,7 +24,7 @@
     <section class="content">
         <div class="row">
             <div class="col-md-3">
-                <partial name="_ClienteDetalle" model='@cliente.FirstOrDefault()' />
+                <partial name="_ClienteDetalle" model='@cliente' />
             </div>
             <div class="col-md-9">
                 <!-- general form elements -->

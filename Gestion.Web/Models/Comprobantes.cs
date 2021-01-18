@@ -51,12 +51,18 @@ namespace Gestion.Web.Models
         public string Telefono { get; set; }
         public string Celular { get; set; }
         public decimal Total { get; set; }
+        public decimal TotalLista { get; set; }
         public decimal TotalSinImpuesto { get; set; }
+        public decimal TotalListaSinImpuesto { get; set; }
         public decimal TotalSinDescuento { get; set; }
+        public decimal TotalListaSinDescuento { get; set; }
         public decimal TotalSinImpuestoSinDescuento { get; set; }
+        public decimal TotalListaSinImpuestoSinDescuento { get; set; }
         public decimal DescuentoPorcentaje { get; set; }
         public decimal DescuentoTotal { get; set; }
+        public decimal DescuentoTotalLista { get; set; }
         public decimal DescuentoSinImpuesto { get; set; }
+        public decimal DescuentoListaSinImpuesto { get; set; }
         public decimal ImporteTributos { get; set; }
         public string Observaciones { get; set; }
         public bool Anulado { get; set; }
@@ -231,9 +237,12 @@ namespace Gestion.Web.Models
         public string FormaPagoTipo { get; set; }
         public string FormaPago { get; set; }
         public decimal Importe { get; set; }
+        public decimal ImporteLista { get; set; }
         public int Cuota { get; set; }
         public decimal Interes { get; set; }
+        public decimal InteresLista { get; set; }
         public decimal Total { get; set; }
+        public decimal TotalLista { get; set; }
         public string TarjetaId { get; set; }
         public string TarjetaNombre { get; set; }
         public string TarjetaCliente { get; set; }
@@ -296,6 +305,7 @@ namespace Gestion.Web.Models
         public string TipoDocumento { get; set; }
         public string NroDocumento { get; set; }
         public string CuilCuit { get; set; }
+        [Display(Name = "Razon Social")]
         public string RazonSocial { get; set; }
         public string ProvinciaId { get; set; }
         public string ProvinciaCodigo { get; set; }
@@ -310,14 +320,21 @@ namespace Gestion.Web.Models
         public string Telefono { get; set; }
         public string Celular { get; set; }
         public decimal Total { get; set; }
+        public decimal TotalLista { get; set; }
         public decimal TotalSinImpuesto { get; set; }
+        public decimal TotalListaSinImpuesto { get; set; }
         public decimal TotalSinDescuento { get; set; }
+        public decimal TotalListaSinDescuento { get; set; }
         public decimal TotalSinImpuestoSinDescuento { get; set; }
+        public decimal TotalListaSinImpuestoSinDescuento { get; set; }
         public decimal DescuentoPorcentaje { get; set; }
         public decimal DescuentoTotal { get; set; }
+        public decimal DescuentoTotalLista { get; set; }
         public decimal DescuentoSinImpuesto { get; set; }
+        public decimal DescuentoListaSinImpuesto { get; set; }
         public decimal ImporteTributos { get; set; }
         public string Observaciones { get; set; }
+        public bool Anulado { get; set; }        
         public DateTime FechaAnulacion { get; set; }
         public string TipoComprobanteAnulaId { get; set; }
         public string TipoComprobanteAnulaCodigo { get; set; }
@@ -325,19 +342,32 @@ namespace Gestion.Web.Models
         public string LetraAnula { get; set; }
         public int PtoVtaAnula { get; set; }
         public decimal NumeroAnula { get; set; }
+        public string CodigoAnula { get; set; }
+        public string UsuarioAnula { get; set; }
+        [Display(Name = "Fecha Alta")]
         public DateTime FechaAlta { get; set; }
+        [Display(Name = "Usuario Alta")]
         public string UsuarioAlta { get; set; }
         public bool Estado { get; set; }
         public decimal Saldo { get; set; }
+
+        [Display(Name = "Pendiente %")]
         public decimal Saldo_Porcentaje { get; set; }
 
         [Display(Name = "Codigo")]
-        public string CodigoPrespuesto { get; set; }
+        public string CodigoPresupuesto { get; set; }
 
         public string TipoComprobanteFiscal { get; set; }
         public string LetraFiscal { get; set; }
         public int PtoVentaFiscal { get; set; }
         public decimal NumeroFiscal { get; set; }
+
+        public string SucursalNombre { get; set; }
+        public string SucursalCalle { get; set; }
+        public string SucursalCalleNro { get; set; }
+        public string SucursalLocalidad { get; set; }
+        public string SucursalCodigoPostal { get; set; }
+        public string SucursalTelefono { get; set; }
     }
 
     public partial class ComprobantesDetalleDTO : IEntidades
@@ -348,11 +378,10 @@ namespace Gestion.Web.Models
         public string ProductoCodigo { get; set; }
         public string ProductoNombre { get; set; }
         public int Cantidad { get; set; }
-        public decimal PrecioUnitario { get; set; }
         public decimal Precio { get; set; }
-        public decimal Imputado { get; set; }
-        public decimal ImputadoPorcentaje { get; set; }
-        public decimal Importe { get; set; }
+        public decimal PrecioLista { get; set; }
+        public decimal PrecioSinIva { get; set; }
+        public decimal PrecioListaSinIva { get; set; }
         public DateTime FechaAlta { get; set; }
         public string UsuarioAlta { get; set; }
     }

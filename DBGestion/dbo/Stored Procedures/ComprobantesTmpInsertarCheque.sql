@@ -1,7 +1,7 @@
 ﻿
 
 CREATE PROCEDURE [dbo].[ComprobantesTmpInsertarCheque]
-	@ClienteId nvarchar(150),
+	@ComprobanteId nvarchar(150),
 	@FormaPagoId nvarchar(150),
 	@Importe numeric(18,2),
 	@ChequeNumero nvarchar(50) = NULL,
@@ -33,11 +33,11 @@ BEGIN TRY
 	FROM SistemaConfiguraciones C
 	INNER JOIN ParamTiposComprobantes T ON T.Codigo = C.Valor
 	INNER JOIN ComprobantesNumeraciones N ON N.TipoComprobanteId = T.Id
-	WHERE C.Configuracion = 'COMPROBANTES_RECIBO_A'
+	WHERE C.Configuracion = 'COMPROBANTES_RECIBO'
 	AND N.Estado = 1
 	
 	BEGIN TRAN
-		INSERT INTO ComprobantesFormasPagosTmp(Id,ClienteId,TipoComprobanteId,
+		INSERT INTO ComprobantesFormasPagosTmp(Id,ComprobanteId,TipoComprobanteId,
 												FormaPagoId,FormaPagoCodigo,
 												FormaPagoTipo,FormaPago,
 												Importe,Cuota,Interes,Total,
@@ -49,17 +49,24 @@ BEGIN TRY
 												ChequeCuenta,
 												Observaciones,
 												FechaAlta,UsuarioAlta)
-										VALUES(@Id,@ClienteId,@TipoComprobanteId,
-												@FormaPagoId,@FormaPagoCodigo,
-												@FormaPagoTipo,@FormaPago,
-												@Importe,@Cuota,@Interes,@Total,
-												@ChequeNumero,
+										VALUES(@Id,
+												@ComprobanteId,
+												@TipoComprobanteId,
+												@FormaPagoId,
+												@FormaPagoCodigo,
+												@FormaPagoTipo,
+												@FormaPago,
+												@Importe,
+												@Cuota,
+												@Interes,
+												@Total,
+												upper(@ChequeNumero),
 												@ChequeFechaEmision,
 												@ChequeFechaVencimiento,
-												@ChequeCuit,
-												@ChequeNombre,
-												@ChequeCuenta,
-												@Observaciones,
+												upper(@ChequeCuit),
+												upper(@ChequeNombre),
+												upper(@ChequeCuenta),
+												upper(@Observaciones),
 												DATEADD(HH,4,GETDATE()),UPPER(@Usuario))
 		
 

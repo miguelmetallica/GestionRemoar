@@ -21,7 +21,9 @@ namespace Gestion.Web.Data
                                     IUserHelper userHelper, 
                                     IFactoryConnection factoryConnection,
                                     IClientesRepository clientesRepository,
-                                    IPresupuestosEstadosRepository presupuestosEstados) : base(context)
+                                    IPresupuestosEstadosRepository presupuestosEstados
+                                    
+            ) : base(context)
         {
             this.context = context;
             this.userHelper = userHelper;
@@ -72,12 +74,7 @@ namespace Gestion.Web.Data
                 return;
             }
 
-            var product = await this.context.Productos.FindAsync(model.ProductoId);
-            if (product == null)
-            {
-                return;
-            }
-
+            
             var presupuestoDetalle = await this.context.PresupuestosDetalle
                 .Where(odt => odt.PresupuestoId == model.PresupuestoId && odt.ProductoId == model.ProductoId)
                 .FirstOrDefaultAsync();
@@ -88,23 +85,47 @@ namespace Gestion.Web.Data
                     Id = Guid.NewGuid().ToString(),
                     PresupuestoId = model.PresupuestoId,
                     ProductoId = model.ProductoId,
-                    Precio = (decimal)product.PrecioVenta,
+                    ProductoCodigo = model.ProductoCodigo,
+                    ProductoNombre = model.ProductoNombre,
+                    Precio = (decimal)model.Precio,
+                    PrecioContado = (decimal)model.PrecioContado,
                     Cantidad = model.Cantidad,
                     UsuarioAlta = userName,
                 };
 
-                await spInsertarProducto(presupuestoDetalle);
-                //this.context.PresupuestosDetalle.Add(presupuestoDetalle);
+                await spInsertarProducto(presupuestoDetalle);                
             }
             else
             {
                 presupuestoDetalle.Precio = model.Precio;
+                presupuestoDetalle.PrecioContado = model.PrecioContado;
                 presupuestoDetalle.Cantidad += model.Cantidad;
-                await spEditarProducto(presupuestoDetalle);
-                //this.context.PresupuestosDetalle.Update(presupuestoDetalle);
+                await spEditarProducto(presupuestoDetalle);                
+            }            
+        }
+
+        public async Task AddItemComodinAsync(PresupuestosDetalle model, string userName)
+        {
+            var user = await this.userHelper.GetUserByEmailAsync(userName);
+            if (user == null)
+            {
+                return;
             }
 
-            await this.context.SaveChangesAsync();
+            var presupuestoDetalle = new PresupuestosDetalle
+            {
+                Id = Guid.NewGuid().ToString(),
+                PresupuestoId = model.PresupuestoId,
+                ProductoId = model.ProductoId,
+                ProductoCodigo = model.ProductoCodigo,
+                ProductoNombre = model.ProductoNombre,
+                Precio = (decimal)model.Precio,
+                PrecioContado = (decimal)model.PrecioContado,
+                Cantidad = model.Cantidad,
+                UsuarioAlta = userName,
+            };
+
+            await spInsertarProducto(presupuestoDetalle);        
         }
 
         public async Task ModifyCantidadesAsync(string id, int cantidad)
@@ -299,7 +320,7 @@ namespace Gestion.Web.Data
             }
         }
 
-        public async Task<int> spAprobar(Presupuestos presupuestos)
+        public async Task<int> spAprobar(PresupuestosDTO presupuestos)
         {
             try
             {
@@ -319,9 +340,7 @@ namespace Gestion.Web.Data
                         //le asignamos los parámetros para el stored procedure
                         //los valores viene en el parámetro item del procedimiento
                         oCmd.Parameters.AddWithValue("@Id", presupuestos.Id);
-                        oCmd.Parameters.AddWithValue("@ClienteId", presupuestos.ClienteId);
-                        //oCmd.Parameters.AddWithValue("@EstadoId", presupuestos.EstadoId);
-                        oCmd.Parameters.AddWithValue("@Usuario", presupuestos.UsuarioAlta);
+                        oCmd.Parameters.AddWithValue("@Usuario", presupuestos.UsuarioAprobacionRechazo);
 
                         //Ejecutamos el comando y retornamos el id generado
                         await oCmd.ExecuteScalarAsync();
@@ -340,7 +359,7 @@ namespace Gestion.Web.Data
             }
         }
 
-        public async Task<int> spRechazar(Presupuestos presupuestos)
+        public async Task<int> spRechazar(PresupuestosDTO presupuestos)
         {
             try
             {
@@ -360,7 +379,7 @@ namespace Gestion.Web.Data
                         //le asignamos los parámetros para el stored procedure
                         //los valores viene en el parámetro item del procedimiento
                         oCmd.Parameters.AddWithValue("@Id", presupuestos.Id);
-                        oCmd.Parameters.AddWithValue("@Usuario", presupuestos.UsuarioAlta);
+                        oCmd.Parameters.AddWithValue("@Usuario", presupuestos.UsuarioAprobacionRechazo);
 
                         //Ejecutamos el comando y retornamos el id generado
                         await oCmd.ExecuteScalarAsync();
@@ -401,7 +420,10 @@ namespace Gestion.Web.Data
                         oCmd.Parameters.AddWithValue("@Id", presupuestos.Id);
                         oCmd.Parameters.AddWithValue("@PresupuestoId", presupuestos.PresupuestoId);
                         oCmd.Parameters.AddWithValue("@ProductoId", presupuestos.ProductoId);
+                        oCmd.Parameters.AddWithValue("@ProductoCodigo", presupuestos.ProductoCodigo);
+                        oCmd.Parameters.AddWithValue("@ProductoNombre", presupuestos.ProductoNombre);
                         oCmd.Parameters.AddWithValue("@Precio", presupuestos.Precio);
+                        oCmd.Parameters.AddWithValue("@PrecioContado", presupuestos.PrecioContado);
                         oCmd.Parameters.AddWithValue("@Cantidad", presupuestos.Cantidad);
                         oCmd.Parameters.AddWithValue("@Usuario", presupuestos.UsuarioAlta);
 
@@ -444,6 +466,7 @@ namespace Gestion.Web.Data
                         oCmd.Parameters.AddWithValue("@Id", presupuestos.Id);
                         oCmd.Parameters.AddWithValue("@Cantidad", presupuestos.Cantidad);
                         oCmd.Parameters.AddWithValue("@Precio", presupuestos.Precio);
+                        oCmd.Parameters.AddWithValue("@PrecioContado", presupuestos.PrecioContado);
                         oCmd.Parameters.AddWithValue("@Usuario", presupuestos.UsuarioAlta);
 
                         //Ejecutamos el comando y retornamos el id generado
@@ -605,7 +628,7 @@ namespace Gestion.Web.Data
             }
         }
 
-        public async Task<List<PresupuestosDetalleDTO>> spPresupuestosVencido(string id)
+        public async Task<PresupuestosDTO> spPresupuestosVencido(string id)
         {
             //Creamos la conexión a utilizar.
             //Utilizamos la sentencia Using para asegurarnos de cerrar la conexión
@@ -629,8 +652,7 @@ namespace Gestion.Web.Data
 
                     //aunque debemos buscar solo un elemento, siempre devolvemos
                     //una colección. Es más fácil de manipular y controlar 
-                    var objs = new List<PresupuestosDetalleDTO>();
-
+                    var obj = new PresupuestosDTO();
                     //No retornamos DataSets, siempre utilizamos objetos para hacernos 
                     //independientes de la estructura de las tablas en el resto
                     //de las capas. Para ellos leemos con el DataReader y creamos
@@ -640,68 +662,69 @@ namespace Gestion.Web.Data
                         //Ejecutamos el comando y retornamos los valores
                         using (SqlDataReader oReader = await oCmd.ExecuteReaderAsync())
                         {
-                            while (oReader.Read())
+                            if (oReader.Read())
                             {
-                                //si existe algun valor, creamos el objeto y lo almacenamos
-                                //en la colección
-                                var obj = new PresupuestosDetalleDTO();
-                                obj.Id = oReader["Id"].ToString();
-                                obj.Codigo = oReader["Codigo"].ToString();
+                                obj.Id = oReader["Id"] as string;
+                                obj.Codigo = oReader["Codigo"] as string;
                                 obj.Fecha = (DateTime)oReader["Fecha"];
                                 obj.FechaVencimiento = (DateTime)oReader["FechaVencimiento"];
+
+                                obj.ClienteId = oReader["ClienteId"] as string;
+                                obj.ClienteCodigo = oReader["ClienteCodigo"] as string;
+                                obj.ClienteRazonSocial = oReader["RazonSocial"] as string;
+                                obj.ClienteNroDocumento = oReader["NroDocumento"] as string;
+                                obj.ClienteCuitCuil = oReader["CuilCuit"] as string;
+
+                                obj.TipoResponsableId = oReader["TipoResponsableId"] as string;
+                                obj.TipoResponsable = oReader["TipoResponsable"] as string;
+
+                                obj.ClienteCategoriaId = oReader["ClienteCategoriaId"] as string;
+                                obj.ClienteCategoria = oReader["ClienteCategoria"] as string;
+
+                                obj.EstadoId = oReader["EstadoId"] as string;
+                                obj.Estado = oReader["Estado"] as string;
+
+                                obj.DescuentoId = oReader["DescuentoId"] as string;
+                                obj.DescuentoPorcentaje = (decimal)oReader["DescuentoPorcentaje"];
+
+                                if (!DBNull.Value.Equals(oReader["FechaAprobacion"]))
+                                    obj.FechaAprobacion = (DateTime)oReader["FechaAprobacion"];
+                                if (!DBNull.Value.Equals(oReader["FechaRechazo"]))
+                                    obj.FechaRechazo = (DateTime)oReader["FechaRechazo"];
+
+                                obj.MotivoAprobacionRechazo = oReader["MotivoAprobacionRechazo"] as string;
+                                obj.UsuarioAprobacionRechazo = oReader["UsuarioAprobacionRechazo"] as string;
+
+                                obj.Precio = (decimal)oReader["Precio"];
+                                obj.PrecioContado = (decimal)oReader["PrecioContado"];
+                                obj.CantidadProductos = (int)oReader["CantidadProductos"];
+
                                 obj.Estado = oReader["Estado"].ToString();
-                                obj.UsuarioAlta = (string)oReader["UsuarioAlta"];
+                                obj.UsuarioAlta = oReader["UsuarioAlta"] as string;
+                                obj.FechaAlta = (DateTime)oReader["FechaAlta"];
+                                obj.UsuarioEdit = oReader["UsuarioEdit"] as string;
 
-                                obj.ClienteId = (string)oReader["ClienteId"];
-                                obj.ClienteCodigo = (string)oReader["ClienteCodigo"];
-                                obj.ClienteRazonSocial = (string)oReader["RazonSocial"];
-                                obj.ClienteNroDocumento = (string)oReader["NroDocumento"];
-                                obj.ClienteCuilCuit = (string)oReader["CuilCuit"];
+                                if (!DBNull.Value.Equals(oReader["FechaEdit"]))
+                                    obj.FechaEdit = (DateTime)oReader["FechaEdit"];
 
-                                obj.TipoResponsableId = (string)oReader["TipoResponsableId"];
-                                obj.TipoResponsable = (string)oReader["TipoResponsable"];
-
-                                obj.ProductoId = (string)oReader["ProductoId"];
-                                obj.ProductoCodigo = (string)oReader["ProductoCodigo"];
-                                obj.ProductoNombre = (string)oReader["Producto"];
-                                obj.ProductoPrecio = (decimal)oReader["Precio"];
-                                obj.ProductoPrecioSinImpuesto = (decimal)oReader["PrecioSinImpuesto"];
-                                obj.ProductoCantidad = (int)oReader["Cantidad"];
-
-                                obj.SubTotal = (decimal)oReader["SubTotal"];
-                                obj.SubTotalSinImpuesto = (decimal)oReader["SubTotalSinImpuesto"];
-                                obj.DetalleId = (string)oReader["DetalleId"];
-
-                                obj.Cantidad = (int)oReader["CantidadTotal"];
-                                obj.Total = (decimal)oReader["PrecioTotal"];
-                                obj.TotalSinImpuesto = (decimal)oReader["PrecioTotalSinImpuesto"];
-                                obj.TotalDescuento = (decimal)oReader["PrecioTotalDescuento"];
-                                obj.TotalSinImpuestoDescuento = (decimal)oReader["PrecioTotalSinImpuestoDescuento"];
-                                obj.Descuento = (decimal)oReader["DescuentoPorcentaje"];
-
-
-                                //Agregamos el objeto a la coleccion de resultados
-                                objs.Add(obj);
-                                obj = null;
                             }
                         }
                         //retornamos los valores encontrados
 
-
-                        return objs;
+                        return obj;
                     }
 
                     finally
                     {
                         //el Finally nos da siempre la oportunidad de liberar
                         //la memoria utilizada por los objetos 
-                        objs = null;
+                        obj = null;
                     }
                 }
             }
         }
 
-        public async Task<List<PresupuestosDetalleDTO>> spPresupuestosPendiente(string id)
+        public async Task<PresupuestosDTO> spPresupuestosPendiente(string id)
         {
             //Creamos la conexión a utilizar.
             //Utilizamos la sentencia Using para asegurarnos de cerrar la conexión
@@ -725,8 +748,7 @@ namespace Gestion.Web.Data
 
                     //aunque debemos buscar solo un elemento, siempre devolvemos
                     //una colección. Es más fácil de manipular y controlar 
-                    var objs = new List<PresupuestosDetalleDTO>();
-
+                    var obj = new PresupuestosDTO();
                     //No retornamos DataSets, siempre utilizamos objetos para hacernos 
                     //independientes de la estructura de las tablas en el resto
                     //de las capas. Para ellos leemos con el DataReader y creamos
@@ -736,61 +758,63 @@ namespace Gestion.Web.Data
                         //Ejecutamos el comando y retornamos los valores
                         using (SqlDataReader oReader = await oCmd.ExecuteReaderAsync())
                         {
-                            while (oReader.Read())
+                            if (oReader.Read())
                             {
-                                //si existe algun valor, creamos el objeto y lo almacenamos
-                                //en la colección
-                                var obj = new PresupuestosDetalleDTO();
-                                obj.Id = oReader["Id"].ToString();
-                                obj.Codigo = oReader["Codigo"].ToString();
+                                obj.Id = oReader["Id"] as string;
+                                obj.Codigo = oReader["Codigo"] as string;
                                 obj.Fecha = (DateTime)oReader["Fecha"];
-                                obj.FechaVencimiento = (DateTime)oReader["FechaVencimiento"];
+                                obj.FechaVencimiento = (DateTime)oReader["FechaVencimiento"];                                
+
+                                obj.ClienteId = oReader["ClienteId"] as string;
+                                obj.ClienteCodigo = oReader["ClienteCodigo"] as string;
+                                obj.ClienteRazonSocial = oReader["RazonSocial"] as string;
+                                obj.ClienteNroDocumento = oReader["NroDocumento"] as string;
+                                obj.ClienteCuitCuil = oReader["CuilCuit"] as string;
+
+                                obj.TipoResponsableId = oReader["TipoResponsableId"] as string;
+                                obj.TipoResponsable = oReader["TipoResponsable"] as string;
+
+                                obj.ClienteCategoriaId = oReader["ClienteCategoriaId"] as string;
+                                obj.ClienteCategoria = oReader["ClienteCategoria"] as string;
+
+                                obj.EstadoId = oReader["EstadoId"] as string;
+                                obj.Estado = oReader["Estado"] as string;
+
+                                obj.DescuentoId = oReader["DescuentoId"] as string;
+                                obj.DescuentoPorcentaje = (decimal)oReader["DescuentoPorcentaje"];
+
+                                if (!DBNull.Value.Equals(oReader["FechaAprobacion"]))
+                                    obj.FechaAprobacion = (DateTime)oReader["FechaAprobacion"];
+                                if (!DBNull.Value.Equals(oReader["FechaRechazo"]))
+                                    obj.FechaRechazo = (DateTime)oReader["FechaRechazo"];
+
+                                obj.MotivoAprobacionRechazo = oReader["MotivoAprobacionRechazo"] as string;
+                                obj.UsuarioAprobacionRechazo= oReader["UsuarioAprobacionRechazo"] as string;
+
+                                obj.Precio = (decimal)oReader["Precio"];
+                                obj.PrecioContado = (decimal)oReader["PrecioContado"];
+                                obj.CantidadProductos = (int)oReader["CantidadProductos"];
+                                
                                 obj.Estado = oReader["Estado"].ToString();
-                                obj.UsuarioAlta = (string)oReader["UsuarioAlta"];
+                                obj.UsuarioAlta = oReader["UsuarioAlta"] as string;
+                                obj.FechaAlta = (DateTime)oReader["FechaAlta"];
+                                obj.UsuarioEdit = oReader["UsuarioEdit"] as string;
 
-                                obj.ClienteId = (string)oReader["ClienteId"];
-                                obj.ClienteCodigo = (string)oReader["ClienteCodigo"];
-                                obj.ClienteRazonSocial = (string)oReader["RazonSocial"];
-                                obj.ClienteNroDocumento = (string)oReader["NroDocumento"];
-                                obj.ClienteCuilCuit = (string)oReader["CuilCuit"];
-
-                                obj.TipoResponsableId = (string)oReader["TipoResponsableId"];
-                                obj.TipoResponsable = (string)oReader["TipoResponsable"];
-
-                                obj.ProductoId = (string)oReader["ProductoId"];
-                                obj.ProductoCodigo = (string)oReader["ProductoCodigo"];
-                                obj.ProductoNombre = (string)oReader["Producto"];
-                                obj.ProductoPrecio = (decimal)oReader["Precio"];
-                                obj.ProductoPrecioSinImpuesto = (decimal)oReader["PrecioSinImpuesto"];
-                                obj.ProductoCantidad = (int)oReader["Cantidad"];
-
-                                obj.SubTotal = (decimal)oReader["SubTotal"];
-                                obj.SubTotalSinImpuesto = (decimal)oReader["SubTotalSinImpuesto"];
-                                obj.DetalleId = (string)oReader["DetalleId"];
-
-                                obj.Cantidad = (int)oReader["CantidadTotal"];
-                                obj.Total = (decimal)oReader["PrecioTotal"];
-                                obj.TotalSinImpuesto = (decimal)oReader["PrecioTotalSinImpuesto"];
-                                obj.TotalDescuento = (decimal)oReader["PrecioTotalDescuento"];
-                                obj.TotalSinImpuestoDescuento = (decimal)oReader["PrecioTotalSinImpuestoDescuento"];
-                                obj.Descuento = (decimal)oReader["DescuentoPorcentaje"];
-
-                                //Agregamos el objeto a la coleccion de resultados
-                                objs.Add(obj);
-                                obj = null;
+                                if (!DBNull.Value.Equals(oReader["FechaEdit"]))
+                                    obj.FechaEdit = (DateTime)oReader["FechaEdit"];
+                                
                             }
                         }
                         //retornamos los valores encontrados
-                        
-                        
-                        return objs;
+                                               
+                        return obj;
                     }
 
                     finally
                     {
                         //el Finally nos da siempre la oportunidad de liberar
                         //la memoria utilizada por los objetos 
-                        objs = null;
+                        obj = null;
                     }
                 }
             }
@@ -836,7 +860,7 @@ namespace Gestion.Web.Data
             }
         }
 
-        public async Task<int> spPresupuestoCopiar(Presupuestos presupuestos, string id)
+        public async Task<int> spPresupuestoCopiar(PresupuestosDTO presupuestos, string id)
         {
             try
             {
@@ -953,7 +977,7 @@ namespace Gestion.Web.Data
             }
         }
 
-        public async Task<List<PresupuestosDetalleDTO>> spPresupuestosRechazado(string id)
+        public async Task<PresupuestosDTO> spPresupuestosRechazado(string id)
         {
             //Creamos la conexión a utilizar.
             //Utilizamos la sentencia Using para asegurarnos de cerrar la conexión
@@ -977,8 +1001,7 @@ namespace Gestion.Web.Data
 
                     //aunque debemos buscar solo un elemento, siempre devolvemos
                     //una colección. Es más fácil de manipular y controlar 
-                    var objs = new List<PresupuestosDetalleDTO>();
-
+                    var obj = new PresupuestosDTO();
                     //No retornamos DataSets, siempre utilizamos objetos para hacernos 
                     //independientes de la estructura de las tablas en el resto
                     //de las capas. Para ellos leemos con el DataReader y creamos
@@ -988,67 +1011,63 @@ namespace Gestion.Web.Data
                         //Ejecutamos el comando y retornamos los valores
                         using (SqlDataReader oReader = await oCmd.ExecuteReaderAsync())
                         {
-                            while (oReader.Read())
+                            if (oReader.Read())
                             {
-                                //si existe algun valor, creamos el objeto y lo almacenamos
-                                //en la colección
-                                var obj = new PresupuestosDetalleDTO();
-                                obj.Id = oReader["Id"].ToString();
-                                obj.Codigo = oReader["Codigo"].ToString();
+                                obj.Id = oReader["Id"] as string;
+                                obj.Codigo = oReader["Codigo"] as string;
                                 obj.Fecha = (DateTime)oReader["Fecha"];
                                 obj.FechaVencimiento = (DateTime)oReader["FechaVencimiento"];
-                                obj.Estado = oReader["Estado"].ToString();
-                                obj.UsuarioAlta = (string)oReader["UsuarioAlta"];
 
-                                obj.ClienteId = (string)oReader["ClienteId"];
-                                obj.ClienteCodigo = (string)oReader["ClienteCodigo"];
-                                obj.ClienteRazonSocial = (string)oReader["RazonSocial"];
-                                obj.ClienteNroDocumento = (string)oReader["NroDocumento"];
-                                obj.ClienteCuilCuit = (string)oReader["CuilCuit"];
+                                obj.ClienteId = oReader["ClienteId"] as string;
+                                obj.ClienteCodigo = oReader["ClienteCodigo"] as string;
+                                obj.ClienteRazonSocial = oReader["RazonSocial"] as string;
+                                obj.ClienteNroDocumento = oReader["NroDocumento"] as string;
+                                obj.ClienteCuitCuil = oReader["CuilCuit"] as string;
 
                                 obj.TipoResponsableId = oReader["TipoResponsableId"] as string;
                                 obj.TipoResponsable = oReader["TipoResponsable"] as string;
 
-                                obj.ProductoId = (string)oReader["ProductoId"];
-                                obj.ProductoCodigo = (string)oReader["ProductoCodigo"];
-                                obj.ProductoNombre = (string)oReader["Producto"];
-                                obj.ProductoPrecio = (decimal)oReader["Precio"];
-                                obj.ProductoPrecioSinImpuesto = (decimal)oReader["PrecioSinImpuesto"];
-                                obj.ProductoCantidad = (int)oReader["Cantidad"];
+                                obj.ClienteCategoriaId = oReader["ClienteCategoriaId"] as string;
+                                obj.ClienteCategoria = oReader["ClienteCategoria"] as string;
 
-                                obj.SubTotal = (decimal)oReader["SubTotal"];
-                                obj.SubTotalSinImpuesto = (decimal)oReader["SubTotalSinImpuesto"];
-                                obj.DetalleId = (string)oReader["DetalleId"];
+                                obj.EstadoId = oReader["EstadoId"] as string;
+                                obj.Estado = oReader["Estado"] as string;
 
-                                obj.Cantidad = (int)oReader["CantidadTotal"];
-                                obj.Total = (decimal)oReader["PrecioTotal"];
-                                obj.TotalSinImpuesto = (decimal)oReader["PrecioTotalSinImpuesto"];
-                                obj.TotalDescuento = (decimal)oReader["PrecioTotalDescuento"];
-                                obj.TotalSinImpuestoDescuento = (decimal)oReader["PrecioTotalSinImpuestoDescuento"];
-                                obj.Descuento = (decimal)oReader["DescuentoPorcentaje"];
+                                obj.DescuentoId = oReader["DescuentoId"] as string;
+                                obj.DescuentoPorcentaje = (decimal)oReader["DescuentoPorcentaje"];
 
+                                if (!DBNull.Value.Equals(oReader["FechaAprobacion"]))
+                                    obj.FechaAprobacion = (DateTime)oReader["FechaAprobacion"];
                                 if (!DBNull.Value.Equals(oReader["FechaRechazo"]))
                                     obj.FechaRechazo = (DateTime)oReader["FechaRechazo"];
-                                
-                                obj.UsuarioAprobacionRechazo = oReader["UsuarioAprobacionRechazo"] as string;
-                                obj.MotivoAprobacionRechazo = oReader["MotivoAprobacionRechazo"] as string;
 
-                                //Agregamos el objeto a la coleccion de resultados
-                                objs.Add(obj);
-                                obj = null;
+                                obj.MotivoAprobacionRechazo = oReader["MotivoAprobacionRechazo"] as string;
+                                obj.UsuarioAprobacionRechazo = oReader["UsuarioAprobacionRechazo"] as string;
+
+                                obj.Precio = (decimal)oReader["Precio"];
+                                obj.PrecioContado = (decimal)oReader["PrecioContado"];
+                                obj.CantidadProductos = (int)oReader["CantidadProductos"];
+
+                                obj.Estado = oReader["Estado"].ToString();
+                                obj.UsuarioAlta = oReader["UsuarioAlta"] as string;
+                                obj.FechaAlta = (DateTime)oReader["FechaAlta"];
+                                obj.UsuarioEdit = oReader["UsuarioEdit"] as string;
+
+                                if (!DBNull.Value.Equals(oReader["FechaEdit"]))
+                                    obj.FechaEdit = (DateTime)oReader["FechaEdit"];
+
                             }
                         }
                         //retornamos los valores encontrados
 
-
-                        return objs;
+                        return obj;
                     }
 
                     finally
                     {
                         //el Finally nos da siempre la oportunidad de liberar
                         //la memoria utilizada por los objetos 
-                        objs = null;
+                        obj = null;
                     }
                 }
             }
@@ -1166,38 +1185,38 @@ namespace Gestion.Web.Data
                                 //en la colección
                                 var obj = new PresupuestosDetalleDTO();
                                 obj.Id = oReader["Id"].ToString();
-                                obj.Codigo = oReader["Codigo"].ToString();
-                                obj.Fecha = (DateTime)oReader["Fecha"];
-                                obj.FechaVencimiento = (DateTime)oReader["FechaVencimiento"];
-                                obj.Estado = oReader["Estado"].ToString();
-                                obj.UsuarioAlta = (string)oReader["UsuarioAlta"];
+                                //obj.Codigo = oReader["Codigo"].ToString();
+                                //obj.Fecha = (DateTime)oReader["Fecha"];
+                                //obj.FechaVencimiento = (DateTime)oReader["FechaVencimiento"];
+                                //obj.Estado = oReader["Estado"].ToString();
+                                //obj.UsuarioAlta = (string)oReader["UsuarioAlta"];
 
-                                obj.ClienteId = (string)oReader["ClienteId"];
-                                obj.ClienteCodigo = (string)oReader["ClienteCodigo"];
-                                obj.ClienteRazonSocial = (string)oReader["RazonSocial"];
-                                obj.ClienteNroDocumento = (string)oReader["NroDocumento"];
-                                obj.ClienteCuilCuit = (string)oReader["CuilCuit"];
+                                //obj.ClienteId = (string)oReader["ClienteId"];
+                                //obj.ClienteCodigo = (string)oReader["ClienteCodigo"];
+                                //obj.ClienteRazonSocial = (string)oReader["RazonSocial"];
+                                //obj.ClienteNroDocumento = (string)oReader["NroDocumento"];
+                                //obj.ClienteCuilCuit = (string)oReader["CuilCuit"];
 
-                                obj.TipoResponsableId = oReader["TipoResponsableId"] as string;
-                                obj.TipoResponsable = oReader["TipoResponsable"] as string ;
+                                //obj.TipoResponsableId = oReader["TipoResponsableId"] as string;
+                                //obj.TipoResponsable = oReader["TipoResponsable"] as string ;
 
-                                obj.ProductoId = (string)oReader["ProductoId"];
-                                obj.ProductoCodigo = (string)oReader["ProductoCodigo"];
-                                obj.ProductoNombre = (string)oReader["Producto"];
-                                obj.ProductoPrecio = (decimal)oReader["Precio"];
-                                obj.ProductoPrecioSinImpuesto = (decimal)oReader["PrecioSinImpuesto"];
-                                obj.ProductoCantidad = (int)oReader["Cantidad"];
+                                //obj.ProductoId = (string)oReader["ProductoId"];
+                                //obj.ProductoCodigo = (string)oReader["ProductoCodigo"];
+                                //obj.ProductoNombre = (string)oReader["Producto"];
+                                //obj.ProductoPrecio = (decimal)oReader["Precio"];
+                                //obj.ProductoPrecioSinImpuesto = (decimal)oReader["PrecioSinImpuesto"];
+                                //obj.ProductoCantidad = (int)oReader["Cantidad"];
 
-                                obj.SubTotal = (decimal)oReader["SubTotal"];
-                                obj.SubTotalSinImpuesto = (decimal)oReader["SubTotalSinImpuesto"];
-                                obj.DetalleId = (string)oReader["DetalleId"];
+                                //obj.SubTotal = (decimal)oReader["SubTotal"];
+                                //obj.SubTotalSinImpuesto = (decimal)oReader["SubTotalSinImpuesto"];
+                                //obj.DetalleId = (string)oReader["DetalleId"];
 
-                                obj.Cantidad = (int)oReader["CantidadTotal"];
-                                obj.Total = (decimal)oReader["PrecioTotal"];
-                                obj.TotalSinImpuesto = (decimal)oReader["PrecioTotalSinImpuesto"];
-                                obj.TotalDescuento = (decimal)oReader["PrecioTotalDescuento"];
-                                obj.TotalSinImpuestoDescuento = (decimal)oReader["PrecioTotalSinImpuestoDescuento"];
-                                obj.Descuento = (decimal)oReader["DescuentoPorcentaje"];
+                                //obj.Cantidad = (int)oReader["CantidadTotal"];
+                                //obj.Total = (decimal)oReader["PrecioTotal"];
+                                //obj.TotalSinImpuesto = (decimal)oReader["PrecioTotalSinImpuesto"];
+                                //obj.TotalDescuento = (decimal)oReader["PrecioTotalDescuento"];
+                                //obj.TotalSinImpuestoDescuento = (decimal)oReader["PrecioTotalSinImpuestoDescuento"];
+                                //obj.Descuento = (decimal)oReader["DescuentoPorcentaje"];
 
 
                                 //Agregamos el objeto a la coleccion de resultados
@@ -1301,7 +1320,7 @@ namespace Gestion.Web.Data
             }
         }
 
-        public async Task<List<PresupuestosDetalleDTO>> spPresupuestosImprimir(string id)
+        public async Task<PresupuestosImprimirDTO> spPresupuestosImprimir(string id)
         {
             //Creamos la conexión a utilizar.
             //Utilizamos la sentencia Using para asegurarnos de cerrar la conexión
@@ -1325,8 +1344,7 @@ namespace Gestion.Web.Data
 
                     //aunque debemos buscar solo un elemento, siempre devolvemos
                     //una colección. Es más fácil de manipular y controlar 
-                    var objs = new List<PresupuestosDetalleDTO>();
-
+                    var obj = new PresupuestosImprimirDTO();
                     //No retornamos DataSets, siempre utilizamos objetos para hacernos 
                     //independientes de la estructura de las tablas en el resto
                     //de las capas. Para ellos leemos con el DataReader y creamos
@@ -1336,44 +1354,50 @@ namespace Gestion.Web.Data
                         //Ejecutamos el comando y retornamos los valores
                         using (SqlDataReader oReader = await oCmd.ExecuteReaderAsync())
                         {
-                            while (oReader.Read())
+                            if (oReader.Read())
                             {
-                                //si existe algun valor, creamos el objeto y lo almacenamos
-                                //en la colección
-                                var obj = new PresupuestosDetalleDTO();
-                                obj.Id = oReader["Id"].ToString();
-                                obj.Codigo = oReader["Codigo"].ToString();
+                                obj.Id = oReader["Id"] as string;
+                                obj.Codigo = oReader["Codigo"] as string;
                                 obj.Fecha = (DateTime)oReader["Fecha"];
                                 obj.FechaVencimiento = (DateTime)oReader["FechaVencimiento"];
-                                obj.Estado = oReader["Estado"].ToString();
-                                obj.UsuarioAlta = (string)oReader["UsuarioAlta"];
 
-                                obj.ClienteId = (string)oReader["ClienteId"];
-                                obj.ClienteCodigo = (string)oReader["ClienteCodigo"];
-                                obj.ClienteRazonSocial = (string)oReader["RazonSocial"];
-                                obj.ClienteNroDocumento = (string)oReader["NroDocumento"];
-                                obj.ClienteCuilCuit = (string)oReader["CuilCuit"];
+                                obj.ClienteId = oReader["ClienteId"] as string;
+                                obj.ClienteCodigo = oReader["ClienteCodigo"] as string;
+                                obj.ClienteRazonSocial = oReader["RazonSocial"] as string;
+                                obj.ClienteNroDocumento = oReader["NroDocumento"] as string;
+                                obj.ClienteCuitCuil = oReader["CuilCuit"] as string;
 
                                 obj.TipoResponsableId = oReader["TipoResponsableId"] as string;
                                 obj.TipoResponsable = oReader["TipoResponsable"] as string;
 
-                                obj.ProductoId = (string)oReader["ProductoId"];
-                                obj.ProductoCodigo = (string)oReader["ProductoCodigo"];
-                                obj.ProductoNombre = (string)oReader["Producto"];
-                                obj.ProductoPrecio = (decimal)oReader["Precio"];
-                                obj.ProductoPrecioSinImpuesto = (decimal)oReader["PrecioSinImpuesto"];
-                                obj.ProductoCantidad = (int)oReader["Cantidad"];
+                                obj.ClienteCategoriaId = oReader["ClienteCategoriaId"] as string;
+                                obj.ClienteCategoria = oReader["ClienteCategoria"] as string;
 
-                                obj.SubTotal = (decimal)oReader["SubTotal"];
-                                obj.SubTotalSinImpuesto = (decimal)oReader["SubTotalSinImpuesto"];
-                                obj.DetalleId = (string)oReader["DetalleId"];
+                                obj.EstadoId = oReader["EstadoId"] as string;
+                                obj.Estado = oReader["Estado"] as string;
 
-                                obj.Cantidad = (int)oReader["CantidadTotal"];
-                                obj.Total = (decimal)oReader["PrecioTotal"];
-                                obj.TotalSinImpuesto = (decimal)oReader["PrecioTotalSinImpuesto"];
-                                obj.TotalDescuento = (decimal)oReader["PrecioTotalDescuento"];
-                                obj.TotalSinImpuestoDescuento = (decimal)oReader["PrecioTotalSinImpuestoDescuento"];
-                                obj.Descuento = (decimal)oReader["DescuentoPorcentaje"];
+                                obj.DescuentoId = oReader["DescuentoId"] as string;
+                                obj.DescuentoPorcentaje = (decimal)oReader["DescuentoPorcentaje"];
+
+                                if (!DBNull.Value.Equals(oReader["FechaAprobacion"]))
+                                    obj.FechaAprobacion = (DateTime)oReader["FechaAprobacion"];
+                                if (!DBNull.Value.Equals(oReader["FechaRechazo"]))
+                                    obj.FechaRechazo = (DateTime)oReader["FechaRechazo"];
+
+                                obj.MotivoAprobacionRechazo = oReader["MotivoAprobacionRechazo"] as string;
+                                obj.UsuarioAprobacionRechazo = oReader["UsuarioAprobacionRechazo"] as string;
+
+                                obj.Precio = (decimal)oReader["Precio"];
+                                obj.PrecioContado = (decimal)oReader["PrecioContado"];
+                                obj.CantidadProductos = (int)oReader["CantidadProductos"];
+
+                                obj.Estado = oReader["Estado"].ToString();
+                                obj.UsuarioAlta = oReader["UsuarioAlta"] as string;
+                                obj.FechaAlta = (DateTime)oReader["FechaAlta"];
+                                obj.UsuarioEdit = oReader["UsuarioEdit"] as string;
+
+                                if (!DBNull.Value.Equals(oReader["FechaEdit"]))
+                                    obj.FechaEdit = (DateTime)oReader["FechaEdit"];
 
                                 obj.SucursalNombre = oReader["SucursalNombre"] as string;
                                 obj.SucursalCalle = oReader["SucursalCalle"] as string;
@@ -1381,30 +1405,26 @@ namespace Gestion.Web.Data
                                 obj.SucursalLocalidad = oReader["SucursalLocalidad"] as string;
                                 obj.SucursalCodigoPostal = oReader["SucursalCodigoPostal"] as string;
                                 obj.SucursalTelefono = oReader["SucursalTelefono"] as string;
-                                
+
                                 obj.VersionImpresion = oReader["VersionImpresion"] as string;
-                                
-                                //Agregamos el objeto a la coleccion de resultados
-                                objs.Add(obj);
-                                obj = null;
+
                             }
                         }
                         //retornamos los valores encontrados
 
-
-                        return objs;
+                        return obj;
                     }
 
                     finally
                     {
                         //el Finally nos da siempre la oportunidad de liberar
                         //la memoria utilizada por los objetos 
-                        objs = null;
+                        obj = null;
                     }
                 }
             }
         }
-
+        
         public async Task<PresupuestosDetalleDTO> spPresupuestosDetalle(string id)
         {
             //Creamos la conexión a utilizar.
@@ -1446,38 +1466,38 @@ namespace Gestion.Web.Data
                                 //en la colección
                                 var obj = new PresupuestosDetalleDTO();
                                 obj.Id = oReader["Id"].ToString();
-                                obj.Codigo = oReader["Codigo"].ToString();
-                                obj.Fecha = (DateTime)oReader["Fecha"];
-                                obj.FechaVencimiento = (DateTime)oReader["FechaVencimiento"];
-                                obj.Estado = oReader["Estado"].ToString();
-                                obj.UsuarioAlta = (string)oReader["UsuarioAlta"];
+                                //obj.Codigo = oReader["Codigo"].ToString();
+                                //obj.Fecha = (DateTime)oReader["Fecha"];
+                                //obj.FechaVencimiento = (DateTime)oReader["FechaVencimiento"];
+                                //obj.Estado = oReader["Estado"].ToString();
+                                //obj.UsuarioAlta = (string)oReader["UsuarioAlta"];
 
-                                obj.ClienteId = (string)oReader["ClienteId"];
-                                obj.ClienteCodigo = (string)oReader["ClienteCodigo"];
-                                obj.ClienteRazonSocial = (string)oReader["RazonSocial"];
-                                obj.ClienteNroDocumento = (string)oReader["NroDocumento"];
-                                obj.ClienteCuilCuit = (string)oReader["CuilCuit"];
+                                //obj.ClienteId = (string)oReader["ClienteId"];
+                                //obj.ClienteCodigo = (string)oReader["ClienteCodigo"];
+                                //obj.ClienteRazonSocial = (string)oReader["RazonSocial"];
+                                //obj.ClienteNroDocumento = (string)oReader["NroDocumento"];
+                                //obj.ClienteCuilCuit = (string)oReader["CuilCuit"];
 
-                                obj.TipoResponsableId = oReader["TipoResponsableId"] as string;
-                                obj.TipoResponsable = oReader["TipoResponsable"] as string;
+                                //obj.TipoResponsableId = oReader["TipoResponsableId"] as string;
+                                //obj.TipoResponsable = oReader["TipoResponsable"] as string;
 
-                                obj.ProductoId = (string)oReader["ProductoId"];
-                                obj.ProductoCodigo = (string)oReader["ProductoCodigo"];
-                                obj.ProductoNombre = (string)oReader["Producto"];
-                                obj.ProductoPrecio = (decimal)oReader["Precio"];
-                                obj.ProductoPrecioSinImpuesto = (decimal)oReader["PrecioSinImpuesto"];
-                                obj.ProductoCantidad = (int)oReader["Cantidad"];
+                                //obj.ProductoId = (string)oReader["ProductoId"];
+                                //obj.ProductoCodigo = (string)oReader["ProductoCodigo"];
+                                //obj.ProductoNombre = (string)oReader["Producto"];
+                                //obj.ProductoPrecio = (decimal)oReader["Precio"];
+                                //obj.ProductoPrecioSinImpuesto = (decimal)oReader["PrecioSinImpuesto"];
+                                //obj.ProductoCantidad = (int)oReader["Cantidad"];
 
-                                obj.SubTotal = (decimal)oReader["SubTotal"];
-                                obj.SubTotalSinImpuesto = (decimal)oReader["SubTotalSinImpuesto"];
-                                obj.DetalleId = (string)oReader["DetalleId"];
+                                //obj.SubTotal = (decimal)oReader["SubTotal"];
+                                //obj.SubTotalSinImpuesto = (decimal)oReader["SubTotalSinImpuesto"];
+                                //obj.DetalleId = (string)oReader["DetalleId"];
 
-                                obj.Cantidad = (int)oReader["CantidadTotal"];
-                                obj.Total = (decimal)oReader["PrecioTotal"];
-                                obj.TotalSinImpuesto = (decimal)oReader["PrecioTotalSinImpuesto"];
-                                obj.TotalDescuento = (decimal)oReader["PrecioTotalDescuento"];
-                                obj.TotalSinImpuestoDescuento = (decimal)oReader["PrecioTotalSinImpuestoDescuento"];
-                                obj.Descuento = (decimal)oReader["DescuentoPorcentaje"];
+                                //obj.Cantidad = (int)oReader["CantidadTotal"];
+                                //obj.Total = (decimal)oReader["PrecioTotal"];
+                                //obj.TotalSinImpuesto = (decimal)oReader["PrecioTotalSinImpuesto"];
+                                //obj.TotalDescuento = (decimal)oReader["PrecioTotalDescuento"];
+                                //obj.TotalSinImpuestoDescuento = (decimal)oReader["PrecioTotalSinImpuestoDescuento"];
+                                //obj.Descuento = (decimal)oReader["DescuentoPorcentaje"];
 
 
                                 //Agregamos el objeto a la coleccion de resultados
@@ -1496,6 +1516,344 @@ namespace Gestion.Web.Data
                         //el Finally nos da siempre la oportunidad de liberar
                         //la memoria utilizada por los objetos 
                         objs = null;
+                    }
+                }
+            }
+        }
+
+        public async Task<List<PresupuestosDetalleDTO>> spPresupuestosDetallePresupuesto(string presupuestoId)
+        {
+            //Creamos la conexión a utilizar.
+            //Utilizamos la sentencia Using para asegurarnos de cerrar la conexión
+            //y liberar el objeto al salir de esta sección de manera automática            
+            using (var oCnn = factoryConnection.GetConnection())
+            {
+                using (SqlCommand oCmd = new SqlCommand())
+                {
+                    //asignamos la conexion de trabajo
+                    oCmd.Connection = oCnn;
+
+                    //utilizamos stored procedures
+                    oCmd.CommandType = System.Data.CommandType.StoredProcedure;
+
+                    //el indicamos cual stored procedure utilizar
+                    oCmd.CommandText = "PresupuestosDetalleGetPresupuesto";
+
+                    //le asignamos el parámetro para el stored procedure
+                    oCmd.Parameters.AddWithValue("@PresupuestoId", presupuestoId);
+
+
+                    //aunque debemos buscar solo un elemento, siempre devolvemos
+                    //una colección. Es más fácil de manipular y controlar 
+                    var objs = new List<PresupuestosDetalleDTO>();
+
+                    //No retornamos DataSets, siempre utilizamos objetos para hacernos 
+                    //independientes de la estructura de las tablas en el resto
+                    //de las capas. Para ellos leemos con el DataReader y creamos
+                    //los objetos asociados que se esperan
+                    try
+                    {
+                        //Ejecutamos el comando y retornamos los valores
+                        using (SqlDataReader oReader = await oCmd.ExecuteReaderAsync())
+                        {
+                            while (oReader.Read())
+                            {
+                                //si existe algun valor, creamos el objeto y lo almacenamos
+                                //en la colección
+                                var obj = new PresupuestosDetalleDTO();
+                                obj.Id = oReader["Id"] as string;
+                                obj.PresupuestoId = oReader["PresupuestoId"] as string;
+                                obj.ProductoId = oReader["ProductoId"] as string;
+                                obj.ProductoCodigo = oReader["ProductoCodigo"] as string;
+                                obj.ProductoNombre = oReader["ProductoNombre"] as string;
+                                if (!DBNull.Value.Equals(oReader["Precio"]))
+                                    obj.Precio = (decimal)oReader["Precio"];
+                                if (!DBNull.Value.Equals(oReader["PrecioContado"]))
+                                    obj.PrecioContado = (decimal)oReader["PrecioContado"];
+                                if (!DBNull.Value.Equals(oReader["PrecioSinImpuesto"]))
+                                    obj.PrecioSinImpuesto = (decimal)oReader["PrecioSinImpuesto"];
+                                if (!DBNull.Value.Equals(oReader["PrecioContadoSinImpuesto"]))
+                                    obj.PrecioContadoSinImpuesto = (decimal)oReader["PrecioContadoSinImpuesto"];
+                                if (!DBNull.Value.Equals(oReader["Cantidad"]))
+                                    obj.Cantidad= (int)oReader["Cantidad"];
+                                obj.UsuarioAlta = oReader["UsuarioAlta"] as string;
+                                obj.FechaAlta = (DateTime)oReader["FechaAlta"];
+                                obj.UsuarioEdit = oReader["UsuarioEdit"] as string;
+
+                                if (!DBNull.Value.Equals(oReader["FechaEdit"]))
+                                    obj.FechaEdit = (DateTime)oReader["FechaEdit"];
+
+
+
+                                //Agregamos el objeto a la coleccion de resultados
+                                objs.Add(obj);
+                                obj = null;
+                            }
+                        }
+                        //retornamos los valores encontrados
+
+
+                        return objs;
+                    }
+
+                    finally
+                    {
+                        //el Finally nos da siempre la oportunidad de liberar
+                        //la memoria utilizada por los objetos 
+                        objs = null;
+                    }
+                }
+            }
+        }
+
+        public async Task<PresupuestosDetalleDTO> spPresupuestosDetalleId(string Id)
+        {
+            //Creamos la conexión a utilizar.
+            //Utilizamos la sentencia Using para asegurarnos de cerrar la conexión
+            //y liberar el objeto al salir de esta sección de manera automática            
+            using (var oCnn = factoryConnection.GetConnection())
+            {
+                using (SqlCommand oCmd = new SqlCommand())
+                {
+                    //asignamos la conexion de trabajo
+                    oCmd.Connection = oCnn;
+
+                    //utilizamos stored procedures
+                    oCmd.CommandType = System.Data.CommandType.StoredProcedure;
+
+                    //el indicamos cual stored procedure utilizar
+                    oCmd.CommandText = "PresupuestosDetalleGetId";
+
+                    //le asignamos el parámetro para el stored procedure
+                    oCmd.Parameters.AddWithValue("@Id", Id);
+
+
+                    //aunque debemos buscar solo un elemento, siempre devolvemos
+                    //una colección. Es más fácil de manipular y controlar 
+                    var obj = new PresupuestosDetalleDTO();
+
+                    //No retornamos DataSets, siempre utilizamos objetos para hacernos 
+                    //independientes de la estructura de las tablas en el resto
+                    //de las capas. Para ellos leemos con el DataReader y creamos
+                    //los objetos asociados que se esperan
+                    try
+                    {
+                        //Ejecutamos el comando y retornamos los valores
+                        using (SqlDataReader oReader = await oCmd.ExecuteReaderAsync())
+                        {
+                            if (oReader.Read())
+                            {
+                                //si existe algun valor, creamos el objeto y lo almacenamos
+                                //en la colección
+                                obj.Id = oReader["Id"] as string;
+                                obj.PresupuestoId = oReader["PresupuestoId"] as string;
+                                obj.ProductoId = oReader["ProductoId"] as string;
+                                obj.ProductoCodigo = oReader["ProductoCodigo"] as string;
+                                obj.ProductoNombre = oReader["ProductoNombre"] as string;
+                                if (!DBNull.Value.Equals(oReader["Precio"]))
+                                    obj.Precio = (decimal)oReader["Precio"];
+                                if (!DBNull.Value.Equals(oReader["PrecioContado"]))
+                                    obj.PrecioContado = (decimal)oReader["PrecioContado"];
+                                if (!DBNull.Value.Equals(oReader["PrecioSinImpuesto"]))
+                                    obj.PrecioSinImpuesto = (decimal)oReader["PrecioSinImpuesto"];
+                                if (!DBNull.Value.Equals(oReader["PrecioContadoSinImpuesto"]))
+                                    obj.PrecioContadoSinImpuesto = (decimal)oReader["PrecioContadoSinImpuesto"];
+                                if (!DBNull.Value.Equals(oReader["Cantidad"]))
+                                    obj.Cantidad = (int)oReader["Cantidad"];
+                                obj.UsuarioAlta = oReader["UsuarioAlta"] as string;
+                                obj.FechaAlta = (DateTime)oReader["FechaAlta"];
+                                obj.UsuarioEdit = oReader["UsuarioEdit"] as string;
+
+                                if (!DBNull.Value.Equals(oReader["FechaEdit"]))
+                                    obj.FechaEdit = (DateTime)oReader["FechaEdit"];
+
+                            }
+                        }
+                        //retornamos los valores encontrados
+
+
+                        return obj;
+                    }
+
+                    finally
+                    {
+                        //el Finally nos da siempre la oportunidad de liberar
+                        //la memoria utilizada por los objetos 
+                        obj = null;
+                    }
+                }
+            }
+        }
+
+        public async Task<int> spDescuentoBorrar(string Id,string usuario)
+        {
+            try
+            {
+                using (var oCnn = factoryConnection.GetConnection())
+                {
+                    using (SqlCommand oCmd = new SqlCommand())
+                    {
+                        //asignamos la conexion de trabajo
+                        oCmd.Connection = oCnn;
+
+                        //utilizamos stored procedures
+                        oCmd.CommandType = System.Data.CommandType.StoredProcedure;
+
+                        //el indicamos cual stored procedure utilizar
+                        oCmd.CommandText = "PresupuestosDescuentoBorrar";
+
+                        //le asignamos los parámetros para el stored procedure
+                        //los valores viene en el parámetro item del procedimiento
+                        oCmd.Parameters.AddWithValue("@Id", Id);
+                        oCmd.Parameters.AddWithValue("@Usuario", usuario);
+
+                        //Ejecutamos el comando y retornamos el id generado
+                        await oCmd.ExecuteScalarAsync();
+
+                        return 1;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error al insertar el registro: " + ex.Message);
+            }
+            finally
+            {
+                factoryConnection.CloseConnection();
+            }
+        }
+
+        public async Task<int> spDatosFiscalesBorrar(string Id, string usuario)
+        {
+            try
+            {
+                using (var oCnn = factoryConnection.GetConnection())
+                {
+                    using (SqlCommand oCmd = new SqlCommand())
+                    {
+                        //asignamos la conexion de trabajo
+                        oCmd.Connection = oCnn;
+
+                        //utilizamos stored procedures
+                        oCmd.CommandType = System.Data.CommandType.StoredProcedure;
+
+                        //el indicamos cual stored procedure utilizar
+                        oCmd.CommandText = "ComprobantesBorrarDatosFiscales";
+
+                        //le asignamos los parámetros para el stored procedure
+                        //los valores viene en el parámetro item del procedimiento
+                        oCmd.Parameters.AddWithValue("@Id", Id);
+                        oCmd.Parameters.AddWithValue("@Usuario", usuario);
+
+                        //Ejecutamos el comando y retornamos el id generado
+                        await oCmd.ExecuteScalarAsync();
+
+                        return 1;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error al insertar el registro: " + ex.Message);
+            }
+            finally
+            {
+                factoryConnection.CloseConnection();
+            }
+        }
+
+        public async Task<PresupuestosDTO> spPresupuesto(string id)
+        {
+            //Creamos la conexión a utilizar.
+            //Utilizamos la sentencia Using para asegurarnos de cerrar la conexión
+            //y liberar el objeto al salir de esta sección de manera automática            
+            using (var oCnn = factoryConnection.GetConnection())
+            {
+                using (SqlCommand oCmd = new SqlCommand())
+                {
+                    //asignamos la conexion de trabajo
+                    oCmd.Connection = oCnn;
+
+                    //utilizamos stored procedures
+                    oCmd.CommandType = System.Data.CommandType.StoredProcedure;
+
+                    //el indicamos cual stored procedure utilizar
+                    oCmd.CommandText = "PresupuestosGet";
+
+                    //le asignamos el parámetro para el stored procedure
+                    oCmd.Parameters.AddWithValue("@Id", id);
+
+
+                    //aunque debemos buscar solo un elemento, siempre devolvemos
+                    //una colección. Es más fácil de manipular y controlar 
+                    var obj = new PresupuestosDTO();
+                    //No retornamos DataSets, siempre utilizamos objetos para hacernos 
+                    //independientes de la estructura de las tablas en el resto
+                    //de las capas. Para ellos leemos con el DataReader y creamos
+                    //los objetos asociados que se esperan
+                    try
+                    {
+                        //Ejecutamos el comando y retornamos los valores
+                        using (SqlDataReader oReader = await oCmd.ExecuteReaderAsync())
+                        {
+                            if (oReader.Read())
+                            {
+                                obj.Id = oReader["Id"] as string;
+                                obj.Codigo = oReader["Codigo"] as string;
+                                obj.Fecha = (DateTime)oReader["Fecha"];
+                                obj.FechaVencimiento = (DateTime)oReader["FechaVencimiento"];
+
+                                obj.ClienteId = oReader["ClienteId"] as string;
+                                obj.ClienteCodigo = oReader["ClienteCodigo"] as string;
+                                obj.ClienteRazonSocial = oReader["RazonSocial"] as string;
+                                obj.ClienteNroDocumento = oReader["NroDocumento"] as string;
+                                obj.ClienteCuitCuil = oReader["CuilCuit"] as string;
+
+                                obj.TipoResponsableId = oReader["TipoResponsableId"] as string;
+                                obj.TipoResponsable = oReader["TipoResponsable"] as string;
+
+                                obj.ClienteCategoriaId = oReader["ClienteCategoriaId"] as string;
+                                obj.ClienteCategoria = oReader["ClienteCategoria"] as string;
+
+                                obj.EstadoId = oReader["EstadoId"] as string;
+                                obj.Estado = oReader["Estado"] as string;
+
+                                obj.DescuentoId = oReader["DescuentoId"] as string;
+                                obj.DescuentoPorcentaje = (decimal)oReader["DescuentoPorcentaje"];
+
+                                if (!DBNull.Value.Equals(oReader["FechaAprobacion"]))
+                                    obj.FechaAprobacion = (DateTime)oReader["FechaAprobacion"];
+                                if (!DBNull.Value.Equals(oReader["FechaRechazo"]))
+                                    obj.FechaRechazo = (DateTime)oReader["FechaRechazo"];
+
+                                obj.MotivoAprobacionRechazo = oReader["MotivoAprobacionRechazo"] as string;
+                                obj.UsuarioAprobacionRechazo = oReader["UsuarioAprobacionRechazo"] as string;
+
+                                obj.Precio = (decimal)oReader["Precio"];
+                                obj.PrecioContado = (decimal)oReader["PrecioContado"];
+                                obj.CantidadProductos = (int)oReader["CantidadProductos"];
+
+                                obj.Estado = oReader["Estado"].ToString();
+                                obj.UsuarioAlta = oReader["UsuarioAlta"] as string;
+                                obj.FechaAlta = (DateTime)oReader["FechaAlta"];
+                                obj.UsuarioEdit = oReader["UsuarioEdit"] as string;
+
+                                if (!DBNull.Value.Equals(oReader["FechaEdit"]))
+                                    obj.FechaEdit = (DateTime)oReader["FechaEdit"];
+
+                            }
+                        }
+                        //retornamos los valores encontrados
+
+                        return obj;
+                    }
+
+                    finally
+                    {
+                        //el Finally nos da siempre la oportunidad de liberar
+                        //la memoria utilizada por los objetos 
+                        obj = null;
                     }
                 }
             }

@@ -2,7 +2,7 @@
 
 @{
     ViewData["Title"] = "Seleccion de Productos";
-    var productos = (IEnumerable<Productos>)ViewData["productos"];
+    var productos = (IEnumerable<ProductosIndex>)ViewData["productos"];
 }
 
 <div class="content-wrapper">
@@ -38,13 +38,18 @@
                             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                             <div class="form-group">
                                 <label asp-for="Producto.Producto" class="control-label"></label>
-                                <input asp-for="NombreProducto" class="form-control input-sm" />
-                                <span asp-validation-for="NombreProducto" class="text-danger"></span>
+                                <input asp-for="ProductoNombre" class="form-control input-sm" />
+                                <span asp-validation-for="ProductoNombre" class="text-danger"></span>
                             </div>
                             <div class="form-group">
                                 <label asp-for="Precio" class="control-label"></label>
                                 <input asp-for="Precio" class="form-control input-sm" />
                                 <span asp-validation-for="Precio" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="PrecioContado" class="control-label"></label>
+                                <input asp-for="PrecioContado" class="form-control input-sm" />
+                                <span asp-validation-for="PrecioContado" class="text-danger"></span>
                             </div>
                             <div class="form-group">
                                 <label asp-for="Cantidad" class="control-label"></label>
@@ -83,32 +88,38 @@
                                     <th>
                                         Precio
                                     </th>
+                                    <th>
+                                        Precio en Efectivo
+                                    </th>
                                     <th>Operaciones</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach (var item in productos)
                                 {
-                                    <tr>
-                                        <td>
-                                            @Html.DisplayFor(modelItem => item.Codigo)
-                                        </td>
-                                        <td>
-                                            @Html.DisplayFor(modelItem => item.Producto)
-                                        </td>
-                                        <td>
-                                            @Html.DisplayFor(modelItem => item.PrecioVenta)
-                                        </td>
-                                        <td>
-                                            <div class="btn-group">
-                                                @{
-                                                    var param = new Dictionary<string, string> { { "productoId", item.Id }, { "presupuestoId", Model.PresupuestoId } };
-                                                }
-                                                <a class="btn btn-warning btn-sm" asp-action="ProductoSeleccion" asp-all-route-data="@param">Seleccionar Producto</a>
+                                <tr>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Codigo)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Producto)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.PrecioVenta)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.PrecioContado)
+                                    </td>
+                                    <td>
+                                        <div class="btn-group">
+                                            @{
+                                                var param = new Dictionary<string, string> { { "productoId", item.Id }, { "presupuestoId", Model.PresupuestoId } };
+                                            }
+                                            <a class="btn btn-warning btn-sm" asp-action="ProductoSeleccion" asp-all-route-data="@param">Seleccionar Producto</a>
 
-                                            </div>
-                                        </td>
-                                    </tr>
+                                        </div>
+                                    </td>
+                                </tr>
                                 }
                                 
                             </tbody>                            

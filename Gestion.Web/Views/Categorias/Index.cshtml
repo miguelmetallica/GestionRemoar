@@ -34,7 +34,13 @@ BREADCRUMB
                     <thead>
                         <tr>
                             <th>
+                                @Html.DisplayNameFor(model => model.Codigo)
+                            </th>
+                            <th>
                                 @Html.DisplayNameFor(model => model.Descripcion)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.DescuentoPorcentaje)
                             </th>
                             <th>
                                 @Html.DisplayNameFor(model => model.PadreId)
@@ -53,7 +59,13 @@ BREADCRUMB
                         {
                         <tr>
                             <td>
+                                @Html.DisplayFor(modelItem => item.Codigo)
+                            </td>
+                            <td>
                                 @Html.DisplayFor(modelItem => item.Descripcion)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.DescuentoPorcentaje)
                             </td>
                             <td>
                                 @Html.DisplayFor(modelItem => item.Padre.Descripcion)

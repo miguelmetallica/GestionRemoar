@@ -1,4 +1,4 @@
-﻿@model Gestion.Web.Models.Productos
+﻿@model Gestion.Web.Models.ProductosDTO
 
 @{
     ViewData["Title"] = "Detalle del Alicuota";
@@ -46,7 +46,7 @@
                                     @Html.DisplayNameFor(model => model.TipoProductoId)
                                 </dt>
                                 <dd>
-                                    @Html.DisplayFor(model => model.TipoProducto.Descripcion)
+                                    @Html.DisplayFor(model => model.TipoProducto)
                                 </dd>
                                 <dt>
                                     @Html.DisplayNameFor(model => model.Producto)
@@ -71,6 +71,24 @@
                                 </dt>
                                 <dd>
                                     @Html.DisplayFor(model => model.PrecioVenta)
+                                </dd>
+                                <dt>
+                                    @Html.DisplayNameFor(model => model.PrecioRebaja)
+                                </dt>
+                                <dd>
+                                    @Html.DisplayFor(model => model.PrecioRebaja)
+                                </dd>
+                                <dt>
+                                    @Html.DisplayNameFor(model => model.RebajaDesde)
+                                </dt>
+                                <dd>
+                                    @Html.DisplayFor(model => model.RebajaDesde)
+                                </dd>
+                                <dt>
+                                    @Html.DisplayNameFor(model => model.RebajaHasta)
+                                </dt>
+                                <dd>
+                                    @Html.DisplayFor(model => model.RebajaHasta)
                                 </dd>
                                 <dt>
                                     @Html.DisplayNameFor(model => model.Peso)
@@ -100,39 +118,53 @@
                                     @Html.DisplayNameFor(model => model.CuentaCompraId)
                                 </dt>
                                 <dd>
-                                    @Html.DisplayFor(model => model.CuentaCompra.Descripcion)
+                                    @Html.DisplayFor(model => model.CuentaCompra)
                                 </dd>
                                 <dt>
                                     @Html.DisplayNameFor(model => model.CuentaVentaId)
                                 </dt>
                                 <dd>
-                                    @Html.DisplayFor(model => model.CuentaVenta.Descripcion)
+                                    @Html.DisplayFor(model => model.CuentaVenta)
                                 </dd>
                                 <dt>
                                     @Html.DisplayNameFor(model => model.UnidadMedidaId)
                                 </dt>
                                 <dd>
-                                    @Html.DisplayFor(model => model.UnidadMedida.Descripcion)
+                                    @Html.DisplayFor(model => model.UnidadMedida)
                                 </dd>
                                 <dt>
                                     @Html.DisplayNameFor(model => model.AlicuotaId)
                                 </dt>
                                 <dd>
-                                    @Html.DisplayFor(model => model.Alicuota.Descripcion)
+                                    @Html.DisplayFor(model => model.Alicuota)
                                 </dd>
                                 <dt>
                                     @Html.DisplayNameFor(model => model.ProveedorId)
                                 </dt>
                                 <dd>
-                                    @Html.DisplayFor(model => model.ProveedorId)
+                                    @Html.DisplayFor(model => model.Proveedor)
                                 </dd>
                                 <dt>
                                     @Html.DisplayNameFor(model => model.CategoriaId)
                                 </dt>
                                 <dd>
-                                    @Html.DisplayFor(model => model.CategoriaId)
+                                    @Html.DisplayFor(model => model.Categoria)
                                 </dd>
-
+                                <dt>
+                                    @Html.DisplayNameFor(model => model.ControlaStock)
+                                </dt>
+                                <dd>
+                                    @Html.DisplayFor(model => model.ControlaStock)
+                                </dd>
+                                <dt>
+                                    @Html.DisplayNameFor(model => model.AceptaDescuento)
+                                </dt>
+                                <dd>
+                                    @Html.DisplayFor(model => model.AceptaDescuento)
+                                </dd>
+                                <dt>
+                                    @Html.DisplayNameFor(model => model.Estado)
+                                </dt>
                                 <dd>
                                     @{
                                         if (Model.Estado)
@@ -166,6 +198,7 @@
                             <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning btn-sm">Editar datos del Producto</a>
                             <a asp-action="AddImage" asp-route-id="@Model.Id" class="btn btn-primary btn-sm">Agregar Imagenes</a>
                             <a asp-action="Index" class="btn btn-default pull-right btn-sm">Volver</a>
+                            <a asp-action="Copiar" class="btn btn-success pull-right btn-sm">Copiar</a>
                         </div>
                     </form>
                 </div>
