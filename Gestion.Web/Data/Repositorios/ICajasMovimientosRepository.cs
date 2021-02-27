@@ -8,5 +8,6 @@ namespace Gestion.Web.Data
     {
         Task<IQueryable<CajasMovimientos>> GetMovimientos(string usuario);
         Task<IQueryable<CajasMovimientos>> GetMovimientosAll(string usuario);
+        Task<int> spPagoProveedorInsert(CajasPagoProveedorDTO item);
     }
 }

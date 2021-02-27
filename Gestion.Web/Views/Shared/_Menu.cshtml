@@ -110,7 +110,10 @@
             <ul class="treeview-menu">
                 <li><a asp-controller="Cajas" asp-action="InformeCaja"><i class="fa fa-circle-o"></i> Informe de Caja</a></li>
                 <li><a asp-controller="CajasMovimientos" asp-action="Index"><i class="fa fa-circle-o"></i> Movimientos de Caja</a></li>
-
+                <li><a asp-controller="CajasMovimientos" asp-action="CreatePagoProveedor"><i class="fa fa-circle-o"></i> Pago a Proveedores</a></li>
+                <li><a asp-controller="CajasMovimientos" asp-action="CreateEnvioDineroSucursal"><i class="fa fa-circle-o"></i> Envio $ a Sucursal</a></li>
+                <li><a asp-controller="CajasMovimientos" asp-action="CreateRecepcionDineroSucursal"><i class="fa fa-circle-o"></i> Recibir $ de Sucursal</a></li>
+                
             </ul>
         </li>
     }
@@ -153,6 +156,15 @@
                 }
                 <li> <a asp-controller="FormasPagos" asp-action="Index"><i class="fa fa-circle-o"></i> Formas de Pagos</a></li>
             </ul>
+        </li>
+    }
+
+    @if (User.IsInRole("Admin") || User.IsInRole("Proveedores"))
+    {
+        <li>
+            <a asp-controller="Proveedores" asp-action="Index">
+                <i class="fas fa-tachometer-alt"></i> <span>Proveedores</span>
+            </a>
         </li>
     }
 

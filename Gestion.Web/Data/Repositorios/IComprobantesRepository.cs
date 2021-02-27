@@ -50,7 +50,7 @@ namespace Gestion.Web.Data
         Task<List<ComprobantesFormasPagosDTO>> spComprobantesFormasPagosPresupuesto(string presupuestoId);
         Task<List<ComprobantesDTO>> spPresupuestosComprobantesDevolucion();
         Task<int> spComprobanteDetalleInsertDevolucionTMP(ComprobantesDetalleDTO detalleDTO);
-        Task<int> spDevolucion(ComprobantesDetalleDTO detalleDTO);
+        Task<int> spDevolucion(ComprobantesDTO detalleDTO);
         Task<List<ComprobantesDetalleDTO>> spComprobanteDetalleDevolucion(string Id);
         Task<List<ComprobantesDTO>> spComprobantesImputaciones();
         Task<List<ComprobantesDetalleDTO>> spComprobanteRemitosDevolucionesGet(string presupuestoId);

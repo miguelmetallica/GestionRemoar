@@ -20,6 +20,7 @@ function cargarDatosImputa(Id, ComprobanteId, ProductoId, ProductoCodigo, Produc
     var mImporte = document.getElementById('mdlImporte');
     var mpagado = document.getElementById('pagado');
     var mdlDisponible = document.getElementById('mdlDisponible');
+    var mdlSaldo = document.getElementById('mdlSaldo');
     
     var importe = 0;    
 
@@ -38,11 +39,13 @@ function cargarDatosImputa(Id, ComprobanteId, ProductoId, ProductoCodigo, Produc
     mProductoId.value = ProductoId;
     mProductoCodigo.value = ProductoCodigo;
     mProductoNombre.value = ProductoNombre;
-    mPrecio.value = Precio.toFixed(2);;    
+    mPrecio.value = Precio.toFixed(2);    
     mImputado.value = Imputado.toFixed(2);
     mImputadoPorcentaje.value = ImputadoPorcentaje.toFixed(2);
     mImporte.value = importe.toFixed(2);
     mdlDisponible.value = mpagado.value;
+
+    mdlSaldo.value = (Precio.toFixed(2) - Imputado.toFixed(2)).toFixed(2);
 };  
 
 function validarFormularioModal() {

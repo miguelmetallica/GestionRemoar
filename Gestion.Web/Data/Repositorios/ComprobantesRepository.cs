@@ -922,6 +922,8 @@ namespace Gestion.Web.Data
                                 obj.SucursalCodigoPostal = oReader["SucursalCodigoPostal"] as string;
                                 obj.SucursalTelefono = oReader["SucursalTelefono"] as string;
 
+                                obj.CodigoPresupuesto = oReader["CodigoPresupuesto"] as string;
+
                                 obj.TipoComprobanteFiscal = oReader["TipoComprobanteFiscal"] as string;
                                 obj.LetraFiscal = oReader["LetraFiscal"] as string;
                                 if (!DBNull.Value.Equals(oReader["PtoVentaFiscal"]))
@@ -3136,7 +3138,7 @@ namespace Gestion.Web.Data
             }
         }
 
-        public async Task<int> spDevolucion(ComprobantesDetalleDTO detalleDTO)
+        public async Task<int> spDevolucion(ComprobantesDTO detalleDTO)
         {
             try
             {
@@ -3155,7 +3157,8 @@ namespace Gestion.Web.Data
 
                         //le asignamos los parámetros para el stored procedure
                         //los valores viene en el parámetro item del procedimiento
-                        oCmd.Parameters.AddWithValue("@ComprobanteId", detalleDTO.ComprobanteId);
+                        oCmd.Parameters.AddWithValue("@ComprobanteId", detalleDTO.Id);
+                        oCmd.Parameters.AddWithValue("@Observaciones", detalleDTO.Observaciones);
                         oCmd.Parameters.AddWithValue("@Usuario", detalleDTO.UsuarioAlta);
 
                         //Ejecutamos el comando y retornamos el id generado

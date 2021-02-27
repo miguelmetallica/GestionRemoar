@@ -87,7 +87,8 @@ BREADCRUMB
                             </td>
                             <td>
                                 <div class="btn-group">
-                                    <a class="btn btn-primary btn-sm" asp-action="ImputacionProducto" asp-route-id="@item.Id" ><i class="fa fa-search"></i></a>
+                                    <a class="btn btn-primary btn-sm" asp-action="ImputacionProducto" asp-route-id="@item.Id">Imputar</a>
+                                    <a class="btn btn-danger btn-sm" asp-action="ImputacionAutorizaProducto" asp-route-id="@item.Id">Autoriza Entrega</a>
                                 </div>
                             </td>
                         </tr>

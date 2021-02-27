@@ -104,6 +104,14 @@
                         </tbody>
                     </table>
                 </div>
+
+                @if (Model.Observaciones != "") 
+                { 
+                    <div class="col-sm-12 invoice-col">
+                        <b>Observaciones: @Model.Observaciones</b><br>
+                    </div>
+                }
+                
             </div>
             <!-- /.row -->            
         </section>

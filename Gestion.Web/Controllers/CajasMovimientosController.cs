@@ -16,17 +16,23 @@ namespace Gestion.Web.Controllers
         private readonly IUserHelper userHelper;
         private readonly ICajasRepository cajasRepository;
         private readonly ICajasTiposMovimientosRepository cajasTiposMovimientosRepository;
+        private readonly IProveedoresRepository proveedoresRepository;
+        private readonly ISucursalesRepository sucursalesRepository;
 
         public CajasMovimientosController(ICajasMovimientosRepository repository, 
                                         IUserHelper userHelper,
                                         ICajasRepository cajasRepository,
-                                        ICajasTiposMovimientosRepository cajasTiposMovimientosRepository
+                                        ICajasTiposMovimientosRepository cajasTiposMovimientosRepository,
+                                        IProveedoresRepository proveedoresRepository,
+                                        ISucursalesRepository sucursalesRepository
             )
         {
             this.repository = repository;
             this.userHelper = userHelper;
             this.cajasRepository = cajasRepository;
             this.cajasTiposMovimientosRepository = cajasTiposMovimientosRepository;
+            this.proveedoresRepository = proveedoresRepository;
+            this.sucursalesRepository = sucursalesRepository;
         }
 
         [Authorize(Roles = "Admin,CajasMovimientos,CajasMovimientosAdministra")]
@@ -346,5 +352,100 @@ namespace Gestion.Web.Controllers
             return View(CajasMovimientos);
         }
 
+
+        [Authorize(Roles = "Admin,CajasMovimientos")]
+        public async Task<IActionResult> CreatePagoProveedor()
+        {
+            var user = await userHelper.GetUserByEmailAsync(User.Identity.Name);
+            ViewBag.Cajas = this.cajasRepository.GetCombo(user.SucursalId);
+            ViewBag.Proveedores = this.proveedoresRepository.GetCombo();
+
+            var cajasPagoProveedorDTO = new CajasPagoProveedorDTO();
+            cajasPagoProveedorDTO.Fecha = DateTime.Today;
+            cajasPagoProveedorDTO.TipoMovimientoId = "a6fc2dc7-8d11-4d0c-b60a-91b915009e5e";
+            return View(cajasPagoProveedorDTO);
+        }
+
+        [Authorize(Roles = "Admin,CajasMovimientos")]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreatePagoProveedor(CajasPagoProveedorDTO cajasPagoProveedorDTO)
+        {
+            cajasPagoProveedorDTO.Fecha = DateTime.Today;
+
+            if (ModelState.IsValid)
+            {
+                var tipoMov = await cajasTiposMovimientosRepository.GetByIdAsync(cajasPagoProveedorDTO.TipoMovimientoId);
+                var usuarios = await userHelper.GetUserByEmailAsync(User.Identity.Name);
+
+                cajasPagoProveedorDTO.FechaAlta = DateTime.Now;
+                cajasPagoProveedorDTO.UsuarioAlta = User.Identity.Name;
+                cajasPagoProveedorDTO.SucursalId = usuarios.SucursalId;
+                if (tipoMov.EsDebe)
+                {
+                    cajasPagoProveedorDTO.Importe = -1 * Math.Abs(cajasPagoProveedorDTO.Importe);
+                }
+                else
+                {
+                    cajasPagoProveedorDTO.Importe = Math.Abs(cajasPagoProveedorDTO.Importe);
+                }
+
+                await repository.spPagoProveedorInsert(cajasPagoProveedorDTO);
+                return RedirectToAction(nameof(Index));
+            }
+
+            var user = await userHelper.GetUserByEmailAsync(User.Identity.Name);
+            ViewBag.Cajas = this.cajasRepository.GetCombo(user.SucursalId);
+            ViewBag.Proveedores = this.proveedoresRepository.GetCombo();
+            return View(cajasPagoProveedorDTO);
+        }
+
+        [Authorize(Roles = "Admin,CajasMovimientos")]
+        public async Task<IActionResult> CreateEnvioDineroSucursal()
+        {
+            var user = await userHelper.GetUserByEmailAsync(User.Identity.Name);
+            ViewBag.Cajas = this.cajasRepository.GetCombo(user.SucursalId);
+            ViewBag.Sucursales = this.sucursalesRepository.GetCombo();
+
+
+            var cajasPagoProveedorDTO = new CajasPagoProveedorDTO();
+            cajasPagoProveedorDTO.Fecha = DateTime.Today;
+            cajasPagoProveedorDTO.TipoMovimientoId = "19777591-e344-47f5-a88a-4e1811094ffe";
+            return View(cajasPagoProveedorDTO);
+        }
+
+        [Authorize(Roles = "Admin,CajasMovimientos")]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreateEnvioDineroSucursal(CajasPagoProveedorDTO cajasPagoProveedorDTO)
+        {
+            cajasPagoProveedorDTO.Fecha = DateTime.Today;
+
+            if (ModelState.IsValid)
+            {
+                var tipoMov = await cajasTiposMovimientosRepository.GetByIdAsync(cajasPagoProveedorDTO.TipoMovimientoId);
+                var usuarios = await userHelper.GetUserByEmailAsync(User.Identity.Name);
+
+                cajasPagoProveedorDTO.FechaAlta = DateTime.Now;
+                cajasPagoProveedorDTO.UsuarioAlta = User.Identity.Name;
+                cajasPagoProveedorDTO.SucursalId = usuarios.SucursalId;
+                if (tipoMov.EsDebe)
+                {
+                    cajasPagoProveedorDTO.Importe = -1 * Math.Abs(cajasPagoProveedorDTO.Importe);
+                }
+                else
+                {
+                    cajasPagoProveedorDTO.Importe = Math.Abs(cajasPagoProveedorDTO.Importe);
+                }
+
+                await repository.spPagoProveedorInsert(cajasPagoProveedorDTO);
+                return RedirectToAction(nameof(Index));
+            }
+
+            var user = await userHelper.GetUserByEmailAsync(User.Identity.Name);
+            ViewBag.Cajas = this.cajasRepository.GetCombo(user.SucursalId);
+            ViewBag.Sucursales = this.sucursalesRepository.GetCombo();
+            return View(cajasPagoProveedorDTO);
+        }
     }
 }

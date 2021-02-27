@@ -32,7 +32,7 @@
                 <!-- general form elements -->
                 <div class="box box-primary">
                     <div class="box-header with-border">
-                        <h3 class="box-title">@Model.TipoComprobante @Model.Codigo</h3>
+                        <h3 class="box-title">PRESUPUESTO @Model.CodigoPresupuesto  -  @Model.TipoComprobante @Model.Codigo</h3>
 
                         <a asp-controller="Comprobantes" asp-action="DevolucionProductos" class="btn btn-default btn-sm pull-right" aria-hidden="true">Volver</a>
 
@@ -57,19 +57,32 @@
                     </form>
 
                     <!-- /.box -->
-                    <div class="box-footer">
-                        <a asp-controller="Comprobantes" asp-action="DevolucionProductos" class="btn btn-default btn-sm pull-right" aria-hidden="true">Volver</a>
-                        @if (Detalle.Count() == 0)
-                        {
-                            <a class="btn btn-primary btn-sm" disabled aria-hidden="true">Generar Devolucion</a>
-                        }
-                        else
-                        {
-                            <a asp-controller="Comprobantes" asp-action="GenerarDevolucion" asp-route-id="@Model.Id" class="btn btn-primary btn-sm" aria-hidden="true">Generar Devolucion</a>
-                        }
+                    <form asp-action="DevolucionProducto" enctype="multipart/form-data">
+                        <div class="box-body">
+                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                            
+                            <input type="hidden" asp-for="Id" />
+                            
+                            <div class="form-group">
+                                <label asp-for="Observaciones" class="control-label"></label>
+                                <input asp-for="Observaciones" class="form-control input-sm" />
+                                <span asp-validation-for="Observaciones" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="box-footer">
+                            <a asp-controller="Comprobantes" asp-action="DevolucionProductos" class="btn btn-default btn-sm pull-right" aria-hidden="true">Volver</a>
+                            @if (Detalle.Count() == 0)
+                            {
+                                <input type="submit" disabled value="Generar Devolucion" class="btn btn-primary btn-sm" />
+                            }
+                            else
+                            {
+                                <input type="submit" value="Generar Devolucion" class="btn btn-primary btn-sm" />
+                                @*<a asp-controller="Comprobantes" asp-action="GenerarDevolucion" asp-route-id="@Model.Id" class="btn btn-primary btn-sm" aria-hidden="true">Generar Devolucion</a>*@
+                            }
 
-                    </div>
-
+                        </div>
+                    </form>
                 </div>
 
                 <div class="box box-primary">

@@ -1,14 +1,16 @@
 ﻿using Gestion.Web.Models;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Gestion.Web.Data
 {
     public class CajasTiposMovimientosRepository : GenericRepository<ParamCajasMovimientosTipos>, ICajasTiposMovimientosRepository
     {
         private readonly DataContext context;
-
         public CajasTiposMovimientosRepository(DataContext context) : base(context)
         {
             this.context = context;
@@ -30,5 +32,7 @@ namespace Gestion.Web.Data
 
             return list;
         }
+
+        
     }
 }
