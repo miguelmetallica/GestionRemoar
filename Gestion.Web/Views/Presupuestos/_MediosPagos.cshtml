@@ -1,0 +1,296 @@
+﻿@model Gestion.Web.Models.PresupuestosDTO
+@{
+    var formasPagos = (IEnumerable<FormasPagos>)ViewData["FormasPagos"];
+    var formasPagosTMP = (IEnumerable<PresupuestosFormasPagosDTO>)ViewData["FormasPagosTMP"];
+    
+}
+<!-- general form elements -->
+<div class="box box-primary">
+    <div class="box-header with-border">
+        <h3 class="box-title">Medios de Pagos</h3>
+    </div>
+    <!-- /.box-header -->
+    <!-- form start -->
+
+    <form>
+        <div class="box-body">
+            <div class="col-md-3">
+                <!-- /.box -->
+                <div class="box box-primary">
+                    <div class="box-header">
+                        <h3 class="box-title">
+                            Formas de Pagos Disponibles
+                        </h3>
+                    </div>
+                    <div class="box-body">
+                        @foreach (var item in formasPagos.Where(x => x.Tipo != "O"))
+                        {
+                            switch (item.Tipo)
+                            {
+                                case "E":
+                                    <a class="btn btn-block btn-social btn-danger " asp-action="Efectivo" asp-route-id="@Model.Id" asp-route-fp="@item.Id">
+                                        <i class="fa fa-bitbucket"></i> @item.Descripcion
+                                    </a>
+                                    break;
+                                case "C":
+                                    <a class="btn btn-block btn-social btn-primary" asp-action="TarjetaCredito" asp-route-id="@Model.Id" asp-route-fp="@item.Id">
+                                        <i class="fa fa-bitbucket"></i> @item.Descripcion
+                                    </a>
+                                    break;
+                                case "D":
+                                    <a class="btn btn-block btn-social btn-success" asp-action="TarjetaDebito" asp-route-id="@Model.Id" asp-route-fp="@item.Id">
+                                        <i class="fa fa-bitbucket"></i> @item.Descripcion
+                                    </a>
+                                    break;
+                                case "X":
+                                    <a class="btn btn-block btn-social btn-warning" asp-action="Cheque" asp-route-id="@Model.Id" asp-route-fp="@item.Id">
+                                        <i class="fa fa-bitbucket"></i> @item.Descripcion
+                                    </a>
+                                    break;
+                                case "O":
+                                    <a class="btn btn-block btn-social btn-bitbucket" asp-action="Otros" asp-route-id="@Model.Id" asp-route-fp="@item.Id">
+                                        <i class="fa fa-bitbucket"></i> @item.Descripcion
+                                    </a>
+                                    break;
+                                case "U":
+                                    <a class="btn btn-block btn-social btn-default" asp-action="Dolar" asp-route-id="@Model.Id" asp-route-fp="@item.Id">
+                                        <i class="fa fa-bitbucket"></i> @item.Descripcion
+                                    </a>
+                                    break;
+                                default:
+                                    break;
+                            }
+                        }
+
+                        @if (formasPagos.Count() == 0)
+                        {
+                            <a class="btn btn-block">
+                                <i class="fa fa-bitbucket"></i> No existen Formas de Pagos
+                            </a>
+                        }
+                    </div>
+                </div>
+                <!-- /.box -->
+            </div>
+            <div class="col-md-9">
+                <div class="box box-primary">
+                    <div class="box-header">
+                        <h3 class="box-title">
+                            Formas de Pagos
+                        </h3>                        
+                    </div>
+                    <div class="box-body">
+                        @foreach (var item in formasPagosTMP)
+                        {
+                        <div class="box-group" id="accordion">
+                            @switch (item.FormaPagoTipo)
+                            {
+                                case "E":
+                                    <div class="panel box box-solid box-danger">
+                                        <div class="box-header with-border">
+                                            <h4 class="box-title">
+                                                <a data-toggle="collapse" data-parent="#accordion" href="#@item.Id">
+                                                    @item.FormaPago - Total: @item.Total
+
+                                                </a>
+                                            </h4>
+                                        </div>
+                                        <div id="@item.Id" class="panel-collapse collapse">
+                                            <div class="box-body">
+                                                <p>Total: @item.Total </p>
+                                                <p>Total Cancela: @item.Importe </p>
+                                                @if (item.Descuento != 0)
+                                                {
+                                                    <p>Descuento x pago de Contado: @item.Descuento </p>
+                                                }
+
+                                                <p>Observaciones: @item.Observaciones</p>
+                                                <p>Usuario: @item.UsuarioAlta </p>
+                                                <p>Fecha: @item.FechaAlta</p>
+
+                                                <a class="btn btn-danger btn-sm pull-right" asp-action="DeleteFormaPago" asp-route-id="@item.Id" asp-route-comp="@Model.Id"><i class="glyphicon glyphicon-remove"></i></a>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    break;
+                                case "C":
+                                    <div class="panel box box-solid box-primary">
+                                        <div class="box-header with-border">
+                                            <h4 class="box-title">
+                                                <a data-toggle="collapse" data-parent="#accordion" href="#@item.Id">
+                                                    @item.FormaPago (@item.TarjetaNombre) - Total: @item.Total
+                                                </a>
+                                            </h4>
+                                        </div>
+                                        <div id="@item.Id" class="panel-collapse collapse">
+                                            <div class="box-body">
+                                                <p>Tarjeta: @item.TarjetaNombre </p>
+                                                <p>Nombre: @item.TarjetaCliente </p>
+                                                <p>Numero: @item.TarjetaNumero - Vence: @item.TarjetaVenceAño / @item.TarjetaVenceMes </p>
+                                                <p>Total Cancela: @item.Total </p>
+                                                <p>Cantidad Cuotas: @item.Cuota - Importe de la Cuota: @(decimal.Round(item.Importe,2)) - Interes: @item.Interes</p>
+                                                <p>Total con Interes: @(decimal.Round(item.Cuota * item.Importe, 2))</p>
+                                                <p>
+                                                    Codigo Autorizacion: @item.CodigoAutorizacion
+                                                </p>
+                                                <p>Observaciones: @item.Observaciones</p>
+                                                <p>Usuario: @item.UsuarioAlta </p>
+                                                <p>Fecha: @item.FechaAlta</p>
+
+                                                <a class="btn btn-danger btn-sm pull-right" asp-action="DeleteFormaPago" asp-route-id="@item.Id" asp-route-comp="@Model.Id"><i class="glyphicon glyphicon-remove"></i></a>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    break;
+                                case "D":
+                                    <div class="panel box box-solid box-success">
+                                        <div class="box-header with-border">
+                                            <h4 class="box-title">
+                                                <a data-toggle="collapse" data-parent="#accordion" href="#@item.Id">
+                                                    @item.FormaPago (@item.TarjetaNombre) - Total: @item.Total
+                                                </a>
+                                            </h4>
+                                        </div>
+                                        <div id="@item.Id" class="panel-collapse collapse">
+                                            <div class="box-body">
+                                                <p>Tarjeta: @item.TarjetaNombre </p>
+                                                <p>Nombre: @item.TarjetaCliente </p>
+                                                <p>Numero: @item.TarjetaNumero - Vence: @item.TarjetaVenceAño / @item.TarjetaVenceMes </p>
+                                                <p>Total Cancela: @item.Total </p>
+                                                <p>
+                                                    Codigo Autorizacion: @item.CodigoAutorizacion
+                                                </p>
+                                                <p>Observaciones: @item.Observaciones</p>
+                                                <p>Usuario: @item.UsuarioAlta </p>
+                                                <p>Fecha: @item.FechaAlta</p>
+
+                                                <a class="btn btn-danger btn-sm pull-right" asp-action="DeleteFormaPago" asp-route-id="@item.Id" asp-route-comp="@Model.Id"><i class="glyphicon glyphicon-remove"></i></a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    break;
+                                case "X":
+                                    <div class="panel box box-solid box-warning">
+                                        <div class="box-header with-border">
+                                            <h4 class="box-title">
+                                                <a data-toggle="collapse" data-parent="#accordion" href="#@item.Id">
+                                                    @item.FormaPago - Total: @item.Total
+                                                </a>
+                                            </h4>
+                                        </div>
+                                        <div id="@item.Id" class="panel-collapse collapse">
+                                            <div class="box-body">
+                                                <p>Numero: @item.ChequeNumero </p>
+                                                <p>Nombre: @item.ChequeNombre </p>
+                                                <p>Cuit: @item.ChequeCuit </p>
+                                                <p>Fecha: @item.ChequeFechaEmision </p>
+                                                <p>Vence: @item.ChequeFechaVencimiento </p>
+                                                <p>Cuit: @item.ChequeCuenta</p>
+                                                <p>Total: @item.Total </p>
+                                                
+                                                @if (item.Descuento != 0)
+                                                {
+                                                    <p>Descuento: @item.Descuento </p>
+                                                }
+                                                @if (item.Interes != 0)
+                                                {
+                                                    <p>Recargo: @item.Interes </p>
+                                                }
+                                                
+                                                <p>Total Cancela: @item.Importe</p>
+                                                <p>Observaciones: @item.Observaciones</p>
+                                                <p>Usuario: @item.UsuarioAlta </p>
+                                                <p>Fecha: @item.FechaAlta</p>
+
+                                                <a class="btn btn-danger btn-sm pull-right" asp-action="DeleteFormaPago" asp-route-id="@item.Id" asp-route-comp="@Model.Id"><i class="glyphicon glyphicon-remove"></i></a>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    break;
+                                case "O":
+                                    <div class="panel box box-solid box-primary">
+                                        <div class="box-header  with-border">
+                                            <h4 class="box-title">
+                                                <a data-toggle="collapse" data-parent="#accordion" href="#@item.Id">
+                                                    @item.FormaPago - Total: @item.Total
+                                                </a>
+                                            </h4>
+                                        </div>
+                                        <div id="@item.Id" class="panel-collapse collapse">
+                                            <div class="box-body">
+                                                <p>Total: @item.Total </p>
+                                                <p>Forma Pago: @item.Otros</p>
+                                                <p>Observaciones: @item.Observaciones</p>
+                                                <p>Usuario: @item.UsuarioAlta </p>
+                                                <p>Fecha: @item.FechaAlta</p>
+
+                                                <a class="btn btn-danger btn-sm pull-right" asp-action="DeleteFormaPago" asp-route-id="@item.Id" asp-route-comp="@Model.Id"><i class="glyphicon glyphicon-remove"></i></a>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    break;
+                                case "U":
+                                    <div class="panel box box-solid box-default">
+                                        <div class="box-header with-border">
+                                            <h4 class="box-title">
+                                                <a data-toggle="collapse" data-parent="#accordion" href="#@item.Id">
+                                                    @item.FormaPago - Total: @item.Total
+
+                                                </a>
+                                            </h4>
+                                        </div>
+                                        <div id="@item.Id" class="panel-collapse collapse">
+                                            <div class="box-body">
+                                                <p>Total: @item.Total </p>
+                                                <p>Importe en Dolares: @item.DolarImporte </p>
+                                                <p>Cotizacion: @item.DolarCotizacion </p>
+
+                                                @if (item.Descuento != 0)
+                                                {
+                                                    <p>Descuento: @item.Descuento </p>
+                                                }
+                                                @if (item.Interes != 0)
+                                                {
+                                                    <p>Recargo: @item.Interes </p>
+                                                }
+                                                <p>Total Cancela: @item.Importe</p>
+
+
+                                                <p>Observaciones: @item.Observaciones</p>
+                                                <p>Usuario: @item.UsuarioAlta </p>
+                                                <p>Fecha: @item.FechaAlta</p>
+
+                                                <a class="btn btn-danger btn-sm pull-right" asp-action="DeleteFormaPago" asp-route-id="@item.Id" asp-route-comp="@Model.Id"><i class="glyphicon glyphicon-remove"></i></a>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    break;
+                                default:
+                                    break;
+                            }
+                        </div>
+                        }
+                        @if (formasPagosTMP.Count() == 0)
+                        {
+                            <div class="alert alert-bitbucket alert-dismissible">
+                                <h4>
+                                    <i class="icon fa fa-bitbucket"></i> No hay formas de pagos seleccionados
+                                </h4>
+                            </div>
+                        }
+                    </div>
+                </div>
+                <!-- /.box -->
+            </div>
+        </div>
+        <!-- /.box-body -->
+
+        
+    </form>
+</div>
+<!-- /.box -->

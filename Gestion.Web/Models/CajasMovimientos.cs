@@ -31,6 +31,9 @@ namespace Gestion.Web.Models
         public DateTime FechaAlta { get; set; }
         public string UsuarioAlta { get; set; }
 
+        public string SucursalId { get; set; }
+        public Sucursales Sucursal { get; set; }
+
     }
 
     public class CajasMovimientosAdministra : IEntidades
@@ -59,6 +62,7 @@ namespace Gestion.Web.Models
 
         public DateTime FechaAlta { get; set; }
         public string UsuarioAlta { get; set; }
-
+        public string SucursalId { get; set; }
+        public Sucursales Sucursal { get; set; }
     }
 }

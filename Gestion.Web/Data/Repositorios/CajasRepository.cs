@@ -40,7 +40,7 @@ namespace Gestion.Web.Data
             return list;
         }
 
-        public async Task<List<CajasEstadoDTO>> spCajasEstadoImportesGet(string fecha,string sucursalId)
+        public async Task<List<CajasEstadoDTO>> spCajasEstadoImportesGet(string Id)
         {
             //Creamos la conexión a utilizar.
             //Utilizamos la sentencia Using para asegurarnos de cerrar la conexión
@@ -59,8 +59,8 @@ namespace Gestion.Web.Data
                     oCmd.CommandText = "CajasEstadoImportesGet";
 
                     //le asignamos el parámetro para el stored procedure
-                    oCmd.Parameters.AddWithValue("@Fecha", fecha);
-                    oCmd.Parameters.AddWithValue("@SucursalId", sucursalId);
+                    oCmd.Parameters.AddWithValue("@Id", Id);
+                    //oCmd.Parameters.AddWithValue("@SucursalId", sucursalId);
 
 
                     //aunque debemos buscar solo un elemento, siempre devolvemos
@@ -107,7 +107,7 @@ namespace Gestion.Web.Data
                 }
             }
         }
-        public async Task<List<CajasEstadoDTO>> spCajasEstadoUsuariosGet(string fecha, string sucursalId)
+        public async Task<List<CajasEstadoDTO>> spCajasEstadoUsuariosGet(string Id)
         {
             //Creamos la conexión a utilizar.
             //Utilizamos la sentencia Using para asegurarnos de cerrar la conexión
@@ -126,8 +126,7 @@ namespace Gestion.Web.Data
                     oCmd.CommandText = "CajasEstadoUsuariosGet";
 
                     //le asignamos el parámetro para el stored procedure
-                    oCmd.Parameters.AddWithValue("@Fecha", fecha);
-                    oCmd.Parameters.AddWithValue("@SucursalId", sucursalId);
+                    oCmd.Parameters.AddWithValue("@Id", Id);
 
 
                     //aunque debemos buscar solo un elemento, siempre devolvemos
@@ -213,6 +212,72 @@ namespace Gestion.Web.Data
                                 //si existe algun valor, creamos el objeto y lo almacenamos
                                 //en la colección
                                 var obj = new CajasEstadoDTO();
+                                obj.Id = oReader["Id"] as string;
+                                obj.Fecha = (DateTime)oReader["Fecha"];
+                                obj.Total = (decimal)(oReader["Total"] ?? 0);
+                                obj.Sucursal = oReader["Sucursal"] as string;
+                                obj.SucursalId = oReader["SucursalId"] as string;
+
+                                //Agregamos el objeto a la coleccion de resultados
+                                objs.Add(obj);
+                                obj = null;
+                            }
+                        }
+                        //retornamos los valores encontrados
+
+
+                        return objs;
+                    }
+
+                    finally
+                    {
+                        //el Finally nos da siempre la oportunidad de liberar
+                        //la memoria utilizada por los objetos 
+                        objs = null;
+                    }
+                }
+            }
+        }
+
+        public async Task<List<CajasEstadoDTO>> spCajasEstadoFechaGet(string sucursalId)
+        {
+            //Creamos la conexión a utilizar.
+            //Utilizamos la sentencia Using para asegurarnos de cerrar la conexión
+            //y liberar el objeto al salir de esta sección de manera automática            
+            using (var oCnn = factoryConnection.GetConnection())
+            {
+                using (SqlCommand oCmd = new SqlCommand())
+                {
+                    //asignamos la conexion de trabajo
+                    oCmd.Connection = oCnn;
+
+                    //utilizamos stored procedures
+                    oCmd.CommandType = System.Data.CommandType.StoredProcedure;
+
+                    //el indicamos cual stored procedure utilizar
+                    oCmd.CommandText = "CajasEstadoFechaGetSucursal";
+                    oCmd.Parameters.AddWithValue("@sucursalId", sucursalId);
+
+
+                    //aunque debemos buscar solo un elemento, siempre devolvemos
+                    //una colección. Es más fácil de manipular y controlar 
+                    var objs = new List<CajasEstadoDTO>();
+
+                    //No retornamos DataSets, siempre utilizamos objetos para hacernos 
+                    //independientes de la estructura de las tablas en el resto
+                    //de las capas. Para ellos leemos con el DataReader y creamos
+                    //los objetos asociados que se esperan
+                    try
+                    {
+                        //Ejecutamos el comando y retornamos los valores
+                        using (SqlDataReader oReader = await oCmd.ExecuteReaderAsync())
+                        {
+                            while (oReader.Read())
+                            {
+                                //si existe algun valor, creamos el objeto y lo almacenamos
+                                //en la colección
+                                var obj = new CajasEstadoDTO();
+                                obj.Id = oReader["Id"] as string;
                                 obj.Fecha = (DateTime)oReader["Fecha"];
                                 obj.Total = (decimal)(oReader["Total"] ?? 0);
                                 obj.Sucursal = oReader["Sucursal"] as string;

@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System;
+using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
@@ -21,13 +22,23 @@ namespace Gestion.Web.Controllers
         private readonly IMailHelper mailHelper;
         private readonly IConfiguration configuration;
         private readonly ISucursalesRepository repository;
+        private readonly RoleManager<IdentityRole> roleManager;
+        private readonly IUserRolesRepository userRoles;
 
-        public AccountController(IUserHelper userHelper, IMailHelper mailHelper, IConfiguration configuration, ISucursalesRepository repository)
+        public AccountController(IUserHelper userHelper, 
+                IMailHelper mailHelper, 
+                IConfiguration configuration, 
+                ISucursalesRepository repository, 
+                RoleManager<IdentityRole> roleManager,
+                IUserRolesRepository userRoles
+                )
         {
             this.userHelper = userHelper;
             this.mailHelper = mailHelper;
             this.configuration = configuration;
             this.repository = repository;
+            this.roleManager = roleManager;
+            this.userRoles = userRoles;
         }
 
         public IActionResult Login()
@@ -54,9 +65,13 @@ namespace Gestion.Web.Controllers
                     }
                     return this.RedirectToAction("Index", "Home");
                 }
-            }
-
-            this.ModelState.AddModelError(string.Empty, "No se pudo iniciar sesión.");
+                else
+                {
+                    this.ModelState.AddModelError("Error", "Usuario o Password incorrecto");
+                    return this.View(model);
+                }
+            }            
+            
             return this.View(model);
         }
 
@@ -365,6 +380,28 @@ namespace Gestion.Web.Controllers
             return this.View(users);
         }
 
+        [Authorize]
+        public async Task<IActionResult> UserRoles(string id)
+        {
+            var roles = roleManager.Roles.ToList();
+            var listRoles = new List<RolesDto>();
+            var myUser = await this.userHelper.GetUserByIdAsync(id);
+
+            foreach (var item in roles) 
+            {
+                var Rol = new RolesDto();
+                
+                Rol.UserId = id;
+                Rol.Id = item.Id;
+                Rol.Name = item.Name;
+                Rol.IsActive = await this.userHelper.IsUserInRoleAsync(myUser, item.Name);
+                
+                listRoles.Add(Rol);
+            } 
+            
+            return View(listRoles);
+        }
+
         public async Task<IActionResult> AdminOff(string id)
         {
             if (string.IsNullOrEmpty(id))
@@ -396,6 +433,65 @@ namespace Gestion.Web.Controllers
             }
 
             await this.userHelper.AddUserToRoleAsync(user, "Admin");
+            return this.RedirectToAction(nameof(Index));
+        }
+
+        public async Task<IActionResult> RolOff(string id, string userid)
+        {
+            if (string.IsNullOrEmpty(id))
+            {
+                return NotFound();
+            }
+            
+            if (string.IsNullOrEmpty(userid))
+            {
+                return NotFound();
+            }
+
+            var rol = new RolesDto();
+            rol.Id = id;
+            rol.UserId = userid;
+            
+            await this.userRoles.spDelete(rol);
+            return this.RedirectToAction(nameof(UserRoles) , new { id = userid });
+        }
+
+        public async Task<IActionResult> RolOn(string id, string userid)
+        {
+            if (string.IsNullOrEmpty(id))
+            {
+                return NotFound();
+            }
+
+            if (string.IsNullOrEmpty(userid))
+            {
+                return NotFound();
+            }
+
+            var rol = new RolesDto();
+            rol.Id = id;
+            rol.UserId = userid;
+
+            await this.userRoles.spInsertar(rol);
+            return this.RedirectToAction(nameof(UserRoles), new { id = userid });
+        }
+
+        public async Task<IActionResult> ResetearPassword(string id)
+        {
+            if (string.IsNullOrEmpty(id))
+            {
+                return NotFound();
+            }
+
+            var user = await this.userHelper.GetUserByIdAsync(id);
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            
+            await this.userHelper.ResetearPassword(user, "123456");
+            
             return this.RedirectToAction(nameof(Index));
         }
 

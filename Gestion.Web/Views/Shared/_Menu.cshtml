@@ -5,78 +5,164 @@
             <i class="fas fa-tachometer-alt"></i> <span>Inicio</span>
         </a>
     </li>
-    <li>
-        <a asp-controller="Clientes" asp-action="Index">
-            <i class="fas fa-users"></i> <span>Clientes</span>
-        </a>
-    </li>
-    <li>
-        <a asp-controller="Productos" asp-action="Index">
-            <i class="fas fa-tachometer-alt"></i> <span>Productos</span>
-        </a>
-    </li>
-    <li class="treeview">
-        <a href="#">
-            <i class="fa fa-inbox"></i>
-            <span>Presupuestos</span>
-            <span class="pull-right-container">
-                <i class="fa fa-angle-left pull-right"></i>
-            </span>
-        </a>
-        <ul class="treeview-menu">
-            <li><a asp-controller="Presupuestos" asp-action="ClienteBuscar" asp-route-id="@Guid.NewGuid().ToString()"><i class="fa fa-circle-o"></i> Nuevo</a></li>
-            <li><a asp-controller="Presupuestos" asp-action="Pendientes"><i class="fa fa-circle-o"></i> Pendientes</a></li>
-            <li><a asp-controller="Presupuestos" asp-action="AprobarRechazar"><i class="fa fa-circle-o"></i> Aprobar/Rechazar</a></li>
-            <li><a asp-controller="Presupuestos" asp-action="Vencidos"><i class="fa fa-circle-o"></i> Vencidos</a></li>
-            <li><a asp-controller="Presupuestos" asp-action="Aprobados"><i class="fa fa-circle-o"></i> Aprobados</a></li>
-            <li><a asp-controller="Presupuestos" asp-action="Rechazados"><i class="fa fa-circle-o"></i> Rechazados</a></li>
-        </ul>
-    </li>
 
-    <li class="treeview">
-        <a href="#">
-            <i class="fa fa-box-open"></i>
-            <span>Entrega de Productos</span>
-            <span class="pull-right-container">
-                <i class="fa fa-angle-left pull-right"></i>
-            </span>
-        </a>
-        <ul class="treeview-menu">
-            <li><a asp-controller="Comprobantes" asp-action="ImputacionesProductos"><i class="fa fa-circle-o"></i> Imputar Productos</a></li>
-            <li><a asp-controller="Comprobantes" asp-action="EntregaProductos"><i class="fa fa-circle-o"></i> Remitos Entrega</a></li>
-            <li><a asp-controller="Comprobantes" asp-action="DevolucionProductos"><i class="fa fa-circle-o"></i> Devoluciones</a></li>
-        </ul>
-    </li>
 
-    <li class="treeview">
-        <a href="#">
-            <i class="glyphicon glyphicon-usd"></i>
-            <span>Cajas</span>
-            <span class="pull-right-container">
-                <i class="fa fa-angle-left pull-right"></i>
-            </span>
-        </a>
-        <ul class="treeview-menu">
-            <li><a asp-controller="Cajas" asp-action="InformeCaja"><i class="fa fa-circle-o"></i> Informe de Caja</a></li>
-            <li><a asp-controller="CajasMovimientos" asp-action="Index"><i class="fa fa-circle-o"></i> Movimientos de Caja</a></li>
+    @if (User.IsInRole("Admin") || User.IsInRole("Clientes"))
+    {
+        <li>
+            <a asp-controller="Clientes" asp-action="Index">
+                <i class="fas fa-users"></i> <span>Clientes</span>
+            </a>
+        </li>
+    }
 
-        </ul>
-    </li>
+    @if (User.IsInRole("Admin") || User.IsInRole("Productos"))
+    {
+        <li>
+            <a asp-controller="Productos" asp-action="Index">
+                <i class="fas fa-tachometer-alt"></i> <span>Productos</span>
+            </a>
+        </li>
+    }
 
-    <li class="treeview">
-        <a href="#">
-            <i class="glyphicon glyphicon-stats"></i>
-            <span>Indicadores - Informes</span>
-            <span class="pull-right-container">
-                <i class="fa fa-angle-left pull-right"></i>
-            </span>
-        </a>
-        <ul class="treeview-menu">
-            <li><a asp-controller="Indicadores" asp-action="EntregasPendientes"><i class="fa fa-circle-o"></i> Entregas Pendientes</a></li>
-        </ul>
-    </li>
+    @if (User.IsInRole("Admin") || User.IsInRole("VentasRapidas"))
+    {
+        <li class="treeview">
+            <a href="#">
+                <i class="glyphicon glyphicon-fire"></i>
+                <span>Ventas Rapidas</span>
+                <span class="pull-right-container">
+                    <i class="fa fa-angle-left pull-right"></i>
+                </span>
+            </a>
+            <ul class="treeview-menu">
+                <li><a asp-controller="VentasRapidas" asp-action="VentaRapida" asp-route-id="@Guid.NewGuid().ToString()"><i class="fa fa-circle-o"></i> Nueva Venta</a></li>
+                <li><a asp-controller="VentasRapidas" asp-action="Index"><i class="fa fa-circle-o"></i> Pendientes</a></li>
+                <li><a asp-controller="VentasRapidas" asp-action="VentasRapidasACobrar"><i class="fa fa-circle-o"></i> A Cobrar</a></li>
+                <li><a asp-controller="VentasRapidas" asp-action="Facturadas"><i class="fa fa-circle-o"></i> Facturadas</a></li>
+            </ul>
+        </li>
+    }
+
+    @if (User.IsInRole("Admin") || User.IsInRole("Presupuestos"))
+    {
+        <li class="treeview">
+            <a href="#">
+                <i class="fa fa-inbox"></i>
+                <span>Presupuestos</span>
+                <span class="pull-right-container">
+                    <i class="fa fa-angle-left pull-right"></i>
+                </span>
+            </a>
+            <ul class="treeview-menu">
+                <li><a asp-controller="Presupuestos" asp-action="ClienteBuscar" asp-route-id="@Guid.NewGuid().ToString()"><i class="fa fa-circle-o"></i> Nuevo</a></li>
+                <li><a asp-controller="Presupuestos" asp-action="Pendientes"><i class="fa fa-circle-o"></i> Pendientes</a></li>
+                <li><a asp-controller="Presupuestos" asp-action="AprobarRechazar"><i class="fa fa-circle-o"></i> Aprobar/Rechazar</a></li>
+                <li><a asp-controller="Presupuestos" asp-action="Vencidos"><i class="fa fa-circle-o"></i> Vencidos</a></li>
+                <li><a asp-controller="Presupuestos" asp-action="Aprobados"><i class="fa fa-circle-o"></i> Aprobados</a></li>
+                <li><a asp-controller="Presupuestos" asp-action="Rechazados"><i class="fa fa-circle-o"></i> Rechazados</a></li>
+            </ul>
+        </li>
+    }
+
+    @if (User.IsInRole("Admin") || User.IsInRole("Comprobantes"))
+    {
+        <li class="treeview">
+            <a href="#">
+                <i class="glyphicon glyphicon-ok"></i>
+                <span>Imputacion de Productos</span>
+                <span class="pull-right-container">
+                    <i class="fa fa-angle-left pull-right"></i>
+                </span>
+            </a>
+            <ul class="treeview-menu">
+                <li><a asp-controller="Comprobantes" asp-action="ImputacionesProductos"><i class="fa fa-circle-o"></i> Imputar Productos</a></li>
+            </ul>
+        </li>
+
+
+        <li class="treeview">
+            <a href="#">
+                <i class="fa fa-box-open"></i>
+                <span>Entrega de Productos</span>
+                <span class="pull-right-container">
+                    <i class="fa fa-angle-left pull-right"></i>
+                </span>
+            </a>
+            <ul class="treeview-menu">
+                <li><a asp-controller="Comprobantes" asp-action="EntregaProductos"><i class="fa fa-circle-o"></i> Remitos Entrega</a></li>
+                <li><a asp-controller="Comprobantes" asp-action="DevolucionProductos"><i class="fa fa-circle-o"></i> Devoluciones</a></li>
+            </ul>
+        </li>
+    }
+
+
+    @if (User.IsInRole("Admin") || User.IsInRole("Cajas") || User.IsInRole("CajasMovimientos") || User.IsInRole("CajasMovimientosAdministra"))
+    {
+        <li class="treeview">
+            <a href="#">
+                <i class="glyphicon glyphicon-usd"></i>
+                <span>Cajas</span>
+                <span class="pull-right-container">
+                    <i class="fa fa-angle-left pull-right"></i>
+                </span>
+            </a>
+            <ul class="treeview-menu">
+                <li><a asp-controller="Cajas" asp-action="InformeCaja"><i class="fa fa-circle-o"></i> Informe de Caja</a></li>
+                <li><a asp-controller="CajasMovimientos" asp-action="Index"><i class="fa fa-circle-o"></i> Movimientos de Caja</a></li>
+
+            </ul>
+        </li>
+    }
+
+
+    @if (User.IsInRole("Admin") || User.IsInRole("Indicadores"))
+    {
+        <li class="treeview">
+            <a href="#">
+                <i class="glyphicon glyphicon-stats"></i>
+                <span>Indicadores - Informes</span>
+                <span class="pull-right-container">
+                    <i class="fa fa-angle-left pull-right"></i>
+                </span>
+            </a>
+            <ul class="treeview-menu">
+                <li><a asp-controller="Indicadores" asp-action="EntregasPendientes"><i class="fa fa-circle-o"></i> Entregas Pendientes</a></li>
+            </ul>
+        </li>
+    }
+
+
+
+    @if (User.IsInRole("Admin") || User.IsInRole("FormasPagos"))
+    {
+        <li class="treeview">
+            <a href="#">
+                <i class="glyphicon glyphicon-piggy-bank"></i>
+                <span>Formas Pagos</span>
+                <span class="pull-right-container">
+                    <i class="fa fa-angle-left pull-right"></i>
+                </span>
+            </a>
+            <ul class="treeview-menu">
+                <li><a asp-controller="Entidades" asp-action="Index"><i class="fa fa-circle-o"></i> Entidades</a></li>
+
+                @if (User.IsInRole("Admin") || User.IsInRole("FormasPagosCotizacion"))
+                {
+                    <li><a asp-controller="FormasPagosCotizacion" asp-action="Index"><i class="fa fa-circle-o"></i> Cotizacion Dolar</a></li>
+                }
+                <li> <a asp-controller="FormasPagos" asp-action="Index"><i class="fa fa-circle-o"></i> Formas de Pagos</a></li>
+            </ul>
+        </li>
+    }
+
     @if (User.IsInRole("Admin"))
     {
+        <li>
+            <a asp-controller="Sucursales" asp-action="Index">
+                <i class="glyphicon glyphicon-map-marker"></i> <span>Sucursales</span>
+            </a>
+        </li>
         <li>
             <a asp-controller="Account" asp-action="Index">
                 <i class="fas fa-user-alt"></i> <span>Usuarios</span>

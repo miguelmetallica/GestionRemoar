@@ -4,6 +4,8 @@
     ViewData["Title"] = "Detalle del Cliente";
     var cliente = (ClientesDTO)ViewData["Clientes"];
     var Detalle = (List<Gestion.Web.Models.ComprobantesDetalleDTO>)ViewData["DetalleTMP"];
+
+    var comp = (List<Gestion.Web.Models.ComprobantesDTO>)ViewData["Comprobantes"];
 }
 
 <div class="content-wrapper">
@@ -63,11 +65,20 @@
                         }
                         else
                         {
-                    <a asp-controller="Comprobantes" asp-action="GenerarDevolucion" asp-route-id="@Model.Id" class="btn btn-primary btn-sm" aria-hidden="true">Generar Devolucion</a>
+                            <a asp-controller="Comprobantes" asp-action="GenerarDevolucion" asp-route-id="@Model.Id" class="btn btn-primary btn-sm" aria-hidden="true">Generar Devolucion</a>
                         }
 
                     </div>
 
+                </div>
+
+                <div class="box box-primary">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">Remitos y Devoluciones Generadas</h3>
+                    </div>
+                    <form>
+                        <partial name="_Remitos" model='@comp' />
+                    </form>
                 </div>
             </div>
         </div>

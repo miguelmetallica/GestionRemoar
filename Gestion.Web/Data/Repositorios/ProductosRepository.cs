@@ -216,6 +216,7 @@ namespace Gestion.Web.Data
                                 obj.TipoProducto = (string)oReader["TipoProducto"];
                                 obj.Producto = (string)oReader["Producto"];
                                 obj.PrecioVenta = (decimal)oReader["PrecioVenta"];
+                                obj.PrecioContado = (decimal)oReader["PrecioRebaja"];
                                 obj.Estado = (bool)oReader["Estado"];
                                 
                                 //Agregamos el objeto a la coleccion de resultados
@@ -367,8 +368,8 @@ namespace Gestion.Web.Data
                                 obj.PrecioVenta = (decimal)oReader["PrecioVenta"];
                                 obj.ProveedorId = oReader["ProveedorId"] as string;
                                 obj.Proveedor = oReader["Proveedor"] as string;
-                                obj.CategoriaId = (string)oReader["CategoriaId"];
-                                obj.Categoria = (string)oReader["Categoria"];
+                                obj.CategoriaId = oReader["CategoriaId"] as string;
+                                obj.Categoria = oReader["Categoria"] as string;
                                 obj.ControlaStock = (bool)oReader["ControlaStock"];
                                 obj.AceptaDescuento = (bool)oReader["AceptaDescuento"];
 
@@ -471,8 +472,8 @@ namespace Gestion.Web.Data
                                 obj.PrecioVenta = (decimal)oReader["PrecioVenta"];
                                 obj.ProveedorId = oReader["ProveedorId"] as string;
                                 obj.Proveedor = oReader["Proveedor"] as string;
-                                obj.CategoriaId = (string)oReader["CategoriaId"];
-                                obj.Categoria = (string)oReader["Categoria"];
+                                obj.CategoriaId = oReader["CategoriaId"] as string;
+                                obj.Categoria = oReader["Categoria"] as string;
                                 obj.ControlaStock = (bool)oReader["ControlaStock"];
                                 obj.AceptaDescuento = (bool)oReader["AceptaDescuento"];
 

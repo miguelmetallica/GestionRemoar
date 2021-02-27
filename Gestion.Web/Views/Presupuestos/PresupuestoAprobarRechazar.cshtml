@@ -3,6 +3,8 @@
 @{
     ViewData["Title"] = "Nuevo Presupuesto";
     var Detalle = (IEnumerable<PresupuestosDetalleDTO>)ViewData["Detalle"];
+
+    var Resumen = (PresupuestosResumen)ViewData["Resumen"];
 }
 
 <div class="content-wrapper">
@@ -21,99 +23,101 @@
 
 <!-- Main content -->
     <section class="content">
-    <div class="row">
-        <!-- left column -->
-        <div class="col-md-6">
-            <!-- general form elements -->
-            <partial name="_CabeceraApruebaRechaza" model='Model' />            
-            <!-- /.box -->
-        </div>
-        <!--/.col-->
-        <!-- left column -->
-        <div class="col-md-6">
-            <partial name="_ResumenView" model='Model' />
-
-            <!-- general form elements -->
-            <div class="box box-primary">
-                <div class="box-header with-border">
-                    <h3 class="box-title">Listado de Productos</h3>                    
-                </div>
-                <div class="box-body">
-                    <table id="dTable" class="table dt-responsive table-condensed table-bordered table-striped" width="100%">
-                        <thead>
-                            <tr>
-                                <th>
-                                    Codigo
-                                </th>
-                                <th>
-                                    Producto
-                                </th>
-                                <th>
-                                    Precio Lista
-                                </th>
-                                <th>
-                                    Precio Contado
-                                </th>
-                                <th>
-                                    Cantidad
-                                </th>                                
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @if (Detalle.Count() > 0)
-                            {
-                                @foreach (var item in Detalle)
-                                {
-                                    if (item.ProductoCodigo != "")
-                                    {
-                                        <tr>
-                                            <td>
-                                                @Html.DisplayFor(modelItem => item.ProductoCodigo)
-                                            </td>
-                                            <td>
-                                                @Html.DisplayFor(modelItem => item.ProductoNombre)
-                                            </td>
-                                            <td>
-                                                @Html.DisplayFor(modelItem => item.Precio)
-                                            </td>
-                                            <td>
-                                                @Html.DisplayFor(modelItem => item.PrecioContado)
-                                            </td>
-                                            <td>
-                                                @Html.DisplayFor(modelItem => item.Cantidad)
-                                            </td>
-                                            
-                                        </tr>
-                                    }
-
-                                }
-                            }
-
-                        </tbody>
-                        <tfoot>
-                            <tr>
-                                <th colspan="2">
-                                </th>
-                                <th>
-                                    @Html.DisplayFor(model => Model.Precio)
-                                </th>
-                                <th>
-                                    @Html.DisplayFor(model => Model.PrecioContado)
-                                </th>
-                                <th>
-                                    @decimal.Round(Model.CantidadProductos, 0)
-                                </th>
-                                
-                            </tr>
-                        </tfoot>
-                    </table>
-                </div>
+        <div class="row">
+            <!-- left column -->
+            <div class="col-md-6">
+                <!-- general form elements -->
+                <partial name="_CabeceraApruebaRechaza" model='Model' />
+                <!-- /.box -->
             </div>
-            <!-- /.box -->
+            <!--/.col-->
+            <!-- left column -->
+            <div class="col-md-6">
+                <partial name="_ResumenView" model='Resumen' />
+            </div>
+            <!--/.col-->
+            <!-- left column -->
+            <div class="col-md-12">
+                <!-- general form elements -->
+                <div class="box box-primary">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">Listado de Productos</h3>
+                    </div>
+                    <div class="box-body">
+                        <table id="dTable" class="table dt-responsive table-condensed table-bordered table-striped" width="100%">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        Codigo
+                                    </th>
+                                    <th>
+                                        Producto
+                                    </th>
+                                    <th>
+                                        Precio
+                                    </th>
+                                    <th>
+                                        Cantidad
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (Detalle.Count() > 0)
+                                {
+                                    @foreach (var item in Detalle)
+                                    {
+                                        if (item.ProductoCodigo != "")
+                                        {
+                                            <tr>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.ProductoCodigo)
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.ProductoNombre)
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.Precio)
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.Cantidad)
+                                                </td>
+
+                                            </tr>
+                                        }
+
+                                    }
+                                }
+
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <th colspan="2">
+                                    </th>
+                                    <th>
+                                        @Html.DisplayFor(model => Model.Precio)
+                                    </th>
+                                    <th>
+                                        @decimal.Round(Model.CantidadProductos, 0)
+                                    </th>
+
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+                <!-- /.box -->
+            </div>
+            <!--/.col-->
         </div>
-    <!--/.col-->
-    </div>
-    <!-- /.row -->
+        <!-- /.row -->
+        <div class="row">
+            <!-- left column -->
+            <div class="col-md-12">
+                <partial name="_MediosPagosView" model='Model' />
+            </div>
+            <!--/.col-->
+        </div>
+        <!-- /.row -->
     </section>
 <!-- /.content -->
 </div>

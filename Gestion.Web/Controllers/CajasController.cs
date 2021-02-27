@@ -29,26 +29,22 @@ namespace Gestion.Web.Controllers
             var model = repository.GetAll().Include(x => x.Sucursal);
             return View(model);
         }
-        public async Task<IActionResult> Estado()
-        {
-            try
-            {
-                var model = await repository.spCajasEstadoFechaGet();
-                return View(model);
-            }
-            catch (Exception e)
-            {
-                throw e;
-            }
-            
-        }
-
+        
         public async Task<IActionResult> InformeCaja()
         {
             try
             {
-                var model = await repository.spCajasEstadoFechaGet();
-                return View(model);
+                if (User.IsInRole("Admin") || User.IsInRole("CajasMovimientosAdministra"))
+                {
+                    var model = await repository.spCajasEstadoFechaGet();
+                    return View(model);
+                }
+                else
+                {
+                    var user = await userHelper.GetUserByEmailAsync(User.Identity.Name);
+                    var model = await repository.spCajasEstadoFechaGet(user.SucursalId);
+                    return View(model);
+                }                               
             }
             catch (Exception e)
             {
@@ -57,16 +53,76 @@ namespace Gestion.Web.Controllers
 
         }
 
-        public async Task<IActionResult> DetailsImportes(string fecha,string sucid)
+        //public async Task<IActionResult> DetailsImportes(string fecha,string sucid)
+        //{
+        //    var model = await repository.spCajasEstadoImportesGet(fecha,sucid);
+        //    return View(model);
+        //}
+
+        //public async Task<IActionResult> DetailsUsuarios(string id)
+        //{
+        //    var model = await repository.spCajasEstadoUsuariosGet(id.Substring(0, 8), id.Substring(8));
+        //    return View(model);
+        //}
+
+        public async Task<IActionResult> InformeCajaImportes(string id)
         {
-            var model = await repository.spCajasEstadoImportesGet(fecha,sucid);
-            return View(model);
+            try
+            {
+                var model = await repository.spCajasEstadoImportesGet(id);
+                return View(model);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
+
+            return View();
         }
 
-        public async Task<IActionResult> DetailsUsuarios(string fecha, string sucid)
+        public async Task<IActionResult> InformeImportes(string id)
         {
-            var model = await repository.spCajasEstadoUsuariosGet(fecha, sucid);
-            return View(model);
+            try
+            {
+                var model = await repository.spCajasEstadoImportesGet(id);
+                return View(model);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
+
+            return View();
+        }
+
+        public async Task<IActionResult> InformeCajaUsuarios(string id)
+        {
+            try
+            {
+                var model = await repository.spCajasEstadoUsuariosGet(id);
+                return View(model);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
+
+            return View();
+        }
+
+        public async Task<IActionResult> InformeUsuarios(string id)
+        {
+            try
+            {
+                var model = await repository.spCajasEstadoUsuariosGet(id);
+                return View(model);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
+
+            return View();
         }
 
         public async Task<IActionResult> Details(string id)

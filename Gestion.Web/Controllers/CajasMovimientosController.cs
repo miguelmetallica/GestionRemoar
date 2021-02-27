@@ -30,13 +30,19 @@ namespace Gestion.Web.Controllers
         }
 
         [Authorize(Roles = "Admin,CajasMovimientos,CajasMovimientosAdministra")]
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            var model = repository.GetAll()
-                    .Include(x => x.Caja)
-                    .Include(x => x.Caja.Sucursal)
-                    .Include(x => x.TipoMovimiento);
-            return View(model);
+            if (User.IsInRole("Admin") || User.IsInRole("CajasMovimientosAdministra"))
+            {
+                var model = await repository.GetMovimientosAll(User.Identity.Name);
+                return View(model);
+            }
+            else 
+            {
+                var model = await repository.GetMovimientos(User.Identity.Name);
+                return View(model);
+            }            
+
         }
 
         [Authorize(Roles = "Admin,CajasMovimientos,CajasMovimientosAdministra")]
@@ -78,9 +84,11 @@ namespace Gestion.Web.Controllers
             if (ModelState.IsValid)
             {
                 var tipoMov = await cajasTiposMovimientosRepository.GetByIdAsync(CajasMovimientos.TipoMovimientoId);
+                var usuarios = await userHelper.GetUserByEmailAsync(User.Identity.Name);
 
                 CajasMovimientos.FechaAlta = DateTime.Now;
                 CajasMovimientos.UsuarioAlta = User.Identity.Name;
+                CajasMovimientos.SucursalId = usuarios.SucursalId;
                 if (tipoMov.EsDebe)
                 {
                     CajasMovimientos.Importe = -1 * Math.Abs(CajasMovimientos.Importe);
@@ -217,6 +225,7 @@ namespace Gestion.Web.Controllers
                 }
 
                 var CajaAdmin = new CajasMovimientos();
+                var usuarios = await userHelper.GetUserByEmailAsync(User.Identity.Name);
 
                 CajaAdmin.CajaId = CajasMovimientos.CajaId;
                 CajaAdmin.Fecha = CajasMovimientos.Fecha;
@@ -225,6 +234,8 @@ namespace Gestion.Web.Controllers
                 CajaAdmin.Observaciones = CajasMovimientos.Observaciones;
                 CajaAdmin.FechaAlta = DateTime.Now;
                 CajaAdmin.UsuarioAlta = User.Identity.Name;
+                
+                CajaAdmin.SucursalId = usuarios.SucursalId;
 
                 await repository.CreateAsync(CajaAdmin);
                 return RedirectToAction(nameof(Index));
@@ -255,16 +266,22 @@ namespace Gestion.Web.Controllers
             ViewBag.Cajas = this.cajasRepository.GetCombo(user.SucursalId);
             ViewBag.TiposMovimientos = this.cajasTiposMovimientosRepository.GetCombo();
 
+            if (CajasMovimientos.SucursalId != user.SucursalId) 
+            {
+                return RedirectToAction(nameof(Index));
+            }
 
             var CajaAdmin = new CajasMovimientosAdministra();
             
             CajaAdmin.CajaId = CajasMovimientos.CajaId;
             CajaAdmin.Fecha = CajasMovimientos.Fecha;
             CajaAdmin.TipoMovimientoId = CajasMovimientos.TipoMovimientoId;
-            CajaAdmin.Importe = CajasMovimientos.Importe;
+            CajaAdmin.Importe = Math.Abs(CajasMovimientos.Importe);
             CajaAdmin.Observaciones = CajasMovimientos.Observaciones;
             CajaAdmin.FechaAlta = CajasMovimientos.FechaAlta;
             CajaAdmin.UsuarioAlta = CajasMovimientos.UsuarioAlta;
+
+            
 
             return this.View(CajaAdmin);
         }
@@ -294,6 +311,7 @@ namespace Gestion.Web.Controllers
                     }
 
                     var CajaAdmin = new CajasMovimientos();
+                    var usuarios = await userHelper.GetUserByEmailAsync(User.Identity.Name);
 
                     CajaAdmin.CajaId = CajasMovimientos.CajaId;
                     CajaAdmin.Fecha = CajasMovimientos.Fecha;
@@ -302,6 +320,8 @@ namespace Gestion.Web.Controllers
                     CajaAdmin.Observaciones = CajasMovimientos.Observaciones;
                     CajaAdmin.FechaAlta = CajasMovimientos.FechaAlta;
                     CajaAdmin.UsuarioAlta = CajasMovimientos.UsuarioAlta;
+
+                    CajaAdmin.SucursalId = usuarios.SucursalId;
 
                     await repository.UpdateAsync(CajaAdmin);
                 }

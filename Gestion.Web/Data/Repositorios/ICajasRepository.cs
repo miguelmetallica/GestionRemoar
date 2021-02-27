@@ -8,8 +8,9 @@ namespace Gestion.Web.Data
     public interface ICajasRepository : IGenericRepository<ParamCajas>
     {
         IEnumerable<SelectListItem> GetCombo(string sucursalId);
-        Task<List<CajasEstadoDTO>> spCajasEstadoImportesGet(string fecha, string sucursalId);
-        Task<List<CajasEstadoDTO>> spCajasEstadoUsuariosGet(string fecha, string sucursalId);
+        Task<List<CajasEstadoDTO>> spCajasEstadoImportesGet(string Id);
+        Task<List<CajasEstadoDTO>> spCajasEstadoUsuariosGet(string Id);
         Task<List<CajasEstadoDTO>> spCajasEstadoFechaGet();
+        Task<List<CajasEstadoDTO>> spCajasEstadoFechaGet(string sucursalId);
     }
 }

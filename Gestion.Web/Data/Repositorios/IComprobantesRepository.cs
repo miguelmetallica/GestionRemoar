@@ -14,7 +14,8 @@ namespace Gestion.Web.Data
         Task<int> spEfectivo(ComprobantesEfectivoDTO reciboDTO);
         Task<int> spOtro(ComprobantesOtroDTO reciboDTO);
         Task<int> spTarjeta(ComprobantesTarjetaDTO reciboDTO);
-        Task<int> spCheque(ComprobantesChequeDTO reciboDTO);        
+        Task<int> spCheque(ComprobantesChequeDTO reciboDTO);
+        Task<int> spDolar(ComprobantesDolarDTO formaPago);
         Task<int> spDeleteFormaPago(string id);
         Task<List<ComprobantesFormasPagosDTO>> spComprobantesTmpFormasPagos(string clienteId);
         Task<List<ComprobantesFormasPagosDTO>> spComprobantesFormasPagos(string Id);
@@ -40,7 +41,7 @@ namespace Gestion.Web.Data
         Task<List<ComprobantesDetalleDTO>> spComprobanteDetalleImprimirGet(string ComprobanteId);
 
         Task<int> spComprobanteInsertaDatosFiscales(ComprobantesDTO comprobantesDTO);
-
+        Task<int> spComprobanteInsertaCodigoAutorizacion(ComprobantesFormasPagosDTO comprobantesDTO);
         Task<List<ComprobantesDetalleIndicador>> spComprobanteDetalleEntregaIndicador();
         Task<List<ComprobantesDTO>> spComprobantesPresupuesto(string PresupuestoId);
         Task<List<ComprobantesDetalleDTO>> spComprobantesDetalleGet(string ComprobanteId);
@@ -51,5 +52,9 @@ namespace Gestion.Web.Data
         Task<int> spComprobanteDetalleInsertDevolucionTMP(ComprobantesDetalleDTO detalleDTO);
         Task<int> spDevolucion(ComprobantesDetalleDTO detalleDTO);
         Task<List<ComprobantesDetalleDTO>> spComprobanteDetalleDevolucion(string Id);
+        Task<List<ComprobantesDTO>> spComprobantesImputaciones();
+        Task<List<ComprobantesDetalleDTO>> spComprobanteRemitosDevolucionesGet(string presupuestoId);
+        Task<List<ComprobantesDTO>> spComprobantesInputaciones(string ComprobanteId);
+        Task<List<ComprobantesDTO>> spPresupuestosRemitos();
     }
 }

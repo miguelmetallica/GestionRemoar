@@ -38,7 +38,10 @@ namespace Gestion.Web.Data
         public DbSet<ParamPresupuestosEstados> ParamPresupuestosEstados { get; set; }
         public DbSet<ParamPresupuestosDescuentos> ParamPresupuestosDescuentos { get; set; }
 
+        public virtual DbSet<ParamEntidades> ParamEntidades { get; set; }
         public virtual DbSet<FormasPagos> FormasPagos { get; set; }
+        public virtual DbSet<FormasPagosCuotas> FormasPagosCuotas { get; set; }
+        public virtual DbSet<FormasPagosCotizacion> FormasPagosCotizacion { get; set; }
 
         public DbSet<ParamCajas> ParamCajas{ get; set; }
         //public DbSet<CajasAperturasCierres> CajasAperturasCierres { get; set; }
@@ -49,6 +52,9 @@ namespace Gestion.Web.Data
 
         public virtual DbSet<ParamClientesCategorias> ParamClientesCategorias { get; set; }
 
+        public virtual DbSet<VentasRapidas> VentasRapidas { get; set; }
+        public virtual DbSet<VentasRapidasDetalle> VentasRapidasDetalle { get; set; }
+        public virtual DbSet<VentasRapidasFormasPagos> VentasRapidasFormasPagos { get; set; }
         public virtual DbSet<Proveedores> Proveedores { get; set; }
 
         public DataContext(DbContextOptions<DataContext> options) : base(options)

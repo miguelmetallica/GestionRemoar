@@ -146,13 +146,14 @@ function guardarFormularioModal(mId, mComprobanteId, mProductoId, mProductoCodig
             //__doPostBack();
             //})
             //CierraModal();
-            document.getElementById("myForm").submit();
+            
 
         },
         error: function (ex) {
             alert('Fallo');
         }
     });
+    document.getElementById("myForm").submit();
 }
 
 function cancelarFormularioModal(mId,mComprobanteId,mProductoId,mProductoCodigo,mProductoNombre,mPrecio,mCantidad,mImputado,mImputadoPorcentaje) {
@@ -176,13 +177,14 @@ function cancelarFormularioModal(mId,mComprobanteId,mProductoId,mProductoCodigo,
 
         },
         success: function (data) {
-            document.getElementById("myForm").submit();
+            
 
         },
         error: function (ex) {
             alert('Fallo');
         }
     });
+    document.getElementById("myForm").submit();
 }
 
 function entregarFormularioModal(mId, mComprobanteId, mProductoId, mProductoCodigo, mProductoNombre, mPrecio, mCantidad, mImputado, mImputadoPorcentaje) {
@@ -206,13 +208,14 @@ function entregarFormularioModal(mId, mComprobanteId, mProductoId, mProductoCodi
 
         },
         success: function (data) {
-            document.getElementById("myForm").submit();
+            
 
         },
         error: function (ex) {
             alert('Fallo');
         }
     });
+    document.getElementById("myForm").submit();
 }
 
 function entregarAnulaFormularioModal(mId, mComprobanteId, mProductoId, mProductoCodigo, mProductoNombre, mPrecio, mCantidad, mImputado, mImputadoPorcentaje) {
@@ -236,13 +239,12 @@ function entregarAnulaFormularioModal(mId, mComprobanteId, mProductoId, mProduct
 
         },
         success: function (data) {
-            document.getElementById("myForm").submit();
-
         },
         error: function (ex) {
             alert('Fallo');
-        }
+        }              
     });
+    document.getElementById("myForm").submit();
 }
 
 function autorizaFormularioModal(mId) {
@@ -255,13 +257,15 @@ function autorizaFormularioModal(mId) {
             Id: mId
         },
         success: function (data) {
-            document.getElementById("myForm").submit();
+            
 
         },
         error: function (ex) {
             alert('Fallo');
         }
     });
+
+    document.getElementById("myForm").submit();
 }
 
 function autorizaAnulaFormularioModal(mId) {
@@ -274,13 +278,14 @@ function autorizaAnulaFormularioModal(mId) {
             Id: mId
         },
         success: function (data) {
-            document.getElementById("myForm").submit();
+            
 
         },
         error: function (ex) {
             alert('Fallo');
         }
     });
+    document.getElementById("myForm").submit();
 }
 
 
@@ -481,10 +486,70 @@ function guardarFiscalModal(mId, mTipoComprobanteFiscal, mLetraFiscal, mPtoVenta
             NumeroFiscal: mNumeroFiscal
         },
         success: function (data) {
-            document.getElementById("CCForm").submit();
+            
         },
         error: function (ex) {
             alert('Fallo');
         }
     });
+    document.getElementById("CCForm").submit();
+}
+
+
+function CargarcodigoAutorizacion(Id, CodigoAutorizacion) {
+    var mId = document.getElementById('mdlId');
+    var mCodigoAutorizacion = document.getElementById('mdlCodigoAutorizacion');
+    
+    $("#mId").text('');
+    $("#mCodigoAutorizacion").text('');
+    
+    mId.value = Id;
+    mCodigoAutorizacion.value = CodigoAutorizacion;    
+};  
+
+function validarCodigoAutorizacion() {
+
+    //var btn = document.getElementById('btnGuardar');
+    var mId = document.getElementById('mdlId').value;
+    var mCodigoAutorizacion = document.getElementById('mdlCodigoAutorizacion').value;
+    
+    var esOk = true;
+    $("#mId").text('');
+    $("#mCodigoAutorizacion").text('');
+    
+    //campo obligatorio
+    if (mCodigoAutorizacion == null || mCodigoAutorizacion.length == 0 || /^\s+$/.test(mCodigoAutorizacion)) {
+        $("#mCodigoAutorizacion").text('Debes ingresar una Codigo de Autorizacion');
+        //return false;
+        esOk = false;
+    }
+
+    //---------------------------------
+    if (esOk == false) {
+        return false;
+    }
+    //---------------------------------
+
+    guardarCodigoAutorizacionModal(mId, mCodigoAutorizacion.toUpperCase());
+
+};
+
+
+function guardarCodigoAutorizacionModal(mId, mCodigoAutorizacion) {
+    $.ajax({
+        async: false,
+        type: 'POST',
+        url: '/Comprobantes/InsertaCodigoAutorizacion',
+        dataType: 'json',
+        data: {
+            Id: mId,
+            CodigoAutorizacion: mCodigoAutorizacion
+        },
+        success: function (data) {},
+        error: function (ex) {
+            alert('Fallo');
+        }        
+    });
+
+    document.getElementById("CCForm").submit();
 }

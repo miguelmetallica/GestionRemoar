@@ -98,89 +98,82 @@
             <!-- /.row -->
             <!-- Table row -->
             <div class="row">
-                <div class="col-xs-12">
-                    <h5>Formas de Pagos</h5>
-                    @foreach (var formas in Detalle)
-                    {
+                @if (Detalle.Count() != 0)
+                {
+                    <div class="col-xs-9">
+                        <p class="lead">Detalle de Formas de Pagos</p>
 
-                        switch (formas.FormaPagoTipo)
-                        {
-                            case "E":
-                                <div class="col-xs-12">
-                                    <b>@formas.FormaPago</b>
-                                    <b> - TOTAL:</b> @formas.TotalLista
+                        <div class="table-responsive">
+                            <table class="table">
+                                @foreach (var formas in Detalle)
+                                {
 
-                                </div>
-                                break;
-                            case "C":
-                                <div class="col-xs-12">
-                                    <b>@formas.FormaPago</b>
-                                    <b> - TOTAL:</b> @formas.TotalLista
-                                    <b> - IMPORTE:</b> @formas.ImporteLista - <b>CUOTA:</b> @formas.Cuota - <b>INTERES:</b> @formas.InteresLista
-                                </div>
-                                break;
-                            case "D":
-                                <div class="col-xs-12">
-                                    <b>@formas.FormaPago</b>
-                                    <b> - TOTAL:</b> @formas.TotalLista
-                                </div>
-                                break;
-                            case "X":
-                                <div class="col-xs-12">
-                                    <b>@formas.FormaPago</b>
-                                    <b> - NUMERO:</b> @formas.ChequeNumero
-                                    <b> - TOTAL:</b> @formas.TotalLista
+                                    switch (formas.FormaPagoTipo)
+                                    {
+                                        case "E":
+                                            <tr>
+                                                <th >@formas.FormaPago</th>
+                                                <td>TOTAL: @formas.Total</td>
+                                                <td>DESCUENTO: @formas.Descuento</td>
+                                            </tr>
+                                            break;
+                                        case "C":
+                                            <tr>
+                                                <th >@formas.FormaPago</th>
+                                                <td>TOTAL: @formas.Total</td>
+                                                <td>
+                                                    IMPORTE: @formas.Importe
+                                                    CUOTA: @formas.Cuota
+                                                    INTERES: @formas.Interes
+                                                </td>
+                                            </tr>
 
-                                </div>
-                                break;
-                            case "O":
-                                <div class="col-xs-12">
-                                    <b>@formas.FormaPago</b>
-                                    <b> - FORMA PAGO:</b> @formas.Otros
-                                    <b> - TOTAL:</b> @formas.TotalLista
+                                            break;
+                                        case "D":
+                                            <tr>
+                                                <th >@formas.FormaPago</th>
+                                                <td>TOTAL: @formas.Total</td>
+                                                <td></td>
+                                            </tr>
+                                            break;
+                                        case "X":
+                                            <tr>
+                                                <th >@formas.FormaPago</th>
+                                                <td>TOTAL: @formas.Total</td>
+                                                <td>NRO de CHEQUE: @formas.ChequeNumero</td>
+                                            </tr>
 
+                                            break;
+                                        case "O":
+                                            <tr>
+                                                <th>@formas.FormaPago</th>
+                                                <td>TOTAL: @formas.Total</td>
+                                                <td>FORMA DE PAGO: @formas.Otros</td>
+                                            </tr>
+                                            break;
+                                        case "U":
+                                            <tr>
+                                                <th>@formas.FormaPago</th>
+                                                <td>TOTAL: @formas.Total</td>
+                                                <td>COTIZACION: @formas.DolarCotizacion </td>
+                                            </tr>
+                                            break;
+                                        default:
+                                            break;
+                                    }
 
-                                </div>
-                                break;
-                            default:
-                                break;
-                        }
-
-                    }
-
-                </div>
-                <!-- /.col -->
-            </div>
-            <!-- /.row -->
-
-            <div class="row">
-                <!-- accepted payments column -->
-                <div class="col-xs-6">
-                </div>
-                <!-- /.col -->
-                <div class="col-xs-6">
-                    <p class="lead">Total</p>
-
-                    <div class="table-responsive">
-                        <table class="table">
-                            <tr>
-                                <th style="width:50%">Subtotal</th>
-                                <td>@Model.Total</td>
-                            </tr>
-                            <tr>
-                                <th>Impuestos</th>
-                                <td>@(Model.Total - Model.TotalSinImpuesto)</td>
-                            </tr>
-                            <tr>
-                                <th>Total</th>
-                                <td>@Model.Total</td>
-                            </tr>
-                        </table>
+                                }
+                                <tr  style="font-size:large; background-color:aliceblue;">
+                                    <th style="width:50%">TOTAL A PAGAR $ </th>
+                                    <td>@Model.Total</td>
+                                    <td></td>
+                                </tr>
+                            </table>
+                        </div>
                     </div>
-                </div>
+                }
                 <!-- /.col -->
-            </div>
-            <!-- /.row -->
+            
         </section>
         <!-- /.content -->
     </div>

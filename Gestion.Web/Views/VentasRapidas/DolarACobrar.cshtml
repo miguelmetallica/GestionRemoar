@@ -1,0 +1,128 @@
+﻿@model Gestion.Web.Models.FormaPagoDolarDTO
+
+@{
+    ViewData["Title"] = "Venta Rapida - A Cobrar";
+    var formasPagosTMP = (IEnumerable<VentasRapidasFormasPagosDTO>)ViewData["FormasPagosTMP"];
+
+    var Resumen = (VentasRapidasResumen)ViewData["Resumen"];
+}
+
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <h1>
+            Sistema de gestíon
+            <small>Ventas Rapidas</small>
+        </h1>
+        <ol class="breadcrumb">
+            <li><a asp-controller="Home" asp-action="Index"><i class="fas fa-tachometer-alt"></i> Inicio</a></li>
+            <li><a asp-controller="VentasRapidas" asp-action="VentasRapidasACobrar">Listado de Ventas Rapidas</a></li>
+            <li class="active">@ViewData["Title"]</li>
+        </ol>
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+        <div class="row">
+            <div class="col-md-6">
+                <!-- general form elements -->
+                <partial name="_ResumenView" model='Resumen' />
+                <!-- /.box -->
+            </div>
+            <div class="col-md-6">
+                <!-- general form elements -->
+                <div class="box box-primary">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">Tipo de Pago Dolar</h3>
+                    </div>
+                    <!-- /.box-header -->
+                    <!-- form start -->
+                    <form asp-action="DolarACobrar" enctype="multipart/form-data">
+                        <div class="box-body">
+                            <div class="box-body">
+                                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                                <input type="hidden" asp-for="VentaRapidaId" />
+                                <input type="hidden" asp-for="ClienteId" />
+                                <input type="hidden" asp-for="FormaPagoId" />
+                                <input type="hidden" asp-for="DolarCotizacion" />
+
+                                <div class="form-group">
+                                    <label class="control-label">Saldo</label>
+                                    <input asp-for="Saldo" class="form-control input-sm" readonly />
+                                    <span asp-validation-for="Saldo" class="text-danger"></span>
+                                </div>
+
+                                @if (Model.Descuento != 0)
+                                {
+                                    <div class="form-group">
+                                        <label class="control-label">Descuento %</label>
+                                        <input asp-for="Descuento" class="form-control input-sm" readonly />
+                                        <span asp-validation-for="Descuento" class="text-danger"></span>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="control-label">Saldo con Descuento</label>
+                                        <input asp-for="SaldoConDescuento" class="form-control input-sm" readonly />
+                                        <span asp-validation-for="SaldoConDescuento" class="text-danger"></span>
+                                    </div>
+                                }
+
+                                <div class="form-group">
+                                    <label asp-for="DolarImporte" class="control-label"></label>
+                                    <input asp-for="DolarImporte" class="form-control input-sm" onkeypress="return FiltrarDecimal(event,this);" onkeyup="multiplicar()" />
+                                    <span asp-validation-for="DolarImporte" class="text-danger"></span>
+                                </div>
+                                <div class="form-group">
+                                    <label asp-for="DolarCotizacion" class="control-label"></label>
+                                    <input asp-for="DolarCotizacion" class="form-control input-sm" readonly />
+                                    <span asp-validation-for="DolarCotizacion" class="text-danger"></span>
+                                </div>
+                                <div class="form-group">
+                                    <label asp-for="Importe" class="control-label"></label>
+                                    <input asp-for="Importe" class="form-control input-sm" onkeypress="return FiltrarDecimal(event,this);" />
+                                    <span asp-validation-for="Importe" class="text-danger"></span>
+                                </div>
+                                <div class="form-group">
+                                    <label asp-for="Observaciones" class="control-label"></label>
+                                    <input asp-for="Observaciones" class="form-control input-sm" />
+                                    <span asp-validation-for="Observaciones" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="box-footer">
+                                <input type="submit" value="Guardar" class="btn btn-primary" />
+                                <a asp-action="VentaRapidaACobrar" asp-route-id="@Model.VentaRapidaId" class="btn btn-default pull-right">Volver</a>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <!-- /.box -->
+
+
+            </div>
+        </div>
+        <!-- /.row -->
+    </section>
+    <!-- /.content -->
+</div>
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}    
+    <script>
+        function multiplicar() {
+            DolarImporte = document.getElementById("DolarImporte").value;
+            DolarCotizacion = document.getElementById("DolarCotizacion").value;
+            
+            if (Number(DolarCotizacion) == 0) {
+                r = 0;
+            }
+            else {
+                r = Number(DolarImporte) * Number(DolarCotizacion);
+            }
+
+
+            document.getElementById("Importe").value = Number(r).toFixed(2);
+        }
+    </script>
+}

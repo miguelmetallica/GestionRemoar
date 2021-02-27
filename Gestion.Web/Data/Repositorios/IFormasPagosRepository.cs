@@ -9,6 +9,6 @@ namespace Gestion.Web.Data
 {
     public interface IFormasPagosRepository : IGenericRepository<FormasPagos>
     {
-        
+        IEnumerable<SelectListItem> GetTipos();
     }    
 }

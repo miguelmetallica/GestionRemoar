@@ -46,7 +46,7 @@ BREADCRUMB
                                 @Html.DisplayNameFor(model => model.RazonSocial)
                             </th>
                             <th>
-                                @Html.DisplayNameFor(model => model.Total)
+                                @Html.DisplayName("Total")
                             </th>
                             <th>
                                 @Html.DisplayNameFor(model => model.Saldo)
@@ -114,6 +114,7 @@ BREADCRUMB
 
             $('#dTable').DataTable({
                 "processing": "true",
+                "order": [[3, 'desc']],
                 "retrieve": "true",
                 "language": {
                     "processing": "Procesando... Espere por favor",

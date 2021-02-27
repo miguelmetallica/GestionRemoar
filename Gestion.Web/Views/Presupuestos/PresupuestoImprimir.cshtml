@@ -4,7 +4,8 @@
     Layout = null;
     var Detalle = (IEnumerable<PresupuestosDetalleDTO>)ViewData["Detalle"];
     var Cliente = (ClientesDTO)ViewData["Cliente"];
-    
+    var Resumen = (PresupuestosResumen)ViewData["Resumen"];
+    var formasPagosTMP = (IEnumerable<PresupuestosFormasPagosDTO>)ViewData["FormasPagosTMP"];
 }
 
 
@@ -96,8 +97,8 @@
                                 <th>Cantidad</th>
                                 <th>Codigo</th>
                                 <th>Producto</th>
-                                <th>Precio Unitario</th>
-                                <th>Subtotal</th>
+                                <th>Precio</th>
+                                <th>Subtotal</th>                                
                             </tr>
                         </thead>
                         <tbody>
@@ -107,8 +108,8 @@
                                 <td>@item.Cantidad</td>
                                 <td>@item.ProductoCodigo</td>
                                 <td>@item.ProductoNombre</td>
-                                <td>@item.PrecioContado</td>
-                                <td>@(item.PrecioContado * item.Cantidad)</td>
+                                <td>@item.Precio</td>
+                                <td>@(item.Precio * item.Cantidad)</td>
                             </tr>
                             }
 
@@ -121,8 +122,74 @@
 
             <div class="row">
                 <!-- accepted payments column -->
-                <div class="col-xs-6">                    
+                @if (formasPagosTMP.Count() != 0) { 
+                <div class="col-xs-6">
+                    <p class="lead">Detalle de Formas de Pagos</p>
+
+                    <div class="table-responsive">
+                        <table class="table">
+                            @foreach (var formas in formasPagosTMP)
+                            {
+
+                                switch (formas.FormaPagoTipo)
+                                {
+                                    case "E":
+                                        <tr>
+                                            <th style="width:50%">@formas.FormaPago</th>
+                                            <td>TOTAL: @formas.Total</td>
+                                            <td>DESCUENTO: @formas.Descuento</td>
+                                        </tr>
+                                        break;
+                                    case "C":
+                                        <tr>
+                                            <th style="width:50%">@formas.FormaPago</th>
+                                            <td>TOTAL: @formas.Total</td>
+                                            <td>
+                                                IMPORTE: @formas.Importe
+                                                CUOTA: @formas.Cuota
+                                                INTERES: @formas.Interes
+                                            </td>
+                                        </tr>
+
+                                        break;
+                                    case "D":
+                                        <tr>
+                                            <th style="width:50%">@formas.FormaPago</th>
+                                            <td>TOTAL: @formas.Total</td>
+                                            <td></td>
+                                        </tr>
+                                        break;
+                                    case "X":
+                                        <tr>
+                                            <th style="width:50%">@formas.FormaPago</th>
+                                            <td>TOTAL: @formas.Total</td>
+                                            <td>NRO de CHEQUE: @formas.ChequeNumero</td>
+                                        </tr>
+
+                                        break;
+                                    case "O":
+                                        <tr>
+                                            <th style="width:50%">@formas.FormaPago</th>
+                                            <td>TOTAL: @formas.Total</td>
+                                            <td>FORMA DE PAGO: @formas.Otros</td>
+                                        </tr>
+                                        break;
+                                    case "U":
+                                        <tr>
+                                            <th style="width:50%">@formas.FormaPago</th>
+                                            <td>TOTAL: @formas.Total</td>
+                                            <td>COTIZACION: @formas.DolarCotizacion </td>
+                                        </tr>
+                                        break;
+                                    default:
+                                        break;
+                                }
+
+                            }
+                        </table>
+                    </div>
                 </div>
+                }
                 <!-- /.col -->
                 <div class="col-xs-6">
                     <p class="lead">Detalle</p>
@@ -131,21 +198,22 @@
                         <table class="table">
                             <tr>
                                 <th style="width:50%">Subtotal</th>
-                                <td>@Model.PrecioContado</td>
+                                <td>@Resumen.SubTotalProductos</td>
                             </tr>
                             <tr>
                                 <th>Descuento</th>
-                                <td>@(decimal.Round(Model.PrecioContado * Model.DescuentoPorcentaje /100,2) )</td>
+                                <td>@Resumen.DescuentoMonto</td>
                             </tr>
                             <tr>
                                 <th>Total</th>
-                                <td>@(decimal.Round(Model.PrecioContado - (Model.PrecioContado * Model.DescuentoPorcentaje /100 ),2))</td>
+                                <td>@Resumen.TotalAPagar</td>
                             </tr>
-                            
+
                         </table>
                     </div>
                 </div>
                 <!-- /.col -->
+
             </div>
             <!-- /.row -->
         </section>

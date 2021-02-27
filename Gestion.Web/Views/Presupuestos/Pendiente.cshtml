@@ -3,6 +3,8 @@
 @{
     ViewData["Title"] = "Nuevo Presupuesto";
     var Detalle = (IEnumerable<PresupuestosDetalleDTO>)ViewData["Detalle"];
+
+    var Resumen = (PresupuestosResumen)ViewData["Resumen"];
 }
 
 <div class="content-wrapper">
@@ -21,111 +23,115 @@
 
 <!-- Main content -->
     <section class="content">
-    <div class="row">
-        <!-- left column -->
-        <div class="col-md-6">
-            <partial name="_Cabecera" model='Model' />
-        </div>
-        <!--/.col-->
-        <!-- left column -->
-        <div class="col-md-6">
-            <!-- general form elements -->
-            <partial name="_Resumen" model='Model' />
-            <!-- /.box -->
-            <!-- general form elements -->
-            <div class="box box-primary">
-                <div class="box-header with-border">
-                    <h3 class="box-title">Listado de Productos</h3>
-                    <a asp-action="ProductoCreate" asp-route-id="@Model.Id" class="btn btn-primary btn-sm pull-right" aria-hidden="true">Agregar Productos</a>
-                </div>
-                <div class="box-body">
-                    <table id="dTable" class="table dt-responsive table-condensed table-bordered table-striped" width="100%">
-                        <thead>
-                            <tr>
-                                <th>
-                                    Codigo
-                                </th>
-                                <th>
-                                    Producto
-                                </th>
-                                <th>
-                                    Precio Lista
-                                </th>
-                                <th>
-                                    Precio Contado
-                                </th>
-                                <th>
-                                    Cantidad
-                                </th>
-                                <th>Operaciones</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @if (Detalle.Count() > 0)
-                            {
-                                @foreach (var item in Detalle)
-                                {
-                                    if (item.ProductoCodigo != "")
-                                    {
-                                        <tr>
-                                            <td>
-                                                @Html.DisplayFor(modelItem => item.ProductoCodigo)
-                                            </td>
-                                            <td>
-                                                @Html.DisplayFor(modelItem => item.ProductoNombre)
-                                            </td>
-                                            <td>
-                                                @Html.DisplayFor(modelItem => item.Precio)
-                                            </td>
-                                            <td>
-                                                @Html.DisplayFor(modelItem => item.PrecioContado)
-                                            </td>
-                                            <td>
-                                                @Html.DisplayFor(modelItem => item.Cantidad)
-                                            </td>
-                                            <td>
-                                                <div class="btn-group">
-                                                    @{
-                                                        var param = new Dictionary<string, string> { { "id", item.Id }, { "id2", item.PresupuestoId } };
-                                                    }
-                                                    <a class="btn btn-success btn-sm" asp-action="Incrementar" asp-all-route-data="@param"><i class="fa fa-plus"></i></a>
-                                                    <a class="btn btn-warning btn-sm" asp-action="Decrementar" asp-all-route-data="@param"><i class="fa fa-minus"></i></a>
-
-                                                    <a class="btn btn-danger btn-sm" asp-action="ProductoDelete" asp-route-id="@item.Id"><i class="fa fa-trash"></i></a>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    }
-
-                                }
-                            }
-
-                        </tbody>
-                        <tfoot>
-                            <tr>
-                                <th colspan="2">
-                                </th>
-                                <th>
-                                    @Html.DisplayFor(model => Model.Precio)
-                                </th>
-                                <th>
-                                    @Html.DisplayFor(model => Model.PrecioContado)
-                                </th>
-                                <th>
-                                    @decimal.Round(Model.CantidadProductos, 0)
-                                </th>
-                                <td>
-                                </td>
-                            </tr>
-                        </tfoot>
-                    </table>
-                </div>
+        <div class="row">
+            <!-- left column -->
+            <div class="col-md-6">
+                <partial name="_Cabecera" model='Model' />
             </div>
-            <!-- /.box -->
+            <!--/.col-->
+            <!-- left column -->
+            <div class="col-md-6">
+                <partial name="_Resumen" model='Resumen' />
+            </div>
+            <!--/.col-->
         </div>
-    <!--/.col-->
-    </div>
-    <!-- /.row -->
+        <div class="row">
+            <!-- left column -->
+            <div class="col-md-12">
+                <!-- general form elements -->
+                <!-- /.box -->
+                <!-- general form elements -->
+                <div class="box box-primary">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">Listado de Productos</h3>
+                        <a asp-action="ProductoCreate" asp-route-id="@Model.Id" class="btn btn-primary btn-sm pull-right" aria-hidden="true">Agregar Productos</a>
+                    </div>
+                    <div class="box-body">
+                        <table id="dTable" class="table dt-responsive table-condensed table-bordered table-striped" width="100%">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        Codigo
+                                    </th>
+                                    <th>
+                                        Producto
+                                    </th>
+                                    <th>
+                                        Precio
+                                    </th>
+                                    <th>
+                                        Cantidad
+                                    </th>
+                                    <th>Operaciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (Detalle.Count() > 0)
+                                {
+                                    @foreach (var item in Detalle)
+                                    {
+                                        if (item.ProductoCodigo != "")
+                                        {
+                                            <tr>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.ProductoCodigo)
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.ProductoNombre)
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.Precio)
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.Cantidad)
+                                                </td>
+                                                <td>
+                                                    <div class="btn-group">
+                                                        @{
+                                                            var param = new Dictionary<string, string> { { "id", item.Id }, { "id2", item.PresupuestoId } };
+                                                        }
+                                                        <a class="btn btn-success btn-sm" asp-action="Incrementar" asp-all-route-data="@param"><i class="fa fa-plus"></i></a>
+                                                        <a class="btn btn-warning btn-sm" asp-action="Decrementar" asp-all-route-data="@param"><i class="fa fa-minus"></i></a>
+
+                                                        <a class="btn btn-danger btn-sm" asp-action="ProductoDelete" asp-route-id="@item.Id"><i class="fa fa-trash"></i></a>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        }
+
+                                    }
+                                }
+
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <th colspan="2">
+                                    </th>
+                                    <th>
+                                        @String.Format("{0:C}", Detalle.Sum(x => x.Precio * x.Cantidad))
+                                    </th>
+                                    <th>
+                                        @decimal.Round(Model.CantidadProductos, 0)
+                                    </th>
+                                    <td>
+                                    </td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+                <!-- /.box -->
+            </div>
+            <!--/.col-->
+        </div>
+        <div class="row">
+            <!-- left column -->
+            <div class="col-md-12">
+                <partial name="_MediosPagos" model='Model' />
+            </div>
+            <!--/.col-->
+        </div>
+        <!-- /.row -->
     </section>
 <!-- /.content -->
 </div>

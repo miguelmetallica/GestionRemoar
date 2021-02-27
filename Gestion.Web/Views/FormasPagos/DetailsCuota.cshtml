@@ -1,0 +1,116 @@
+﻿@model Gestion.Web.Models.FormasPagosCuotas
+
+@{
+    ViewData["Title"] = "Detalle de la Cuota";
+    var entidades = (IEnumerable<Gestion.Web.Models.ParamEntidades>)ViewData["Entidades"];
+}
+
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <h1>
+            Sistema de gestíon
+            <small>Formas de Pagos</small>
+        </h1>
+        <ol class="breadcrumb">
+            <li><a asp-controller="Home" asp-action="Index"><i class="fas fa-tachometer-alt"></i> Inicio</a></li>
+            <li><a asp-controller="FormasPagos" asp-action="Index">Listado de Formas de Pagos</a></li>
+            <li class="active">@ViewData["Title"]</li>
+        </ol>
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+        <div class="row">
+            <!-- left column -->
+            <div class="col-md-6">
+                <!-- general form elements -->
+                <div class="box box-primary">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">Datos de la Cuota</h3>
+                    </div>
+                    <!-- /.box-header -->
+                    <!-- form start -->
+                    <form asp-action="Create" enctype="multipart/form-data">
+                        <div class="box-body">
+                            <dl class="dl-horizontal">
+                                <dt>
+                                    @Html.DisplayNameFor(model => model.EntidadId)
+                                </dt>
+                                <dd>
+                                    @{
+                                        var entidad = entidades.Where(x => x.Id == Model.EntidadId).FirstOrDefault().Descripcion;
+                                    }
+
+                                    @Html.Display(entidad)
+                                </dd>
+                                <dt>
+                                    @Html.DisplayNameFor(model => model.Descripcion)
+                                </dt>
+                                <dd>
+                                    @Html.DisplayFor(model => model.Descripcion)
+                                </dd>
+                                <dt>
+                                    @Html.DisplayNameFor(model => model.Cuota)
+                                </dt>
+                                <dd>
+                                    @Html.DisplayFor(model => model.Cuota)
+                                </dd>
+                                <dt>
+                                    @Html.DisplayNameFor(model => model.Interes)
+                                </dt>
+                                <dd>
+                                    @Html.DisplayFor(model => model.Interes)
+                                </dd>
+                                <dt>
+                                    @Html.DisplayNameFor(model => model.FechaDesde)
+                                </dt>
+                                <dd>
+                                    @Html.DisplayFor(model => model.FechaDesde)
+                                </dd>
+                                <dt>
+                                    @Html.DisplayNameFor(model => model.FechaHasta)
+                                </dt>
+                                <dd>
+                                    @Html.DisplayFor(model => model.FechaHasta)
+                                </dd>
+                                <dt>
+                                    @Html.DisplayNameFor(model => model.Estado)
+                                </dt>
+                                <dd>
+                                    @{
+                                        if (Model.Estado)
+                                        {
+                                            <span class="label label-success">Activo</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="label label-danger">Inactivo</span>
+                                        }
+
+                                    }
+                                </dd>
+                            </dl>
+                        </div>
+                        <!-- /.box-body -->
+
+                        <div class="box-footer">
+                            <a asp-action="EditCuota" asp-route-id="@Model.Id" class="btn btn-warning">Editar datos</a>
+                            <a asp-action="Cuotas"  asp-route-id="@Model.FormaPagoId"   class="btn btn-default pull-right">Volver al Listado</a>
+                        </div>
+                    </form>
+                </div>
+                <!-- /.box -->
+            </div>
+            <!--/.col-->
+        </div>
+        <!-- /.row -->
+    </section>
+    <!-- /.content -->
+</div>
+<!-- /.content-wrapper -->
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

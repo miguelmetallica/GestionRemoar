@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Gestion.Web.Models
 {
@@ -13,6 +14,9 @@ namespace Gestion.Web.Models
         public string Password { get; set; }
 
         public bool RememberMe { get; set; }
+
+        [NotMapped]
+        public string Error { get; set; }
 
     }
 }

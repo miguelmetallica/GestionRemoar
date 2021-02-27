@@ -29,9 +29,9 @@ BREADCRUMB
                 <table id="dTable" class="table dt-responsive table-condensed table-bordered table-striped" width="100%">
                     <thead>
                         <tr>
-                            <th>
+                            @*<th>
                                 @Html.DisplayNameFor(model => model.CodigoPresupuesto)
-                            </th>
+                            </th>*@
                             <th>
                                 @Html.DisplayNameFor(model => model.TipoComprobante)
                             </th>
@@ -44,15 +44,13 @@ BREADCRUMB
                             <th>
                                 @Html.DisplayNameFor(model => model.RazonSocial)
                             </th>
-                            @*<th>
-                                @Html.DisplayNameFor(model => model.Total)
+                            <th>
+                                @Html.DisplayNameFor(model => model.UsuarioAlta)
                             </th>
                             <th>
-                                @Html.DisplayNameFor(model => model.Saldo)
+                                @Html.DisplayNameFor(model => model.FechaAlta)
                             </th>
-                            <th>
-                                @Html.DisplayNameFor(model => model.Saldo_Porcentaje)
-                            </th>*@
+                            
                             <th>Operaciones</th>
                         </tr>
                     </thead>
@@ -60,9 +58,6 @@ BREADCRUMB
                         @foreach (var item in Model)
                         {
                         <tr>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.CodigoPresupuesto)
-                            </td>
                             <td>
                                 @Html.DisplayFor(modelItem => item.TipoComprobante)
                             </td>
@@ -75,18 +70,16 @@ BREADCRUMB
                             <td>
                                 @Html.DisplayFor(modelItem => item.RazonSocial)
                             </td>
-                            @*<td>
-                                @Html.DisplayFor(modelItem => item.Total)
+
+                            <td>
+                                @Html.DisplayFor(modelItem => item.UsuarioAlta)
                             </td>
                             <td>
-                                @Html.DisplayFor(modelItem => item.Saldo)
+                                @Html.DisplayFor(modelItem => item.FechaAlta)
                             </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Saldo_Porcentaje)
-                            </td>*@
                             <td>
                                 <div class="btn-group">
-                                    <a class="btn btn-primary btn-sm" asp-action="DevolucionProducto" asp-route-id="@item.Id" ><i class="fa fa-search"></i></a>
+                                    <a class="btn btn-primary btn-sm" asp-action="DevolucionProducto" asp-route-id="@item.Id"><i class="fa fa-search"></i></a>
                                 </div>
                             </td>
                         </tr>
@@ -110,6 +103,7 @@ BREADCRUMB
             $('#dTable').DataTable({
                 "processing": "true",
                 "retrieve": "true",
+                "order": [[2, 'desc']],
                 "language": {
                     "processing": "Procesando... Espere por favor",
                     "lengthMenu": "Mostrar _MENU_ registros por pagina",

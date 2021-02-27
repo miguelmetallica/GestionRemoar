@@ -1,0 +1,82 @@
+﻿@model Gestion.Web.Models.VentasRapidasDTO
+
+@{
+    ViewData["Title"] = "Editar datos del Cliente";
+}
+
+    <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+            <h1>
+                Sistema de gestíon
+                <small>Ventas Rapidas</small>
+            </h1>
+            <ol class="breadcrumb">
+                <li><a asp-controller="Home" asp-action="Index"><i class="fas fa-tachometer-alt"></i> Inicio</a></li>
+                <li><a asp-controller="VentasRapidas" asp-action="Index">Listado de Ventas Rapidas</a></li>
+                <li class="active">@ViewData["Title"]</li>
+            </ol>
+        </section>
+
+        <!-- Main content -->
+        <section class="content">
+            <div class="row">
+                <!-- left column -->
+                <div class="col-md-6">
+                    <!-- general form elements -->
+                    <div class="box box-primary">
+                        <div class="box-header with-border">
+                            <h3 class="box-title">Datos del Cliente</h3>
+                        </div>
+                        <!-- /.box-header -->
+                        <!-- form start -->
+                        <form asp-action="ClienteEditarACobrar" enctype="multipart/form-data">
+                            <div class="box-body">
+                                <div class="box-body">
+                                    <input type="hidden" asp-for="Id" />
+
+                                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                                    <div class="form-group">
+                                        <label asp-for="ClienteRazonSocial" class="control-label"></label>
+                                        <input asp-for="ClienteRazonSocial" class="form-control input-sm" />
+                                        <span asp-validation-for="ClienteRazonSocial" class="text-danger"></span>
+                                    </div>
+                                    <div class="form-group">
+                                        <label asp-for="ClienteNroDocumento" class="control-label"></label>
+                                        <input asp-for="ClienteNroDocumento" class="form-control input-sm" />
+                                        <span asp-validation-for="ClienteNroDocumento" class="text-danger"></span>
+                                    </div>
+                                    <div class="form-group">
+                                        <label asp-for="ClienteCuitCuil" class="control-label"></label>
+                                        <input asp-for="ClienteCuitCuil" class="form-control input-sm" />
+                                        <span asp-validation-for="ClienteCuitCuil" class="text-danger"></span>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label asp-for="TipoResponsableId" class="control-label"></label>
+                                        <select asp-for="TipoResponsableId" asp-items="@ViewBag.TiposResponsables" class="form-control input-sm"></select>
+                                        <span asp-validation-for="TipoResponsableId" class="text-danger"></span>
+                                    </div>
+                                    
+                                </div>
+                                <!-- /.box-body -->
+                                <div class="box-footer">
+                                    <input type="submit" value="Guardar" class="btn btn-primary" />
+                                    <a asp-action="VentaRapidaACobrar" asp-route-id="@Model.Id" class="btn btn-default pull-right">Volver</a>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <!-- /.box -->
+                </div>
+                <!--/.col-->
+            </div>
+            <!-- /.row -->
+        </section>
+    </div>
+<!-- /.content-wrapper -->
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

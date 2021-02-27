@@ -98,6 +98,9 @@ namespace Gestion.Web.Models
         [DisplayFormat(DataFormatString = "{0:C2}")]
         public decimal Total { get; set; }
 
+        //[DisplayFormat(DataFormatString = "{0:C2}")]
+        //public decimal TotalContado { get; set; }
+
         [Display(Name = "Fecha Aprobacion")]
         public DateTime? FechaAprobacion { get; set; }
 
@@ -155,11 +158,11 @@ namespace Gestion.Web.Models
         public DateTime FechaEdit { get; set; }
         public string UsuarioEdit { get; set; }
 
-        [Display(Name = "Precio Lista")]
+        [Display(Name = "Precio")]
         [DisplayFormat(DataFormatString = "{0:C2}")]
         public decimal Precio { get; set; }
-        [Display(Name = "Precio Contado")]
-        [DisplayFormat(DataFormatString = "{0:C2}")]
+        //[Display(Name = "Precio Contado")]
+        //[DisplayFormat(DataFormatString = "{0:C2}")]
         public decimal PrecioContado { get; set; }
 
         [Display(Name = "Cant. Productos")] 
@@ -177,11 +180,8 @@ namespace Gestion.Web.Models
         [DisplayFormat(DataFormatString = "{0:C2}")]
         [Display(Name = "Precio")]
         public decimal Precio { get; set; }
-        [DisplayFormat(DataFormatString = "{0:C2}")]
-        [Display(Name = "Precio en Efectivo")]
-        public decimal PrecioContado { get; set; }
-        public decimal PrecioSinImpuesto { get; set; }
-        public decimal PrecioContadoSinImpuesto { get; set; }
+
+        public decimal PrecioSinImpuesto { get; set; }    
         [DisplayFormat(DataFormatString = "{0:N0}")]
         [Display(Name = "Cantidad de Productos")]
         public int Cantidad { get; set; }
@@ -233,7 +233,6 @@ namespace Gestion.Web.Models
         public string UsuarioEdit { get; set; }
 
         public decimal Precio { get; set; }
-        public decimal PrecioContado { get; set; }
         public decimal CantidadProductos { get; set; }
 
         public string SucursalNombre { get; set; }
@@ -244,5 +243,72 @@ namespace Gestion.Web.Models
         public string SucursalTelefono { get; set; }
 
         public string VersionImpresion { get; set; }
+    }
+
+    public partial class PresupuestosResumen
+    {
+        public string Id { get; set; }
+
+        [DisplayFormat(DataFormatString = "{0:N0}")]
+        [Display(Name = "Cantidad de Productos")]
+        public int CantidadProductos { get; set; }
+
+        [DisplayFormat(DataFormatString = "{0:C2}")]
+        [Display(Name = "SubTotal")]
+        public decimal SubTotalProductos { get; set; }
+        [DisplayFormat(DataFormatString = "{0:C2}")]
+        [Display(Name = "Descuento %")]
+        public decimal DescuentoPorcentaje { get; set; }
+        [DisplayFormat(DataFormatString = "{0:C2}")]
+        [Display(Name = "Descuento $")]
+        public decimal DescuentoMonto { get; set; }
+        [DisplayFormat(DataFormatString = "{0:C2}")]
+        [Display(Name = "Total a Pagar")]
+        public decimal TotalAPagar { get; set; }
+        [DisplayFormat(DataFormatString = "{0:C2}")]
+        [Display(Name = "Saldo a Pagar")]
+        public decimal SaldoAPagar { get; set; }
+
+    }
+    public partial class PresupuestosFormasPagosDTO
+    {
+        public string Id { get; set; }
+        public string ClienteId { get; set; }
+        public string PresupuestoId { get; set; }
+        public string TipoComprobanteId { get; set; }
+        public string FormaPagoId { get; set; }
+        public string FormaPagoCodigo { get; set; }
+        public string FormaPagoTipo { get; set; }
+        public string FormaPago { get; set; }
+        public decimal Importe { get; set; }
+        public int Cuota { get; set; }
+        public decimal Interes { get; set; }
+        public decimal Descuento { get; set; }
+        public decimal Total { get; set; }
+        public string TarjetaId { get; set; }
+        public string TarjetaNombre { get; set; }
+        public string TarjetaCliente { get; set; }
+        public string TarjetaNumero { get; set; }
+        public int TarjetaVenceMes { get; set; }
+        public int TarjetaVenceAño { get; set; }
+        public int TarjetaCodigoSeguridad { get; set; }
+        public bool? TarjetaEsDebito { get; set; }
+        public string ChequeBancoId { get; set; }
+        public string ChequeBanco { get; set; }
+        public string ChequeNumero { get; set; }
+        public DateTime? ChequeFechaEmision { get; set; }
+        public DateTime? ChequeFechaVencimiento { get; set; }
+        public string ChequeCuit { get; set; }
+        public string ChequeNombre { get; set; }
+        public string ChequeCuenta { get; set; }
+        public string Otros { get; set; }
+        public string Observaciones { get; set; }
+        [Display(Name = "Codigo de Autorizacion")]
+        public string CodigoAutorizacion { get; set; }
+        public decimal DolarImporte { get; set; }
+        public decimal DolarCotizacion { get; set; }
+        public DateTime FechaAlta { get; set; }
+        public string UsuarioAlta { get; set; }
+
     }
 }

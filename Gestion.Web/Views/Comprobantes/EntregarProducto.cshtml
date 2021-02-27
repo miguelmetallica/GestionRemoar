@@ -4,6 +4,8 @@
     ViewData["Title"] = "Detalle del Cliente";
     var cliente = (ClientesDTO)ViewData["Clientes"];
     var Detalle = (List<Gestion.Web.Models.ComprobantesDetalleDTO>)ViewData["DetalleTMP"];
+    var remitos = (List<Gestion.Web.Models.ComprobantesDetalleDTO>)ViewData["Remitos"];
+    var comp = (List<Gestion.Web.Models.ComprobantesDTO>)ViewData["Comprobantes"];
 }
 
 <div class="content-wrapper">
@@ -67,7 +69,15 @@
                         }
 
                     </div>
+                </div>
 
+                <div class="box box-primary">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">Remitos y Devoluciones Generadas</h3>
+                    </div>
+                    <form>
+                        <partial name="_Remitos" model='@comp' />
+                    </form>
                 </div>
             </div>
         </div>

@@ -44,5 +44,7 @@ namespace Gestion.Web.Helpers
 
         Task DeleteUserAsync(Usuarios user);
 
+        Task ResetearPassword(Usuarios user, string password);
+
     }
 }

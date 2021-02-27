@@ -28,7 +28,7 @@
                     <b>Presupuesto: @Model.Codigo</b><br>
                     <br>
                     <b>Fecha:</b> @Model.FechaComprobante.ToShortDateString()<br>
-                    <b>Cantidad de Productos:</b> <br>
+                    <b>Cantidad de Productos:</b> @Detalle.Count() <br>
                     <b>SubTotal:</b> @Model.TotalSinDescuento<br>
                     <b>Descuento %:</b> @Model.DescuentoPorcentaje<br>
                     <b>Descuento $:</b> @Model.DescuentoTotal<br>

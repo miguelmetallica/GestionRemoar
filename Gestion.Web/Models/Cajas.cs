@@ -32,5 +32,6 @@ namespace Gestion.Web.Models
         public string Sucursal { get; set; }
         public string SucursalId { get; set; }
         public string Usuario { get; set; }
+        public string Id { get; set; }
     }
 }

@@ -14,9 +14,9 @@ namespace Gestion.Web.Data
         Task AddItemAsync(PresupuestosDetalle model, string userName);
         Task AddItemComodinAsync(PresupuestosDetalle model, string userName);
 
-        Task ModifyCantidadesAsync(string id, int cantidad);
+        //Task ModifyCantidadesAsync(string id, int cantidad);
 
-        Task DeleteDetailAsync(string id);
+        //Task DeleteDetailAsync(string id);
 
         Task<bool> ConfirmOrderAsync(string userName);
 
@@ -62,5 +62,20 @@ namespace Gestion.Web.Data
         Task<int> spDatosFiscalesBorrar(string Id, string usuario);
 
         Task<PresupuestosDTO> spPresupuesto(string id);
+        Task<List<PresupuestosIndex>> spPresupuestosVencidos(string ClienteId);
+        Task<List<PresupuestosIndex>> spPresupuestosRechazados(string ClienteId);
+
+        Task<int> spElimina(string Id, string usuario);
+        Task<int> spIncrementa(string Id, int Cantidad, string usuario);
+        Task<int> spDecrementa(string Id, int Cantidad, string usuario);
+
+        Task<PresupuestosResumen> spResumenPresupuesto(string presupuestoId);
+        Task<List<PresupuestosFormasPagosDTO>> spFormasPagos(string presupuestoId);
+        Task<int> spEfectivo(FormaPagoEfectivoDTO formaPago);
+        Task<int> spOtro(FormaPagoOtroDTO formaPago);
+        Task<int> spTarjeta(FormaPagoTarjetaDTO formaPago);
+        Task<int> spCheque(FormaPagoChequeDTO formaPago);
+        Task<int> spDolar(FormaPagoDolarDTO formaPago);
+        Task<int> spDeleteFormaPago(string id);
     }
 }

@@ -1,8 +1,11 @@
 ﻿using Gestion.Web.Models;
+using Gestion.Web.Data;
+using Gestion.Web.Helpers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System.Diagnostics;
+using System.Threading.Tasks;
 
 namespace Gestion.Web.Controllers
 {
@@ -10,14 +13,21 @@ namespace Gestion.Web.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly IPresupuestosRepository presupuesto;
+        private readonly IComprobantesRepository comprobantes;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger,IPresupuestosRepository presupuesto,IComprobantesRepository comprobantes)
         {
             _logger = logger;
+            this.presupuesto = presupuesto;
+            this.comprobantes = comprobantes;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
+            ViewData["presupuesto"] = await presupuesto.spPresupuestosPendientes();
+            ViewData["comprobantePendiente"] = await comprobantes.spComprobanteDetalleEntregaIndicador();
+
             return View();
         }
 

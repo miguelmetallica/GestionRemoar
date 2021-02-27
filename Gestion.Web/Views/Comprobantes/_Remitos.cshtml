@@ -1,0 +1,99 @@
+﻿@model IEnumerable<Gestion.Web.Models.ComprobantesDTO>
+
+@{
+    var comprobante = (ComprobantesDTO)ViewData["Comprobante"];
+    var CCDetalle = (List<Gestion.Web.Models.ComprobantesDetalleDTO>)ViewData["Detalles"];
+    //var CCFormaPagos = (List<Gestion.Web.Models.ComprobantesFormasPagosDTO>)ViewData["FormasPagos"];
+}
+<form id="CCForm">
+    <div class="box-body">
+        <ul class="timeline">
+            @foreach (var item in Model.OrderByDescending(x => x.FechaComprobante))
+            {
+                <li class="time-label">
+                    <span class="bg-red">
+                        @(item.FechaComprobante.ToShortDateString())
+                    </span>
+                </li>
+                <li>
+                    <!-- timeline icon -->
+                    <i class="fa bg-blue"></i>
+                    <div class="timeline-item">
+                        <span class="time"><i class="fa fa-clock-o"></i> @(item.FechaComprobante.ToShortTimeString())</span>
+                        
+                        <h3 class="timeline-header"><a>@item.TipoComprobante @item.Codigo</a> ...</h3>
+
+                        <div class="timeline-body">
+                            @if (item.TipoComprobanteFiscal != null)
+                            {
+                                <b>Comprobante Fiscal</b><br>
+                                <b>Tipo: @item.TipoComprobanteFiscal - Letra: @item.LetraFiscal - Pto Venta: @item.PtoVentaFiscal.ToString("D4") - Numero: @item.NumeroFiscal.ToString("00000000")</b><br>
+                            }
+                            <br>
+                            <b>Fecha:</b> @item.FechaComprobante.ToShortDateString()<br>
+                            <b>Observaciones:</b> @item.Observaciones<br>
+                            <b>Usuario:</b> @item.UsuarioAlta<br>
+                            <br>
+                            
+                            @if (item.Anulado == true)
+                            {
+                                <div class="callout callout-danger">
+                                    <h4>DEVOLUCION</h4>
+
+                                    <b>Fecha Devolucion:</b> @item.FechaAnulacion.ToShortDateString()<br>
+                                    <b>Tipo Comprobante:</b> @item.TipoComprobanteAnula<br>
+                                    <b>Comprobante:</b> @item.CodigoAnula<br>
+                                    <b>Usuario:</b> @item.UsuarioAnula<br>
+                                </div>
+                                <br>
+
+                            }
+
+                            <br>
+                            @if (CCDetalle.Where(x => x.ComprobanteId == item.Id).Count() != 0)
+                            {
+                                <table class="table table-bordered">
+                                    <tr>
+                                        <th>Codigo</th>
+                                        <th>Producto</th>
+                                        <th>Cantidad</th>                                        
+                                    </tr>
+                                    @foreach (var det in CCDetalle.Where(x => x.ComprobanteId == item.Id))
+                                    {
+                                        <tr>
+                                            <td>@det.ProductoCodigo</td>
+                                            <td>@det.ProductoNombre</td>
+                                            <td>@det.Cantidad</td>                                            
+                                        </tr>
+
+                                    }
+                                </table>
+                            }
+
+                            
+                        </div>
+
+
+                        <div class="timeline-footer">
+                            @if (item.TipoComprobanteCodigo == "018")
+                            {
+                                <a asp-controller="Comprobantes" asp-action="RemitoImprimir" asp-route-id="@item.Id" class="btn btn-primary btn-sm" aria-hidden="true" target="_blank"><i class="fa fa-print"></i> Imprimir</a>
+                            }
+
+                            @if (item.TipoComprobanteCodigo == "019")
+                            {
+                                <a asp-controller="Comprobantes" asp-action="RemitoImprimir" asp-route-id="@item.Id" class="btn btn-primary btn-sm" aria-hidden="true" target="_blank"><i class="fa fa-print"></i> Imprimir</a>
+                            }                            
+                        </div>
+                    </div>
+                </li>
+
+            }
+
+
+            
+            <!-- END timeline item -->
+            ...
+        </ul>
+    </div>
+</form>

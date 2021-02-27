@@ -34,4 +34,17 @@ namespace Gestion.Web.Models
 
 
     }
+
+    public class RolesDto:IEntidades
+    {        
+        public string Id { get; set; }        
+        public string UserId { get; set; }
+        [Display(Name = "Rol")]
+        public string Name { get; set; }
+
+        [Display(Name = "Is Active?")]
+        public bool IsActive { get; set; }
+
+
+    }
 }

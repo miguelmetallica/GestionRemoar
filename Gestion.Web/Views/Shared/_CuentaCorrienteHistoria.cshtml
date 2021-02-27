@@ -20,7 +20,7 @@
                     <i class="fa bg-blue"></i>
                     <div class="timeline-item">
                         <span class="time"><i class="fa fa-clock-o"></i> @(item.FechaComprobante.ToShortTimeString())</span>
-                        
+
                         <h3 class="timeline-header"><a>@item.TipoComprobante @item.Codigo</a> ...</h3>
 
                         <div class="timeline-body">
@@ -33,11 +33,18 @@
                             <b>Fecha:</b> @item.FechaComprobante.ToShortDateString()<br>
                             @if (item.TipoComprobanteCodigo == "000")
                             {
+
                                 <b>Cantidad de Productos:</b> @CCDetalle.Where(x => x.ComprobanteId == item.Id).Sum(x => x.Cantidad)<br>
+                                <br>
+                                @*<b>SubTotal Lista:</b> @item.TotalListaSinDescuento<br>*@
+                                <b>Descuento %:</b> @item.DescuentoPorcentaje<br>
+                                @*<b>Descuento $:</b> @item.DescuentoTotalLista<br>*@
+                                <br>
                                 <b>SubTotal:</b> @item.TotalSinDescuento<br>
                                 <b>Descuento %:</b> @item.DescuentoPorcentaje<br>
                                 <b>Descuento $:</b> @item.DescuentoTotal<br>
                                 <b>Tipo Responsable:</b> @item.TipoResponsable<br>
+                                <br>
                             }
 
                             <b>Observaciones:</b> @item.Observaciones<br>
@@ -46,9 +53,10 @@
                             @if (item.TipoComprobanteCodigo != "018" && item.TipoComprobanteCodigo != "019")
                             {
                                 <b>Total:</b> @item.Total<br>
+                                @*<b>Total Lista:</b> @item.TotalLista<br>*@
                             }
 
-                            
+
                             @if (item.TipoComprobanteCodigo == "000")
                             {
                                 <b>Saldo:</b> @item.Saldo<br>
@@ -75,34 +83,33 @@
                                     <tr>
                                         <th>Codigo</th>
                                         <th>Producto</th>
-                                        @if (item.TipoComprobanteCodigo != "018")
-                                        {
-                                            <th>Precio U.</th>
-                                        }
-
                                         <th>Cantidad</th>
-                                        @if (item.TipoComprobanteCodigo != "018")
+                                        @if (item.TipoComprobanteCodigo != "018" && item.TipoComprobanteCodigo != "019")
+                                        {
+                                            <th>Precio</th>
+                                        }
+                                        @if (item.TipoComprobanteCodigo != "018" && item.TipoComprobanteCodigo != "019")
                                         {
                                             <th>SubTotal</th>
                                         }
 
+                                        
                                     </tr>
                                     @foreach (var det in CCDetalle.Where(x => x.ComprobanteId == item.Id))
                                     {
                                         <tr>
                                             <td>@det.ProductoCodigo</td>
                                             <td>@det.ProductoNombre</td>
-                                            @if (item.TipoComprobanteCodigo != "018")
+                                            <td>@det.Cantidad</td>
+                                            @if (item.TipoComprobanteCodigo != "018" && item.TipoComprobanteCodigo != "019")
                                             {
                                                 <td>@det.Precio</td>
                                             }
-
-                                            <td>@det.Cantidad</td>
-                                            @if (item.TipoComprobanteCodigo != "018")
+                                            @if (item.TipoComprobanteCodigo != "018" && item.TipoComprobanteCodigo != "019")
                                             {
                                                 <td>@decimal.Round(det.Cantidad * det.Precio, 2)</td>
                                             }
-
+                            
                                         </tr>
 
                                     }
@@ -122,14 +129,23 @@
                                                         <h4 class="box-title">
                                                             <a data-toggle="collapse" data-parent="#accordion" href="#@formas.Id">
                                                                 @formas.FormaPago - Total: @formas.Total
+
                                                             </a>
                                                         </h4>
                                                     </div>
                                                     <div id="@formas.Id" class="panel-collapse collapse">
                                                         <div class="box-body">
                                                             <p>Total: @formas.Total </p>
+                                                            <p>Total Cancela: @formas.Importe </p>
+                                                            @if (formas.Descuento != 0)
+                                                            {
+                                                                <p>Descuento x pago de Contado: @formas.Descuento </p>
+                                                            }
+
                                                             <p>Observaciones: @formas.Observaciones</p>
-                                                            <p>Usuario: @formas.UsuarioAlta - Fecha: @formas.FechaAlta</p>
+                                                            <p>Usuario: @formas.UsuarioAlta </p>
+                                                            <p>Fecha: @formas.FechaAlta</p>
+
                                                         </div>
                                                     </div>
                                                 </div>
@@ -140,18 +156,31 @@
                                                     <div class="box-header with-border">
                                                         <h4 class="box-title">
                                                             <a data-toggle="collapse" data-parent="#accordion" href="#@formas.Id">
-                                                                @formas.FormaPago - Total: @formas.Total
+                                                                @formas.FormaPago (@formas.TarjetaNombre) - Total: @formas.Total
                                                             </a>
                                                         </h4>
                                                     </div>
                                                     <div id="@formas.Id" class="panel-collapse collapse">
                                                         <div class="box-body">
+                                                            <p>Tarjeta: @formas.TarjetaNombre </p>
                                                             <p>Nombre: @formas.TarjetaCliente </p>
                                                             <p>Numero: @formas.TarjetaNumero - Vence: @formas.TarjetaVenceAño / @formas.TarjetaVenceMes </p>
-                                                            <p>Total: @formas.Total </p>
-                                                            <p>Importe: @formas.Importe - Cuota: @formas.Cuota - Interes: @formas.Interes</p>
+                                                            <p>Total Cancela: @formas.Total </p>
+                                                            <p>Cantidad Cuotas: @formas.Cuota - Importe de la Cuota: @(decimal.Round(formas.Importe,2)) - Interes: @formas.Interes</p>
+                                                            <p>Total con Interes: @(decimal.Round(formas.Cuota * formas.Importe, 2))</p>
+                                                            <p>
+                                                                Codigo Autorizacion: @formas.CodigoAutorizacion
+
+                                                                <button type="button" class="btn btn-warning btn-sm" data-toggle="modal"
+                                                                        onclick="CargarcodigoAutorizacion('@formas.Id','@formas.CodigoAutorizacion');"
+                                                                        data-target="#modal-codigoAutorizacion">
+                                                                    <i class="glyphicon glyphicon-pencil"></i>
+                                                                </button>
+                                                            </p>
                                                             <p>Observaciones: @formas.Observaciones</p>
-                                                            <p>Usuario: @formas.UsuarioAlta - Fecha: @formas.FechaAlta</p>
+                                                            <p>Usuario: @formas.UsuarioAlta </p>
+                                                            <p>Fecha: @formas.FechaAlta</p>
+
                                                         </div>
                                                     </div>
                                                 </div>
@@ -162,21 +191,32 @@
                                                     <div class="box-header with-border">
                                                         <h4 class="box-title">
                                                             <a data-toggle="collapse" data-parent="#accordion" href="#@formas.Id">
-                                                                @formas.FormaPago - Total: @formas.Total
+                                                                @formas.FormaPago (@formas.TarjetaNombre) - Total: @formas.Total
                                                             </a>
                                                         </h4>
                                                     </div>
                                                     <div id="@formas.Id" class="panel-collapse collapse">
                                                         <div class="box-body">
+                                                            <p>Tarjeta: @formas.TarjetaNombre </p>
                                                             <p>Nombre: @formas.TarjetaCliente </p>
                                                             <p>Numero: @formas.TarjetaNumero - Vence: @formas.TarjetaVenceAño / @formas.TarjetaVenceMes </p>
-                                                            <p>Total: @formas.Total </p>
+                                                            <p>Total Cancela: @formas.Total </p>
+                                                            <p>
+                                                                Codigo Autorizacion: @formas.CodigoAutorizacion
+
+                                                                <button type="button" class="btn btn-warning btn-sm" data-toggle="modal"
+                                                                        onclick="CargarcodigoAutorizacion('@formas.Id','@formas.CodigoAutorizacion');"
+                                                                        data-target="#modal-codigoAutorizacion">
+                                                                    <i class="glyphicon glyphicon-pencil"></i>
+                                                                </button>
+                                                            </p>
                                                             <p>Observaciones: @formas.Observaciones</p>
-                                                            <p>Usuario: @formas.UsuarioAlta - Fecha: @formas.FechaAlta</p>
+                                                            <p>Usuario: @formas.UsuarioAlta </p>
+                                                            <p>Fecha: @formas.FechaAlta</p>
+
                                                         </div>
                                                     </div>
                                                 </div>
-
                                                 break;
                                             case "X":
                                                 <div class="panel box box-solid box-primary">
@@ -196,8 +236,21 @@
                                                             <p>Vence: @formas.ChequeFechaVencimiento </p>
                                                             <p>Cuit: @formas.ChequeCuenta</p>
                                                             <p>Total: @formas.Total </p>
+
+                                                            @if (formas.Descuento != 0)
+                                                            {
+                                                                <p>Descuento: @formas.Descuento </p>
+                                                            }
+                                                            @if (formas.Interes != 0)
+                                                            {
+                                                                <p>Recargo: @formas.Interes </p>
+                                                            }
+
+                                                            <p>Total Cancela: @formas.Importe</p>
                                                             <p>Observaciones: @formas.Observaciones</p>
-                                                            <p>Usuario: @formas.UsuarioAlta - Fecha: @formas.FechaAlta</p>
+                                                            <p>Usuario: @formas.UsuarioAlta </p>
+                                                            <p>Fecha: @formas.FechaAlta</p>
+
                                                         </div>
                                                     </div>
                                                 </div>
@@ -214,10 +267,49 @@
                                                     </div>
                                                     <div id="@formas.Id" class="panel-collapse collapse">
                                                         <div class="box-body">
-                                                            <p>Total: @formas.Total </p>
                                                             <p>Forma Pago: @formas.Otros</p>
+                                                            <p>Total: @formas.Total </p>
+                                                            <p>Total Cancela: @formas.Importe</p>
                                                             <p>Observaciones: @formas.Observaciones</p>
-                                                            <p>Usuario: @formas.UsuarioAlta - Fecha: @formas.FechaAlta</p>
+                                                            <p>Usuario: @formas.UsuarioAlta </p>
+                                                            <p>Fecha: @formas.FechaAlta</p>
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                break;
+                                            case "U":
+                                                <div class="panel box box-solid box-primary">
+                                                    <div class="box-header with-border">
+                                                        <h4 class="box-title">
+                                                            <a data-toggle="collapse" data-parent="#accordion" href="#@formas.Id">
+                                                                @formas.FormaPago - Total: @formas.Total
+
+                                                            </a>
+                                                        </h4>
+                                                    </div>
+                                                    <div id="@formas.Id" class="panel-collapse collapse">
+                                                        <div class="box-body">
+                                                            <p>Total: @formas.Total </p>
+                                                            <p>Importe en Dolares: @formas.DolarImporte </p>
+                                                            <p>Cotizacion: @formas.DolarCotizacion </p>
+
+                                                            @if (formas.Descuento != 0)
+                                                            {
+                                                                <p>Descuento: @formas.Descuento </p>
+                                                            }
+                                                            @if (formas.Interes != 0)
+                                                            {
+                                                                <p>Recargo: @formas.Interes </p>
+                                                            }
+                                                            <p>Total Cancela: @formas.Importe</p>
+
+
+                                                            <p>Observaciones: @formas.Observaciones</p>
+                                                            <p>Usuario: @formas.UsuarioAlta </p>
+                                                            <p>Fecha: @formas.FechaAlta</p>
+
                                                         </div>
                                                     </div>
                                                 </div>
@@ -279,7 +371,7 @@
             }
 
 
-            
+
             <!-- END timeline item -->
             ...
         </ul>
@@ -301,27 +393,27 @@
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <div class="form-group">
                     <label class="control-label">Tipo Comprobante (FA,NC,ND,RE)</label>
-                    <input id="mdlTipoComprobanteFiscal"  class="form-control input-sm" maxlength="2" />
+                    <input id="mdlTipoComprobanteFiscal" class="form-control input-sm" maxlength="2" />
                     <span id="mTipoComprobanteFiscal" class="text-danger"></span>
                 </div>
                 <div class="form-group">
                     <label class="control-label">Letra</label>
-                    <input id="mdlLetraFiscal"  class="form-control input-sm" maxlength="1"/>
+                    <input id="mdlLetraFiscal" class="form-control input-sm" maxlength="1" />
                     <span id="mLetraFiscal" class="text-danger"></span>
                 </div>
                 <div class="form-group">
                     <label class="control-label">Pto Venta</label>
-                    <input id="mdlPtoVentaFiscal"  class="form-control input-sm" maxlength="4" onkeypress="return FiltrarEnteros(event,this);" />
+                    <input id="mdlPtoVentaFiscal" class="form-control input-sm" maxlength="4" onkeypress="return FiltrarEnteros(event,this);" />
                     <span id="mPtoVentaFiscal" class="text-danger"></span>
                 </div>
 
                 <div class="form-group">
                     <label class="control-label">Numero</label>
-                    <input id="mdlNumeroFiscal"  class="form-control input-sm" maxlength="8" onkeypress="return FiltrarEnteros(event,this);"/>
+                    <input id="mdlNumeroFiscal" class="form-control input-sm" maxlength="8" onkeypress="return FiltrarEnteros(event,this);" />
                     <span id="mNumeroFiscal" class="text-danger"></span>
                 </div>
 
-                
+
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Cerrar</button>
@@ -333,3 +425,34 @@
     <!-- /.modal-dialog -->
 </div>
 <!-- /.modal -->
+
+
+<div class="modal fade" id="modal-codigoAutorizacion">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">Ingresar Codigo Autorizacion</h4>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="mdlId" />
+
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group">
+                    <label class="control-label">Codigo de Autorizacion</label>
+                    <input id="mdlCodigoAutorizacion" class="form-control input-sm" maxlength="50" />
+                    <span id="mCodigoAutorizacion" class="text-danger"></span>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Cerrar</button>
+                    <button type="button" id="btnGuardar" class="btn btn-primary" onclick="validarCodigoAutorizacion()">Guardar </button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+    <!-- /.modal -->
+</div>

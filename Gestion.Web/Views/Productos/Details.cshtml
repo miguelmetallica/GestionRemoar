@@ -30,6 +30,7 @@
                 <div class="box box-primary">
                     <div class="box-header with-border">
                         <h3 class="box-title">Datos del Producto</h3>
+                        <a asp-action="Copiar" asp-route-id="@Model.Id" class="btn btn-success pull-right btn-sm">Copiar</a>
                     </div>
                     <!-- /.box-header -->
                     <!-- form start -->
@@ -198,7 +199,7 @@
                             <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning btn-sm">Editar datos del Producto</a>
                             <a asp-action="AddImage" asp-route-id="@Model.Id" class="btn btn-primary btn-sm">Agregar Imagenes</a>
                             <a asp-action="Index" class="btn btn-default pull-right btn-sm">Volver</a>
-                            <a asp-action="Copiar" class="btn btn-success pull-right btn-sm">Copiar</a>
+                            
                         </div>
                     </form>
                 </div>

@@ -150,6 +150,11 @@ namespace Gestion.Web.Helpers
         }
 
 
+        public async Task ResetearPassword(Usuarios user ,string password)
+        {
+            await userManager.RemovePasswordAsync(user);
+            await userManager.AddPasswordAsync(user, password);            
+        }
     }
 
 }

@@ -180,67 +180,121 @@ namespace Gestion.Web.Data
 
                     //aunque debemos buscar solo un elemento, siempre devolvemos
                     //una colección. Es más fácil de manipular y controlar 
-                    var obj = new ClientesDTO();
+                    
 
                     //No retornamos DataSets, siempre utilizamos objetos para hacernos 
                     //independientes de la estructura de las tablas en el resto
                     //de las capas. Para ellos leemos con el DataReader y creamos
                     //los objetos asociados que se esperan
+                    
+                    //Ejecutamos el comando y retornamos los valores
+                    using (SqlDataReader oReader = await oCmd.ExecuteReaderAsync())
+                    {
+                        if(oReader.Read())
+                        {
+                            var obj = new ClientesDTO();
+                            //si existe algun valor, creamos el objeto y lo almacenamos
+                            //en la colección
+                            obj.Id = oReader["Id"] as string;
+                            obj.Codigo = oReader["Codigo"] as string;
+                            obj.Apellido = oReader["Apellido"] as string;
+                            obj.Nombre = oReader["Nombre"] as string;
+                            obj.RazonSocial = oReader["RazonSocial"] as string;
+
+                            obj.TipoDocumentoId = oReader["TipoDocumentoId"] as string;
+                            obj.TipoDocumento = oReader["TipoDocumento"] as string;
+                            obj.NroDocumento = oReader["NroDocumento"] as string;
+                            obj.CuilCuit = oReader["CuilCuit"] as string;
+
+                            if (!DBNull.Value.Equals(oReader["FechaNacimiento"]))
+                                obj.FechaNacimiento = (DateTime)oReader["FechaNacimiento"];
+                            obj.esPersonaJuridica = (bool)oReader["esPersonaJuridica"];
+                            obj.ProvinciaId = oReader["ProvinciaId"] as string;
+                            obj.Provincia = oReader["Provincia"] as string;
+                            obj.Localidad = oReader["Localidad"] as string;
+                            obj.CodigoPostal = oReader["CodigoPostal"] as string;
+                            obj.Calle = oReader["Calle"] as string;
+                            obj.CalleNro = oReader["CalleNro"] as string;
+                            obj.PisoDpto = oReader["PisoDpto"] as string;
+                            obj.OtrasReferencias = oReader["OtrasReferencias"] as string;
+                            obj.Telefono = oReader["Telefono"] as string;
+                            obj.Celular = oReader["Celular"] as string;
+                            obj.Email = oReader["Email"] as string;
+
+                            obj.TipoResponsableId = oReader["TipoResponsableId"] as string;
+                            obj.TipoResponsable = oReader["TipoResponsable"] as string;
+                                
+                            obj.CategoriaId = oReader["CategoriaId"] as string;
+                            obj.Categoria = oReader["Categoria"] as string;
+                                                                
+                            obj.Estado = (bool)oReader["Estado"];
+
+                            return obj;
+                        }
+                    }
+                    return null;
+                    //retornamos los valores encontrados
+                    
+                }
+            }
+        }
+
+        public async Task<List<Clientes>> spClienteGetAll()
+        {
+            //Creamos la conexión a utilizar.
+            //Utilizamos la sentencia Using para asegurarnos de cerrar la conexión
+            //y liberar el objeto al salir de esta sección de manera automática            
+            using (var oCnn = factoryConnection.GetConnection())
+            {
+                using (SqlCommand oCmd = new SqlCommand())
+                {
+                    //asignamos la conexion de trabajo
+                    oCmd.Connection = oCnn;
+
+                    //utilizamos stored procedures
+                    oCmd.CommandType = System.Data.CommandType.StoredProcedure;
+
+                    //el indicamos cual stored procedure utilizar
+                    oCmd.CommandText = "Clientes_GetAll";
+
+                    var objs = new List<Clientes>();
+                    //Ejecutamos el comando y retornamos los valores
+
                     try
                     {
-                        //Ejecutamos el comando y retornamos los valores
                         using (SqlDataReader oReader = await oCmd.ExecuteReaderAsync())
                         {
-                            if(oReader.Read())
+                            while (oReader.Read())
                             {
+                                var obj = new Clientes();
                                 //si existe algun valor, creamos el objeto y lo almacenamos
                                 //en la colección
                                 obj.Id = oReader["Id"] as string;
                                 obj.Codigo = oReader["Codigo"] as string;
-                                obj.Apellido = oReader["Apellido"] as string;
-                                obj.Nombre = oReader["Nombre"] as string;
                                 obj.RazonSocial = oReader["RazonSocial"] as string;
-
-                                obj.TipoDocumentoId = oReader["TipoDocumentoId"] as string;
-                                obj.TipoDocumento = oReader["TipoDocumento"] as string;
+                                
+                                //obj.TipoDocumentoId = oReader["TipoDocumentoId"] as string;
                                 obj.NroDocumento = oReader["NroDocumento"] as string;
                                 obj.CuilCuit = oReader["CuilCuit"] as string;
 
-                                if (!DBNull.Value.Equals(oReader["FechaNacimiento"]))
-                                    obj.FechaNacimiento = (DateTime)oReader["FechaNacimiento"];
-                                obj.esPersonaJuridica = (bool)oReader["esPersonaJuridica"];
-                                obj.ProvinciaId = oReader["ProvinciaId"] as string;
-                                obj.Provincia = oReader["Provincia"] as string;
-                                obj.Localidad = oReader["Localidad"] as string;
-                                obj.CodigoPostal = oReader["CodigoPostal"] as string;
-                                obj.Calle = oReader["Calle"] as string;
-                                obj.CalleNro = oReader["CalleNro"] as string;
-                                obj.PisoDpto = oReader["PisoDpto"] as string;
-                                obj.OtrasReferencias = oReader["OtrasReferencias"] as string;
-                                obj.Telefono = oReader["Telefono"] as string;
-                                obj.Celular = oReader["Celular"] as string;
-                                obj.Email = oReader["Email"] as string;
+                                obj.Estado = (bool)oReader["Estado"];                               
 
-                                obj.TipoResponsableId = oReader["TipoResponsableId"] as string;
-                                obj.TipoResponsable = oReader["TipoResponsable"] as string;
-                                
-                                obj.CategoriaId = oReader["CategoriaId"] as string;
-                                obj.Categoria = oReader["Categoria"] as string;
-                                                                
-                                obj.Estado = (bool)oReader["Estado"];                                                               
+                                //Agregamos el objeto a la coleccion de resultados
+                                objs.Add(obj);
+                                obj = null;
                             }
                         }
                         //retornamos los valores encontrados
 
 
-                        return obj;
+                        return objs;
                     }
 
                     finally
                     {
                         //el Finally nos da siempre la oportunidad de liberar
                         //la memoria utilizada por los objetos 
-                        obj = null;
+                        objs = null;
                     }
                 }
             }

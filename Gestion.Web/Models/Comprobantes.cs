@@ -120,6 +120,14 @@ namespace Gestion.Web.Models
         public string Observaciones { get; set; }
         public string Usuario { get; set; }
 
+        public decimal Descuento { get; set; }
+
+        [DisplayFormat(DataFormatString = "{0:C2}")]
+        [Required(ErrorMessage = "El campo {0} es obligatorio.")]
+        [Range(0.01, 9999999, ErrorMessage = "El Saldo debe ser mayor a Cero")]
+        public decimal Saldo { get; set; }
+        [DisplayFormat(DataFormatString = "{0:C2}")]
+        public decimal SaldoConDescuento { get; set; }
     }
 
     public partial class ComprobantesTarjetaDTO
@@ -149,10 +157,10 @@ namespace Gestion.Web.Models
         public decimal Total { get; set; }
         public string TarjetaId { get; set; }
         public string TarjetaNombre { get; set; }
-        [Required(ErrorMessage = "El campo {0} es obligatorio.")]
+        
         [Display(Name = "Nombre del Cliente")]
         public string TarjetaCliente { get; set; }
-        [Required(ErrorMessage = "El campo {0} es obligatorio.")]
+        
         [Display(Name = "Numero de Tarjeta")]
         public string TarjetaNumero { get; set; }
         [Required(ErrorMessage = "El campo {0} es obligatorio.")]
@@ -168,6 +176,16 @@ namespace Gestion.Web.Models
         public string CodigoAutorizacion { get; set; }
         public string Observaciones { get; set; }
         public string Usuario { get; set; }
+
+        public decimal Descuento { get; set; }
+        public decimal Recargo { get; set; }
+
+        [DisplayFormat(DataFormatString = "{0:C2}")]
+        [Required(ErrorMessage = "El campo {0} es obligatorio.")]
+        [Range(0.01, 9999999, ErrorMessage = "El Saldo debe ser mayor a Cero")]
+        public decimal Saldo { get; set; }
+        [DisplayFormat(DataFormatString = "{0:C2}")]
+        public decimal SaldoConDescuento { get; set; }
     }
 
     public partial class ComprobantesChequeDTO
@@ -202,6 +220,15 @@ namespace Gestion.Web.Models
         public string ChequeCuenta { get; set; }
         public string Observaciones { get; set; }
         public string Usuario { get; set; }
+        public decimal Recargo { get; set; }
+        public decimal Descuento { get; set; }
+
+        [DisplayFormat(DataFormatString = "{0:C2}")]
+        [Required(ErrorMessage = "El campo {0} es obligatorio.")]
+        [Range(0.01, 9999999, ErrorMessage = "El Saldo debe ser mayor a Cero")]
+        public decimal Saldo { get; set; }
+        [DisplayFormat(DataFormatString = "{0:C2}")]
+        public decimal SaldoConDescuento { get; set; }
     }
 
     public partial class ComprobantesOtroDTO
@@ -224,6 +251,51 @@ namespace Gestion.Web.Models
         public string Observaciones { get; set; }
         public string Usuario { get; set; }
 
+        public decimal Descuento { get; set; }
+        public decimal Recargo { get; set; }
+
+        [DisplayFormat(DataFormatString = "{0:C2}")]
+        [Required(ErrorMessage = "El campo {0} es obligatorio.")]
+        [Range(0.01, 9999999, ErrorMessage = "El Saldo debe ser mayor a Cero")]
+        public decimal Saldo { get; set; }
+        [DisplayFormat(DataFormatString = "{0:C2}")]
+        public decimal SaldoConDescuento { get; set; }
+
+    }
+
+    public partial class ComprobantesDolarDTO
+    {
+        public string ComprobanteId { get; set; }
+        public string ClienteId { get; set; }
+        public string TipoComprobanteId { get; set; }
+        public string FormaPagoId { get; set; }
+        [Display(Name = "Importe en Pesos")]
+        public decimal Importe { get; set; }
+
+        [DisplayFormat(DataFormatString = "{0:C2}")]
+        [Required(ErrorMessage = "El campo {0} es obligatorio.")]
+        [Range(0.01, 9999999, ErrorMessage = "El campo {0} puede tomar valores entre {1} y {2}")]
+        [Display(Name = "Importe en Dolares")]
+        public decimal DolarImporte { get; set; }
+
+        [DisplayFormat(DataFormatString = "{0:C2}")]
+        [Required(ErrorMessage = "El campo {0} es obligatorio.")]
+        [Range(0.01, 9999999, ErrorMessage = "El campo {0} puede tomar valores entre {1} y {2}")]
+        [Display(Name = "Cotizacion")]
+        public decimal DolarCotizacion { get; set; }
+        public string Observaciones { get; set; }
+        public string Usuario { get; set; }
+
+        [DisplayFormat(DataFormatString = "{0:C2}")]
+        public decimal Descuento { get; set; }
+
+        [DisplayFormat(DataFormatString = "{0:C2}")]
+        [Required(ErrorMessage = "El campo {0} es obligatorio.")]
+        [Range(0.01, 9999999, ErrorMessage = "El Saldo debe ser mayor a Cero")]
+        public decimal Saldo { get; set; }
+        [DisplayFormat(DataFormatString = "{0:C2}")]
+        public decimal SaldoConDescuento { get; set; }
+
     }
 
     public partial class ComprobantesFormasPagosDTO
@@ -237,12 +309,10 @@ namespace Gestion.Web.Models
         public string FormaPagoTipo { get; set; }
         public string FormaPago { get; set; }
         public decimal Importe { get; set; }
-        public decimal ImporteLista { get; set; }
         public int Cuota { get; set; }
         public decimal Interes { get; set; }
-        public decimal InteresLista { get; set; }
+        public decimal Descuento { get; set; }
         public decimal Total { get; set; }
-        public decimal TotalLista { get; set; }
         public string TarjetaId { get; set; }
         public string TarjetaNombre { get; set; }
         public string TarjetaCliente { get; set; }
@@ -263,6 +333,8 @@ namespace Gestion.Web.Models
         public string Observaciones { get; set; }
         [Display(Name = "Codigo de Autorizacion")]
         public string CodigoAutorizacion { get; set; }
+        public decimal DolarImporte { get; set; }
+        public decimal DolarCotizacion { get; set; }
         public DateTime FechaAlta { get; set; }
         public string UsuarioAlta { get; set; }
 
@@ -320,18 +392,12 @@ namespace Gestion.Web.Models
         public string Telefono { get; set; }
         public string Celular { get; set; }
         public decimal Total { get; set; }
-        public decimal TotalLista { get; set; }
         public decimal TotalSinImpuesto { get; set; }
-        public decimal TotalListaSinImpuesto { get; set; }
         public decimal TotalSinDescuento { get; set; }
-        public decimal TotalListaSinDescuento { get; set; }
         public decimal TotalSinImpuestoSinDescuento { get; set; }
-        public decimal TotalListaSinImpuestoSinDescuento { get; set; }
         public decimal DescuentoPorcentaje { get; set; }
         public decimal DescuentoTotal { get; set; }
-        public decimal DescuentoTotalLista { get; set; }
         public decimal DescuentoSinImpuesto { get; set; }
-        public decimal DescuentoListaSinImpuesto { get; set; }
         public decimal ImporteTributos { get; set; }
         public string Observaciones { get; set; }
         public bool Anulado { get; set; }        
@@ -351,7 +417,7 @@ namespace Gestion.Web.Models
         public bool Estado { get; set; }
         public decimal Saldo { get; set; }
 
-        [Display(Name = "Pendiente %")]
+        [Display(Name = "Saldado %")]
         public decimal Saldo_Porcentaje { get; set; }
 
         [Display(Name = "Codigo")]
@@ -379,9 +445,7 @@ namespace Gestion.Web.Models
         public string ProductoNombre { get; set; }
         public int Cantidad { get; set; }
         public decimal Precio { get; set; }
-        public decimal PrecioLista { get; set; }
         public decimal PrecioSinIva { get; set; }
-        public decimal PrecioListaSinIva { get; set; }
         public DateTime FechaAlta { get; set; }
         public string UsuarioAlta { get; set; }
     }

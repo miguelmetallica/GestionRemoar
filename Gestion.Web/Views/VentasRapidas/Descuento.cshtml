@@ -1,0 +1,120 @@
+﻿@model Gestion.Web.Models.VentasRapidasDTO
+
+@{
+    ViewData["Title"] = "Nuevo Presupuesto";
+    var descuentos = (IEnumerable<ParamPresupuestosDescuentos>)ViewData["Descuentos"];
+}
+
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <h1>
+            Sistema de gestíon
+            <small>Gestion de Presupuestos</small>
+        </h1>
+        <ol class="breadcrumb">
+            <li><a asp-controller="Home"><i class="fas fa-tachometer-alt"></i> Inicio</a></li>
+            <li><a asp-controller="Presupuestos">Listado de Presupuestos</a></li>
+            <li class="active">@ViewData["Title"]</li>
+        </ol>
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+        <div class="row">
+            <!-- left column -->
+            <div class="col-md-6">
+                <!-- general form elements -->
+                <div class="box box-primary">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">Aplicar Descuento</h3>
+                    </div>
+                    <!-- /.box-header -->
+                    <!-- form start -->
+                    <div class="box-body">
+                        <div class="form-group col-md-4">
+                            <label asp-for="@Model.Codigo" class="control-label"></label>
+                            <input asp-for="@Model.Codigo" readonly class="form-control input-sm" />
+                        </div>
+
+                        <div class="form-group col-md-8">
+                            <label asp-for="@Model.ClienteRazonSocial" class="control-label"></label>
+                            <input asp-for="@Model.ClienteRazonSocial" readonly class="form-control input-sm" />
+                        </div>
+
+                        <div class="form-group col-md-4">
+                            <label asp-for="@Model.CantidadProductos" class="control-label"></label>
+                            <input asp-for="@Model.CantidadProductos" readonly class="form-control input-sm" />
+                        </div>
+
+                        <div class="form-group col-md-8">
+                            <label class="control-label">Total a Pagar</label>
+                            <input asp-for="@Model.Precio" readonly class="form-control input-sm" />
+                        </div>
+
+                        <div class="box-header with-border">
+                            <h3 class="box-title">Descuentos Disponibles</h3>
+                        </div>
+                        <div class="box-body">
+                            <table id="dTable" class="table dt-responsive table-condensed table-bordered table-striped" width="100%">
+                                <thead>
+                                    <tr>
+                                        <th>
+                                            @Html.DisplayName("Descuento %")
+                                        </th>
+                                        <th>
+                                            @Html.DisplayNameFor(model => model.Precio)
+                                        </th>
+                                        <th>Selecciona</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in descuentos)
+                                    {
+                                        var total = (decimal)(Model.Precio - (Model.Precio * (item.Porcentaje / 100)));
+                                        <tr>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.Descripcion)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => total)
+                                            </td>
+                                            @*<td>
+                                                @Html.DisplayFor(modelItem => totalsinimpuesto)
+                                            </td>*@
+                                            <td>
+                                                <div class="btn-group">
+                                                    @{
+                                                        var param = new Dictionary<string, string> { { "id", item.Id }, { "id2", Model.Id } };
+                                                    }
+                                                    <a class="btn btn-primary btn-sm" asp-action="DescuentoAplica" asp-all-route-data="@param"><i class="fa fa-check"></i></a>
+                                                </div>
+                                            </td>
+                                        </tr>
+
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <!-- /.box-body -->
+
+                    <div class="box-footer">
+                        <a asp-controller="VentasRapidas" asp-action="VentaRapida" asp-route-id="@Model.Id" class="btn btn-default pull-right">Volver</a>
+                    </div>
+                    
+                </div>
+                <!-- /.box -->
+            </div>
+            <!--/.col-->
+        </div>
+        <!-- /.row -->
+    </section>
+    <!-- /.content -->
+</div>
+<!-- /.content-wrapper -->
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

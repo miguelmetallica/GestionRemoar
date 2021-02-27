@@ -4,6 +4,20 @@
     ViewData["Title"] = "Detalle del Cliente";
     var SaldoDTO = (ComprobantesDTO)ViewData["Saldo"];
     var formasPagosTMP = (IEnumerable<ComprobantesFormasPagosDTO>)ViewData["FormasPagosTMP"];
+
+    decimal TotalRec = 0;
+    foreach (var totalRec in formasPagosTMP)
+    {
+        if (totalRec.FormaPagoTipo == "E")
+        {
+            TotalRec = TotalRec + (totalRec.Total);
+        }
+        else
+        {
+            TotalRec = TotalRec + (totalRec.Cuota * totalRec.Importe);
+        }
+
+    }
 }
 
 <div class="content-wrapper">
@@ -42,12 +56,28 @@
                                 <input type="hidden" asp-for="ComprobanteId" />
                                 <input type="hidden" asp-for="ClienteId" />
                                 <input type="hidden" asp-for="FormaPagoId" />
+                               
 
                                 <div class="form-group">
                                     <label class="control-label">Saldo</label>
-                                    <input value="@(SaldoDTO.Saldo - formasPagosTMP.Sum(x => x.Total))" readonly class="form-control input-sm" />
+                                    <input asp-for="Saldo" value="@(Model.Saldo - TotalRec)" readonly class="form-control input-sm" />
 
                                 </div>
+
+                                @if (Model.Descuento != 0)
+                                {
+                                    <div class="form-group">
+                                        <label class="control-label">Descuento %</label>
+                                        <input asp-for="Descuento" class="form-control input-sm" readonly />
+                                        <span asp-validation-for="Descuento" class="text-danger"></span>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="control-label">Saldo con Descuento</label>
+                                        <input asp-for="SaldoConDescuento" class="form-control input-sm" readonly />
+                                        <span asp-validation-for="SaldoConDescuento" class="text-danger"></span>
+                                    </div>
+                                }
 
                                 <div class="form-group">
                                     <label asp-for="Importe" class="control-label"></label>

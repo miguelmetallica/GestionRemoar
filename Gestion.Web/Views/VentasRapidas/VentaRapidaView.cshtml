@@ -1,0 +1,151 @@
+﻿@model Gestion.Web.Models.VentasRapidasDTO
+
+@{
+    ViewData["Title"] = "Venta Rapidas Facturadas";
+    var Detalle = (IEnumerable<VentasRapidasDetalleDTO>)ViewData["Detalle"];
+
+    var Resumen = (VentasRapidasResumen)ViewData["Resumen"];
+}
+
+<div class="content-wrapper">
+<!-- Content Header(Page header) -->
+    <section class="content-header">
+        <h1>
+            Sistema de gestíon
+            <small> Ventas Rapidas</small>
+        </h1>
+        <ol class="breadcrumb">
+            <li><a asp-controller="Home"><i class="fas fa-tachometer-alt"></i> Inicio</a></li>
+            <li><a asp-controller="Presupuestos" asp-action="Pendientes">Listado de Ventas Pendientes</a></li>
+            <li class="active">@ViewData["Title"]</li>
+        </ol>
+    </section>
+
+<!-- Main content -->
+    <section class="content">
+        <div class="row">
+            <!-- left column -->
+            <div class="col-md-6">
+                <partial name="_CabeceraView" model='Model' />
+            </div>
+            <!--/.col-->
+            <!-- left column -->
+            <div class="col-md-6">
+                <!-- general form elements -->
+                <partial name="_ResumenView" model='Resumen' />
+                <!-- /.box -->
+            </div>
+
+            <div class="col-md-12">
+                <!-- general form elements -->
+                <div class="box box-primary">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">Listado de Productos</h3>                        
+                    </div>
+                    <div class="box-body">
+                        <table id="dTable" class="table dt-responsive table-condensed table-bordered table-striped" width="100%">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        Codigo
+                                    </th>
+                                    <th>
+                                        Producto
+                                    </th>
+                                    <th>
+                                        Precio
+                                    </th>
+                                    <th>
+                                        Cantidad
+                                    </th>
+
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (Detalle.Count() > 0)
+                                {
+                                    @foreach (var item in Detalle)
+                                    {
+                                        if (item.ProductoCodigo != "")
+                                        {
+                                            <tr>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.ProductoCodigo)
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.ProductoNombre)
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.Precio)
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.Cantidad)
+                                                </td>
+                                            </tr>
+                                        }
+
+                                    }
+                                }
+
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <th colspan="2">
+                                    </th>
+                                    <th>
+                                        @String.Format("{0:C}", Detalle.Sum(x => x.Precio * x.Cantidad))
+                                    </th>
+                                    <th>
+                                        @decimal.Round(Model.CantidadProductos, 0)
+                                    </th>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+                <!-- /.box -->
+            </div>
+            <div class="col-md-12">
+                <!-- general form elements -->
+                <partial name="_MediosPagosView" model='Model' />
+                <!-- /.box -->
+            </div>
+            <!--/.col-->
+        </div>
+    <!-- /.row -->
+    </section>
+<!-- /.content -->
+</div>
+<!-- /.content-wrapper -->
+
+
+@section Scripts {
+        @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+        <script type="text/javascript">
+            $(document).ready(function () {
+
+                $('#dTable').DataTable({
+                    "processing": "true",
+                    "retrieve": "true",
+                    "language": {
+                        "processing": "Procesando... Espere por favor",
+                        "lengthMenu": "Mostrar _MENU_ registros por pagina",
+                        "zeroRecords": "Nada encontrado",
+                        "info": "Mostrando página _PAGE_ de _PAGES_",
+                        "infoEmpty": "No hay registros disponibles",
+                        "sInfoFiltered": "(filtrado de un total de _MAX_ registros)",
+                        "sSearch": "Buscar:",
+                        "oPaginate": {
+                            "sFirst": "Primero",
+                            "sLast": "Último",
+                            "sNext": "Siguiente",
+                            "sPrevious": "Anterior"
+                        }
+                    }
+                });
+            });
+
+        </script>
+
+}

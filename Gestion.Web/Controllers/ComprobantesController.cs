@@ -28,7 +28,7 @@ namespace Gestion.Web.Controllers
 
         public async Task<IActionResult> ImputacionesProductos()
         {
-            var model = await repository.spComprobantesPresupuestos();
+            var model = await repository.spComprobantesImputaciones();
             return View(model);
         }
 
@@ -139,7 +139,9 @@ namespace Gestion.Web.Controllers
 
         public async Task<IActionResult> EntregaProductos()
         {
-            var model = await repository.spPresupuestosComprobantesEntrega();
+            //var model = await repository.spPresupuestosComprobantesEntrega();
+            var model = await repository.spComprobantesImputaciones();
+            
             return View(model);
         }
 
@@ -164,7 +166,9 @@ namespace Gestion.Web.Controllers
             ViewData["Detalle"] = await repository.spComprobanteDetalleEntrega(CC.Id);
             ViewData["DetalleTmp"] = await repository.spComprobanteDetalleTMP(CC.Id);
             ViewData["Clientes"] = cliente;
-
+            ViewData["Comprobantes"] = await repository.spComprobantesInputaciones(id);
+            ViewData["Detalles"] = await repository.spComprobanteRemitosDevolucionesGet(id);
+            
             return View(CC);
         }
 
@@ -272,9 +276,25 @@ namespace Gestion.Web.Controllers
             }
         }
 
+        [HttpPost]
+        public JsonResult InsertaCodigoAutorizacion(ComprobantesFormasPagosDTO pagosDTO)
+        {
+            try
+            {
+                pagosDTO.UsuarioAlta = User.Identity.Name;
+                var i = repository.spComprobanteInsertaCodigoAutorizacion(pagosDTO);
+                return Json(1);
+            }
+            catch (Exception e)
+            {
+                ModelState.AddModelError("", e.Message);
+                return Json(0);
+            }
+        }
+
         public async Task<IActionResult> DevolucionProductos()
         {
-            var model = await repository.spPresupuestosComprobantesDevolucion();
+            var model = await repository.spPresupuestosRemitos();
             return View(model);
         }
 
@@ -300,6 +320,8 @@ namespace Gestion.Web.Controllers
             ViewData["DetalleTmp"] = await repository.spComprobanteDetalleTMP(CC.Id);
             ViewData["Clientes"] = cliente;
 
+            ViewData["Comprobantes"] = await repository.spComprobantesInputaciones(id);
+            ViewData["Detalles"] = await repository.spComprobanteRemitosDevolucionesGet(id);
             return View(CC);
         }
 

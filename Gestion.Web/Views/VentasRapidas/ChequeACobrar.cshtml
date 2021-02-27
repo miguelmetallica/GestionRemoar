@@ -1,0 +1,158 @@
+﻿@model Gestion.Web.Models.FormaPagoChequeDTO
+
+@{
+    ViewData["Title"] = "Venta Rapida - A Cobrar";
+
+    var formasPagosTMP = (IEnumerable<VentasRapidasFormasPagosDTO>
+    )ViewData["FormasPagosTMP"];
+
+    var Resumen = (VentasRapidasResumen)ViewData["Resumen"];
+}
+
+    <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+            <h1>
+                Sistema de gestíon
+                <small>Ventas Rapidas</small>
+            </h1>
+            <ol class="breadcrumb">
+                <li><a asp-controller="Home" asp-action="Index"><i class="fas fa-tachometer-alt"></i> Inicio</a></li>
+                <li><a asp-controller="VentasRapidas" asp-action="VentasRapidasACobrar">Listado de Ventas Rapidas</a></li>
+                <li class="active">@ViewData["Title"]</li>
+            </ol>
+        </section>
+
+        <!-- Main content -->
+        <section class="content">
+            <div class="row">
+                <div class="col-md-6">
+                    <!-- general form elements -->
+                    <partial name="_ResumenView" model='Resumen' />
+                    <!-- /.box -->
+                </div>
+                <div class="col-md-6">
+                    <!-- general form elements -->
+                    <div class="box box-primary">
+                        <div class="box-header with-border">
+                            <h3 class="box-title">Tipo de Pago Cheque</h3>
+                        </div>
+                        <!-- /.box-header -->
+                        <!-- form start -->
+                        <form asp-action="ChequeACobrar" enctype="multipart/form-data">
+                            <div class="box-body">
+                                <div class="box-body">
+                                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                                    <input type="hidden" asp-for="VentaRapidaId" />
+                                    <input type="hidden" asp-for="ClienteId" />
+                                    <input type="hidden" asp-for="FormaPagoId" />
+
+                                    <div class="form-group">
+                                        <label class="control-label">Saldo</label>
+                                        <input asp-for="Saldo" class="form-control input-sm" readonly />
+                                        <span asp-validation-for="Saldo" class="text-danger"></span>
+                                    </div>
+                                    @if (Model.Descuento != 0)
+                                    {
+                                    <div class="form-group">
+                                        <label class="control-label">Descuento %</label>
+                                        <input asp-for="Descuento" class="form-control input-sm" readonly />
+                                        <span asp-validation-for="Descuento" class="text-danger"></span>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="control-label">Saldo con Descuento</label>
+                                        <input asp-for="SaldoConDescuento" class="form-control input-sm" readonly />
+                                        <span asp-validation-for="SaldoConDescuento" class="text-danger"></span>
+                                    </div>
+                                    }
+
+                                    @if (Model.Recargo != 0)
+                                    {
+                                    <div class="form-group">
+                                        <label class="control-label">Recargo %</label>
+                                        <input asp-for="Recargo" class="form-control input-sm" readonly />
+                                        <span asp-validation-for="Recargo" class="text-danger"></span>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="control-label">Saldo con Recargo</label>
+                                        <input asp-for="SaldoConDescuento" class="form-control input-sm" readonly />
+                                        <span asp-validation-for="SaldoConDescuento" class="text-danger"></span>
+                                    </div>
+                                    }
+
+                                    <div class="form-group">
+                                        <label asp-for="ChequeBancoId" class="control-label"></label>
+                                        <select asp-for="ChequeBancoId" asp-items="@ViewBag.Bancos" class="form-control input-sm"></select>
+                                        <span asp-validation-for="ChequeBancoId" class="text-danger"></span>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label asp-for="ChequeNumero" class="control-label"></label>
+                                        <input asp-for="ChequeNumero" class="form-control input-sm" />
+                                        <span asp-validation-for="ChequeNumero" class="text-danger"></span>
+                                    </div>
+                                    <div class="form-group">
+                                        <label asp-for="ChequeFechaEmision" class="control-label"></label>
+                                        <input asp-for="ChequeFechaEmision" class="form-control input-sm" />
+                                        <span asp-validation-for="ChequeFechaEmision" class="text-danger"></span>
+                                    </div>
+                                    <div class="form-group">
+                                        <label asp-for="ChequeFechaVencimiento" class="control-label"></label>
+                                        <input asp-for="ChequeFechaVencimiento" class="form-control input-sm" />
+                                        <span asp-validation-for="ChequeFechaVencimiento" class="text-danger"></span>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label asp-for="Importe" class="control-label"></label>
+                                        <input asp-for="Importe" class="form-control input-sm" />
+                                        <span asp-validation-for="Importe" class="text-danger"></span>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label asp-for="ChequeNombre" class="control-label"></label>
+                                        <input asp-for="ChequeNombre" class="form-control input-sm" />
+                                        <span asp-validation-for="ChequeNombre" class="text-danger"></span>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label asp-for="ChequeCuit" class="control-label"></label>
+                                        <input asp-for="ChequeCuit" class="form-control input-sm" />
+                                        <span asp-validation-for="ChequeCuit" class="text-danger"></span>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label asp-for="ChequeCuenta" class="control-label"></label>
+                                        <input asp-for="ChequeCuenta" class="form-control input-sm" />
+                                        <span asp-validation-for="ChequeCuenta" class="text-danger"></span>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label asp-for="Observaciones" class="control-label"></label>
+                                        <input asp-for="Observaciones" class="form-control input-sm" />
+                                        <span asp-validation-for="Observaciones" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="box-footer">
+                                    <input type="submit" value="Guardar" class="btn btn-primary" />
+                                    <a asp-action="VentaRapidaACobrar" asp-route-id="@Model.VentaRapidaId" class="btn btn-default pull-right">Volver</a>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <!-- /.box -->
+
+
+                </div>
+            </div>
+            <!-- /.row -->
+        </section>
+        <!-- /.content -->
+    </div>
+
+
+    @section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    }

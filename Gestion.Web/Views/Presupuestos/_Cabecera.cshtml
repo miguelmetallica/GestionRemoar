@@ -5,7 +5,11 @@
     <div class="box-header with-border">
         <h3 class="box-title">Datos del Presupuesto</h3>
         <a asp-action="PresupuestoImprimir" asp-route-id="@Model.Id" class="btn btn-primary btn-sm pull-right" aria-hidden="true" target="_blank"><i class="fa fa-print"></i> Imprimir</a>
-
+        
+        @{
+            var url = ViewBag.url;
+        }
+        <a href="@url" class="btn btn-warning btn-sm pull-right" aria-hidden="true" target="_blank"><i class="fa fa-mail-bulk"></i> Enviar por mensaje </a>        
     </div>
     <!-- /.box-header -->
     <!-- form start -->

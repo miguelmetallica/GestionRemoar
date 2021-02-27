@@ -7,12 +7,12 @@ namespace Gestion.Web.Models
     {
         public string Id { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "El campo {0} es obligatorio.")]
         [Display(Name = "Codigo")]
         [MaxLength(5, ErrorMessage = "The field {0} only can contain {1} characters length.")]
         public string Codigo { get; set; }
-        
-        [Required]
+
+        [Required(ErrorMessage = "El campo {0} es obligatorio.")]
         [Display(Name = "Sucursal")]
         [MaxLength(150, ErrorMessage = "The field {0} only can contain {1} characters length.")]
         public string Nombre { get; set; }
@@ -22,32 +22,30 @@ namespace Gestion.Web.Models
         public ParamProvincias Provincia { get; set; }
         //public ICollection<ParamProvincias> Provincia { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "El campo {0} es obligatorio.")]
         [Display(Name = "Localidad")]
         [MaxLength(250, ErrorMessage = "The field {0} only can contain {1} characters length.")]
         public string Localidad { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "El campo {0} es obligatorio.")]
         [Display(Name = "Codigo Postal")]
-        [MaxLength(10, ErrorMessage = "The field {0} only can contain {1} characters length.")]
+        //[MaxLength(10, ErrorMessage = "The field {0} only can contain {1} characters length.")]
         public string CodigoPostal { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "El campo {0} es obligatorio.")]
         [Display(Name = "Calle")]
         [MaxLength(500, ErrorMessage = "The field {0} only can contain {1} characters length.")]
         public string Calle { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "El campo {0} es obligatorio.")]
         [Display(Name = "Numero")]
         [MaxLength(10, ErrorMessage = "The field {0} only can contain {1} characters length.")]
         public string CalleNro { get; set; }
 
-        [Required]
         [Display(Name = "Piso / Dpto")]
         [MaxLength(10, ErrorMessage = "The field {0} only can contain {1} characters length.")]
         public string PisoDpto { get; set; }
 
-        [Required]
         [Display(Name = "Otras Referencias")]
         [MaxLength(500, ErrorMessage = "The field {0} only can contain {1} characters length.")]
         public string OtrasReferencias { get; set; }

@@ -124,7 +124,10 @@ namespace Gestion.Web
 
             services.AddScoped<IComprobantesRepository, ComprobantesRepository>();
 
+            services.AddScoped<IEntidadesRepository, EntidadesRepository>();
             services.AddScoped<IFormasPagosRepository, FormasPagosRepository>();
+            services.AddScoped<IFormasPagosCuotasRepository, FormasPagosCuotasRepository>();
+            services.AddScoped<IFormasPagosCotizacionRepository, FormasPagosCotizacionRepository>();
 
             services.AddScoped<IConfiguracionesRepository, ConfiguracionesRepository>();
             services.AddScoped<ICombosRepository, CombosRepository>();
@@ -132,6 +135,10 @@ namespace Gestion.Web
             services.AddScoped<IClientesCategoriasRepository, ClientesCategoriasRepository>();
 
             services.AddScoped<IProveedoresRepository, ProveedoresRepository>();
+
+            services.AddScoped<IVentasRapidasRepository, VentasRapidasRepository>();
+
+            services.AddScoped<IUserRolesRepository , UserRolesRepository>();
 
             services.AddScoped<IUserHelper, UserHelper>();
             services.AddScoped<IMailHelper, MailHelper>();

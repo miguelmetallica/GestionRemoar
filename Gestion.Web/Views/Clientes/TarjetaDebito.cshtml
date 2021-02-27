@@ -4,6 +4,21 @@
     ViewData["Title"] = "Detalle del Cliente";
     var SaldoDTO = (ComprobantesDTO)ViewData["Saldo"];
     var formasPagosTMP = (IEnumerable<ComprobantesFormasPagosDTO>)ViewData["FormasPagosTMP"];
+    var cliente = (ClientesDTO)ViewData["Cliente"];
+
+    decimal TotalRec = 0;
+    foreach (var totalRec in formasPagosTMP)
+    {
+        if (totalRec.FormaPagoTipo == "E")
+        {
+            TotalRec = TotalRec + (totalRec.Total);
+        }
+        else
+        {
+            TotalRec = TotalRec + (totalRec.Cuota * totalRec.Importe);
+        }
+
+    }
 }
 
 <div class="content-wrapper">
@@ -24,7 +39,7 @@
     <section class="content">
         <div class="row">
             <div class="col-md-3">
-                <partial name="_ClienteDetalle" model='ViewData["Cliente"]' />
+                <partial name="_ClienteDetalle" model='cliente' />
             </div>
             <div class="col-md-9">
                 <!-- general form elements -->
@@ -48,9 +63,15 @@
 
                                 <div class="form-group col-md-12">
                                     <label class="control-label">Saldo</label>
-                                    <input value=@(SaldoDTO.Saldo - formasPagosTMP.Sum(x => x.Total)) readonly class="form-control input-sm" />
+                                    <input asp-for="Saldo" value=@(Model.Saldo - TotalRec) readonly class="form-control input-sm" />
 
                                 </div>
+                                <div class="form-group col-md-12">
+                                    <label asp-for="TarjetaId" class="control-label"></label>
+                                    <select asp-for="TarjetaId" asp-items="@ViewBag.Tarjetas" class="form-control input-sm"></select>
+                                    <span asp-validation-for="TarjetaId" class="text-danger"></span>
+                                </div>
+
                                 <div class="form-group col-md-12">
                                     <label asp-for="TarjetaCliente" class="control-label"></label>
                                     <input asp-for="TarjetaCliente" class="form-control input-sm" />

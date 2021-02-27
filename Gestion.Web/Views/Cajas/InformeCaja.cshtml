@@ -60,15 +60,9 @@ BREADCRUMB
                                     @Html.DisplayFor(modelItem => item.Total)
                                 </td>
                                 <td width="20%">
-                                    @{
-                                        var año = item.Fecha.Year;
-                                        var mes = item.Fecha.Month;
-                                        var dia = item.Fecha.Day;
-                                        var parametroFecha = año.ToString("D4") + mes.ToString("D2") + dia.ToString("D2");
-                                    }
                                     <div class="btn-group">
-                                        <a class="btn btn-info btn-sm" asp-action="DetailsImportes" asp-route-fecha="@parametroFecha" asp-route-sucid="@item.SucursalId"><i class="fa fa-search"></i> Ver por Tipos de Pagos</a>
-                                        <a class="btn btn-success btn-sm" asp-action="DetailsUsuarios" asp-route-fecha="@parametroFecha" asp-route-sucid="@item.SucursalId"><i class="fa fa-search"></i> Ver por Usuario</a>
+                                        <a class="btn btn-info btn-sm" asp-action="InformeImportes" asp-route-id="@item.Id" ><i class="fa fa-search"></i> Ver por Tipos de Pagos</a>
+                                        <a class="btn btn-success btn-sm" asp-action="InformeUsuarios" asp-route-id="@item.Id" ><i class="fa fa-search"></i> Ver por Usuario</a>
                                     </div>
                                 </td>
                             </tr>
