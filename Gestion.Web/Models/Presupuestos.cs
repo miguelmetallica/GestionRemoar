@@ -269,6 +269,10 @@ namespace Gestion.Web.Models
         [Display(Name = "Saldo a Pagar")]
         public decimal SaldoAPagar { get; set; }
 
+        [Display(Name = "Saldo a Pagar Contado")]
+        [DisplayFormat(DataFormatString = "{0:C2}")]
+        public decimal SaldoContadoAPagar { get; set; }
+
     }
     public partial class PresupuestosFormasPagosDTO
     {

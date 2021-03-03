@@ -163,10 +163,10 @@ namespace Gestion.Web.Models
         
         [Display(Name = "Numero de Tarjeta")]
         public string TarjetaNumero { get; set; }
-        [Required(ErrorMessage = "El campo {0} es obligatorio.")]
+        //[Required(ErrorMessage = "El campo {0} es obligatorio.")]
         [Display(Name = "Mes Vence")]
         public string TarjetaVenceMes { get; set; }
-        [Required(ErrorMessage = "El campo {0} es obligatorio.")]
+        //[Required(ErrorMessage = "El campo {0} es obligatorio.")]
         [Display(Name = "Año Vence")]
         public string TarjetaVenceAño { get; set; }
         [Display(Name = "Codigo Seguridad")]
@@ -353,6 +353,7 @@ namespace Gestion.Web.Models
         public string TipoComprobante { get; set; }
         public string TipoComprobanteCodigo { get; set; }
         public string PresupuestoId { get; set; }
+        public string VentaRapidaId { get; set; }
         public string Letra { get; set; }
         public int PtoVenta { get; set; }
         public decimal Numero { get; set; }
@@ -416,6 +417,9 @@ namespace Gestion.Web.Models
         public string UsuarioAlta { get; set; }
         public bool Estado { get; set; }
         public decimal Saldo { get; set; }
+
+        [Display(Name = "Saldo de Contado")] 
+        public decimal SaldoContado { get; set; }
 
         [Display(Name = "Saldado %")]
         public decimal Saldo_Porcentaje { get; set; }

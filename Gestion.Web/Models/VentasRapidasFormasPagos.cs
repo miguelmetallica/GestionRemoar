@@ -152,6 +152,7 @@ namespace Gestion.Web.Models
         [Display(Name = "Tasa de Interes %")]
         public decimal Interes { get; set; }
 
+        [Display(Name = "Total Cuota")]
         [DisplayFormat(DataFormatString = "{0:C2}")]               
         public decimal Total { get; set; }
 
@@ -166,10 +167,10 @@ namespace Gestion.Web.Models
         //[Required(ErrorMessage = "El campo {0} es obligatorio.")]
         [Display(Name = "Numero de Tarjeta")]
         public string TarjetaNumero { get; set; }
-        [Required(ErrorMessage = "El campo {0} es obligatorio.")]
+        //[Required(ErrorMessage = "El campo {0} es obligatorio.")]
         [Display(Name = "Mes Vence")]
         public string TarjetaVenceMes { get; set; }
-        [Required(ErrorMessage = "El campo {0} es obligatorio.")]
+        //[Required(ErrorMessage = "El campo {0} es obligatorio.")]
         [Display(Name = "Año Vence")]
         public string TarjetaVenceAño { get; set; }
         [Display(Name = "Codigo Seguridad")]

@@ -41,5 +41,9 @@ namespace Gestion.Web.Data
         List<VentasRapidasDetalleDTO> spDetalleVentaRapidaPrint(string ventaRapidaId);
         List<VentasRapidasFormasPagosDTO> spFormasPagosPrint(string VentaRapidaId);
         VentasRapidasResumen spResumenVentaRapidaPrint(string ventaRapidaId);
+        Task<List<VentasRapidasIndex>> spVentasRapidasSucursal(string sucursalId);
+        Task<List<VentasRapidasIndex>> spVentasRapidasSucursalACobrar(string sucursalId);
+        Task<List<VentasRapidasIndex>> spVentasRapidasSucursalFacturadas(string sucursalId);
+        Task<int> spEditarProducto(VentasRapidasDetalle detalle);
     }
 }

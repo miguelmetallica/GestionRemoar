@@ -55,6 +55,7 @@ namespace Gestion.Web.Controllers
 
             return View(CC);
         }
+        [Authorize(Roles = "Admin,ComprobantesAdministra")]
 
         public async Task<IActionResult> ImputacionAutorizaProducto(string id)
         {
@@ -191,8 +192,16 @@ namespace Gestion.Web.Controllers
             ViewData["DetalleTmp"] = await repository.spComprobanteDetalleTMP(CC.Id);
             ViewData["Clientes"] = cliente;
             ViewData["Comprobantes"] = await repository.spComprobantesInputaciones(id);
-            ViewData["Detalles"] = await repository.spComprobanteRemitosDevolucionesGet(CC.PresupuestoId);
-            
+            if (CC.PresupuestoId != null)
+            {
+                ViewData["Detalles"] = await repository.spComprobanteRemitosDevolucionesGet(CC.PresupuestoId);
+            }
+            if (CC.VentaRapidaId != null)
+            {
+                ViewData["Detalles"] = await repository.spComprobanteRemitosDevolucionesGet(CC.VentaRapidaId);
+            }
+
+
             return View(CC);
         }
 
@@ -345,7 +354,14 @@ namespace Gestion.Web.Controllers
             ViewData["Clientes"] = cliente;
 
             ViewData["Comprobantes"] = await repository.spComprobantesInputaciones(id);
-            ViewData["Detalles"] = await repository.spComprobanteRemitosDevolucionesGet(id);
+            if (CC.PresupuestoId != null)
+            {
+                ViewData["Detalles"] = await repository.spComprobanteRemitosDevolucionesGet(CC.PresupuestoId);
+            }
+            if (CC.VentaRapidaId != null)
+            {
+                ViewData["Detalles"] = await repository.spComprobanteRemitosDevolucionesGet(CC.VentaRapidaId);
+            }
             return View(CC);
         }
 
@@ -366,7 +382,7 @@ namespace Gestion.Web.Controllers
                 remito.UsuarioAlta = User.Identity.Name;
                 await repository.spDevolucion(remito);
 
-                return RedirectToAction(nameof(DevolucionProductos));
+                return RedirectToAction(nameof(DevolucionProducto) , new { id = remito.Id });
             }
             return View(comprobantesDTO);
         }

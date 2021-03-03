@@ -69,8 +69,18 @@ namespace Gestion.Web.Controllers
 
         public async Task<IActionResult> Pendientes()
         {
-            var model = await repository.spPresupuestosPendientes();
-            return View(model);
+            if (User.IsInRole("Admin"))
+            {
+                var model = await repository.spPresupuestosPendientes();
+                return View(model);
+            }
+            else
+            {
+                var user = await userHelper.GetUserByEmailAsync(User.Identity.Name);
+                var model = await repository.spPresupuestosPendientes(user.SucursalId);
+                return View(model);
+            }
+            
         }
 
         public IActionResult ClienteBuscar(string id)
@@ -352,6 +362,7 @@ namespace Gestion.Web.Controllers
                 return RedirectToAction("Pendiente", new { id = presupuestos.Id });
             }
 
+            ViewData["productos"] = await productosRepository.spProductosVentaGet();
             return View(presupuestos);
         }
         public async Task<IActionResult> ProductoDelete(string id)
@@ -584,8 +595,17 @@ namespace Gestion.Web.Controllers
 
         public async Task<IActionResult> AprobarRechazar()
         {
-            var model = await repository.spPresupuestosPendientes();
-            return View(model);
+            if (User.IsInRole("Admin"))
+            {
+                var model = await repository.spPresupuestosPendientes();
+                return View(model);
+            }
+            else
+            {
+                var user = await userHelper.GetUserByEmailAsync(User.Identity.Name);
+                var model = await repository.spPresupuestosPendientes(user.SucursalId);
+                return View(model);
+            }
         }
 
         public async Task<IActionResult> PresupuestoAprobarRechazar(string id)
@@ -904,16 +924,16 @@ namespace Gestion.Web.Controllers
                 ModelState.AddModelError("Importe", "El Importe ingresado es mayor al Saldo");
             }
 
-            if (Convert.ToInt32(formaPago.TarjetaVenceAño) == DateTime.Now.Year && Convert.ToInt32(formaPago.TarjetaVenceMes) < DateTime.Now.Month)
-            {
-                ModelState.AddModelError("TarjetaVenceMes", "Tarjeta Vencida");
-            }
+            //if (Convert.ToInt32(formaPago.TarjetaVenceAño) == DateTime.Now.Year && Convert.ToInt32(formaPago.TarjetaVenceMes) < DateTime.Now.Month)
+            //{
+            //    ModelState.AddModelError("TarjetaVenceMes", "Tarjeta Vencida");
+            //}
 
-            if (Convert.ToInt32(formaPago.TarjetaVenceAño) < DateTime.Now.Year)
-            {
-                ModelState.AddModelError("TarjetaVenceAño", "Tarjeta Vencida");
+            //if (Convert.ToInt32(formaPago.TarjetaVenceAño) < DateTime.Now.Year)
+            //{
+            //    ModelState.AddModelError("TarjetaVenceAño", "Tarjeta Vencida");
 
-            }
+            //}
 
             if (ModelState.IsValid)
             {
@@ -994,16 +1014,16 @@ namespace Gestion.Web.Controllers
                 ModelState.AddModelError("Cuota", "El numero de cuota debe ser mayor que cero");
             }
 
-            if (Convert.ToInt32(formaPago.TarjetaVenceAño) == DateTime.Now.Year && Convert.ToInt32(formaPago.TarjetaVenceMes) < DateTime.Now.Month)
-            {
-                ModelState.AddModelError("TarjetaVenceMes", "Tarjeta Vencida");
-            }
+            //if (Convert.ToInt32(formaPago.TarjetaVenceAño) == DateTime.Now.Year && Convert.ToInt32(formaPago.TarjetaVenceMes) < DateTime.Now.Month)
+            //{
+            //    ModelState.AddModelError("TarjetaVenceMes", "Tarjeta Vencida");
+            //}
 
-            if (Convert.ToInt32(formaPago.TarjetaVenceAño) < DateTime.Now.Year)
-            {
-                ModelState.AddModelError("TarjetaVenceAño", "Tarjeta Vencida");
+            //if (Convert.ToInt32(formaPago.TarjetaVenceAño) < DateTime.Now.Year)
+            //{
+            //    ModelState.AddModelError("TarjetaVenceAño", "Tarjeta Vencida");
 
-            }
+            //}
 
             if (ModelState.IsValid)
             {
@@ -1118,6 +1138,43 @@ namespace Gestion.Web.Controllers
             return RedirectToAction(nameof(Pendiente), new { id = comp });
         }
 
-        
+
+        public async Task<IActionResult> ProductoEdit(string id)
+        {
+
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            return View(await this.repository.spPresupuestosDetalleId(id));
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ProductoEdit(PresupuestosDetalleDTO detalleDTO)
+        {
+
+            if (detalleDTO == null)
+            {
+                return RedirectToAction("Pendientes", "Presupuestos");
+            }
+
+            var detalle = new PresupuestosDetalle
+            {
+                Id = detalleDTO.Id,
+                ProductoId = detalleDTO.ProductoId,
+                Cantidad = detalleDTO.Cantidad,
+                Precio = (decimal)detalleDTO.Precio,
+                ProductoNombre = detalleDTO.ProductoNombre,
+                UsuarioAlta = User.Identity.Name
+            };
+
+            await repository.spEditarProducto(detalle);
+            return RedirectToAction("Pendiente", new { id = detalleDTO.PresupuestoId});
+        }
+
     }
+
+    
 }

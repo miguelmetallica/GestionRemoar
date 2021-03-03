@@ -69,7 +69,7 @@
                                     <span asp-validation-for="TarjetaId" class="text-danger"></span>
                                 </div>
 
-                                <div class="form-group col-md-12">
+                                @*<div class="form-group col-md-12">
                                     <label asp-for="TarjetaCliente" class="control-label"></label>
                                     <input asp-for="TarjetaCliente" class="form-control input-sm" />
                                     <span asp-validation-for="TarjetaCliente" class="text-danger"></span>
@@ -94,7 +94,7 @@
                                     <label asp-for="TarjetaCodigoSeguridad" class="control-label"></label>
                                     <input asp-for="TarjetaCodigoSeguridad" class="form-control input-sm" />
                                     <span asp-validation-for="TarjetaCodigoSeguridad" class="text-danger"></span>
-                                </div>
+                                </div>*@
                                 <div class="form-group col-md-12">
                                     <label asp-for="Importe" class="control-label"></label>
                                     <input asp-for="Importe" class="form-control input-sm" onkeypress="return filterFloat(event,this);" onkeyup="multiplicar()" />
@@ -116,14 +116,13 @@
 
                                 <div class="form-group col-md-12">
                                     <label asp-for="Total" class="control-label"></label>
-                                    <input asp-for="Total" class="form-control input-sm" readonly />
+                                    <input asp-for="Total" readonly class="form-control input-sm" readonly />
                                     <span asp-validation-for="Total" class="text-danger"></span>
                                 </div>
 
                                 <div class="form-group col-md-12">
-                                    <label asp-for="CodigoAutorizacion" class="control-label"></label>
-                                    <input asp-for="CodigoAutorizacion" class="form-control input-sm" />
-                                    <span asp-validation-for="CodigoAutorizacion" class="text-danger"></span>
+                                    <label class="control-label">Total</label>
+                                    <input id="TotalInteres" readonly class="form-control input-sm" />
                                 </div>
                                 <div class="form-group col-md-12">
                                     <label asp-for="Observaciones" class="control-label"></label>
@@ -159,15 +158,21 @@
 
             if (Number(Cuota) == 0) {
                 r = 0;
+                t = 0;
             }
             else {
                 r = (
                     Number(Importe) +
                     (Number(Importe) * (Number(Interes) / 100))
                 ) / Number(Cuota);
+
+                t = ((
+                    Number(Importe) +
+                    (Number(Importe) * (Number(Interes) / 100))
+                ) / Number(Cuota)) * Number(Cuota);
             }
 
-
+            document.getElementById("TotalInteres").value = Number(t).toFixed(2);
             document.getElementById("Total").value = Number(r).toFixed(2);
         }
 

@@ -39,12 +39,6 @@ BREADCRUMB
                             <th>
                                 @Html.DisplayNameFor(model => model.RazonSocial)
                             </th>
-                            <th class="col-xs-offset-0">
-                                @Html.DisplayNameFor(model => model.NroDocumento)
-                            </th>
-                            <th>
-                                @Html.DisplayNameFor(model => model.CuilCuit)
-                            </th>
                             <th>
                                 @Html.DisplayName("Total")
                             </th>
@@ -69,12 +63,6 @@ BREADCRUMB
                                 </td>
                                 <td>
                                     @Html.DisplayFor(modelItem => item.RazonSocial)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.NroDocumento)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.CuilCuit)
                                 </td>
                                 <td>
                                     @Html.DisplayFor(modelItem => item.Total)
@@ -108,6 +96,7 @@ BREADCRUMB
 
             $('#dTable').DataTable({
                 "processing": "true",
+                "order": [[1, 'desc'], [2, 'desc']],
                 "retrieve": "true",
                 "language": {
                     "processing": "Procesando... Espere por favor",

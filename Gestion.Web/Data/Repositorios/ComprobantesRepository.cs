@@ -836,6 +836,7 @@ namespace Gestion.Web.Data
                                 obj.TipoComprobanteCodigo = oReader["TipoComprobanteCodigo"] as string;
 
                                 obj.PresupuestoId = oReader["PresupuestoId"] as string;
+                                obj.VentaRapidaId = oReader["VentaRapidaId"] as string;
                                 obj.Letra = oReader["Letra"] as string;
                                 obj.PtoVenta = (int)(oReader["PtoVenta"] ?? 0);
                                 obj.Numero = (decimal)(oReader["Numero"] ?? 0);
@@ -1074,6 +1075,8 @@ namespace Gestion.Web.Data
 
                                 if (!DBNull.Value.Equals(oReader["Saldo"]))
                                     obj.Saldo = (decimal)(oReader["Saldo"] ?? 0);
+                                if (!DBNull.Value.Equals(oReader["SaldoContado"]))
+                                    obj.SaldoContado = (decimal)(oReader["SaldoContado"] ?? 0);
 
                                 if (!DBNull.Value.Equals(oReader["Saldo_Porcentaje"]))
                                     obj.Saldo_Porcentaje = (decimal)(oReader["Saldo_Porcentaje"] ?? 0);

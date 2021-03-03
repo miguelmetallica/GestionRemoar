@@ -194,18 +194,20 @@
                                 </td>
                             </tr>
                         }
-                        @*<tfoot>
+                        <tfoot>
                             <tr>
                                 <th></th>
                                 <th></th>
+                                <th>@Detalle.Sum(x => x.Precio)</th>
+                                <th>@Detalle.Sum(x => x.Cantidad)</th>
+                                <th>@Detalle.Sum(x => x.Imputado)</th>
                                 <th></th>
                                 <th></th>
-                                <th>@Detalle.Sum(x => x.Imputado) </th>
                                 <th></th>
                                 <th></th>
                                 <th></th>
                             </tr>
-                        </tfoot>*@
+                        </tfoot>
                     </table>
 
                 </div>

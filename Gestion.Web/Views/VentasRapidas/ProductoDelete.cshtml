@@ -65,7 +65,7 @@
                         <form asp-action="ProductoDelete">
                             <input type="hidden" asp-for="Id" />
                             <input type="submit" value="Eliminar" class="btn btn-danger" />
-                            <a asp-controller="Presupuestos" asp-action="Pendiente" asp-route-id="@Model.VentaRapidaId" class="btn btn-default pull-right">Volver</a>
+                            <a asp-controller="VentasRapidas" asp-action="VentaRapida" asp-route-id="@Model.VentaRapidaId" class="btn btn-default pull-right">Volver</a>
                         </form>                        
                     </div>                
                 </div>

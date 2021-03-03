@@ -878,16 +878,16 @@ namespace Gestion.Web.Controllers
                 ModelState.AddModelError("Importe", "El Importe ingresado es mayor al Saldo");
             }
 
-            if (Convert.ToInt32(reciboDTO.TarjetaVenceAño) == DateTime.Now.Year && Convert.ToInt32(reciboDTO.TarjetaVenceMes) < DateTime.Now.Month)
-            {
-                ModelState.AddModelError("TarjetaVenceMes", "Tarjeta Vencida");
-            }
+            //if (Convert.ToInt32(reciboDTO.TarjetaVenceAño) == DateTime.Now.Year && Convert.ToInt32(reciboDTO.TarjetaVenceMes) < DateTime.Now.Month)
+            //{
+            //    ModelState.AddModelError("TarjetaVenceMes", "Tarjeta Vencida");
+            //}
 
-            if (Convert.ToInt32(reciboDTO.TarjetaVenceAño) < DateTime.Now.Year)
-            {
-                ModelState.AddModelError("TarjetaVenceAño", "Tarjeta Vencida");
+            //if (Convert.ToInt32(reciboDTO.TarjetaVenceAño) < DateTime.Now.Year)
+            //{
+            //    ModelState.AddModelError("TarjetaVenceAño", "Tarjeta Vencida");
 
-            }
+            //}
 
             if (ModelState.IsValid)
             {
@@ -976,16 +976,16 @@ namespace Gestion.Web.Controllers
                 ModelState.AddModelError("Cuota", "El numero de cuota debe ser mayor que cero");
             }
 
-            if (Convert.ToInt32(reciboDTO.TarjetaVenceAño) == DateTime.Now.Year && Convert.ToInt32(reciboDTO.TarjetaVenceMes) < DateTime.Now.Month)
-            {
-                ModelState.AddModelError("TarjetaVenceMes", "Tarjeta Vencida");
-            }
+            //if (Convert.ToInt32(reciboDTO.TarjetaVenceAño) == DateTime.Now.Year && Convert.ToInt32(reciboDTO.TarjetaVenceMes) < DateTime.Now.Month)
+            //{
+            //    ModelState.AddModelError("TarjetaVenceMes", "Tarjeta Vencida");
+            //}
 
-            if (Convert.ToInt32(reciboDTO.TarjetaVenceAño) < DateTime.Now.Year)
-            {
-                ModelState.AddModelError("TarjetaVenceAño", "Tarjeta Vencida");
+            //if (Convert.ToInt32(reciboDTO.TarjetaVenceAño) < DateTime.Now.Year)
+            //{
+            //    ModelState.AddModelError("TarjetaVenceAño", "Tarjeta Vencida");
 
-            }
+            //}
 
             if (ModelState.IsValid)
             {

@@ -58,20 +58,50 @@ namespace Gestion.Web.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var model = await repository.spVentasRapidas();
-            return View(model);
+            if (User.IsInRole("Admin"))
+            {
+                var model = await repository.spVentasRapidas();
+                return View(model);
+            }
+            else
+            {
+                var user = await userHelper.GetUserByEmailAsync(User.Identity.Name);
+                var model = await repository.spVentasRapidasSucursal(user.SucursalId);
+                return View(model);
+            }
+            
         }
 
         public async Task<IActionResult> VentasRapidasACobrar()
         {
-            var model = await repository.spVentasRapidasACobrar();
-            return View(model);
+            if (User.IsInRole("Admin"))
+            {
+                var model = await repository.spVentasRapidasACobrar();
+                return View(model);
+            }
+            else
+            {
+                var user = await userHelper.GetUserByEmailAsync(User.Identity.Name);
+                var model = await repository.spVentasRapidasSucursalACobrar(user.SucursalId);
+                return View(model);
+            }
+
         }
 
         public async Task<IActionResult> Facturadas()
         {
-            var model = await repository.spVentasRapidasFacturadas();
-            return View(model);
+            if (User.IsInRole("Admin"))
+            {
+                var model = await repository.spVentasRapidasFacturadas();
+                return View(model);
+            }
+            else
+            {
+                var user = await userHelper.GetUserByEmailAsync(User.Identity.Name);
+                var model = await repository.spVentasRapidasSucursalFacturadas(user.SucursalId);
+                return View(model);
+            }
+
         }
 
         public async Task<IActionResult> VentaRapida(string id)
@@ -591,16 +621,16 @@ namespace Gestion.Web.Controllers
                 ModelState.AddModelError("Importe", "El Importe ingresado es mayor al Saldo");
             }
 
-            if (Convert.ToInt32(formaPago.TarjetaVenceAño) == DateTime.Now.Year && Convert.ToInt32(formaPago.TarjetaVenceMes) < DateTime.Now.Month)
-            {
-                ModelState.AddModelError("TarjetaVenceMes", "Tarjeta Vencida");
-            }
+            //if (Convert.ToInt32(formaPago.TarjetaVenceAño) == DateTime.Now.Year && Convert.ToInt32(formaPago.TarjetaVenceMes) < DateTime.Now.Month)
+            //{
+            //    ModelState.AddModelError("TarjetaVenceMes", "Tarjeta Vencida");
+            //}
 
-            if (Convert.ToInt32(formaPago.TarjetaVenceAño) < DateTime.Now.Year)
-            {
-                ModelState.AddModelError("TarjetaVenceAño", "Tarjeta Vencida");
+            //if (Convert.ToInt32(formaPago.TarjetaVenceAño) < DateTime.Now.Year)
+            //{
+            //    ModelState.AddModelError("TarjetaVenceAño", "Tarjeta Vencida");
 
-            }
+            //}
 
             if (ModelState.IsValid)
             {
@@ -769,16 +799,16 @@ namespace Gestion.Web.Controllers
                 ModelState.AddModelError("Cuota", "El numero de cuota debe ser mayor que cero");
             }
 
-            if (Convert.ToInt32(formaPago.TarjetaVenceAño) == DateTime.Now.Year && Convert.ToInt32(formaPago.TarjetaVenceMes) < DateTime.Now.Month)
-            {
-                ModelState.AddModelError("TarjetaVenceMes", "Tarjeta Vencida");
-            }
+            //if (Convert.ToInt32(formaPago.TarjetaVenceAño) == DateTime.Now.Year && Convert.ToInt32(formaPago.TarjetaVenceMes) < DateTime.Now.Month)
+            //{
+            //    ModelState.AddModelError("TarjetaVenceMes", "Tarjeta Vencida");
+            //}
 
-            if (Convert.ToInt32(formaPago.TarjetaVenceAño) < DateTime.Now.Year)
-            {
-                ModelState.AddModelError("TarjetaVenceAño", "Tarjeta Vencida");
+            //if (Convert.ToInt32(formaPago.TarjetaVenceAño) < DateTime.Now.Year)
+            //{
+            //    ModelState.AddModelError("TarjetaVenceAño", "Tarjeta Vencida");
 
-            }
+            //}
 
             if (ModelState.IsValid)
             {
@@ -1256,16 +1286,16 @@ namespace Gestion.Web.Controllers
                 ModelState.AddModelError("Importe", "El Importe ingresado es mayor al Saldo");
             }
 
-            if (Convert.ToInt32(formaPago.TarjetaVenceAño) == DateTime.Now.Year && Convert.ToInt32(formaPago.TarjetaVenceMes) < DateTime.Now.Month)
-            {
-                ModelState.AddModelError("TarjetaVenceMes", "Tarjeta Vencida");
-            }
+            //if (Convert.ToInt32(formaPago.TarjetaVenceAño) == DateTime.Now.Year && Convert.ToInt32(formaPago.TarjetaVenceMes) < DateTime.Now.Month)
+            //{
+            //    ModelState.AddModelError("TarjetaVenceMes", "Tarjeta Vencida");
+            //}
 
-            if (Convert.ToInt32(formaPago.TarjetaVenceAño) < DateTime.Now.Year)
-            {
-                ModelState.AddModelError("TarjetaVenceAño", "Tarjeta Vencida");
+            //if (Convert.ToInt32(formaPago.TarjetaVenceAño) < DateTime.Now.Year)
+            //{
+            //    ModelState.AddModelError("TarjetaVenceAño", "Tarjeta Vencida");
 
-            }
+            //}
 
             if (ModelState.IsValid)
             {
@@ -1346,16 +1376,16 @@ namespace Gestion.Web.Controllers
                 ModelState.AddModelError("Cuota", "El numero de cuota debe ser mayor que cero");
             }
 
-            if (Convert.ToInt32(formaPago.TarjetaVenceAño) == DateTime.Now.Year && Convert.ToInt32(formaPago.TarjetaVenceMes) < DateTime.Now.Month)
-            {
-                ModelState.AddModelError("TarjetaVenceMes", "Tarjeta Vencida");
-            }
+            //if (Convert.ToInt32(formaPago.TarjetaVenceAño) == DateTime.Now.Year && Convert.ToInt32(formaPago.TarjetaVenceMes) < DateTime.Now.Month)
+            //{
+            //    ModelState.AddModelError("TarjetaVenceMes", "Tarjeta Vencida");
+            //}
 
-            if (Convert.ToInt32(formaPago.TarjetaVenceAño) < DateTime.Now.Year)
-            {
-                ModelState.AddModelError("TarjetaVenceAño", "Tarjeta Vencida");
+            //if (Convert.ToInt32(formaPago.TarjetaVenceAño) < DateTime.Now.Year)
+            //{
+            //    ModelState.AddModelError("TarjetaVenceAño", "Tarjeta Vencida");
 
-            }
+            //}
 
             if (ModelState.IsValid)
             {
@@ -1465,6 +1495,41 @@ namespace Gestion.Web.Controllers
             ViewData["Resumen"] = await repository.spResumenVentaRapida(formaPago.VentaRapidaId);
             ViewBag.Bancos = new SelectList(cuotasRepository.GetBancos(), "Value", "Text");
             return View(formaPago);
+        }
+
+        public async Task<IActionResult> ProductoEdit(string id)
+        {
+
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            return View(await this.repository.spDetalleVentaRapidaId(id));
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ProductoEdit(VentasRapidasDetalleDTO detalleDTO)
+        {
+            
+            if (detalleDTO == null)
+            {
+                return RedirectToAction("Index", "VentasRapidas");
+            }
+
+            var detalle = new VentasRapidasDetalle
+            {
+                Id = detalleDTO.Id,
+                ProductoId = detalleDTO.ProductoId,
+                Cantidad = detalleDTO.Cantidad,
+                Precio = (decimal)detalleDTO.Precio,
+                ProductoNombre = detalleDTO.ProductoNombre,
+                UsuarioAlta = User.Identity.Name
+            };
+
+            await repository.spEditarProducto(detalle);
+            return RedirectToAction("VentaRapida", new { id = detalleDTO.VentaRapidaId });
         }
     }
 }

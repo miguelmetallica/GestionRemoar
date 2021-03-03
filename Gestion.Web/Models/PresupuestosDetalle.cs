@@ -19,8 +19,8 @@ namespace Gestion.Web.Models
         public decimal Precio { get; set; }
 
         [DisplayFormat(DataFormatString = "{0:C2}")]
-        [Required(ErrorMessage = "El campo {0} es obligatorio.")]
-        [Range(1, 9999999, ErrorMessage = "El campo {0} puede tomar valores entre {1} y {2}")]
+        //[Required(ErrorMessage = "El campo {0} es obligatorio.")]
+        //[Range(1, 9999999, ErrorMessage = "El campo {0} puede tomar valores entre {1} y {2}")]
         public decimal PrecioContado { get; set; }
 
         [DisplayFormat(DataFormatString = "{0:N2}")]

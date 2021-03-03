@@ -31,10 +31,15 @@
                             }
                             <br>
                             <b>Fecha:</b> @item.FechaComprobante.ToShortDateString()<br>
-                            <b>Observaciones:</b> @item.Observaciones<br>
+
+                            @if (item.Observaciones != null)
+                            {
+                                <b> Observaciones:</b>  @item.Observaciones<br>
+                            }
+
                             <b>Usuario:</b> @item.UsuarioAlta<br>
                             <br>
-                            
+
                             @if (item.Anulado == true)
                             {
                                 <div class="callout callout-danger">
@@ -56,21 +61,21 @@
                                     <tr>
                                         <th>Codigo</th>
                                         <th>Producto</th>
-                                        <th>Cantidad</th>                                        
+                                        <th>Cantidad</th>
                                     </tr>
                                     @foreach (var det in CCDetalle.Where(x => x.ComprobanteId == item.Id))
                                     {
                                         <tr>
                                             <td>@det.ProductoCodigo</td>
                                             <td>@det.ProductoNombre</td>
-                                            <td>@det.Cantidad</td>                                            
+                                            <td>@det.Cantidad</td>
                                         </tr>
 
                                     }
                                 </table>
                             }
 
-                            
+
                         </div>
 
 

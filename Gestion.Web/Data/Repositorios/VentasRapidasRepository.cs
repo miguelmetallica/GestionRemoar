@@ -16,18 +16,18 @@ namespace Gestion.Web.Data
         private readonly IUserHelper userHelper;
         private readonly IFactoryConnection factoryConnection;
         private readonly IClientesRepository clientesRepository;
-        
-        public VentasRapidasRepository(DataContext context, 
-                                    IUserHelper userHelper, 
+
+        public VentasRapidasRepository(DataContext context,
+                                    IUserHelper userHelper,
                                     IFactoryConnection factoryConnection,
-                                    IClientesRepository clientesRepository                                                    
+                                    IClientesRepository clientesRepository
             ) : base(context)
         {
             this.context = context;
             this.userHelper = userHelper;
             this.factoryConnection = factoryConnection;
             this.clientesRepository = clientesRepository;
-            
+
         }
 
         public async Task<VentasRapidasDTO> spVentasRapidas(string id)
@@ -52,7 +52,7 @@ namespace Gestion.Web.Data
                     oCmd.Parameters.AddWithValue("@Id", id);
 
 
-                                        
+
                     //No retornamos DataSets, siempre utilizamos objetos para hacernos 
                     //independientes de la estructura de las tablas en el resto
                     //de las capas. Para ellos leemos con el DataReader y creamos
@@ -118,7 +118,7 @@ namespace Gestion.Web.Data
             }
         }
 
-        public async Task<VentasRapidasDTO> spVentasRapidas(string id,string formaPagoId)
+        public async Task<VentasRapidasDTO> spVentasRapidas(string id, string formaPagoId)
         {
             //Creamos la conexión a utilizar.
             //Utilizamos la sentencia Using para asegurarnos de cerrar la conexión
@@ -139,7 +139,7 @@ namespace Gestion.Web.Data
                     //le asignamos el parámetro para el stored procedure
                     oCmd.Parameters.AddWithValue("@Id", id);
                     oCmd.Parameters.AddWithValue("@FormaPagoId", formaPagoId);
-                   
+
                     //No retornamos DataSets, siempre utilizamos objetos para hacernos 
                     //independientes de la estructura de las tablas en el resto
                     //de las capas. Para ellos leemos con el DataReader y creamos
@@ -176,7 +176,7 @@ namespace Gestion.Web.Data
                                 obj.Precio = (decimal)oReader["TotalProductos"];
                                 obj.CantidadProductos = (int)oReader["CantidadProductos"];
                                 obj.PrecioSinDescuento = (decimal)oReader["TotalProductosSinDescuento"];
-                                
+
                                 if (!DBNull.Value.Equals(oReader["DescuentoPorcentaje"]))
                                     obj.DescuentoPorcentaje = (decimal)oReader["DescuentoPorcentaje"];
 
@@ -428,7 +428,7 @@ namespace Gestion.Web.Data
                                 obj.FechaVencimiento = (DateTime)oReader["FechaVencimiento"];
                                 obj.RazonSocial = oReader["RazonSocial"].ToString();
                                 obj.NroDocumento = oReader["NroDocumento"].ToString();
-                                obj.CuilCuit = oReader["CuilCuit"].ToString();                                
+                                obj.CuilCuit = oReader["CuilCuit"].ToString();
                                 obj.UsuarioAlta = oReader["UsuarioAlta"].ToString();
                                 obj.Total = (decimal)oReader["Precio"];
                                 //obj.TotalContado = (decimal)oReader["PrecioContado"];
@@ -599,7 +599,7 @@ namespace Gestion.Web.Data
                     //independientes de la estructura de las tablas en el resto
                     //de las capas. Para ellos leemos con el DataReader y creamos
                     //los objetos asociados que se esperan
-                    
+
                     //Ejecutamos el comando y retornamos los valores
                     using (SqlDataReader oReader = await oCmd.ExecuteReaderAsync())
                     {
@@ -765,9 +765,10 @@ namespace Gestion.Web.Data
                         //le asignamos los parámetros para el stored procedure
                         //los valores viene en el parámetro item del procedimiento
                         oCmd.Parameters.AddWithValue("@Id", detalle.Id);
+                        oCmd.Parameters.AddWithValue("@ProductoId", detalle.ProductoId);
                         oCmd.Parameters.AddWithValue("@Cantidad", detalle.Cantidad);
                         oCmd.Parameters.AddWithValue("@Precio", detalle.Precio);
-                        //oCmd.Parameters.AddWithValue("@PrecioContado", detalle.PrecioContado);
+                        oCmd.Parameters.AddWithValue("@Producto", detalle.ProductoNombre);
                         oCmd.Parameters.AddWithValue("@Usuario", detalle.UsuarioAlta);
 
                         //Ejecutamos el comando y retornamos el id generado
@@ -1398,7 +1399,7 @@ namespace Gestion.Web.Data
                         //le asignamos los parámetros para el stored procedure
                         //los valores viene en el parámetro item del procedimiento
                         oCmd.Parameters.AddWithValue("@Id", ventaRapidaId);
-                        
+
                         //Ejecutamos el comando y retornamos el id generado
                         await oCmd.ExecuteScalarAsync();
 
@@ -1637,34 +1638,36 @@ namespace Gestion.Web.Data
                     //Ejecutamos el comando y retornamos los valores
                     using (SqlDataReader oReader = await oCmd.ExecuteReaderAsync())
                     {
-                        if(oReader.Read())
+                        if (oReader.Read())
                         {
                             obj.Id = oReader["Id"].ToString();
 
                             if (!DBNull.Value.Equals(oReader["CantidadProductos"]))
-                                
+
                                 obj.CantidadProductos = (int)oReader["CantidadProductos"];
-                                
+
                             if (!DBNull.Value.Equals(oReader["SubTotalProductos"]))
                                 obj.SubTotalProductos = (decimal)oReader["SubTotalProductos"];
-                                
+
                             if (!DBNull.Value.Equals(oReader["DescuentoPorcentaje"]))
                                 obj.DescuentoPorcentaje = (decimal)oReader["DescuentoPorcentaje"];
-                                
+
                             if (!DBNull.Value.Equals(oReader["DescuentoMonto"]))
                                 obj.DescuentoMonto = (decimal)oReader["DescuentoMonto"];
-                                
+
                             if (!DBNull.Value.Equals(oReader["TotalAPagar"]))
                                 obj.TotalAPagar = (decimal)oReader["TotalAPagar"];
-                                
+
                             if (!DBNull.Value.Equals(oReader["SaldoAPagar"]))
                                 obj.SaldoAPagar = (decimal)oReader["SaldoAPagar"];
-                                
+                            if (!DBNull.Value.Equals(oReader["SaldoContadoAPagar"]))
+                                obj.SaldoContadoAPagar = (decimal)oReader["SaldoContadoAPagar"];
+
                             return obj;
                         }
                     }
                     return null;
-                    
+
                 }
             }
         }
@@ -2023,6 +2026,221 @@ namespace Gestion.Web.Data
                     }
                     return null;
 
+                }
+            }
+        }
+
+        public async Task<List<VentasRapidasIndex>> spVentasRapidasSucursal(string sucursalId)
+        {
+            //Creamos la conexión a utilizar.
+            //Utilizamos la sentencia Using para asegurarnos de cerrar la conexión
+            //y liberar el objeto al salir de esta sección de manera automática            
+            using (var oCnn = factoryConnection.GetConnection())
+            {
+                using (SqlCommand oCmd = new SqlCommand())
+                {
+                    //asignamos la conexion de trabajo
+                    oCmd.Connection = oCnn;
+
+                    //utilizamos stored procedures
+                    oCmd.CommandType = System.Data.CommandType.StoredProcedure;
+
+                    //el indicamos cual stored procedure utilizar
+                    oCmd.CommandText = "VentasRapidasSucursalGets";
+
+                    //le asignamos el parámetro para el stored procedure
+                    oCmd.Parameters.AddWithValue("@SucursalId", sucursalId);                    
+
+
+                    //aunque debemos buscar solo un elemento, siempre devolvemos
+                    //una colección. Es más fácil de manipular y controlar 
+                    var objs = new List<VentasRapidasIndex>();
+
+                    //No retornamos DataSets, siempre utilizamos objetos para hacernos 
+                    //independientes de la estructura de las tablas en el resto
+                    //de las capas. Para ellos leemos con el DataReader y creamos
+                    //los objetos asociados que se esperan
+                    try
+                    {
+                        //Ejecutamos el comando y retornamos los valores
+                        using (SqlDataReader oReader = await oCmd.ExecuteReaderAsync())
+                        {
+                            while (oReader.Read())
+                            {
+                                //si existe algun valor, creamos el objeto y lo almacenamos
+                                //en la colección
+                                var obj = new VentasRapidasIndex();
+                                obj.Id = oReader["Id"].ToString();
+                                obj.Codigo = oReader["Codigo"].ToString();
+                                obj.Fecha = (DateTime)oReader["Fecha"];
+                                obj.FechaVencimiento = (DateTime)oReader["FechaVencimiento"];
+                                obj.RazonSocial = oReader["RazonSocial"].ToString();
+                                obj.NroDocumento = oReader["NroDocumento"].ToString();
+                                obj.CuilCuit = oReader["CuilCuit"].ToString();
+                                //obj.Estado = oReader["Estado"].ToString();
+                                obj.UsuarioAlta = oReader["UsuarioAlta"].ToString();
+                                obj.Total = (decimal)oReader["Precio"];
+                                //obj.TotalContado = (decimal)oReader["PrecioContado"];
+                                obj.Cantidad = (int)oReader["Cantidad"];
+
+                                //Agregamos el objeto a la coleccion de resultados
+                                objs.Add(obj);
+                                obj = null;
+                            }
+                        }
+                        //retornamos los valores encontrados
+                        return objs;
+                    }
+
+                    finally
+                    {
+                        //el Finally nos da siempre la oportunidad de liberar
+                        //la memoria utilizada por los objetos 
+                        objs = null;
+                    }
+                }
+            }
+        }
+
+        public async Task<List<VentasRapidasIndex>> spVentasRapidasSucursalACobrar(string sucursalId)
+        {
+            //Creamos la conexión a utilizar.
+            //Utilizamos la sentencia Using para asegurarnos de cerrar la conexión
+            //y liberar el objeto al salir de esta sección de manera automática            
+            using (var oCnn = factoryConnection.GetConnection())
+            {
+                using (SqlCommand oCmd = new SqlCommand())
+                {
+                    //asignamos la conexion de trabajo
+                    oCmd.Connection = oCnn;
+
+                    //utilizamos stored procedures
+                    oCmd.CommandType = System.Data.CommandType.StoredProcedure;
+
+                    //el indicamos cual stored procedure utilizar
+                    oCmd.CommandText = "VentasRapidasSucursalACobrarGets";
+
+                    //le asignamos el parámetro para el stored procedure
+                    oCmd.Parameters.AddWithValue("@sucursalId", sucursalId);                    
+
+
+                    //aunque debemos buscar solo un elemento, siempre devolvemos
+                    //una colección. Es más fácil de manipular y controlar 
+                    var objs = new List<VentasRapidasIndex>();
+
+                    //No retornamos DataSets, siempre utilizamos objetos para hacernos 
+                    //independientes de la estructura de las tablas en el resto
+                    //de las capas. Para ellos leemos con el DataReader y creamos
+                    //los objetos asociados que se esperan
+                    try
+                    {
+                        //Ejecutamos el comando y retornamos los valores
+                        using (SqlDataReader oReader = await oCmd.ExecuteReaderAsync())
+                        {
+                            while (oReader.Read())
+                            {
+                                //si existe algun valor, creamos el objeto y lo almacenamos
+                                //en la colección
+                                var obj = new VentasRapidasIndex();
+                                obj.Id = oReader["Id"].ToString();
+                                obj.Codigo = oReader["Codigo"].ToString();
+                                obj.Fecha = (DateTime)oReader["Fecha"];
+                                obj.FechaVencimiento = (DateTime)oReader["FechaVencimiento"];
+                                obj.RazonSocial = oReader["RazonSocial"].ToString();
+                                obj.NroDocumento = oReader["NroDocumento"].ToString();
+                                obj.CuilCuit = oReader["CuilCuit"].ToString();
+                                //obj.Estado = oReader["Estado"].ToString();
+                                obj.UsuarioAlta = oReader["UsuarioAlta"].ToString();
+                                obj.Total = (decimal)oReader["Precio"];
+                                //obj.TotalContado = (decimal)oReader["PrecioContado"];
+                                obj.Cantidad = (int)oReader["Cantidad"];
+
+                                //Agregamos el objeto a la coleccion de resultados
+                                objs.Add(obj);
+                                obj = null;
+                            }
+                        }
+                        //retornamos los valores encontrados
+                        return objs;
+                    }
+
+                    finally
+                    {
+                        //el Finally nos da siempre la oportunidad de liberar
+                        //la memoria utilizada por los objetos 
+                        objs = null;
+                    }
+                }
+            }
+        }
+
+        public async Task<List<VentasRapidasIndex>> spVentasRapidasSucursalFacturadas(string sucursalId)
+        {
+            //Creamos la conexión a utilizar.
+            //Utilizamos la sentencia Using para asegurarnos de cerrar la conexión
+            //y liberar el objeto al salir de esta sección de manera automática            
+            using (var oCnn = factoryConnection.GetConnection())
+            {
+                using (SqlCommand oCmd = new SqlCommand())
+                {
+                    //asignamos la conexion de trabajo
+                    oCmd.Connection = oCnn;
+
+                    //utilizamos stored procedures
+                    oCmd.CommandType = System.Data.CommandType.StoredProcedure;
+
+                    //el indicamos cual stored procedure utilizar
+                    oCmd.CommandText = "VentasRapidasSucursalGetsFacturadas";
+
+                    //le asignamos el parámetro para el stored procedure
+                    oCmd.Parameters.AddWithValue("@sucursalId", sucursalId);                    
+
+
+                    //aunque debemos buscar solo un elemento, siempre devolvemos
+                    //una colección. Es más fácil de manipular y controlar 
+                    var objs = new List<VentasRapidasIndex>();
+
+                    //No retornamos DataSets, siempre utilizamos objetos para hacernos 
+                    //independientes de la estructura de las tablas en el resto
+                    //de las capas. Para ellos leemos con el DataReader y creamos
+                    //los objetos asociados que se esperan
+                    try
+                    {
+                        //Ejecutamos el comando y retornamos los valores
+                        using (SqlDataReader oReader = await oCmd.ExecuteReaderAsync())
+                        {
+                            while (oReader.Read())
+                            {
+                                //si existe algun valor, creamos el objeto y lo almacenamos
+                                //en la colección
+                                var obj = new VentasRapidasIndex();
+                                obj.Id = oReader["Id"].ToString();
+                                obj.Codigo = oReader["Codigo"].ToString();
+                                obj.Fecha = (DateTime)oReader["Fecha"];
+                                obj.FechaVencimiento = (DateTime)oReader["FechaVencimiento"];
+                                obj.RazonSocial = oReader["RazonSocial"].ToString();
+                                obj.NroDocumento = oReader["NroDocumento"].ToString();
+                                obj.CuilCuit = oReader["CuilCuit"].ToString();
+                                obj.UsuarioAlta = oReader["UsuarioAlta"].ToString();
+                                obj.Total = (decimal)oReader["Precio"];
+                                //obj.TotalContado = (decimal)oReader["PrecioContado"];
+                                obj.Cantidad = (int)oReader["Cantidad"];
+
+                                //Agregamos el objeto a la coleccion de resultados
+                                objs.Add(obj);
+                                obj = null;
+                            }
+                        }
+                        //retornamos los valores encontrados
+                        return objs;
+                    }
+
+                    finally
+                    {
+                        //el Finally nos da siempre la oportunidad de liberar
+                        //la memoria utilizada por los objetos 
+                        objs = null;
+                    }
                 }
             }
         }

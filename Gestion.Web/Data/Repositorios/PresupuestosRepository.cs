@@ -433,10 +433,16 @@ namespace Gestion.Web.Data
 
                         //le asignamos los parámetros para el stored procedure
                         //los valores viene en el parámetro item del procedimiento
+                        //oCmd.Parameters.AddWithValue("@Id", presupuestos.Id);
+                        //oCmd.Parameters.AddWithValue("@Cantidad", presupuestos.Cantidad);
+                        //oCmd.Parameters.AddWithValue("@Precio", presupuestos.Precio);
+                        //oCmd.Parameters.AddWithValue("@PrecioContado", presupuestos.PrecioContado);
+                        //oCmd.Parameters.AddWithValue("@Usuario", presupuestos.UsuarioAlta);
                         oCmd.Parameters.AddWithValue("@Id", presupuestos.Id);
+                        oCmd.Parameters.AddWithValue("@ProductoId", presupuestos.ProductoId);
                         oCmd.Parameters.AddWithValue("@Cantidad", presupuestos.Cantidad);
                         oCmd.Parameters.AddWithValue("@Precio", presupuestos.Precio);
-                        oCmd.Parameters.AddWithValue("@PrecioContado", presupuestos.PrecioContado);
+                        oCmd.Parameters.AddWithValue("@Producto", presupuestos.ProductoNombre);
                         oCmd.Parameters.AddWithValue("@Usuario", presupuestos.UsuarioAlta);
 
                         //Ejecutamos el comando y retornamos el id generado
@@ -503,6 +509,77 @@ namespace Gestion.Web.Data
                                 obj.RazonSocial = oReader["RazonSocial"].ToString();
                                 obj.NroDocumento = oReader["NroDocumento"].ToString();
                                 obj.CuilCuit = oReader["CuilCuit"].ToString();                                
+                                obj.Estado = oReader["Estado"].ToString();
+                                obj.UsuarioAlta = oReader["UsuarioAlta"].ToString();
+                                obj.Total = (decimal)oReader["Precio"];
+                                obj.Cantidad = (int)oReader["Cantidad"];
+
+                                //Agregamos el objeto a la coleccion de resultados
+                                objs.Add(obj);
+                                obj = null;
+                            }
+                        }
+                        //retornamos los valores encontrados
+                        return objs;
+                    }
+
+                    finally
+                    {
+                        //el Finally nos da siempre la oportunidad de liberar
+                        //la memoria utilizada por los objetos 
+                        objs = null;
+                    }
+                }
+            }
+        }
+
+        public async Task<List<PresupuestosIndex>> spPresupuestosPendientes(string sucursalId)
+        {
+            //Creamos la conexión a utilizar.
+            //Utilizamos la sentencia Using para asegurarnos de cerrar la conexión
+            //y liberar el objeto al salir de esta sección de manera automática            
+            using (var oCnn = factoryConnection.GetConnection())
+            {
+                using (SqlCommand oCmd = new SqlCommand())
+                {
+                    //asignamos la conexion de trabajo
+                    oCmd.Connection = oCnn;
+
+                    //utilizamos stored procedures
+                    oCmd.CommandType = System.Data.CommandType.StoredProcedure;
+
+                    //el indicamos cual stored procedure utilizar
+                    oCmd.CommandText = "PresupuestosSucursalGetPendientes";
+
+                    //le asignamos el parámetro para el stored procedure
+                    oCmd.Parameters.AddWithValue("@sucursalId", sucursalId);                    
+
+
+                    //aunque debemos buscar solo un elemento, siempre devolvemos
+                    //una colección. Es más fácil de manipular y controlar 
+                    var objs = new List<PresupuestosIndex>();
+
+                    //No retornamos DataSets, siempre utilizamos objetos para hacernos 
+                    //independientes de la estructura de las tablas en el resto
+                    //de las capas. Para ellos leemos con el DataReader y creamos
+                    //los objetos asociados que se esperan
+                    try
+                    {
+                        //Ejecutamos el comando y retornamos los valores
+                        using (SqlDataReader oReader = await oCmd.ExecuteReaderAsync())
+                        {
+                            while (oReader.Read())
+                            {
+                                //si existe algun valor, creamos el objeto y lo almacenamos
+                                //en la colección
+                                var obj = new PresupuestosIndex();
+                                obj.Id = oReader["Id"].ToString();
+                                obj.Codigo = oReader["Codigo"].ToString();
+                                obj.Fecha = (DateTime)oReader["Fecha"];
+                                obj.FechaVencimiento = (DateTime)oReader["FechaVencimiento"];
+                                obj.RazonSocial = oReader["RazonSocial"].ToString();
+                                obj.NroDocumento = oReader["NroDocumento"].ToString();
+                                obj.CuilCuit = oReader["CuilCuit"].ToString();
                                 obj.Estado = oReader["Estado"].ToString();
                                 obj.UsuarioAlta = oReader["UsuarioAlta"].ToString();
                                 obj.Total = (decimal)oReader["Precio"];
@@ -2140,6 +2217,9 @@ namespace Gestion.Web.Data
                             if (!DBNull.Value.Equals(oReader["SaldoAPagar"]))
                                 obj.SaldoAPagar = (decimal)oReader["SaldoAPagar"];
 
+                            if (!DBNull.Value.Equals(oReader["SaldoContadoAPagar"]))
+                                obj.SaldoContadoAPagar = (decimal)oReader["SaldoContadoAPagar"];
+
                             return obj;
                         }
                     }
@@ -2550,5 +2630,7 @@ namespace Gestion.Web.Data
                 factoryConnection.CloseConnection();
             }
         }
+
+        
     }
 }

@@ -77,5 +77,7 @@ namespace Gestion.Web.Data
         Task<int> spCheque(FormaPagoChequeDTO formaPago);
         Task<int> spDolar(FormaPagoDolarDTO formaPago);
         Task<int> spDeleteFormaPago(string id);
+        Task<int> spEditarProducto(PresupuestosDetalle presupuestos);
+        Task<List<PresupuestosIndex>> spPresupuestosPendientes(string sucursalId);
     }
 }

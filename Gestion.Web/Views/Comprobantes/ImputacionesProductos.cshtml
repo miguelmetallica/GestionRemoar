@@ -88,7 +88,12 @@ BREADCRUMB
                             <td>
                                 <div class="btn-group">
                                     <a class="btn btn-primary btn-sm" asp-action="ImputacionProducto" asp-route-id="@item.Id">Imputar</a>
-                                    <a class="btn btn-danger btn-sm" asp-action="ImputacionAutorizaProducto" asp-route-id="@item.Id">Autoriza Entrega</a>
+                                    
+                                    @if (User.IsInRole("Admin") || User.IsInRole("ComprobantesAdministra")) 
+                                    { 
+                                        <a class="btn btn-danger btn-sm" asp-action="ImputacionAutorizaProducto" asp-route-id="@item.Id">Autoriza Entrega</a>
+                                    }
+                                        
                                 </div>
                             </td>
                         </tr>
@@ -112,6 +117,7 @@ BREADCRUMB
             $('#dTable').DataTable({
                 "processing": "true",
                 "retrieve": "true",
+                "order": [[3, 'desc']],
                 "language": {
                     "processing": "Procesando... Espere por favor",
                     "lengthMenu": "Mostrar _MENU_ registros por pagina",

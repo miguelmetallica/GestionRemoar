@@ -46,7 +46,7 @@
                     </h2>
                 </div>
                 <div class="col-xs-4">
-                    <h4>@Model.TipoComprobante - @Model.Codigo</h4>
+                    <h4>Presupuesto Rapido - @Model.Codigo</h4>
                 </div>
                 <div class="col-xs-4">
                 </div>
@@ -186,6 +186,11 @@
                                     }
 
                                 }
+                            <tr style="font-size:large; background-color:aliceblue;">
+                                <th style="width:50%">TOTAL A PAGAR $ </th>
+                                <td> @formasPagosTMP.Sum(x => x.Total)</td>
+                                <td></td>
+                            </tr>
                             </table>
                         </div>
                     </div>

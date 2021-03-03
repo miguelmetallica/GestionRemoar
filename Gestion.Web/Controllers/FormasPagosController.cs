@@ -290,13 +290,13 @@ namespace Gestion.Web.Controllers
             ViewData["Entidades"] = entidadesRepository.GetAll();
             return this.View(cuotas);
         }
-
+        [AllowAnonymous]
         public JsonResult GetCuotas(FormasPagosCuotas formasPagosCuotas)
         {
             var cuotas = cuotasRepository.GetCuotas(formasPagosCuotas.FormaPagoId,formasPagosCuotas.EntidadId);
             return Json(cuotas);
         }
-
+        [AllowAnonymous]
         public JsonResult GetCuotasInteres(FormasPagosCuotas formasPagosCuotas)
         {
             var cuotas = cuotasRepository.GetCuotasInteres(formasPagosCuotas.FormaPagoId, formasPagosCuotas.EntidadId, formasPagosCuotas.Cuota);
