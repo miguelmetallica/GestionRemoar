@@ -45,7 +45,7 @@ BREADCRUMB
                             <th>
                                 @Html.DisplayNameFor(model => model.Total)
                             </th>
-                                                       
+
                         </tr>
                     </thead>
                     <tbody>
@@ -63,10 +63,24 @@ BREADCRUMB
                                 </td>
                                 <td>
                                     @Html.DisplayFor(modelItem => item.Total)
-                                </td>                                                                
+                                </td>
                             </tr>
                         }
                     </tbody>
+                    <tfoot>
+                        <tr>
+                            <th>
+                            </th>
+                            <th>
+                            </th>
+                            <th>
+                            </th>
+                            <th>
+                                @Html.DisplayFor(modelItem => Model.Sum(x => x.Total))
+                            </th>
+
+                        </tr>
+                    </tfoot>
                 </table>
             </div>
         </div>

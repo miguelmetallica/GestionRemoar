@@ -34,4 +34,22 @@ namespace Gestion.Web.Models
         public string Usuario { get; set; }
         public string Id { get; set; }
     }
+
+    public partial class CajasEstadoFormaPagosDTO
+    {
+        [Display(Name = "Tipos Comp")]
+        public string TipoComprobante { get; set; }
+        [Display(Name = "Nro Comp")]
+        public string NroComprobante { get; set; }
+
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
+        public DateTime Fecha { get; set; }
+        [Display(Name = "Tipos de Pagos")]
+        public string FormaPagoTipo { get; set; }
+        public decimal Total { get; set; }
+        public string Sucursal { get; set; }
+        public string SucursalId { get; set; }
+        public string Usuario { get; set; }
+        public string Id { get; set; }
+    }
 }

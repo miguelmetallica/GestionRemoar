@@ -42,30 +42,34 @@ BREADCRUMB
                                 @Html.DisplayNameFor(model => model.Total)
                             </th>
                             <th>
-                                Ver
+                                Tipos Pagos
                             </th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach (var item in Model)
                         {
-                            <tr>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Fecha)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Sucursal)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Total)
-                                </td>
-                                <td width="20%">
-                                    <div class="btn-group">
-                                        <a class="btn btn-info btn-sm" asp-action="InformeImportes" asp-route-id="@item.Id" ><i class="fa fa-search"></i> Ver por Tipos de Pagos</a>
-                                        <a class="btn btn-success btn-sm" asp-action="InformeUsuarios" asp-route-id="@item.Id" ><i class="fa fa-search"></i> Ver por Usuario</a>
-                                    </div>
-                                </td>
-                            </tr>
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Fecha)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Sucursal)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Total)
+                            </td>
+                            <td>
+                                <div class="btn-group">
+                                    <a class="btn btn-info btn-sm" asp-action="InformeImportes" asp-route-id="@item.Id"><i class="fa fa-search"></i> Tipos de Pagos</a>
+                                    <a class="btn btn-success btn-sm" asp-action="InformeUsuarios" asp-route-id="@item.Id"><i class="fa fa-search"></i> por Usuario</a>
+                                    <a class="btn btn-danger btn-sm" asp-action="InformeImportesEfectivo" asp-route-id="@item.Id"><i class="fa fa-search"></i> Efectivo</a>
+                                    <a class="btn btn-default btn-sm" asp-action="InformeImportesDolares" asp-route-id="@item.Id"><i class="fa fa-search"></i> Dolares</a>
+                                    <a class="btn btn-warning btn-sm" asp-action="InformeImportesCheques" asp-route-id="@item.Id"><i class="fa fa-search"></i> Cheques</a>
+                                </div>
+                            </td>
+                            
+                        </tr>
                         }
                     </tbody>
                 </table>

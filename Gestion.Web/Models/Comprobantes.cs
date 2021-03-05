@@ -420,6 +420,8 @@ namespace Gestion.Web.Models
 
         [Display(Name = "Saldo de Contado")] 
         public decimal SaldoContado { get; set; }
+        public decimal InteresFormaPago { get; set; }
+        
 
         [Display(Name = "Saldado %")]
         public decimal Saldo_Porcentaje { get; set; }

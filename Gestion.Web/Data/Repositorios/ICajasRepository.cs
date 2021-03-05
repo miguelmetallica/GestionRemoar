@@ -12,5 +12,8 @@ namespace Gestion.Web.Data
         Task<List<CajasEstadoDTO>> spCajasEstadoUsuariosGet(string Id);
         Task<List<CajasEstadoDTO>> spCajasEstadoFechaGet();
         Task<List<CajasEstadoDTO>> spCajasEstadoFechaGet(string sucursalId);
+        Task<List<CajasEstadoFormaPagosDTO>> spCajasEstadoChequesGet(string Id);
+        Task<List<CajasEstadoFormaPagosDTO>> spCajasEstadoEfectivoGet(string Id);
+        Task<List<CajasEstadoFormaPagosDTO>> spCajasEstadoDolaresGet(string Id);
     }
 }

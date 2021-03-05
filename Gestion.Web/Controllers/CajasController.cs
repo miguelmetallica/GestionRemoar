@@ -53,18 +53,6 @@ namespace Gestion.Web.Controllers
 
         }
 
-        //public async Task<IActionResult> DetailsImportes(string fecha,string sucid)
-        //{
-        //    var model = await repository.spCajasEstadoImportesGet(fecha,sucid);
-        //    return View(model);
-        //}
-
-        //public async Task<IActionResult> DetailsUsuarios(string id)
-        //{
-        //    var model = await repository.spCajasEstadoUsuariosGet(id.Substring(0, 8), id.Substring(8));
-        //    return View(model);
-        //}
-
         public async Task<IActionResult> InformeCajaImportes(string id)
         {
             try
@@ -93,6 +81,33 @@ namespace Gestion.Web.Controllers
             }
 
             return View();
+        }
+
+        public async Task<IActionResult> InformeImportesCheques(string id)
+        {
+            try
+            {
+                var model = await repository.spCajasEstadoChequesGet(id);
+                return View(model);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
+
+            return View();
+        }
+
+        public async Task<IActionResult> InformeImportesEfectivo(string id)
+        {
+            var model = await repository.spCajasEstadoEfectivoGet(id);
+            return View(model);
+        }
+
+        public async Task<IActionResult> InformeImportesDolares(string id)
+        {
+            var model = await repository.spCajasEstadoDolaresGet(id);
+            return View(model);
         }
 
         public async Task<IActionResult> InformeCajaUsuarios(string id)

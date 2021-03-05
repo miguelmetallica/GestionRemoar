@@ -914,6 +914,11 @@ namespace Gestion.Web.Data
                                 if (!DBNull.Value.Equals(oReader["Saldo"]))
                                     obj.Saldo = (decimal)(oReader["Saldo"] ?? 0);
 
+                                if (!DBNull.Value.Equals(oReader["SaldoContado"]))
+                                    obj.SaldoContado = (decimal)(oReader["SaldoContado"] ?? 0);
+                                if (!DBNull.Value.Equals(oReader["InteresFormaPago"]))
+                                    obj.InteresFormaPago = (decimal)(oReader["InteresFormaPago"] ?? 0);
+
                                 obj.UsuarioAlta = oReader["UsuarioAlta"] as string;
 
                                 obj.SucursalNombre = oReader["SucursalNombre"] as string;

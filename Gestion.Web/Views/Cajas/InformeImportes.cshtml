@@ -67,6 +67,20 @@ BREADCRUMB
                             </tr>
                         }
                     </tbody>
+                    <tfoot>
+                        <tr>
+                            <th>
+                            </th>
+                            <th>
+                            </th>
+                            <th>
+                            </th>
+                            <th>
+                                @(Model.Sum(x => x.Total))
+                            </th>
+
+                        </tr>
+                    </tfoot>
                 </table>
             </div>
         </div>
